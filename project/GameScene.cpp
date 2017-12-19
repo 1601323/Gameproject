@@ -32,7 +32,7 @@ GameScene::GameScene()
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
-	_map->Load("map/1218_000.map");
+	_map->Load("map/1218_001.map");
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
 	_fac = new GimmickFactory(*_player,*_rope);
@@ -125,17 +125,17 @@ void GameScene::NormalUpdata(Input* input)
 }
 void GameScene::ObjectUpdata(Input* input,Position2& offset)
 {
+	//_cam->Update();
 	_fac->Updata(*input);
 	_rope->Updata(input,offset);
 	_player->Update(input);
 	_emFac->Updata();
-	_cam->Update();
 }
 //ロープを使っているときに呼び出される
 void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
 {	
 
-
+	//_cam->Update();
 	for (auto& gim : _fac->GimmickList()) {		//ropeに左右されるギミックだけUpdataを呼び出す
 		if (gim->GetType() == GIM_FALL || gim->GetType() == GIM_ATTRACT) {
 			gim->Updata(*input);
@@ -146,13 +146,12 @@ void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
 	_rope->Updata(input,offset);
 	_player->Update(input);
 
-	_cam->Update();
 }
 //クリアした後、リザルトに遷移するためのupdataです
 void GameScene::TransitionUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
-	_cam->Update();
+	//_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	_map->Draw(offset);
 	Draw(offset);

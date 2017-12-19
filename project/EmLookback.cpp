@@ -12,7 +12,6 @@
 EmLookback::EmLookback(Position2 pos, Player& pl,Rope& rope,EnemyServer& server):_player(pl),_rope(rope),_server(server)
 {
 	_hit = new HitClass();
-	//_server = new EnemyServer();
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
 	_pos.x = pos.x;
