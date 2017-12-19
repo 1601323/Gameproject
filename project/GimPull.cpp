@@ -71,20 +71,23 @@ void GimPull::Move()
 	}
 	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
 		_state = GM_END;
+		count = 60;
 	}
 }
 
 void GimPull::Draw(Position2 offset) 
 {
 	if (_state != GM_END) {			//END以外であれば色は同じまま
-		DrawBox((int)_pos.x - offset.x,(int) _pos.y-offset.y,(int) _pos.x -offset.x+ 32 * 3, (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
+		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
 	}
 	else if (_state == GM_END) {	//ENDになったら赤に変える
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y,(int) _pos.x - offset.x + 32 * 3, (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
+		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y),(int) (_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
 	}
 	else{}
 	_gmRect.SetCenter(_pos.x -offset.x+ (_gmRect.w / 2), _pos.y -offset.y + (_gmRect.h / 2));
-	_gmRect.Draw();
+	_gmRect.Draw();	
+	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
+
 }
 //あたり矩形を返す
 Rect& GimPull::GetRect() 

@@ -47,6 +47,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 EmAround::~EmAround()
 {
 	//delete _pl;
+	delete _hit;
 }
 
 void EmAround::Updata()
@@ -127,7 +128,7 @@ void EmAround::InterMove()
 				_dir = DIR_RIGHT;
 			}
 			else {
-				Assert(__FILE__, __LINE__);
+				ASSERT();
 			}
 		}
 	}
