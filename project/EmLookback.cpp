@@ -34,6 +34,10 @@ EmLookback::EmLookback(Position2 pos, Player& pl,Rope& rope,EnemyServer& server)
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
+	//ŒÂ‘Ìƒf[ƒ^‰Šú‰»
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }
 
 EmLookback::~EmLookback()

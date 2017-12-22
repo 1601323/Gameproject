@@ -1,3 +1,15 @@
-﻿  GameScene.cpp
-  projects.vcxproj -> D:\labo\prj_data\project\Debug\projects.exe
-  projects.vcxproj -> D:\labo\prj_data\project\Debug\projects.pdb (Partial PDB)
+﻿  EmLookback.cpp
+d:\file\project\emlookback.cpp(69): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\file\project\emlookback.cpp(72): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\file\project\emlookback.cpp(79): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  EmAround.cpp
+d:\file\project\emaround.cpp(309): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\file\project\emaround.cpp(312): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  コードを生成中...
+  コンパイル中...
+  EnemyFactory.cpp
+  コードを生成中...
+  スキップ中... (関連する変更は検出されませんでした)
+  EnemyServer.cpp
+  projects.vcxproj -> D:\file\project\Debug\projects.exe
+  projects.vcxproj -> D:\file\project\Debug\projects.pdb (Partial PDB)
