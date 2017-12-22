@@ -48,9 +48,21 @@ EmLookback::~EmLookback()
 
 void EmLookback::Updata()
 {
-	setDir();
-	LookPl();
-	moveFear();
+	if (_state == EM_ST_MOVE ||_state == EM_ST_RETURN) {
+		setDir();
+	}
+	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
+		if (_individualData.plFoundFlag == true) {
+			LookPl();
+		}
+		else if (_individualData.plFoundFlag == false) {
+			LoseSight();
+		}
+		else{}
+	}
+	else {
+		moveFear();
+	}
 	//Draw();
 	//_emRect.SetCenter(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h / 2));
 	//_emRect.Draw();
@@ -123,6 +135,15 @@ void EmLookback::setDir(void)
 		}
 		LookCount = 0;
 	}
+	_emData.lookAngle = 60;
+	_emData.lookDir = _dir;
+	_emData.lookRange = _emEye;
+	_individualData.plFoundFlag = false;
+	//視界判定(プレイヤーを見つけたとき)
+	if (_hit->EnemyViewing(_emData, _player.GetRect())&& _player.GetcharState() != ST_VANISH) {
+		_state = EM_ST_DIS;
+		_individualData.plFoundFlag = true;
+	}
 }
 
 void EmLookback::LookPl(void)
@@ -130,11 +151,12 @@ void EmLookback::LookPl(void)
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
+	_individualData.plFoundFlag = false;
 	//視界判定(プレイヤーを見つけたとき)
-	if (_hit->EnemyViewing(_emData, _player.GetRect())&& _player.GetcharState() != ST_VANISH) {
+	if (_hit->EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
 		_state = EM_ST_DIS;
+		_individualData.plFoundFlag = true;
 	}
-
 	//プレイヤーを見つけたら追いかけてくる
 	//今は向いている方向に動くようにしている
 	if (_state == EM_ST_DIS) {
@@ -155,7 +177,23 @@ void EmLookback::LookPl(void)
 		}
 	}
 }
-
+//ﾌﾟﾚｲﾔｰを見失ったとき
+void EmLookback::LoseSight()
+{
+	//きょろきょろすると見失った感じがすると思う
+	//通常状態に戻る前にEnemyに見つけたフラグを送る
+	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
+		loseSightCnt--;
+		if (loseSightCnt < 0) {
+			_state = EM_ST_MOVE;
+			loseSightCnt = 180;
+			_individualData.plFoundFlag = true;
+			_server.GetInfo(_individualData);
+			_individualData.plFoundFlag = false;
+			_individualData.dataSendFlag = false;
+		}
+	}
+}
 void EmLookback::moveFear(void)
 {
 	////ﾛｰﾌﾟに当たったらひるむ
