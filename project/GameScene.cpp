@@ -53,8 +53,8 @@ GameScene::GameScene()
 	}
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope,*_server);
-	_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
+	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
+	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
 
 	_hit = new HitClass(_fac,_emFac);
 

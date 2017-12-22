@@ -8,7 +8,7 @@
 
 #define MAP_CHIP_SIZE_X (32)	// 1ﾁｯﾌﾟあたりの大きさ
 #define MAP_CHIP_SIZE_Y (32)	// 1ﾁｯﾌﾟあたりの大きさ
-#define MAP_SIZE_X (28)			//スクロール非対応マップの大きさ
+#define MAP_SIZE_X (28)			//スクロール非対応マップの大きさ28
 //#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define MAP_SIZE_Y (15)			// ﾏｯﾌﾟのｻｲｽﾞ
 

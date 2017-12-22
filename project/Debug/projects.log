@@ -1,77 +1,13 @@
-﻿  TitleScene.cpp
-  SensorDoor.cpp
-c:\users\idek0\desktop\github用食パンproject\project\sensordoor.cpp(110): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\sensordoor.cpp(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\sensordoor.cpp(114): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  SelectScene.cpp
-  Scene.cpp
-  Rope.cpp
+﻿  Rope.cpp
 c:\users\idek0\desktop\github用食パンproject\project\rope.cpp(117): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  ResultScene.cpp
   Player.cpp
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(62): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(67): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(71): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(75): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(79): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(80): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\player.cpp(120): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-  Object.cpp
-  Math.cpp
-  MapCtl.cpp
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(100): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(102): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(185): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(208): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(210): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(213): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\mapctl.cpp(214): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-  main.cpp
-  Input.cpp
-  ImageMgr.cpp
-  HitClass.cpp
-c:\users\idek0\desktop\github用食パンproject\project\hitclass.cpp(182): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  GimPull.cpp
-c:\users\idek0\desktop\github用食パンproject\project\gimpull.cpp(60): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimpull.cpp(81): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimpull.cpp(84): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimpull.cpp(89): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  GimmickFactory.cpp
-  Gimmick.cpp
-  GimDrop.cpp
-c:\users\idek0\desktop\github用食パンproject\project\gimdrop.cpp(16): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-c:\users\idek0\desktop\github用食パンproject\project\gimdrop.cpp(265): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimdrop.cpp(271): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimdrop.cpp(273): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimdrop.cpp(276): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  GimButton.cpp
-c:\users\idek0\desktop\github用食パンproject\project\gimbutton.cpp(74): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimbutton.cpp(88): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimbutton.cpp(97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimbutton.cpp(101): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\gimbutton.cpp(103): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  GameScene.cpp
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(68): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(73): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(77): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(81): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(85): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(86): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\idek0\desktop\github用食パンproject\project\player.cpp(126): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
   コードを生成中...
-  コンパイル中...
-  GameOverScene.cpp
-  GameMain.cpp
-  EnemyServer.cpp
-  EnemyFactory.cpp
-  EmLookback.cpp
-c:\users\idek0\desktop\github用食パンproject\project\emlookback.cpp(65): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\emlookback.cpp(68): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\emlookback.cpp(75): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Enemy.cpp
-  EmAround.cpp
-c:\users\idek0\desktop\github用食パンproject\project\emaround.cpp(311): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\idek0\desktop\github用食パンproject\project\emaround.cpp(314): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  ClearScene.cpp
-  Camera.cpp
-c:\users\idek0\desktop\github用食パンproject\project\camera.cpp(51): warning C4800: 'Player *': ブール値を 'true' または 'false' に強制的に設定します (警告の処理)
-c:\users\idek0\desktop\github用食パンproject\project\camera.cpp(57): warning C4800: 'MapCtl *': ブール値を 'true' または 'false' に強制的に設定します (警告の処理)
-  Assert.cpp
-c:\users\idek0\desktop\github用食パンproject\project\assert.cpp(27): warning C4551: 関数呼び出しに引数リストがありません。
-  コードを生成中...
-  LINK : 前回のインクリメンタル リンクで C:\Users\idek0\Desktop\github用食パンproject\project\Debug\projects.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
   projects.vcxproj -> C:\Users\idek0\Desktop\github用食パンproject\project\Debug\projects.exe
   projects.vcxproj -> C:\Users\idek0\Desktop\github用食パンproject\project\Debug\projects.pdb (Partial PDB)

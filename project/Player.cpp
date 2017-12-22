@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Geometry.h"
 #include "Rope.h"
+
+#include <iostream>
 using namespace std;
 
 
@@ -54,6 +56,10 @@ void Player::Update(Input* input)
 	//½Ã°À½§Œä
 	setState();
 	HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
+
+	//std::cout << _pos.x << std::endl;
+	//std::cout << _pos.y << std::endl;
+
 }
 
 void Player::Draw(Position2& offset)
