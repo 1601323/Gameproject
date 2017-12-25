@@ -14,7 +14,6 @@
 EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(pl),_rope(rope),_server(server)
 {
 	_map = MapCtl::GetInstance();
-	//_pl = new Player();
 	_hit = new HitClass();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
@@ -46,7 +45,6 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 
 EmAround::~EmAround()
 {
-	//delete _pl;
 	delete _hit;
 }
 

@@ -16,10 +16,7 @@ Gimmick::~Gimmick()
 {
 }
 
-Rect& Gimmick::GetRect()
-{
-	return _gmRect;
-}
+
 //¡‚Ìó‘Ô‚ğ•Ô‚·
 GimmickState Gimmick::nowState() 
 {
