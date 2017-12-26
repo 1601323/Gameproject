@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include <iostream>
 #include "GameScene.h"
 #include "GimDrop.h"
 #include "GimPull.h"
@@ -58,6 +59,7 @@ void Player::Update(Input* input)
 
 void Player::Draw(Position2& offset)
 {
+	//cout << offset.x << endl;
 	//Žž‹@
 	DrawBox((int)_pos.x -offset.x, (int)_pos.y +offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
 	switch (_state)
@@ -89,8 +91,8 @@ void Player::Draw(Position2& offset)
 	DrawFormatString(10, 400, 0xffffff, "½Ã°À½F%d", GetcharState());
 	DrawFormatString(10, 415, 0xffffff, "dir:%d ¶:2 ‰E:3", _dir);
 #endif
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2) -offset.x, _pos.y + (_plRect.h / 2) -offset.y);
-	_plRect.Draw();
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2) , _pos.y + (_plRect.h / 2) );
+	_plRect.Draw(offset);
 }
 
 //ˆÚ“®Œn‚Ìˆ—

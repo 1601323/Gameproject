@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <DxLib.h>
+#include <iostream>
 #include "HitClass.h"
 #include "Geometry.h"
 #include "Camera.h"

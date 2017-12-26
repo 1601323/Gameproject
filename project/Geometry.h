@@ -153,6 +153,9 @@ struct Rect
 	void Draw(unsigned int color = 0xff00ffff) {
 		DrawBox((int)Left(),(int) Top(), (int)Right(),(int) Bottom(), color, false);
 	}
+	void Draw(Position2& offset,unsigned int color = 0xff00ffff) {
+		DrawBox((int)Left()-offset.x, (int)Top() - offset.y, (int)Right() - offset.x, (int)Bottom() - offset.y, color, false);
+	}
 };
 //円について
 struct Circle
@@ -180,6 +183,9 @@ struct Circle
 	}
 	void Draw(unsigned int color = 0xff00ffff) {
 		DrawCircle((int)pos.x,(int)pos.y,(int)r,color,false);
+	}
+	void Draw(Position2 offset,unsigned int color = 0xff00ffff) {
+		DrawCircle((int)pos.x -offset.x, (int)pos.y-offset.y, (int)r, color, false);
 	}
 };
 //敵のデータについて（あたり判定で使用）
