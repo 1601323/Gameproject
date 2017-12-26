@@ -99,14 +99,14 @@ void GimPull::Draw(Position2 offset)
 {
 	cout << _pos.x << endl;
 	if (_state != GM_END) {			//ENDˆÈŠO‚Å‚ ‚ê‚ÎF‚Í“¯‚¶‚Ü‚Ü
-	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
+		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
 	}
 	else if (_state == GM_END) {	//END‚É‚È‚Á‚½‚çÔ‚É•Ï‚¦‚é
 		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y),(int) (_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
 	}
 	else{}
-	_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
-	_gmRect.Draw();	
+	_gmRect.SetCenter(_pos.x+ (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
+	_gmRect.Draw(offset);	
 	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
 
 }

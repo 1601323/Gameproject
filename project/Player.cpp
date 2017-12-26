@@ -91,8 +91,8 @@ void Player::Draw(Position2& offset)
 	DrawFormatString(10, 400, 0xffffff, "½Ã°À½F%d", GetcharState());
 	DrawFormatString(10, 415, 0xffffff, "dir:%d ¶:2 ‰E:3", _dir);
 #endif
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2) -offset.x, _pos.y + (_plRect.h / 2) -offset.y);
-	_plRect.Draw();
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2) , _pos.y + (_plRect.h / 2) );
+	_plRect.Draw(offset);
 }
 
 //ˆÚ“®Œn‚Ìˆ—
