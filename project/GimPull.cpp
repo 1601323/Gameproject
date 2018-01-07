@@ -44,7 +44,7 @@ void GimPull::CheckDoMove()
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
 			//当たっていたら
 			_state = GM_HIT;
-			if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_rope.GetCircle().pos.x > _pos.x) {	//ﾛｰﾌﾟの場所が中心より右側であれば
+			if (/*_rope.GetRopeState() == ST_ROPE_SHRINKING &&*/_rope.GetCircle().pos.x > _pos.x) {	//ﾛｰﾌﾟの場所が中心より右側であれば
 				_state = GM_MOVE;
 			}
 		}
@@ -66,14 +66,15 @@ void GimPull::Move()
 	nextPos[1].x = _pos.x ;
 	nextPos[1].y = _pos.y;
 	//ﾛｰﾌﾟの移動量を見てそれに従い移動する予定
-//	count -=abs(_rope.GetRopeVec().x);
+	//count -=abs(_rope.GetRopeVec().x);
+	count -=1;
 	if (count > 0) {
 		if (_state == GM_HIT) {			//ｴﾝﾀｰもしくはﾛｰﾌﾟの当たった場所が中心より左側
-			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK) {
+			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK) {
 				_state = GM_END;
 			}
 			else {
-				_pos.x -= _rope.GetRopeVec().x;
+				_pos.x -= abs(_rope.GetRopeVec().x);
 			}
 		}
 		else if (_state == GM_MOVE) {	//ropeの当たった場所が中心より右側
@@ -81,14 +82,13 @@ void GimPull::Move()
 				_state = GM_END;
 			}
 			else {
-				_pos.x += _rope.GetRopeVec().x;
+				_pos.x += abs(_rope.GetRopeVec().x);
 			}
 		}
 		else {
 
 		}
 	}
-
 	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
 		_state = GM_END;
 		count = 60;
@@ -97,7 +97,6 @@ void GimPull::Move()
 
 void GimPull::Draw(Position2 offset) 
 {
-	cout << _pos.x << endl;
 	if (_state != GM_END) {			//END以外であれば色は同じまま
 		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
 	}

@@ -113,7 +113,6 @@ void Rope::DrawRopeRect(void)
 //DrawLine‚ğ‚Ü‚Æ‚ß‚½ŠÖ” offset’l‚Ìİ’è‚ª•ª‚©‚è‚É‚­‚©‚Á‚½‚©‚ç
 void Rope::DrawLineSet(Position2 startpos, Position2 endpos,int color)
 {
-	//cout<<_tmpOffset.x<<endl;
 	DrawLine(startpos.x - _tmpOffset.x +(_RopeRect.w / 2), startpos.y - _tmpOffset.y + (_RopeRect.h / 2),
 		endpos.x - _tmpOffset.x + (_RopeRect.w / 2),endpos.y - _tmpOffset.y + (_RopeRect.h / 2),color);
 }
