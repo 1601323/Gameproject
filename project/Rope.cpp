@@ -92,8 +92,8 @@ void Rope::DrawRopeRect(void)
 	RopeRect.Draw();*/
 
 	//circle
-	_RopeCircle.SetCenter(_rope[*itr-1].x + (_RopeRect.w / 2) /*- _tmpOffset.x*/,
-		_rope[*itr-1].y + (_RopeRect.h / 2)/*- _tmpOffset.y*/, range);
+	_RopeCircle.SetCenter(_rope[*itr-1].x + (_RopeRect.w / 2) ,
+		_rope[*itr-1].y + (_RopeRect.h / 2), range);
 
 	if (RopeTurnFlag)
 	{
@@ -113,7 +113,6 @@ void Rope::DrawRopeRect(void)
 //DrawLineÇÇ‹Ç∆ÇﬂÇΩä÷êî offsetílÇÃê›íËÇ™ï™Ç©ÇËÇ…Ç≠Ç©Ç¡ÇΩÇ©ÇÁ
 void Rope::DrawLineSet(Position2 startpos, Position2 endpos,int color)
 {
-	//cout<<_tmpOffset.x<<endl;
 	DrawLine(startpos.x - _tmpOffset.x +(_RopeRect.w / 2), startpos.y - _tmpOffset.y + (_RopeRect.h / 2),
 		endpos.x - _tmpOffset.x + (_RopeRect.w / 2),endpos.y - _tmpOffset.y + (_RopeRect.h / 2),color);
 }
@@ -261,9 +260,9 @@ void Rope::SelectDir(Input* input)
 	{
 		//î≠éÀëOÇ…ÇÆÇÈÇÆÇÈâÒÇµÇƒÇ¢Ç‹Ç∑ âºÇÃìÆÇ´Ç»ÇÃÇ≈Ç∑Ç≤Ç¢ìKìñ
 		theta -= 30;
-		_RopeCircle.SetCenter(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2),
-			                  RotationPos.y - _tmpOffset.y +(_RopeRect.h / 2), range);
-		_RopeCircle.Draw();
+		_RopeCircle.SetCenter(RotationPos.x /*- _tmpOffset.x*/ + (_RopeRect.w / 2),
+			                  RotationPos.y/* - _tmpOffset.y */+(_RopeRect.h / 2), range);
+		_RopeCircle.Draw(_tmpOffset);
 
 		_vec.x = cos(AngleRad(theta)) *  SetVec().x;
 		_vec.y = sin(AngleRad(theta)) *  SetVec().y;
@@ -364,7 +363,7 @@ void Rope::Extended(Input* input)
 		if (time > 0) 
 		{
 			//ÇªÇÃèÍÇ≈ï`âÊ
-			_RopeCircle.Draw();
+			_RopeCircle.Draw(_tmpOffset);
 			DrawLineSet(_rope[0], _rope[18], 0xfffffff);
 			time--;
 		}
