@@ -74,7 +74,6 @@ void GimPull::Move()
 	nextPos[0].y = _pos.y;
 	//ç∂
 	nextPos[1].x = _pos.x - 15;
-	nextPos[1].x = _pos.x + 15;
 	nextPos[1].y = _pos.y;
 	//ë´å≥îªíËÇí«â¡
 	Position2 downPos[2];
