@@ -44,12 +44,9 @@ GameScene::GameScene()
 	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(200,40));				//センサードア
 	//_fac->Create(CHIP_TYPE::CHIP_BUTTON_1,Position2(380,420));			//消えるﾎﾞﾀﾝ
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
-<<<<<<< HEAD
 	_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
-=======
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(700,430));				//センサードア
->>>>>>> origin/nkmr
 	//マップを読み取り、リストにギミックを持たせます。
 	auto gimData = _map->getChipPosData();
 	for (auto& data : gimData) {
