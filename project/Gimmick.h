@@ -25,7 +25,7 @@ public:
 	Rect _gmRect;
 	CLEAR_DATA _clearData;
 	GIMMICK_TYPE _gimType;
-	virtual Rect& GetRect() =0;
+	virtual Rect& GetRect();
 	GimmickState _state;
 	virtual GIMMICK_TYPE& GetType();
 	virtual CLEAR_DATA& GetClearData();
