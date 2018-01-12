@@ -122,7 +122,7 @@ struct Vector2
 //わかりやすくポジションに置き換える
 typedef Vector2 Position2;
 //場所の矩形について
-struct Rect 
+struct Rect
 {
 	Position2 pos;
 	int w, h;
@@ -132,26 +132,29 @@ struct Rect
 		pos(x, y), w(inw), h(inh) {}
 	Rect(Position2 &inpos, int inw, int inh) :
 		pos(inpos), w(inw), h(inh) {}
-	void SetCenter(float x, float y){
+	void SetCenter(float x, float y) {
 		pos.x = x;
 		pos.y = y;
 	}
-	void SetCenter(Position2& inpos){
+	void SetCenter(Position2& inpos) {
 		pos.x = inpos.x;
 		pos.y = inpos.y;
 	}
 
-	Vector2 Center(){
+	Vector2 Center() {
 		return pos;
 	}
 	//上下左右を確認する
-	float Left()   { return pos.x -( w / 2); }
-	float Top()	   { return pos.y - (h / 2); }
-	float Right()  { return pos.x + (w / 2); }
+	float Left() { return pos.x - (w / 2); }
+	float Top() { return pos.y - (h / 2); }
+	float Right() { return pos.x + (w / 2); }
 	float Bottom() { return pos.y + (h / 2); }
 	//あたり矩形を表示する
 	void Draw(unsigned int color = 0xff00ffff) {
-		DrawBox((int)Left(),(int) Top(), (int)Right(),(int) Bottom(), color, false);
+		DrawBox((int)Left(), (int)Top(), (int)Right(), (int)Bottom(), color, false);
+	}
+	void Draw(Position2 offset, unsigned int color = 0xff00ffff) {
+		DrawBox((int)Left() - offset.x, (int)Top() - offset.y, (int)Right() - offset.x, (int)Bottom() - offset.y, color, false);
 	}
 };
 //円について
@@ -180,6 +183,9 @@ struct Circle
 	}
 	void Draw(unsigned int color = 0xff00ffff) {
 		DrawCircle((int)pos.x,(int)pos.y,(int)r,color,false);
+	}
+	void Draw(Position2 offset, unsigned int color = 0xff00ffff) {
+		DrawCircle((int)pos.x - offset.x, (int)pos.y - offset.y, (int)r, color, false);
 	}
 };
 //敵のデータについて（あたり判定で使用）
