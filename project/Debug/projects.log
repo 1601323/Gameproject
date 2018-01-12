@@ -1,0 +1,37 @@
+﻿  SelectScene.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  Rope.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\rope.cpp(118): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  Player.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(64): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(69): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(73): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(77): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(81): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\player.cpp(122): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+  GimmickFactory.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  GimPull.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\gimpull.cpp(144): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\gimpull.cpp(147): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\gimpull.cpp(154): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\gimpull.cpp(155): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  GameScene.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  GameMain.cpp
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\labo\desktop\学校プロジェクト\project\geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\labo\Desktop\学校プロジェクト\project\Debug\projects.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  projects.vcxproj -> C:\Users\labo\Desktop\学校プロジェクト\project\Debug\projects.exe
+  projects.vcxproj -> C:\Users\labo\Desktop\学校プロジェクト\project\Debug\projects.pdb (Partial PDB)
