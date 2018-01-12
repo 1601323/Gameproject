@@ -104,9 +104,9 @@ void GimButton::Draw(Position2 offset)
 #endif
 	//_state‚ªnone‚©move‚ÌŽž‚¾‚¯‚ ‚½‚è”»’è‚ð•\Ž¦‚·‚é
 	if (_state == GM_NONE || _state == GM_MOVE) {
-		_gmRect.SetCenter(_pos.x  + (_gmRect.w / 2), _pos.y  + (_gmRect.h / 2));
+		_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
 	}
-	_gmRect.Draw(offset);
+	_gmRect.Draw();
 
 }
 //‚ ‚½‚è”»’è—p
