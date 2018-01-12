@@ -73,72 +73,49 @@ void GimPull::Move()
 	nextPos[0].x = _pos.x + (_gmRect.w) + 15;
 	nextPos[0].y = _pos.y;
 	//左
-	nextPos[1].x = _pos.x;
+
+	nextPos[1].x = _pos.x - 15;
 	nextPos[1].y = _pos.y;
+	//足元判定を追加
+	Position2 downPos[2];
+	//右下
+	downPos[0].x = _pos.x + (_gmRect.w) - 15;
+	downPos[0].y = _pos.y + (_gmRect.h) + 15;
+	//左下
+	downPos[1].x = _pos.x + 15;
+	downPos[1].y = _pos.y + (_gmRect.h) + 15;
 	//ﾛｰﾌﾟの移動量を見てそれに従い移動する予定
-//	count -=abs(_rope.GetRopeVec().x);
+	//count -=abs(_rope.GetRopeVec().x);
+	count -= 1;
 	if (count > 0) {
 		if (_state == GM_HIT) {			//ｴﾝﾀｰもしくはﾛｰﾌﾟの当たった場所が中心より左側
-			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK) {
-				_state = GM_END;
-			}
-			else {
-				_pos.x -= _rope.GetRopeVec().x;
-			}
-		}
-		else if (_state == GM_MOVE) {	//ropeの当たった場所が中心より右側
-			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK) {
+			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT || _map->GetChipType(downPos[0]) == CHIP_BLANK) {
 				_state = GM_END;
 			}
 			else {
 				_pos.x += _rope.GetRopeVec().x;
-				nextPos[1].x = _pos.x - 15;
-				nextPos[1].y = _pos.y;
-				//足元判定を追加
-				Position2 downPos[2];
-				//右下
-				downPos[0].x = _pos.x + (_gmRect.w) - 15;
-				downPos[0].y = _pos.y + (_gmRect.h) + 15;
-				//左下
-				downPos[1].x = _pos.x + 15;
-				downPos[1].y = _pos.y + (_gmRect.h) + 15;
-				//ﾛｰﾌﾟの移動量を見てそれに従い移動する予定
-				//count -=abs(_rope.GetRopeVec().x);
-				count -= 1;
-				if (count > 0) {
-					if (_state == GM_HIT) {			//ｴﾝﾀｰもしくはﾛｰﾌﾟの当たった場所が中心より左側
-						if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT || _map->GetChipType(downPos[0]) == CHIP_BLANK) {
-							_state = GM_END;
-						}
-						else {
-							_pos.x += _rope.GetRopeVec().x;
-						}
-					}
-					else if (_state == GM_MOVE) {	//ropeの当たった場所が中心より右側
-						if (_map->GetChipType(nextPos[0]) != CHIP_BLANK || _map->GetChipType(downPos[1]) == CHIP_BLANK) {
-							_state = GM_END;
-						}
-						else {
-							_pos.x += abs(_rope.GetRopeVec().x);
-						}
-					}
-					else {
-
-					}
-				}
-
-				else {		//設定した移動量だけ移動し終わったら状態をENDに変える
-					_state = GM_END;
-					count = 60;
-				}
 			}
 		}
+		else if (_state == GM_MOVE) {	//ropeの当たった場所が中心より右側
+			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK || _map->GetChipType(downPos[1]) == CHIP_BLANK) {
+				_state = GM_END;
+			}
+			else {
+				_pos.x += abs(_rope.GetRopeVec().x);
+			}
+		}
+		else {
+
+		}
+	}
+	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
+		_state = GM_END;
+		count = 60;
 	}
 }
 
 void GimPull::Draw(Position2 offset) 
 {
-	cout << _pos.x << endl;
 	if (_state != GM_END) {			//END以外であれば色は同じまま
 	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
 		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
@@ -147,8 +124,8 @@ void GimPull::Draw(Position2 offset)
 		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y),(int) (_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
 	}
 	else{}
-	_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
-	_gmRect.Draw();	
+	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
+	//_gmRect.Draw();	
 	_gmRect.SetCenter(_pos.x+ (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
 	_gmRect.Draw(offset);	
 	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
