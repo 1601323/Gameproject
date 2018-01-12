@@ -73,8 +73,12 @@ void GimPull::Move()
 	nextPos[0].x = _pos.x + (_gmRect.w) + 15;
 	nextPos[0].y = _pos.y;
 	//左
+<<<<<<< HEAD
 
 	nextPos[1].x = _pos.x - 15;
+=======
+	nextPos[1].x = _pos.x + 15;
+>>>>>>> b1fc5a4ff220db1dced2fc3e3f90900276afd5e1
 	nextPos[1].y = _pos.y;
 	//足元判定を追加
 	Position2 downPos[2];
@@ -91,6 +95,7 @@ void GimPull::Move()
 		if (_state == GM_HIT) {			//ｴﾝﾀｰもしくはﾛｰﾌﾟの当たった場所が中心より左側
 			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT || _map->GetChipType(downPos[0]) == CHIP_BLANK) {
 				_state = GM_END;
+				count = 60;
 			}
 			else {
 				_pos.x += _rope.GetRopeVec().x;
@@ -99,6 +104,7 @@ void GimPull::Move()
 		else if (_state == GM_MOVE) {	//ropeの当たった場所が中心より右側
 			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK || _map->GetChipType(downPos[1]) == CHIP_BLANK) {
 				_state = GM_END;
+				count = 60;
 			}
 			else {
 				_pos.x += abs(_rope.GetRopeVec().x);
@@ -107,6 +113,10 @@ void GimPull::Move()
 		else {
 
 		}
+	}
+	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
+		_state = GM_END;
+		count = 60;
 	}
 	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
 		_state = GM_END;

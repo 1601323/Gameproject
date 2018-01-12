@@ -1,5 +1,4 @@
 #include "DxLib.h"
-#include <iostream>
 #include "GameScene.h"
 #include "GimDrop.h"
 #include "GimPull.h"
@@ -8,6 +7,8 @@
 #include "Player.h"
 #include "Geometry.h"
 #include "Rope.h"
+
+#include <iostream>
 using namespace std;
 
 
@@ -55,6 +56,10 @@ void Player::Update(Input* input)
 	//Ω√∞¿Ωêßå‰
 	setState();
 	HitToEnemy();		//ìGÇ∆ìñÇΩÇ¡ÇΩÇ∆Ç´
+
+	//std::cout << _pos.x << std::endl;
+	//std::cout << _pos.y << std::endl;
+
 }
 
 void Player::Draw(Position2& offset)
@@ -91,8 +96,8 @@ void Player::Draw(Position2& offset)
 	DrawFormatString(10, 400, 0xffffff, "Ω√∞¿ΩÅF%d", GetcharState());
 	DrawFormatString(10, 415, 0xffffff, "dir:%d ç∂:2 âE:3", _dir);
 #endif
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2) , _pos.y + (_plRect.h / 2) );
-	_plRect.Draw(offset);
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2) -offset.x, _pos.y + (_plRect.h / 2) -offset.y);
+	_plRect.Draw();
 }
 
 //à⁄ìÆånÇÃèàóù
