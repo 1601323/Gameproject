@@ -199,7 +199,6 @@ void Input::InputSet()
 //ゲームパッドの方向を取得する（左右上下の4方向）
 STICK_DIR Input::GetStickDir(float stick)
 {	
-	//cout <<(int)( stick / AngleRad(60.f)) << endl;
 	if ((int)(stick / AngleRad(60.f)) == 2 ||		// 右 60度
 		(int)(stick / AngleRad(60.f)) == 3) {
 		return SD_RIGHT;
