@@ -8,6 +8,19 @@ class SelectScene :
 private:
 	void(SelectScene::*_updater)(Input* input);
 	void NormalUpdata(Input* input);
+	void Draw();
+	void Select();
+
+	KEY key;
+	KEY lastKey;
+	INPUT_INFO _inpInfo;
+
+	int nowNum;
+	int mapNumber[6];
+	int SelectMap;
+
+	int w;
+	int h;
 public:
 	SelectScene();
 	~SelectScene();

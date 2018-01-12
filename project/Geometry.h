@@ -154,7 +154,7 @@ struct Rect
 		DrawBox((int)Left(), (int)Top(), (int)Right(), (int)Bottom(), color, false);
 	}
 	void Draw(Position2 offset, unsigned int color = 0xff00ffff) {
-		DrawBox((int)Left(), (int)Top(), (int)Right(), (int)Bottom(), color, false);
+		DrawBox((int)Left() - offset.x, (int)Top() - offset.y, (int)Right() - offset.x, (int)Bottom() - offset.y, color, false);
 	}
 };
 //‰~‚É‚Â‚¢‚Ä
