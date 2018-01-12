@@ -17,7 +17,6 @@ private:
 	EnemyServer& _server;
 	DIR _dir;			//ｷｬﾗの向き
 	MapCtl* _map;
-	EnemyServerData _individualData;	//エネミー本部に送るデータ
 
 	Player& _player;
 	Rope& _rope;
