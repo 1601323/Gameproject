@@ -73,12 +73,8 @@ void GimPull::Move()
 	nextPos[0].x = _pos.x + (_gmRect.w) + 15;
 	nextPos[0].y = _pos.y;
 	//¶
-<<<<<<< HEAD
-
 	nextPos[1].x = _pos.x - 15;
-=======
 	nextPos[1].x = _pos.x + 15;
->>>>>>> b1fc5a4ff220db1dced2fc3e3f90900276afd5e1
 	nextPos[1].y = _pos.y;
 	//‘«Œ³”»’è‚ğ’Ç‰Á
 	Position2 downPos[2];
@@ -113,10 +109,6 @@ void GimPull::Move()
 		else {
 
 		}
-	}
-	else {		//İ’è‚µ‚½ˆÚ“®—Ê‚¾‚¯ˆÚ“®‚µI‚í‚Á‚½‚çó‘Ô‚ğEND‚É•Ï‚¦‚é
-		_state = GM_END;
-		count = 60;
 	}
 	else {		//İ’è‚µ‚½ˆÚ“®—Ê‚¾‚¯ˆÚ“®‚µI‚í‚Á‚½‚çó‘Ô‚ğEND‚É•Ï‚¦‚é
 		_state = GM_END;
