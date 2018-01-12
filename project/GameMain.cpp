@@ -133,7 +133,7 @@ void GameMain::Run()
 	else
 	{
 		//new‚Ìæ‚ğØ‚è‘Ö‚¦‚é‚±‚Æ‚Å‚»‚ê‚¼‚êŠm”F‚Å‚«‚Ü‚·
-		ChangeScene(new GameScene());
+		ChangeScene(new SelectScene());
 	}
 	ClearDataLoad();
 	while (ProcessMessage() == 0) {
