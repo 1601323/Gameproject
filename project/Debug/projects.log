@@ -1,0 +1,5 @@
+﻿  GimPull.cpp
+d:\file\project\gimpull.cpp(105): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\file\project\gimpull.cpp(110): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  projects.vcxproj -> D:\file\project\Debug\projects.exe
+  projects.vcxproj -> D:\file\project\Debug\projects.pdb (Partial PDB)
