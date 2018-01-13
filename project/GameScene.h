@@ -15,6 +15,7 @@ class Rope;//‰¼’u‚«
 class HitClass;
 class Camera;
 class EnemyServer;
+class Midpoint;
 
 class GimmickFactory;
 class EnemyFactory;
@@ -31,9 +32,11 @@ private:
 	HitClass* _hit;
 	MapCtl* _map;
 	EnemyServer* _server;
+	Midpoint* _mid;
 	//‰¼‚Å‚·
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
+
 
 	RESULT_DATA _rtData;
 

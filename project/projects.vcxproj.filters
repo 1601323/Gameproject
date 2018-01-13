@@ -120,11 +120,16 @@
     <ClCompile Include="ResultScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyServer.cpp">
+    <ClCompile Include="Midpoint.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="ModelMgr.cpp">
       <Filter>ソース ファイル</Filter>
+=======
+    <ClCompile Include="EnemyServer.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+>>>>>>> c525954c2cff39936eacfe5bf585081757b52b5b
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,11 +220,16 @@
     <ClInclude Include="ResultScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyServer.h">
+    <ClInclude Include="Midpoint.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="ModelMgr.h">
       <Filter>ヘッダー ファイル</Filter>
+=======
+    <ClInclude Include="EnemyServer.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+>>>>>>> c525954c2cff39936eacfe5bf585081757b52b5b
     </ClInclude>
   </ItemGroup>
 </Project>

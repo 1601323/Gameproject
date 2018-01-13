@@ -14,10 +14,18 @@ Midpoint::Midpoint()
 	GetFlag = false;
 	//マップから受け取るようにする
 	_pos.x = 400;
-	_pos.y = 60;
+	_pos.y = 100;
+	tmpDir = DIR_RIGHT;
 	//大きさについてはとりあえずチップの大きさと一緒にしておく
 	_hitRect.w = 32;
 	_hitRect.h = 32;
+	cnt = 0;
+	bubbleFlag = false;
+	bubble = 0;
+}
+void Midpoint::GetClass(Player* p)
+{
+	_pl = p;
 }
 Midpoint::~Midpoint()
 {
@@ -26,25 +34,74 @@ Midpoint::~Midpoint()
 
 void Midpoint::Updata()
 {
-
+	GetPoint();
+	if (GetFlag == true) {
+		FollowDir();
+	}
 }
 void Midpoint::GetPoint()
 {
 	//ﾌﾟﾚｲﾔｰがたどり着いたとき（あたり判定?）
+	if (_hit->IsHit(GetRect(), _pl->GetRect())) {
+		GetFlag = true;
+	}
+
+}
+void Midpoint::FollowDir()
+{
+	cnt++;
+	if (cnt > 5) {
+		cnt = 0;
+		if (bubbleFlag == false) {
+			bubble++;
+		}
+		else if (bubbleFlag == true) {
+			bubble--;
+		}
+	}
+	if (bubble > 10) {
+		bubbleFlag = true;
+	}
+	else if (bubble < -1) {
+		bubbleFlag = false;
+	}
+	//プレイヤーの後ろについていく処理
+	if (_pl->GetDir() == DIR_RIGHT || _pl->GetDir() == DIR_LEFT) {
+		tmpDir = _pl->GetDir();
+	}
+	_pos.x = _pl->GetPos().x;
+	_pos.y = _pl->GetPos().y;
+	if (tmpDir == DIR_RIGHT) {
+		_pos.x = _pl->GetPos().x -30;
+		_pos.y = _pl->GetPos().y - bubble;
+	}
+	else if (tmpDir == DIR_LEFT) {
+		_pos.x = _pl->GetPos().x + 30;
+		_pos.y = _pl->GetPos().y -bubble;
+	}
 
 }
 void Midpoint::Draw(Position2 offset)
 {
-	if (GetFlag = false) {
-		DrawCircle(_pos.x+offset.x,_pos.y +offset.y,10,GetColor(210,140,44),true);
+	if (GetFlag == false) {
+		DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);
+		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+		_hitRect.Draw(offset);
 	}
 	else if (GetFlag == true) {
-
+		DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
+		//よく考えたら当たり判定取得した後いらないよね
+		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+		_hitRect.Draw(offset);
 	}
-	_hitRect.SetCenter(_pos.x+(_hitRect.w /2) , _pos.y+(_hitRect.h/2));
-	_hitRect.Draw(offset);
+
 }
 bool Midpoint::ReturnGetFlag()
 {
 	return GetFlag;
+}
+
+Rect& Midpoint::GetRect()
+{
+	return _hitRect;
 }
