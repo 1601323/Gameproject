@@ -21,6 +21,7 @@
 #include "EnemyFactory.h"
 #include "HitClass.h"
 #include "EnemyServer.h"
+#include "Midpoint.h"
 
 GameScene::GameScene()
 {
@@ -28,6 +29,7 @@ GameScene::GameScene()
 	_player = new Player();
 	_rope = new Rope(_player);
 	_server = new EnemyServer();
+	_mid = new Midpoint();
 	_cam = Camera::GetInstance();
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
@@ -65,7 +67,8 @@ GameScene::GameScene()
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit,_rope);
-
+	
+	_mid->GetClass(_player);
 	GameInit();
 	count = 0;
 }
@@ -74,6 +77,7 @@ GameScene::~GameScene()
 {
 	delete _player;
 
+	delete _mid;
 	delete _rope;
 	delete _fac;
 	delete _emFac;
@@ -114,8 +118,14 @@ void GameScene::NormalUpdata(Input* input)
 	}
 #endif
 	//クリアによる画面遷移を仮実装
-	if (_player->EnterDoor()) {
+	if (_mid->ReturnGetFlag() == true){
 		_rtData.goalFlag = true;
+	}
+	else
+	{
+		_rtData.goalFlag = false;
+	}
+	if (_player->EnterDoor()) {
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}
@@ -132,6 +142,7 @@ void GameScene::ObjectUpdata(Input* input,Position2& offset)
 	_rope->Updata(input,offset);
 	_player->Update(input);
 	_emFac->Updata();
+	_mid->Updata();
 }
 //ロープを使っているときに呼び出される
 void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
@@ -173,6 +184,7 @@ void GameScene::Draw(Position2& offset)
 	_emFac->Draw(offset);
 	_player->Draw(offset);
 	_server->Draw(offset);
+	_mid->Draw(offset);
 }
 //シーン遷移のために用意
 SCENE_TYPE GameScene::GetScene()
