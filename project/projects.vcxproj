@@ -145,6 +145,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCtl.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="ModelMgr.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="MapCtl.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="ModelMgr.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResultScene.h" />

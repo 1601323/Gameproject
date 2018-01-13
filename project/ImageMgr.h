@@ -7,6 +7,7 @@ private:
 
 	std::map<std::string, int> imageID;					//画像のハンドル
 	std::map < std::string, SCENE_TYPE> deleteTiming;	//画像の消去タイミング
+
 public:
 	~ImageMgr();
 	static ImageMgr& Instance();
