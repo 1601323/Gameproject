@@ -4,6 +4,7 @@ class Midpoint
 {
 private:
 	HitClass* _hit;
+	Player* _pl;
 	void GetPoint();	//中間地点にたどり着いたことを示す
 
 	Position2 _pos;
@@ -13,8 +14,9 @@ public:
 	Midpoint();
 	~Midpoint();	
 	void Updata();
-
+	void GetClass(Player* p);
 	void Draw(Position2 offset);
 	bool ReturnGetFlag();		//中間地点にたどり着いているかいないかを返す
+	Rect& GetRect();
 };
 
