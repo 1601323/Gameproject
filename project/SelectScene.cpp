@@ -36,6 +36,7 @@ void SelectScene::NormalUpdata(Input* input)
 	Draw();
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
 }
@@ -73,6 +74,8 @@ void SelectScene::Select()
 		if (nowNum < 0) {
 			nowNum += 6;
 		}
+	}
+	else {
 	}
 }
 void SelectScene::Draw()
