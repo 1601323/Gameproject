@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include <iostream>
+#include <stdio.h>
 #include <list>
 #include <memory>
 #include <map>
@@ -26,6 +27,7 @@
 GameScene::GameScene()
 {
 	_updater = &GameScene::NormalUpdata;
+	GameInit();
 	_player = new Player();
 	_rope = new Rope(_player);
 	_server = new EnemyServer();
@@ -34,7 +36,9 @@ GameScene::GameScene()
 	// Ï¯Ìß²İ½Àİ½
 	_map = MapCtl::GetInstance();
 	// Ï¯ÌßÃŞ°À‚Ì“Ç‚İ‚İ
-	_map->Load("map/1218_001.map");
+	//_map->Load("map/1218_001.map");
+	_map->Load(mapName);
+
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
 	_fac = new GimmickFactory(*_player,*_rope);
@@ -69,7 +73,7 @@ GameScene::GameScene()
 	_player->Getclass(_hit,_rope);
 	
 	_mid->GetClass(_player);
-	GameInit();
+	//GameInit();
 	count = 0;
 }
 
@@ -86,8 +90,17 @@ GameScene::~GameScene()
 }
 void GameScene::GameInit()
 {
+	GameMain& gm = GameMain::Instance();
 	//‰Šúó‘Ô‚Ìƒf[ƒ^‚ğ“ü‚ê‚é
 	_rtData = RESULT_DATA();
+	switch (gm.GetNowStage()) {
+	case 0:
+		mapName = "map/1218_001.map";
+		break;
+	default:
+		mapName = "map/1218_001.map";
+		break;
+	}
 }
 
 void GameScene::NormalUpdata(Input* input)

@@ -36,8 +36,7 @@ private:
 	//仮です
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
-
-
+	const char* mapName;
 	RESULT_DATA _rtData;
 
 	int count;			//遷移確認用（あとで削除します）

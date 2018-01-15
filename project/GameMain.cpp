@@ -69,6 +69,7 @@ GameMain::GameMain()
 	}
 	fclose(fp);
 
+	nowStage = 0;
 }
 
 void GameMain::ChangeScene(Scene * scene) 
@@ -111,6 +112,16 @@ RESULT_DATA GameMain::GetResultData()
 {
 	return _resultData;
 }
+//現在のステージを受け取ります
+void GameMain::SetNowStage(int num)
+{
+	nowStage = num;
+}
+//現在のステージ番号を返します
+int GameMain::GetNowStage()
+{
+	return nowStage;
+}
 //ゲームの実行のメイン部分
 void GameMain::Run()
 {
@@ -133,7 +144,7 @@ void GameMain::Run()
 	else
 	{
 		//newの先を切り替えることでそれぞれ確認できます
-		ChangeScene(new GameScene());
+		ChangeScene(new SelectScene());
 	}
 	ClearDataLoad();
 	while (ProcessMessage() == 0) {
