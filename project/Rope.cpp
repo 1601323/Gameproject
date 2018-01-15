@@ -92,8 +92,8 @@ void Rope::DrawRopeRect(void)
 	RopeRect.Draw();*/
 
 	//circle
-	_RopeCircle.SetCenter(_rope[*itr-1].x + (_RopeRect.w / 2) - _tmpOffset.x,
-		_rope[*itr-1].y + (_RopeRect.h / 2)- _tmpOffset.y, range);
+	_RopeCircle.SetCenter(_rope[*itr-1].x + (_RopeRect.w / 2),
+		_rope[*itr-1].y + (_RopeRect.h / 2), range);
 
 	if (RopeTurnFlag)
 	{
@@ -107,7 +107,7 @@ void Rope::DrawRopeRect(void)
 		}
 	}
 
-	_RopeCircle.Draw();
+	_RopeCircle.Draw(_tmpOffset);
 }
 
 //DrawLineÇÇ‹Ç∆ÇﬂÇΩä÷êî offsetílÇÃê›íËÇ™ï™Ç©ÇËÇ…Ç≠Ç©Ç¡ÇΩÇ©ÇÁ

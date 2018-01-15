@@ -73,7 +73,7 @@ void GimPull::Move()
 	nextPos[0].x = _pos.x + (_gmRect.w) + 15;
 	nextPos[0].y = _pos.y;
 	//ç∂
-	nextPos[1].x = _pos.x + 15;
+	nextPos[1].x = _pos.x - 15;
 	nextPos[1].y = _pos.y;
 	//ë´å≥îªíËÇí«â¡
 	Position2 downPos[2];
@@ -105,6 +105,9 @@ void GimPull::Move()
 				_pos.x += abs(_rope.GetRopeVec().x);
 			}
 		}
+		else {
+
+		}
 	}
 	else {		//ê›íËÇµÇΩà⁄ìÆó ÇæÇØà⁄ìÆÇµèIÇÌÇ¡ÇΩÇÁèÛë‘ÇENDÇ…ïœÇ¶ÇÈ
 		_state = GM_END;
@@ -122,8 +125,8 @@ void GimPull::Draw(Position2 offset)
 		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y),(int) (_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
 	}
 	else{}
-	_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
-	_gmRect.Draw();	
+	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
+	//_gmRect.Draw();	
 	_gmRect.SetCenter(_pos.x+ (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
 	_gmRect.Draw(offset);	
 	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
