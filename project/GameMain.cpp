@@ -128,7 +128,6 @@ RESULT_DATA GameMain::GetResultData()
 {
 	return _resultData;
 }
-<<<<<<< HEAD
 //現在のステージを受け取ります
 void GameMain::SetNowStage(int num)
 {
@@ -147,8 +146,6 @@ void GameMain::TransTitle()
 		ChangeScene(new TitleScene());
 	}
 }
-=======
->>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
 //ゲームの実行のメイン部分
 void GameMain::Run()
 {
