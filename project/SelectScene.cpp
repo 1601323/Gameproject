@@ -38,3 +38,7 @@ void SelectScene::Updata(Input* input)
 {
 	(this->*_updater)(input);
 }
+
+void SelectScene::Select() {
+
+}
