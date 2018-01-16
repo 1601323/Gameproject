@@ -276,7 +276,9 @@ void GimDrop::Draw(Position2 offset)
 		DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(0, 0, 255), true);
 	}
 	_gmRect.SetCenter(_pos.x , _pos.y);
+#ifdef _DEBUG
 	_gmRect.Draw(offset);
+#endif
 }
 //‚ ‚½‚è”»’è—p
 Rect& GimDrop::GetRect()

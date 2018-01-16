@@ -86,13 +86,17 @@ void Midpoint::Draw(Position2 offset)
 	if (GetFlag == false) {
 		DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+#ifdef _DEBUG
 		_hitRect.Draw(offset);
+#endif
 	}
 	else if (GetFlag == true) {
 		DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
 		//ÇÊÇ≠çlÇ¶ÇΩÇÁìñÇΩÇËîªíËéÊìæÇµÇΩå„Ç¢ÇÁÇ»Ç¢ÇÊÇÀ
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+#ifdef _DEBUG
 		_hitRect.Draw(offset);
+#endif
 	}
 
 }
