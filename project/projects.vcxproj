@@ -146,6 +146,19 @@
     <ClCompile Include="MapCtl.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Midpoint.cpp" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    <ClCompile Include="ModelMgr.cpp" />
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
+=======
+    <ClCompile Include="ModelMgr.cpp" />
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -180,6 +193,19 @@
     <ClInclude Include="MapCtl.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Midpoint.h" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    <ClInclude Include="ModelMgr.h" />
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
+=======
+    <ClInclude Include="ModelMgr.h" />
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResultScene.h" />
