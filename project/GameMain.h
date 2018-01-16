@@ -28,6 +28,8 @@ private:
 	//GameMain& operator=(const GameMain&);
 	void ClearDataLoad();
 	void ClearDataSave();
+
+	void TransTitle();
 public:
 	static GameMain& Instance() {
 		static GameMain instance;

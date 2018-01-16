@@ -97,6 +97,10 @@ void GameScene::GameInit()
 	case 0:
 		mapName = "map/1218_001.map";
 		break;
+
+	case 1:
+		mapName = "map/1218_001.map";
+		break;
 	default:
 		mapName = "map/1218_001.map";
 		break;
@@ -132,6 +136,7 @@ void GameScene::NormalUpdata(Input* input)
 #endif
 	//ƒNƒŠƒA‚É‚æ‚é‰æ–Ê‘JˆÚ‚ð‰¼ŽÀ‘•
 	if (_mid->ReturnGetFlag() == true){
+		gm._bestData.goalTime = 50;
 		_rtData.goalFlag = true;
 	}
 	else
