@@ -28,8 +28,8 @@ void SelectScene::NormalUpdata(Input* input)
 	GameMain& gm = GameMain::Instance();
 	key = input->GetInput(1).key;
 	lastKey = input->GetLastKey();
-	 _inpInfo = input->GetInput(1);
-	 Select();
+	_inpInfo = input->GetInput(1);
+	Select();
 #ifdef _DEBUG
 	DrawString(10,0,"ƒZƒŒƒNƒg",GetColor(255,255,255));
 #endif
