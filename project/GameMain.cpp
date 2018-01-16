@@ -178,7 +178,7 @@ void GameMain::Run()
 		{
 			break;
 		}
-
+		TransTitle();
 		input->Update();
 		input->InputSet();
 		//scene.func(&scene, input);
