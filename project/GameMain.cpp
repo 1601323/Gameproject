@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include <stdio.h>
 #include <iostream>
+#include "Assert.h"
 #include "GameMain.h"
 #include "Scene.h"
 #include "TitleScene.h"
