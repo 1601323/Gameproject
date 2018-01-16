@@ -5,6 +5,8 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include "Geometry.h"
+#include "Assert.h"
 #include "GameScene.h"
 #include "GameMain.h"
 #include "Input.h"
@@ -15,7 +17,7 @@
 #include "Enemy.h"
 #include "Object.h"
 #include "Rope.h"
-#include "Geometry.h"
+
 #include "ResultScene.h"
 
 #include "GimmickFactory.h"
@@ -23,6 +25,7 @@
 #include "HitClass.h"
 #include "EnemyServer.h"
 #include "Midpoint.h"
+#include "TimeManager.h"
 
 GameScene::GameScene()
 {
@@ -32,6 +35,7 @@ GameScene::GameScene()
 	_rope = new Rope(_player);
 	_server = new EnemyServer();
 	_mid = new Midpoint();
+	_timer = new TimeManager();
 	_cam = Camera::GetInstance();
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
@@ -73,6 +77,7 @@ GameScene::GameScene()
 	_player->Getclass(_hit,_rope);
 	
 	_mid->GetClass(_player);
+	_timer->StartTimer();
 	//GameInit();
 	count = 0;
 }
@@ -81,6 +86,7 @@ GameScene::~GameScene()
 {
 	delete _player;
 
+	delete _timer;
 	delete _mid;
 	delete _rope;
 	delete _fac;
@@ -97,8 +103,14 @@ void GameScene::GameInit()
 	case 0:
 		mapName = "map/1218_001.map";
 		break;
-	default:
+
+	case 1:
 		mapName = "map/1218_001.map";
+		break;
+	default:
+		//マップの数が決まり次第、アサートに切り替え
+		mapName = "map/1218_001.map";
+		//ASSERT();
 		break;
 	}
 }
@@ -119,7 +131,7 @@ void GameScene::NormalUpdata(Input* input)
 	_server->Updata();
 
 	Draw(offset);
-
+	_timer->Updata();
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
@@ -132,6 +144,7 @@ void GameScene::NormalUpdata(Input* input)
 #endif
 	//クリアによる画面遷移を仮実装
 	if (_mid->ReturnGetFlag() == true){
+		gm._bestData.goalTime = 50;
 		_rtData.goalFlag = true;
 	}
 	else
@@ -139,6 +152,8 @@ void GameScene::NormalUpdata(Input* input)
 		_rtData.goalFlag = false;
 	}
 	if (_player->EnterDoor()) {
+		_timer->StopTimer();
+		_rtData.goalTime = _timer->ShowTimer();
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}

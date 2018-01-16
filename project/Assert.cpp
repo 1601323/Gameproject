@@ -15,6 +15,7 @@
 //	}
 
 //埋め込むときはAssert(__FILE__,__LINE__);でお願いします
+//なんか仕様変更したのでASSERT()だけで大丈夫です
 void Assert(char* file, int line) 
 {
 	FILE *fp;
