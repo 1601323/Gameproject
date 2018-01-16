@@ -36,6 +36,7 @@ void SelectScene::NormalUpdata(Input* input)
 	Draw();
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
 }
@@ -74,6 +75,8 @@ void SelectScene::Select()
 			nowNum += 6;
 		}
 	}
+	else {
+	}
 }
 void SelectScene::Draw()
 {
@@ -86,5 +89,5 @@ void SelectScene::Draw()
 		}
 	}
 	DrawBox(90+ 100*(nowNum%3),90+100*(nowNum/3), 90 + 100 * (nowNum % 3)+w, 90 + 100 * (nowNum /3)+h,0x999999,true);
-	cout << nowNum << endl;
+	//cout << nowNum << endl;
 }

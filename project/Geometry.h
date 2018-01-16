@@ -11,6 +11,7 @@
 #define MAP_SIZE_X (28)			//スクロール非対応マップの大きさ28
 //#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define MAP_SIZE_Y (15)			// ﾏｯﾌﾟのｻｲｽﾞ
+#define STAGE_MAX (6)			//ステージの数（仮）
 
 //プレイヤーの状態について
 enum CHAR_ST {
