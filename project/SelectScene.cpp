@@ -39,6 +39,33 @@ void SelectScene::Updata(Input* input)
 	(this->*_updater)(input);
 }
 
-void SelectScene::Select() {
-
+void SelectScene::Select()
+{
+	//ステージ選択
+	if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !lastKey.keybit.R_RIGHT_BUTTON) {
+		nowNum += 1;
+		if (nowNum >= 6) {
+			nowNum = 0;
+		}
+	}
+	else if (_inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
+		nowNum -= 1;
+		if (nowNum < 0) {
+			nowNum = 5;
+		}
+	}
+	else if (_inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
+		nowNum += 3;
+		if (nowNum >= 6) {
+			nowNum -= 6;
+		}
+	}
+	else if (_inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
+		nowNum -= 3;
+		if (nowNum < 0) {
+			nowNum += 6;
+		}
+	}
+	else {
+	}
 }
