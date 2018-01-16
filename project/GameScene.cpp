@@ -5,6 +5,8 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include "Geometry.h"
+#include "Assert.h"
 #include "GameScene.h"
 #include "GameMain.h"
 #include "Input.h"
@@ -15,7 +17,7 @@
 #include "Enemy.h"
 #include "Object.h"
 #include "Rope.h"
-#include "Geometry.h"
+
 #include "ResultScene.h"
 
 #include "GimmickFactory.h"
@@ -106,7 +108,9 @@ void GameScene::GameInit()
 		mapName = "map/1218_001.map";
 		break;
 	default:
+		//マップの数が決まり次第、アサートに切り替え
 		mapName = "map/1218_001.map";
+		//ASSERT();
 		break;
 	}
 }

@@ -94,12 +94,15 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 	//ドアのところで上を押すとはいれるようにしたほうがいいらしい
 	if (count * 2 >= _pl.GetRect().w) {
 		_clearData.clearFlag = true;
-
+#ifdef _DEBUG
 		DrawString(100,30,"クリアできるよ",GetColor(244,244,244));
+#endif
 	}
 	else {
 		_clearData.clearFlag = false;
+#ifdef _DEBUG
 		DrawString(100, 30, "クリアできないよ", GetColor(244, 244, 244));
+#endif
 
 	}
 }
