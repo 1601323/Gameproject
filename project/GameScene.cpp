@@ -49,15 +49,15 @@ GameScene::GameScene()
 	//// ﾀｰｹﾞｯﾄ指定
 	_cam->SetTarget(_player);	// player基準
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
-								//ギミック呼び出し用の関数です。
-								//このように宣言するとどこでも設置できるので確認等につかってください
-								//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(200,40));				//センサードア
-								//_fac->Create(CHIP_TYPE::CHIP_BUTTON_1,Position2(380,420));			//消えるﾎﾞﾀﾝ
-								//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
-								//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
-								//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
-								//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(700,430));				//センサードア
-								//マップを読み取り、リストにギミックを持たせます。
+	//ギミック呼び出し用の関数です。
+	//このように宣言するとどこでも設置できるので確認等につかってください
+	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(200,40));				//センサードア
+	//_fac->Create(CHIP_TYPE::CHIP_BUTTON_1,Position2(380,420));			//消えるﾎﾞﾀﾝ
+	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
+	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
+	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
+	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(700,430));				//センサードア
+	//マップを読み取り、リストにギミックを持たせます。
 	auto gimData = _map->getChipPosData();
 	for (auto& data : gimData) {
 		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
@@ -65,7 +65,7 @@ GameScene::GameScene()
 	}
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server);
-	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
+	_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
 
 	_hit = new HitClass(_fac, _emFac);
