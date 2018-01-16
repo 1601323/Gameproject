@@ -139,10 +139,11 @@ void GimPull::Draw(Position2 offset)
 	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
 	//_gmRect.Draw();	
 	_gmRect.SetCenter(_pos.x+ (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
+#ifdef _DEBUG
 	_gmRect.Draw(offset);	
 	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
 	DrawPixel(_pos.x - offset.x , _pos.y - offset.y , 0xff00ff);
-
+#endif
 }
 //‚ ‚½‚è‹éŒ`‚ð•Ô‚·
 Rect& GimPull::GetRect() 

@@ -117,7 +117,9 @@ void SensorDoor::Draw(Position2 offset)
 	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)),(int)( _pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x - count ), (int)_pos.y - offset.y, 0xffffffff, true);
 
 	_gmRect.SetCenter(_pos.x , _pos.y - (HEIGHT / 2));
+#ifdef _DEBUG
 	_gmRect.Draw(offset);
+#endif
 }
 
 Rect& SensorDoor::GetRect() 
