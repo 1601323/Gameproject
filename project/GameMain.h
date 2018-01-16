@@ -30,28 +30,21 @@ private:
 	//ﾃﾞｰﾀ保存＆書き込み用の関数
 	void ClearDataLoad();
 	void ClearDataSave();
-<<<<<<< HEAD
 
 	void TransTitle();							//タイトルへの強制遷移
-=======
->>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
 public:
 	static GameMain& Instance() {
 		static GameMain instance;
 		return instance;
 	}
 
-<<<<<<< HEAD
 	RESULT_DATA _newData[STAGE_MAX];			//最新のクリアデータを保持
 	RESULT_DATA _bestData[STAGE_MAX];			//ベストスコアを保持
 	void BestDataSet();
 	void NewDataSet();
 	int nowStage;								//選ばれたステージ番号を保持
-=======
-	RESULT_DATA _newData;						//最新のクリアデータを保持
-	RESULT_DATA _bestData;						//ベストスコアを保持
-
->>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
+	void SetNowStage(int num);
+	int GetNowStage();
 	void Run();									//ゲーム実行
 	void ChangeScene(Scene* scene);				//シーンチェンジ
 
