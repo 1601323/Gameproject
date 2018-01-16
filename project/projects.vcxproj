@@ -145,6 +145,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCtl.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="Midpoint.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SensorDoor.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +179,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="MapCtl.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Midpoint.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResultScene.h" />
@@ -184,6 +187,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SensorDoor.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

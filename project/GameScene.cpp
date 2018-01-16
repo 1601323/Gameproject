@@ -1,9 +1,12 @@
 #include <DxLib.h>
 #include <iostream>
+#include <stdio.h>
 #include <list>
 #include <memory>
 #include <map>
 #include <vector>
+#include "Geometry.h"
+#include "Assert.h"
 #include "GameScene.h"
 #include "GameMain.h"
 #include "Input.h"
@@ -14,25 +17,32 @@
 #include "Enemy.h"
 #include "Object.h"
 #include "Rope.h"
-#include "Geometry.h"
+
 #include "ResultScene.h"
 
 #include "GimmickFactory.h"
 #include "EnemyFactory.h"
 #include "HitClass.h"
 #include "EnemyServer.h"
+#include "Midpoint.h"
+#include "TimeManager.h"
 
 GameScene::GameScene()
 {
 	_updater = &GameScene::NormalUpdata;
+	GameInit();
 	_player = new Player();
 	_rope = new Rope(_player);
 	_server = new EnemyServer();
+	_mid = new Midpoint();
+	_timer = new TimeManager();
 	_cam = Camera::GetInstance();
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
-	_map->Load("map/1218_001.map");
+	//_map->Load("map/1218_001.map");
+	_map->Load(mapName);
+
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
 	_fac = new GimmickFactory(*_player,*_rope);
@@ -65,8 +75,10 @@ GameScene::GameScene()
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit,_rope);
-
-	GameInit();
+	
+	_mid->GetClass(_player);
+	_timer->StartTimer();
+	//GameInit();
 	count = 0;
 }
 
@@ -74,6 +86,8 @@ GameScene::~GameScene()
 {
 	delete _player;
 
+	delete _timer;
+	delete _mid;
 	delete _rope;
 	delete _fac;
 	delete _emFac;
@@ -82,8 +96,23 @@ GameScene::~GameScene()
 }
 void GameScene::GameInit()
 {
+	GameMain& gm = GameMain::Instance();
 	//初期状態のデータを入れる
 	_rtData = RESULT_DATA();
+	switch (gm.GetNowStage()) {
+	case 0:
+		mapName = "map/1218_001.map";
+		break;
+
+	case 1:
+		mapName = "map/1218_001.map";
+		break;
+	default:
+		//マップの数が決まり次第、アサートに切り替え
+		mapName = "map/1218_001.map";
+		//ASSERT();
+		break;
+	}
 }
 
 void GameScene::NormalUpdata(Input* input)
@@ -102,7 +131,7 @@ void GameScene::NormalUpdata(Input* input)
 	_server->Updata();
 
 	Draw(offset);
-
+	_timer->Updata();
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
@@ -114,8 +143,16 @@ void GameScene::NormalUpdata(Input* input)
 	}
 #endif
 	//クリアによる画面遷移を仮実装
-	if (_player->EnterDoor()) {
+	if (_mid->ReturnGetFlag() == true){
 		_rtData.goalFlag = true;
+	}
+	else
+	{
+		_rtData.goalFlag = false;
+	}
+	if (_player->EnterDoor()) {
+		_timer->StopTimer();
+		_rtData.goalTime = _timer->ShowTimer();
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}
@@ -132,6 +169,7 @@ void GameScene::ObjectUpdata(Input* input,Position2& offset)
 	_rope->Updata(input,offset);
 	_player->Update(input);
 	_emFac->Updata();
+	_mid->Updata();
 }
 //ロープを使っているときに呼び出される
 void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
@@ -173,6 +211,7 @@ void GameScene::Draw(Position2& offset)
 	_emFac->Draw(offset);
 	_player->Draw(offset);
 	_server->Draw(offset);
+	_mid->Draw(offset);
 }
 //シーン遷移のために用意
 SCENE_TYPE GameScene::GetScene()

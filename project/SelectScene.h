@@ -11,12 +11,14 @@ private:
 	void Draw();
 	void Select();
 
-	KEY key ;
-	KEY lastKey ;
+	KEY key;
+	KEY lastKey;
 	INPUT_INFO _inpInfo;
-	int nowNum;
 
-	//確認用（あとで削除）
+	int nowNum;
+	int mapNumber[6];
+	int SelectMap;
+
 	int w;
 	int h;
 public:
@@ -24,8 +26,5 @@ public:
 	~SelectScene();
 	SCENE_TYPE GetScene();
 	void Updata(Input* input);
-	//まだ構成がはっきりしていなのでここで設定しておく
-	int SelectMap;
-	int mapNumber[6];
 };
 

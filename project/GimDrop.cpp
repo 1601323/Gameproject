@@ -275,7 +275,7 @@ void GimDrop::Draw(Position2 offset)
 	else if (_state == GM_PAUSE) {		//ˆÚ“®‚ªˆê’â~‚µ‚Ä‚¢‚é‚Æ‚«i•Ç‚É‚Ô‚Â‚©‚Á‚½‚È‚Ç)
 		DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(0, 0, 255), true);
 	}
-	_gmRect.SetCenter(_pos.x, _pos.y );
+	_gmRect.SetCenter(_pos.x , _pos.y);
 	_gmRect.Draw(offset);
 }
 //‚ ‚½‚è”»’è—p
