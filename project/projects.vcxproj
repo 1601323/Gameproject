@@ -146,6 +146,10 @@
     <ClCompile Include="MapCtl.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Midpoint.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="ModelMgr.cpp" />
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -180,6 +184,10 @@
     <ClInclude Include="MapCtl.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Midpoint.h" />
+<<<<<<< HEAD
+    <ClInclude Include="ModelMgr.h" />
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResultScene.h" />

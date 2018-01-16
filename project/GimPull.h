@@ -6,6 +6,8 @@ class Input;
 class Rope;
 //class Player;
 class MapCtl;
+class ModelMgr;
+
 class GimPull :
 	public Gimmick
 {
@@ -16,11 +18,13 @@ private:
 	GimmickState _state;
 	Position2 _pos;
 	MapCtl* _map;
+	ModelMgr* _modelmgr;
 	//確認用
 	KEY _key;
 	KEY _lastKey;
 	INPUT_INFO _inpInfo;
 	int count;				//一定量動く範囲を設定する
+	int modelhandle;
 
 	void CheckDoMove();		//動作条件判定
 	void Move();			//ギミックの動作について
