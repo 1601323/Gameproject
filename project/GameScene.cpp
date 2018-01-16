@@ -144,7 +144,6 @@ void GameScene::NormalUpdata(Input* input)
 #endif
 	//ƒNƒŠƒA‚É‚æ‚é‰æ–Ê‘JˆÚ‚ð‰¼ŽÀ‘•
 	if (_mid->ReturnGetFlag() == true){
-		gm._bestData.goalTime = 50;
 		_rtData.goalFlag = true;
 	}
 	else

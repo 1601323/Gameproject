@@ -36,8 +36,8 @@ public:
 		return instance;
 	}
 
-	RESULT_DATA _newData;						//最新のクリアデータを保持
-	RESULT_DATA _bestData;						//ベストスコアを保持
+	RESULT_DATA _newData[STAGE_MAX];						//最新のクリアデータを保持
+	RESULT_DATA _bestData[STAGE_MAX];						//ベストスコアを保持
 
 	int nowStage;								//選ばれたステージ番号を保持
 	void Run();									//ゲーム実行

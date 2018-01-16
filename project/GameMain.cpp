@@ -86,10 +86,10 @@ void GameMain::ClearDataLoad()
 	fopen_s(&file, "data/clearData.dat", "rb");
 	if (file == nullptr) {
 		fopen_s(&file,"data/clearData.dat","wb");
-		fwrite(&_bestData,sizeof(_bestData),1,file);
+		fwrite(&_bestData,sizeof(_bestData),STAGE_MAX,file);
 	}
 	else {
-		fread(&_bestData,sizeof(_bestData),1,file);
+		fread(&_bestData,sizeof(_bestData),STAGE_MAX,file);
 	}
 	fclose(file);
 }
@@ -99,7 +99,7 @@ void GameMain::ClearDataSave()
 	FILE* file;
 	fopen_s(&file,"data/clearData.dat","wb");
 
-	fwrite(&_bestData,sizeof(_bestData),1,file);
+	fwrite(&_bestData,sizeof(_bestData),STAGE_MAX,file);
 	fclose(file);
 }
 //リザルトに関してのデータをセットします
@@ -120,7 +120,7 @@ void GameMain::SetNowStage(int num)
 //現在のステージ番号を返します
 int GameMain::GetNowStage()
 {
-	cout <<_bestData.goalTime << endl;
+	cout <<_bestData[0].goalTime << endl;
 	return nowStage;
 }
 //タイトルに強制遷移を行います
