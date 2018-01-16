@@ -42,7 +42,7 @@ std::weak_ptr<Enemy>EnemyFactory::Create(ENEMY_TYPE et,Position2 pos)
 	case ENEMY_MIMICRY:
 		break;
 	default:
-		Assert(__FILE__, __LINE__);
+		ASSERT();
 		break;
 	}
 	return _enemyList.back();
