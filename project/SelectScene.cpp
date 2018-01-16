@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include <iostream>
+#include "Geometry.h"
 #include "GameMain.h"
 #include "SelectScene.h"
 #include "Input.h"
@@ -10,7 +11,11 @@
 SelectScene::SelectScene()
 {
 	_updater = &SelectScene::NormalUpdata;
+	SelectMap = mapNumber[0];
 	nowNum = 0;
+
+	w = 90;
+	h = 60;
 }
 
 
@@ -30,6 +35,7 @@ void SelectScene::NormalUpdata(Input* input)
 	Draw();
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
 }
