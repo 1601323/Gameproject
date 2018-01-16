@@ -1,141 +1,56 @@
-﻿  Assert.cpp
-Assert.cpp(27): warning C4551: 関数呼び出しに引数リストがありません。
-  Camera.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Camera.cpp(51): warning C4800: 'Player *': ブール値を 'true' または 'false' に強制的に設定します (警告の処理)
-Camera.cpp(57): warning C4800: 'MapCtl *': ブール値を 'true' または 'false' に強制的に設定します (警告の処理)
-  ClearScene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  EmAround.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-EmAround.cpp(311): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-EmAround.cpp(314): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Enemy.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  EmLookback.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-EmLookback.cpp(65): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-EmLookback.cpp(68): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-EmLookback.cpp(75): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  EnemyFactory.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  EnemyServer.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+﻿  Enemy.cpp
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   GameMain.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  GameOverScene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   GameScene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GameScene.cpp(152): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   GimButton.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 GimButton.cpp(88): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 GimButton.cpp(97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   GimDrop.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimDrop.cpp(16): warning C4305: '=': 'double' から 'float' へ切り詰めます。
-GimDrop.cpp(265): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimDrop.cpp(271): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimDrop.cpp(273): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimDrop.cpp(276): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Gimmick.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  GimmickFactory.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimDrop.cpp(15): warning C4305: '=': 'double' から 'float' へ切り詰めます。
+GimDrop.cpp(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimDrop.cpp(113): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimDrop.cpp(119): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimDrop.cpp(121): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimDrop.cpp(124): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   GimPull.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimPull.cpp(122): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimPull.cpp(125): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimPull.cpp(132): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-GimPull.cpp(133): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimPull.cpp(81): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+GimPull.cpp(84): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  Gimmick.cpp
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  GimmickFactory.cpp
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   HitClass.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-HitClass.cpp(182): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  ImageMgr.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Input.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  main.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  コンパイル中...
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   MapCtl.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-MapCtl.cpp(99): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-MapCtl.cpp(101): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-MapCtl.cpp(184): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-MapCtl.cpp(207): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-MapCtl.cpp(209): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-MapCtl.cpp(212): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-MapCtl.cpp(213): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-  Math.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Midpoint.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Midpoint.cpp(87): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Midpoint.cpp(92): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+MapCtl.cpp(85): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+MapCtl.cpp(87): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+MapCtl.cpp(194): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+MapCtl.cpp(196): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+MapCtl.cpp(199): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+MapCtl.cpp(200): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
   Object.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   Player.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(69): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(74): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(78): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(82): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(86): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(87): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Player.cpp(127): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-  ResultScene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   Rope.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-Rope.cpp(118): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  Scene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  SelectScene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   SensorDoor.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-SensorDoor.cpp(110): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-SensorDoor.cpp(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-SensorDoor.cpp(114): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  TimeManager.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-  TitleScene.cpp
-d:\file\project\Geometry.h(157): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-d:\file\project\Geometry.h(188): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+SensorDoor.cpp(103): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+SensorDoor.cpp(105): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+SensorDoor.cpp(107): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  main.cpp
+d:\prj_data\project\Geometry.h(112): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
   コード生成しています。
-  All 1425 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  136 of 774 functions (17.6%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    12 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  projects.vcxproj -> D:\file\project\Release\projects.exe
-  projects.vcxproj -> D:\file\project\Release\projects.pdb (Full PDB)
+  projects.vcxproj -> D:\prj_data\project\Release\projects.exe
+  projects.vcxproj -> D:\prj_data\project\Release\projects.pdb (Full PDB)

@@ -1,0 +1,37 @@
+﻿  Assert.cpp
+  Enemy.cpp
+d:\prj_data\project\Geometry.h(2): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  GameMain.cpp
+GameMain.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  GameScene.cpp
+GameScene.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  GimButton.cpp
+GimButton.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  GimDrop.cpp
+GimDrop.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Gimmick.cpp
+d:\prj_data\project\Geometry.h(2): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  GimmickFactory.cpp
+GimmickFactory.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  GimPull.cpp
+GimPull.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  HitClass.cpp
+HitClass.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Input.cpp
+Input.cpp(3): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  main.cpp
+main.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  MapCtl.cpp
+MapCtl.cpp(2): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Math.cpp
+d:\prj_data\project\Geometry.h(2): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Object.cpp
+d:\prj_data\project\Geometry.h(2): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Player.cpp
+Player.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Rope.cpp
+Rope.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  Scene.cpp
+d:\prj_data\project\Geometry.h(2): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory
+  SensorDoor.cpp
+SensorDoor.cpp(1): fatal error C1083: include ファイルを開けません。'DxLib.h':No such file or directory

@@ -22,13 +22,13 @@ private:
 
 	void CheckDoMove();		//“®ìğŒ”»’è
 	void Move();			//ƒMƒ~ƒbƒN‚Ì“®ì‚É‚Â‚¢‚Ä
+	void Draw(Position2 offset);			//•`‰æ
 public:
 	GimPull(Position2 pos,Rope& r);
 	~GimPull();
 	Rect& GetRect();
 	GIMMICK_TYPE& GetType();
 	void Updata(Input& _input);
-	void Draw(Position2 offset);			//•`‰æ
 
 };
 
