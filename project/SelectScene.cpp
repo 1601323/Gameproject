@@ -23,6 +23,7 @@ void SelectScene::NormalUpdata(Input* input)
 	lastKey = input->GetLastKey();
 	_inpInfo = input->GetInput(1);
 	Select();
+	Draw();
 #ifdef _DEBUG
 	DrawString(10,0,"セレクト",GetColor(255,255,255));
 #endif
@@ -68,4 +69,17 @@ void SelectScene::Select()
 	}
 	else {
 	}
+}
+void SelectScene::Draw()
+{
+	//背景色
+	DrawBox(0, 0, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT, 0xffffff, true);
+	//ステージ選択用の四角
+	for (int y = 0; y < 2; y++) {
+		for (int x = 0; x < 3; x++) {
+			DrawBox(90 + 100 * x, 90 + 100 * y, 90 + 100 * x + w, 90 + 100 * y + h, 0x223344, true);
+		}
+	}
+	DrawBox(90 + 100 * (nowNum % 3), 90 + 100 * (nowNum / 3), 90 + 100 * (nowNum % 3) + w, 90 + 100 * (nowNum / 3) + h, 0x999999, true);
+	//cout << nowNum << endl;
 }
