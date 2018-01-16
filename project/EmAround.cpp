@@ -8,12 +8,17 @@
 #include "HitClass.h"
 #include "Player.h"
 #include "Rope.h"
+#include "ModelMgr.h"
+#include "GameMain.h"
+#include "ModelMgr.h"
 
 #include "Math.h"
 
 EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(pl),_rope(rope),_server(server)
 {
 	_map = MapCtl::GetInstance();
+	_modelmgr = ModelMgr::Instance();
+
 	//_pl = new Player();
 	_hit = new HitClass();
 	_pos.x = pos.x;
@@ -41,12 +46,15 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 }
 
 
 EmAround::~EmAround()
 {
 	//delete _pl;
+	_modelmgr->ModelIdAllDelete();
 	delete _hit;
 }
 
@@ -307,11 +315,16 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
+	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_HEIGHT -_pos.y - (_emRect.h),0));
+	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
+	MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
+	
 	if (_state != EM_ST_FEAR) {
-		DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
+		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}
 	else {
-		DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
+		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
 	}
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {

@@ -5,17 +5,21 @@
 #include "Rope.h"
 #include "HitClass.h"
 #include "MapCtl.h"
-
+#include "ModelMgr.h"
 
 GimPull::GimPull(Position2 pos,Rope& r):_rope(r),_pos(pos)
 {
 	_hit = new HitClass();
+	_modelmgr = ModelMgr::Instance();
+
 	_map = MapCtl::GetInstance();
 	_state = GM_NONE;
 	_gmRect.w = 32*3;
 	_gmRect.h = 32;
 	count = 60;
 	_gimType = GIM_ATTRACT;
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ/丸底フラスコ.pmx", SCENE_RESULT);
+
 }
 
 
@@ -117,6 +121,11 @@ void GimPull::Move()
 
 void GimPull::Draw(Position2 offset) 
 {
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
+	MV1SetScale(modelhandle, VGet(10.f, 10.f, 10.f));
+	//MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+
 	if (_state != GM_END) {			//END以外であれば色は同じまま
 	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
 		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);

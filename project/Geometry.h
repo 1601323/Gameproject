@@ -121,10 +121,22 @@ struct Vector2
 };
 //わかりやすくポジションに置き換える
 typedef Vector2 Position2;
+
+//こっちは三次元だぞ!
+struct Vector3
+{
+	Vector3() :x(0), y(0) {}
+	Vector3(float inx, float iny,float inz) : x(inx), y(iny), z(inz){}
+	float x, y, z;
+};
+//ポジションに置き換える
+typedef Vector3 Position3;
+
 //場所の矩形について
 struct Rect
 {
 	Position2 pos;
+
 	int w, h;
 	Rect() :pos(0, 0), w(0), h(0) {}
 

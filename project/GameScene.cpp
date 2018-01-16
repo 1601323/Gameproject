@@ -22,6 +22,8 @@
 #include "HitClass.h"
 #include "EnemyServer.h"
 #include "Midpoint.h"
+#include "ModelMgr.h"
+#include "ImageMgr.h"
 
 GameScene::GameScene()
 {
@@ -35,6 +37,7 @@ GameScene::GameScene()
 	_map = MapCtl::GetInstance();
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
 	_map->Load("map/1218_001.map");
+
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
 	_fac = new GimmickFactory(*_player,*_rope);
@@ -58,7 +61,7 @@ GameScene::GameScene()
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope,*_server);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
 
 	_hit = new HitClass(_fac,_emFac);
 

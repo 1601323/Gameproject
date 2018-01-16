@@ -7,12 +7,15 @@
 
 class HitClass;
 class Player;
+class ModelMgr;
+
 class SensorDoor :
 	public Gimmick
 {
 private:
 	HitClass* _hit;
 	Player& _pl;
+	ModelMgr* _modelmgr;
 	GimmickState  _state;
 	Position2 _pos;
 	//動作確認用
@@ -21,6 +24,10 @@ private:
 
 	int count;			//ドア開閉のためのカウント
 	int doorCount;		//ドア開閉の調整カウント
+
+	int modelhandle;
+	int AttachIndex;
+	int totalTime;
 
 	void CheckDoMove();	//動作条件判定
 	void CheckHit();	//あたり判定をプレイヤーの場所によって変えるので書いておく

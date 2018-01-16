@@ -7,6 +7,7 @@ class HitClass;
 class Player;
 class Rope;
 class EnemyServer;
+class ModelMgr;
 
 class EmAround :
 	public Enemy
@@ -24,6 +25,7 @@ private:
 	MapCtl* _map;
 	DIR _dir;
 	EnemyServerData _individualData;		//ｴﾈﾐｰ本部に送るﾃﾞｰﾀ
+	ModelMgr* _modelmgr;
 
 	//重力について
 	float vx;
@@ -35,6 +37,8 @@ private:
 
 	int loseSightCnt;		//PLが認識範囲から外れて見失うまでのカウント
 	int fearCnt;			//ひるんでいる秒数
+
+	int modelhandle;//かり
 
 	void Move();			//敵の動きについての管理を行う
 

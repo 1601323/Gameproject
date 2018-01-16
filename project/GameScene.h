@@ -11,11 +11,13 @@ class Gimmick;
 class Player;
 class Enemy;
 class MapCtl;
-class Rope;//‰¼’u‚«
+class Rope;
 class HitClass;
 class Camera;
 class EnemyServer;
 class Midpoint;
+
+class ModelManager;
 
 class GimmickFactory;
 class EnemyFactory;
@@ -36,7 +38,6 @@ private:
 	//‰¼‚Å‚·
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
-
 
 	RESULT_DATA _rtData;
 
