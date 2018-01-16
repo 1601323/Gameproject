@@ -41,7 +41,7 @@ std::weak_ptr<Gimmick>GimmickFactory::Create(CHIP_TYPE gt,Position2 pos)
 		_gimmickList.push_back(Gimmick_ptr(new GimButton(pos,_player)));
 		break;
 	case CHIP_TYPE::CHIP_ROPE_ATTRACT:
-		_gimmickList.push_back(Gimmick_ptr(new GimPull(pos,_rope)));
+		_gimmickList.push_back(Gimmick_ptr(new GimPull(pos,_rope,_player)));
 		break;
 	case CHIP_TYPE::CHIP_ROPE_FALL:
 		_gimmickList.push_back(Gimmick_ptr(new GimDrop(pos,_rope,_player)));
