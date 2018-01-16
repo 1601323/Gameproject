@@ -48,11 +48,8 @@ EmLookback::~EmLookback()
 
 void EmLookback::Updata()
 {
-	//setDir();
 	SetMove();
 	Visibility();
-	//LookPl();
-	//moveFear();
 }
 
 void EmLookback::Draw(Position2 offset)

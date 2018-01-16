@@ -4,6 +4,7 @@
 #include "Input.h"
 class Input;
 class Rope;
+//class Player;
 class MapCtl;
 class GimPull :
 	public Gimmick
@@ -11,6 +12,7 @@ class GimPull :
 private:
 	HitClass* _hit;
 	Rope& _rope;
+	Player& _player;
 	GimmickState _state;
 	Position2 _pos;
 	MapCtl* _map;
@@ -23,7 +25,7 @@ private:
 	void CheckDoMove();		//“®ìğŒ”»’è
 	void Move();			//ƒMƒ~ƒbƒN‚Ì“®ì‚É‚Â‚¢‚Ä
 public:
-	GimPull(Position2 pos,Rope& r);
+	GimPull(Position2 pos,Rope& r,Player& p);
 	~GimPull();
 	Rect& GetRect();
 	GIMMICK_TYPE& GetType();
