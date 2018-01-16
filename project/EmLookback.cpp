@@ -12,7 +12,6 @@
 EmLookback::EmLookback(Position2 pos, Player& pl,Rope& rope,EnemyServer& server):_player(pl),_rope(rope),_server(server)
 {
 	_hit = new HitClass();
-	//_server = new EnemyServer();
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
 	_pos.x = pos.x;
@@ -79,11 +78,11 @@ void EmLookback::Draw(Position2 offset)
 		break;
 	}
 	_tmpOffset = offset;
-	_emEye.SetCenter(_pos.x - offset.x + _emRect.w, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+	_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
 	returnDir(offset);
-	_emRect.SetCenter(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h / 2));
-	_emRect.Draw();
-	_emEye.Draw();
+	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y - + (_emRect.h / 2));
+	_emRect.Draw(offset);
+	_emEye.Draw(offset);
 
 #ifdef _DEBUG
 	DrawFormatString(10, 380, 0xffffff, "êUÇËï‘ÇË:%d", LookCount);

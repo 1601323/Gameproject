@@ -69,6 +69,7 @@ GameMain::GameMain()
 	}
 	fclose(fp);
 
+	nowStage = 0;
 }
 
 void GameMain::ChangeScene(Scene * scene) 
@@ -85,10 +86,10 @@ void GameMain::ClearDataLoad()
 	fopen_s(&file, "data/clearData.dat", "rb");
 	if (file == nullptr) {
 		fopen_s(&file,"data/clearData.dat","wb");
-		fwrite((char*)&_bestData,sizeof(_bestData),1,file);
+		fwrite(&_bestData,sizeof(_bestData),STAGE_MAX,file);
 	}
 	else {
-		fread((char*)&_bestData,sizeof(_bestData),1,file);
+		fread(&_bestData,sizeof(_bestData),STAGE_MAX,file);
 	}
 	fclose(file);
 }
@@ -98,7 +99,7 @@ void GameMain::ClearDataSave()
 	FILE* file;
 	fopen_s(&file,"data/clearData.dat","wb");
 
-	fread((char*)&_bestData,sizeof(_bestData),1,file);
+	fwrite(&_bestData,sizeof(_bestData),STAGE_MAX,file);
 	fclose(file);
 }
 //リザルトに関してのデータをセットします
@@ -110,6 +111,24 @@ void GameMain::SetResultData(RESULT_DATA rt)
 RESULT_DATA GameMain::GetResultData()
 {
 	return _resultData;
+}
+//現在のステージを受け取ります
+void GameMain::SetNowStage(int num)
+{
+	nowStage = num;
+}
+//現在のステージ番号を返します
+int GameMain::GetNowStage()
+{
+	cout <<_bestData[0].goalTime << endl;
+	return nowStage;
+}
+//タイトルに強制遷移を行います
+void GameMain::TransTitle()
+{
+	if (CheckHitKey(KEY_INPUT_T) && CheckHitKey(KEY_INPUT_LCONTROL)) {
+		ChangeScene(new TitleScene());
+	}
 }
 //ゲームの実行のメイン部分
 void GameMain::Run()
@@ -133,7 +152,7 @@ void GameMain::Run()
 	else
 	{
 		//newの先を切り替えることでそれぞれ確認できます
-		ChangeScene(new GameScene());
+		ChangeScene(new SelectScene());
 	}
 	ClearDataLoad();
 	while (ProcessMessage() == 0) {
@@ -143,7 +162,7 @@ void GameMain::Run()
 		{
 			break;
 		}
-
+		TransTitle();
 		input->Update();
 		input->InputSet();
 		//scene.func(&scene, input);

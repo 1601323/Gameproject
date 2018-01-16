@@ -15,6 +15,8 @@ class Rope;//仮置き
 class HitClass;
 class Camera;
 class EnemyServer;
+class Midpoint;
+class TimeManager;
 
 class GimmickFactory;
 class EnemyFactory;
@@ -31,10 +33,12 @@ private:
 	HitClass* _hit;
 	MapCtl* _map;
 	EnemyServer* _server;
+	Midpoint* _mid;
+	TimeManager* _timer;
 	//仮です
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
-
+	const char* mapName;
 	RESULT_DATA _rtData;
 
 	int count;			//遷移確認用（あとで削除します）

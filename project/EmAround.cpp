@@ -47,6 +47,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 EmAround::~EmAround()
 {
 	//delete _pl;
+	delete _hit;
 }
 
 void EmAround::Updata()
@@ -127,7 +128,7 @@ void EmAround::InterMove()
 				_dir = DIR_RIGHT;
 			}
 			else {
-				Assert(__FILE__, __LINE__);
+				ASSERT();
 			}
 		}
 	}
@@ -312,15 +313,15 @@ void EmAround::Draw(Position2 offset)
 	else {
 		DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
 	}
-	_emRect.SetCenter(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h / 2));
+	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {
-		_emEye.SetCenter(_pos.x - offset.x, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+		_emEye.SetCenter(_pos.x , _pos.y  + (_emRect.h / 4), _emEye.r);
 	}
 	else if (_dir == DIR_RIGHT) {
-		_emEye.SetCenter(_pos.x - offset.x + _emRect.w, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+		_emEye.SetCenter(_pos.x+ _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 	}
-	_emRect.Draw();
-	_emEye.Draw();
+	_emRect.Draw(offset);
+	_emEye.Draw(offset);
 }
 
 void EmAround::GetClass(HitClass* hit, Player& pl)

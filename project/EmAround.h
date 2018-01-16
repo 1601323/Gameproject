@@ -55,6 +55,7 @@ public:
 	ENEMY_STATE & GetState();
 	void EnemyFalter();		//‹¯‚İó‘Ô‚É‚È‚éğŒ
 	void GetClass(HitClass* hit,Player& pl);		//ƒNƒ‰ƒXó‚¯æ‚è—p
+
 	void Draw(Position2 offset);
 };
 
