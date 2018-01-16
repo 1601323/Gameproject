@@ -8,6 +8,7 @@ class SelectScene :
 private:
 	void(SelectScene::*_updater)(Input* input);
 	void NormalUpdata(Input* input);
+<<<<<<< HEAD
 	void Draw();
 	void Select();
 
@@ -21,6 +22,8 @@ private:
 
 	int w;
 	int h;
+=======
+>>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
 public:
 	SelectScene();
 	~SelectScene();

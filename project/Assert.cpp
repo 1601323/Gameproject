@@ -13,9 +13,10 @@
 //			or 
 //		exit(1);	//強制終了（nullptrの時とか、そのまま進んだら困るとき）
 //	}
+#ifdef _DEBUG
+	#define ASSERT(X,Y)  Assert(char* file, int line) 
 
 //埋め込むときはAssert(__FILE__,__LINE__);でお願いします
-//なんか仕様変更したのでASSERT()だけで大丈夫です
 void Assert(char* file, int line) 
 {
 	FILE *fp;
@@ -27,3 +28,6 @@ void Assert(char* file, int line)
 	fprintf(fp, "\"%s,\"%d\"\n", file, line);
 	fclose;
 }
+#else
+	#define ASSERT(X,Y)
+#endif

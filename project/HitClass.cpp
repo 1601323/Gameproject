@@ -197,7 +197,7 @@ bool HitClass::EnemyViewing(ENEMY_DATA& em, Rect&rc)
 			downAngle = AngleRad(180.f - (em.lookAngle *0.5f));			//‰º•ûŒü‚ÌŠp“x
 		}
 		else {
-			ASSERT();
+			Assert(__FILE__, __LINE__);
 		}
 		Vector2 vector[2];
 		Position2 intersection[2];
@@ -215,7 +215,7 @@ bool HitClass::EnemyViewing(ENEMY_DATA& em, Rect&rc)
 				p = { rc.Left(),rc.Bottom() };
 			}
 			else {
-				ASSERT();
+				Assert(__FILE__, __LINE__);
 			}
 			Vector2 ap = {p.x -em.lookRange.pos.x, p.y-em.lookRange.pos.y};
 			Vector2 ab = {intersection[0].x - em.lookRange.pos.x, intersection[0].y - em.lookRange.pos.y};
@@ -239,7 +239,7 @@ bool HitClass::EnemyViewing(ENEMY_DATA& em, Rect&rc)
 				p = { rc.Left(),rc.Top() };
 			}
 			else {
-				ASSERT();
+				Assert(__FILE__,__LINE__);
 			}
 			Vector2 ap = { p.x - em.lookRange.pos.x, p.y - em.lookRange.pos.y };
 			Vector2 ab = { intersection[1].x - em.lookRange.pos.x, intersection[1].y - em.lookRange.pos.y };
