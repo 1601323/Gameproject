@@ -32,6 +32,7 @@ private:
 	Circle _emEye;
 	Position2 _pos;
 	Position2 _tmpOffset;
+	EnemyServerData _individualData;	//エネミー本部に送るデータ
 
 	float emSpeed; 
 	float upAngle;

@@ -94,12 +94,15 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 	//ドアのところで上を押すとはいれるようにしたほうがいいらしい
 	if (count * 2 >= _pl.GetRect().w) {
 		_clearData.clearFlag = true;
-
+#ifdef _DEBUG
 		DrawString(100,30,"クリアできるよ",GetColor(244,244,244));
+#endif
 	}
 	else {
 		_clearData.clearFlag = false;
+#ifdef _DEBUG
 		DrawString(100, 30, "クリアできないよ", GetColor(244, 244, 244));
+#endif
 
 	}
 }
@@ -113,8 +116,8 @@ void SensorDoor::Draw(Position2 offset)
 	//左扉
 	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)),(int)( _pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x - count ), (int)_pos.y - offset.y, 0xffffffff, true);
 
-	_gmRect.SetCenter(_pos.x - offset.x, _pos.y - offset.y - (HEIGHT / 2));
-	_gmRect.Draw();
+	_gmRect.SetCenter(_pos.x , _pos.y - (HEIGHT / 2));
+	_gmRect.Draw(offset);
 }
 
 Rect& SensorDoor::GetRect() 

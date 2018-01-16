@@ -101,6 +101,23 @@ void GameMain::ClearDataSave()
 	fread((char*)&_bestData,sizeof(_bestData),1,file);
 	fclose(file);
 }
+//最新のプレイデータを保存します
+void GameMain::NewDataSet()
+{
+	_newData[nowStage] = _resultData;
+}
+//ベストスコアのﾃﾞｰﾀを保存します
+void GameMain::BestDataSet()
+{
+	if (_bestData[nowStage].goalFlag == false) {	//一回もプレイされていないとき
+		_bestData[nowStage] =_resultData;
+	}
+	//タイムを比較
+	else if (_bestData[nowStage].goalTime >= _newData[nowStage].goalTime) {
+		_bestData[nowStage] = _resultData;
+	}
+
+}
 //リザルトに関してのデータをセットします
 void GameMain::SetResultData(RESULT_DATA rt)
 {
@@ -111,6 +128,27 @@ RESULT_DATA GameMain::GetResultData()
 {
 	return _resultData;
 }
+<<<<<<< HEAD
+//現在のステージを受け取ります
+void GameMain::SetNowStage(int num)
+{
+	nowStage = num;
+}
+//現在のステージ番号を返します
+int GameMain::GetNowStage()
+{
+	cout <<_bestData[nowStage].goalTime << endl;
+	return nowStage;
+}
+//タイトルに強制遷移を行います
+void GameMain::TransTitle()
+{
+	if (CheckHitKey(KEY_INPUT_T) && CheckHitKey(KEY_INPUT_LCONTROL)) {
+		ChangeScene(new TitleScene());
+	}
+}
+=======
+>>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
 //ゲームの実行のメイン部分
 void GameMain::Run()
 {

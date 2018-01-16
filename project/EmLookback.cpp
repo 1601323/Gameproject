@@ -25,22 +25,26 @@ EmLookback::EmLookback(Position2 pos, Player& pl,Rope& rope,EnemyServer& server)
 	_emEye.pos.y = _pos.y + (_emRect.h / 4);
 	_emEye.r = 40;
 	_emType = ENEMY_TURN;
+	_state = EM_ST_MOVE;
 
 	upAngle = 120;
 	downAngle = 60;
 	emSpeed = 1;
 	LookCount = 0;
-	FearCount = 0;
+	FearCount = 180;
 	loseSightCnt = 180;
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
+	//å¬ëÃÉfÅ[É^èâä˙âª
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }
 
 EmLookback::~EmLookback()
 {
 	delete _hit;
-	//delete _player;
 }
 
 void EmLookback::Updata()
@@ -48,7 +52,7 @@ void EmLookback::Updata()
 	setDir();
 	LookPl();
 	moveFear();
-	//Draw();
+
 	//_emRect.SetCenter(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h / 2));
 	//_emRect.Draw();
 	//_emEye.Draw();
@@ -81,9 +85,15 @@ void EmLookback::Draw(Position2 offset)
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x - offset.x + _emRect.w, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
 	returnDir(offset);
+<<<<<<< HEAD
+	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y  + (_emRect.h / 2));
+	_emRect.Draw(offset);
+	_emEye.Draw(offset);
+=======
 	_emRect.SetCenter(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h / 2));
 	_emRect.Draw();
 	_emEye.Draw();
+>>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
 
 #ifdef _DEBUG
 	DrawFormatString(10, 380, 0xffffff, "êUÇËï‘ÇË:%d", LookCount);
@@ -102,20 +112,20 @@ void EmLookback::setDir(void)
 		}
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
-			_emEye.SetCenter(_pos.x -_tmpOffset.x + _emRect.w, _pos.y -_tmpOffset.y+ (_emRect.h / 4), _emEye.r);
+			_emEye.SetCenter(_pos.x+ _emRect.w, _pos.y+ (_emRect.h / 4), _emEye.r);
 		}
 		else {
 			_dir = DIR_LEFT;
-			_emEye.SetCenter(_pos.x - _tmpOffset.x, _pos.y - _tmpOffset.y + (_emRect.h / 4), _emEye.r);
+			_emEye.SetCenter(_pos.x , _pos.y  + (_emRect.h / 4), _emEye.r);
 		}
 	}
 	else {
 		if (_state != EM_ST_FEAR) {
 			if (_dir == DIR_RIGHT) {
-				_emEye.SetCenter(_pos.x - _tmpOffset.x + _emRect.w, _pos.y - _tmpOffset.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
 			}
 			else if (_dir == DIR_LEFT) {
-				_emEye.SetCenter(_pos.x - _tmpOffset.x, _pos.y - _tmpOffset.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x , _pos.y  + (_emRect.h / 4), _emEye.r);
 			}
 		}
 		LookCount = 0;
@@ -156,18 +166,12 @@ void EmLookback::LookPl(void)
 void EmLookback::moveFear(void)
 {
 	////€∞ÃﬂÇ…ìñÇΩÇ¡ÇΩÇÁÇ–ÇÈÇﬁ
-	//if (FearCount == 0) {
-	//	if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
-	//		FearCount = 180;
-	//	}
-	//}
-	//3ïbä‘ãØÇﬁ
-	if (FearCount != 0) {
+	if (_state == EM_ST_FEAR) {
 		FearCount--;
-		_state = EM_ST_FEAR;
-	}
-	else {
-		_state = EM_ST_MOVE;
+		if (FearCount <= 0) {
+			_state = EM_ST_MOVE;
+			FearCount = 180;
+		}
 	}
 #ifdef _DEBUG
 	DrawFormatString(10, 450, 0xffffff, "ãØÇ›:%d", FearCount);
@@ -175,10 +179,12 @@ void EmLookback::moveFear(void)
 }
 void EmLookback::EnemyFalter()
 {
-	//€∞ÃﬂÇ…ìñÇΩÇ¡ÇΩÇÁÇ–ÇÈÇﬁ
-	if (FearCount == 0) {
+
+	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
-			FearCount = 180;
+			_state = EM_ST_FEAR;
+		}
+		else {
 		}
 	}
 }
@@ -207,20 +213,20 @@ void EmLookback::returnDir(Position2 offset)
 	if (_state == EM_ST_MOVE) {
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
-			_emEye.SetCenter(_pos.x - offset.x + _emRect.w, _pos.y -offset.y + (_emRect.h / 4), _emEye.r);
+			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		else {
 			_dir = DIR_LEFT;
-			_emEye.SetCenter(_pos.x - offset.x, _pos.y -offset.y + (_emRect.h / 4), _emEye.r);
+			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 	}
 	else {
 		if (_state != EM_ST_FEAR) {
 			if (_dir == DIR_RIGHT) {
-				_emEye.SetCenter(_pos.x - offset.x + _emRect.w, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
 			}
 			else if (_dir == DIR_LEFT) {
-				_emEye.SetCenter(_pos.x - offset.x, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x , _pos.y  + (_emRect.h / 4), _emEye.r);
 			}
 		}
 	}

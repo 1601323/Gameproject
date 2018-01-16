@@ -46,7 +46,11 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 
 EmAround::~EmAround()
 {
+<<<<<<< HEAD
+	delete _hit;
+=======
 	//delete _pl;
+>>>>>>> bde5c3d0ac1b2c3ccf60ed9efac762e5bdc67085
 }
 
 void EmAround::Updata()
@@ -56,7 +60,6 @@ void EmAround::Updata()
 	Gravity();
 	Visibility();
 	Move();
-	//描画はゲームシーンでまとめて行う
 }
 //いい処理が浮かばなかったのでここでmoveの管理させています
 void EmAround::Move()

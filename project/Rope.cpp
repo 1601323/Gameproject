@@ -92,8 +92,8 @@ void Rope::DrawRopeRect(void)
 	RopeRect.Draw();*/
 
 	//circle
-	_RopeCircle.SetCenter(_rope[*itr-1].x + (_RopeRect.w / 2) - _tmpOffset.x,
-		_rope[*itr-1].y + (_RopeRect.h / 2)- _tmpOffset.y, range);
+	_RopeCircle.SetCenter(_rope[*itr-1].x + (_RopeRect.w / 2),
+		_rope[*itr-1].y + (_RopeRect.h / 2), range);
 
 	if (RopeTurnFlag)
 	{
@@ -107,12 +107,13 @@ void Rope::DrawRopeRect(void)
 		}
 	}
 
-	_RopeCircle.Draw();
+	_RopeCircle.Draw(_tmpOffset);
 }
 
 //DrawLineをまとめた関数 offset値の設定が分かりにくかったから
 void Rope::DrawLineSet(Position2 startpos, Position2 endpos,int color)
 {
+	//cout<<_tmpOffset.x<<endl;
 	DrawLine(startpos.x - _tmpOffset.x +(_RopeRect.w / 2), startpos.y - _tmpOffset.y + (_RopeRect.h / 2),
 		endpos.x - _tmpOffset.x + (_RopeRect.w / 2),endpos.y - _tmpOffset.y + (_RopeRect.h / 2),color);
 }
@@ -237,6 +238,7 @@ void Rope::Ready(Input* input)
 			RotationPos = _player->GetPos() + RotationPos;
 			RopeTurnFlag = false;
 			_minValue = SV_MID;
+			_HitPos = { 0,0 };
 			_vec = { 0,0 };
 			theta = ROPE_THETA;//回すために仮に代入しているだけです
 			_state = ST_ROPE_SELECT;
@@ -327,7 +329,7 @@ void Rope::Extending(Input* input)
 			}
 
 			//伸ばしている最中にギミックやステージにあたれば強制的に戻す
-			if (_hit->GimmickHit(GetCircle()) || _hit->EnemyHit(GetCircle())||
+			if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle())||
 				_mapctl->GetChipType(_rope[*itr+1]) == CHIP_N_CLIMB_WALL ||
 				_mapctl->GetChipType(_rope[*itr+1]) == CHIP_CLIMB_WALL)
 			{
