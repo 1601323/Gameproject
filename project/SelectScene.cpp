@@ -10,6 +10,7 @@
 SelectScene::SelectScene()
 {
 	_updater = &SelectScene::NormalUpdata;
+	nowNum = 0;
 }
 
 
@@ -23,10 +24,11 @@ void SelectScene::NormalUpdata(Input* input)
 	lastKey = input->GetLastKey();
 	_inpInfo = input->GetInput(1);
 	Select();
-	Draw();
 #ifdef _DEBUG
 	DrawString(10,0,"ÉZÉåÉNÉg",GetColor(255,255,255));
-#endif
+#endif	
+	Draw();
+
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		gm.Instance().ChangeScene(new GameScene());
 	}
