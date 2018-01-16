@@ -38,7 +38,9 @@ private:
 	float upAngle;
 	float downAngle;
 
+	void SetMove();		//動きについてセットする
 	void setDir(void);	//向き
+	void Visibility();	//視界判定
 	void LookPl(void);	//プレイヤー発見時
 	void LoseSight();
 	void moveFear(void);	//怯み状態
