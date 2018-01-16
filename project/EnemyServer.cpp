@@ -77,7 +77,9 @@ void EnemyServer::SetAlert()
 }
 void EnemyServer::Draw(Position2 offset) 
 {
+#ifdef _DEBUG
 	DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
+#endif
 	DrawBox(400, 30, 400 + vigiCnt, 60, 0xffff25, true);
 	DrawBox(400,30,500,60,0xff00ff,false);
 }

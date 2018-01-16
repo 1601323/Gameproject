@@ -42,6 +42,8 @@ void ResultScene::NormalUpdata(Input* input)
 void ResultScene::GameClear()
 {
 	GameMain& gm = GameMain::Instance();
+	gm.NewDataSet();
+	gm.BestDataSet();
 #ifdef _DEBUG
 	DrawString(100,100,"Clear",0xff00ff);
 #endif

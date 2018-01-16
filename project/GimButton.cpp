@@ -20,10 +20,6 @@ GimButton::GimButton(Position2 pos, Player& p) :_pl(p)
 	color = 255;
 
 	_gimType = GIM_BUTTON;
-#ifdef _DEBUG
-	Font = CreateFontToHandle( NULL ,8,3,DX_FONTTYPE_EDGE);
-	drawCount = 0;
-#endif
 }
 
 
@@ -97,17 +93,15 @@ void GimButton::Draw(Position2 offset)
 		DrawBox(_pos.x - offset.x,_pos.y - offset.y +(_gmRect.h/2),_pos.x - offset.x +_gmRect.w,_pos.y - offset.y +_gmRect.h,0xff0000,true);
 	}
 #ifdef _DEBUG
-	if (drawCount <= 120) {
-		DrawStringToHandle(_pos.x, 47, "ÎÞÀÝ‚Åì“®¨", 0xffffff, Font);
-	}
 	DrawCircle(_pos.x - offset.x + 70,50 - offset.y,5,GetColor(color,color,color),true);
 #endif
 	//_state‚ªnone‚©move‚ÌŽž‚¾‚¯‚ ‚½‚è”»’è‚ð•\Ž¦‚·‚é
 	if (_state == GM_NONE || _state == GM_MOVE) {
 		_gmRect.SetCenter(_pos.x + (_gmRect.w / 2), _pos.y  + (_gmRect.h / 2));
 	}
+#ifdef _DEBUG
 	_gmRect.Draw(offset);
-
+#endif
 }
 //‚ ‚½‚è”»’è—p
 Rect& GimButton::GetRect() 

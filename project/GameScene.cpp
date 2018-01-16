@@ -53,7 +53,7 @@ GameScene::GameScene()
 
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
-	_fac = new GimmickFactory(*_player,*_rope);
+	_fac = new GimmickFactory(*_player, *_rope);
 	//// ﾀｰｹﾞｯﾄ指定
 	_cam->SetTarget(_player);	// player基準
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
@@ -68,22 +68,26 @@ GameScene::GameScene()
 	//マップを読み取り、リストにギミックを持たせます。
 	auto gimData = _map->getChipPosData();
 	for (auto& data : gimData) {
-		if(CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
-		_fac->Create(static_cast<CHIP_TYPE>(data.chipType),Position2(data.posX,data.posY));
+		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
+			_fac->Create(static_cast<CHIP_TYPE>(data.chipType), Position2(data.posX, data.posY));
 	}
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
-	_emFac = new EnemyFactory(*_player, *_rope,*_server);
+	_emFac = new EnemyFactory(*_player, *_rope, *_server);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
+<<<<<<< HEAD
 	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
+=======
+	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(250, 130));
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
 
-	_hit = new HitClass(_fac,_emFac);
+	_hit = new HitClass(_fac, _emFac);
 
 	//_server = new EnemyServer();
 
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
-	_player->Getclass(_hit,_rope);
-	
+	_player->Getclass(_hit, _rope);
+
 	_mid->GetClass(_player);
 	_timer->StartTimer();
 	//GameInit();
@@ -99,7 +103,7 @@ GameScene::~GameScene()
 	delete _rope;
 	delete _fac;
 	delete _emFac;
-	delete _hit;	
+	delete _hit;
 	delete _server;
 }
 void GameScene::GameInit()
@@ -131,10 +135,10 @@ void GameScene::NormalUpdata(Input* input)
 	_map->Draw(offset);
 	//ﾛｰﾌﾟ使用中は敵などが止まる
 	if (_player->GetcharState() == ST_ROPE) {
-		UsingRopeUpdata(input,offset);
+		UsingRopeUpdata(input, offset);
 	}
 	else {
-		ObjectUpdata(input,offset);
+		ObjectUpdata(input, offset);
 	}
 	_server->Updata();
 
@@ -151,7 +155,7 @@ void GameScene::NormalUpdata(Input* input)
 	}
 #endif
 	//クリアによる画面遷移を仮実装
-	if (_mid->ReturnGetFlag() == true){
+	if (_mid->ReturnGetFlag() == true) {
 		_rtData.goalFlag = true;
 	}
 	else
@@ -164,24 +168,30 @@ void GameScene::NormalUpdata(Input* input)
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}
-		if (_player->GetcharState() == ST_DETH) {
-			_rtData.goalFlag = false;
-			gm.SetResultData(_rtData);
-			_updater = &GameScene::TransitionUpdata;
+	if (_player->GetcharState() == ST_DETH) {
+		_rtData.goalFlag = false;
+		gm.SetResultData(_rtData);
+		_updater = &GameScene::TransitionUpdata;
 	}
 }
-void GameScene::ObjectUpdata(Input* input,Position2& offset)
+void GameScene::ObjectUpdata(Input* input, Position2& offset)
 {
 	//_cam->Update();
 	_fac->Updata(*input);
-	_rope->Updata(input,offset);
+	_rope->Updata(input, offset);
 	_player->Update(input);
 	_emFac->Updata();
 	_mid->Updata();
 }
 //ロープを使っているときに呼び出される
+<<<<<<< HEAD
 void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
 {	
+=======
+void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
+{
+
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
 	//_cam->Update();
 	for (auto& gim : _fac->GimmickList()) {		//ropeに左右されるギミックだけUpdataを呼び出す
 		if (gim->GetType() == GIM_FALL || gim->GetType() == GIM_ATTRACT) {
@@ -190,7 +200,7 @@ void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
 		}
 	}
 	_emFac->EnemyFalter();
-	_rope->Updata(input,offset);
+	_rope->Updata(input, offset);
 	_player->Update(input);
 
 }
@@ -203,9 +213,9 @@ void GameScene::TransitionUpdata(Input* input)
 	_map->Draw(offset);
 	Draw(offset);
 	count++;
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA,100+count);
-	DrawBox(0,0,SCREEN_SIZE_X,SCREEN_SIZE_Y,0x000000,true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100 + count);
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	if (count >= 120) {
 		gm.Instance().ChangeScene(new ResultScene());
 	}
@@ -225,7 +235,7 @@ SCENE_TYPE GameScene::GetScene()
 {
 	return SCENE_GAME;
 }
-void GameScene::Updata(Input* input) 
+void GameScene::Updata(Input* input)
 {
 	(this->*_updater)(input);
 

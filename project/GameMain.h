@@ -26,27 +26,30 @@ private:
 	GameMain();
 	GameMain(const GameMain&);
 	//GameMain& operator=(const GameMain&);
+
+	//ﾃﾞｰﾀ保存＆書き込み用の関数
 	void ClearDataLoad();
 	void ClearDataSave();
 
-	void TransTitle();
+	void TransTitle();							//タイトルへの強制遷移
 public:
 	static GameMain& Instance() {
 		static GameMain instance;
 		return instance;
 	}
 
-	RESULT_DATA _newData[STAGE_MAX];						//最新のクリアデータを保持
-	RESULT_DATA _bestData[STAGE_MAX];						//ベストスコアを保持
-
+	RESULT_DATA _newData[STAGE_MAX];			//最新のクリアデータを保持
+	RESULT_DATA _bestData[STAGE_MAX];			//ベストスコアを保持
+	void BestDataSet();
+	void NewDataSet();
 	int nowStage;								//選ばれたステージ番号を保持
+	void SetNowStage(int num);
+	int GetNowStage();
 	void Run();									//ゲーム実行
 	void ChangeScene(Scene* scene);				//シーンチェンジ
 
 	void SetResultData(RESULT_DATA rt);			//リザルトのデータを渡す
 	RESULT_DATA GetResultData();				//リザルトデータを返す
-	void SetNowStage(int num);					//現在の選択ステージ番号をもらう
-	int GetNowStage();							//選択されているステージ番号を返す
 
 	void checkBestScore();
 

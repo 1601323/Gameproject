@@ -1,3 +1,4 @@
+
 #include <DxLib.h>
 #include <math.h>
 #include "Assert.h"
@@ -53,8 +54,11 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 
 EmAround::~EmAround()
 {
+<<<<<<< HEAD
 	//delete _pl;
 	_modelmgr->ModelIdAllDelete();
+=======
+>>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
 	delete _hit;
 }
 
@@ -65,7 +69,6 @@ void EmAround::Updata()
 	Gravity();
 	Visibility();
 	Move();
-	//ï`âÊÇÕÉQÅ[ÉÄÉVÅ[ÉìÇ≈Ç‹Ç∆ÇﬂÇƒçsÇ§
 }
 //Ç¢Ç¢èàóùÇ™ïÇÇ©ÇŒÇ»Ç©Ç¡ÇΩÇÃÇ≈Ç±Ç±Ç≈moveÇÃä«óùÇ≥ÇπÇƒÇ¢Ç‹Ç∑
 void EmAround::Move()
@@ -98,8 +101,7 @@ void EmAround::Move()
 	//if(_state == EM_ST_DIS )
 	//ãØÇ›èÛë‘ÇÃéû
 	if (_state == EM_ST_FEAR) {
-	moveFear();
-
+		moveFear();
 	}
 }
 void EmAround::BasicMove()
@@ -136,7 +138,7 @@ void EmAround::InterMove()
 				_dir = DIR_RIGHT;
 			}
 			else {
-				ASSERT();
+				Assert(__FILE__, __LINE__);
 			}
 		}
 	}
@@ -207,14 +209,11 @@ void EmAround::Visibility()
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
-
 		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
-			DrawString(100, 300, "î≠å©", 0xffffff);
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
 		else {
-			DrawString(100, 300, "çıìGíÜ", 0xffffff);
 			if (_individualData.plFoundFlag == true) {
 				LoseSight();
 			}
@@ -222,12 +221,10 @@ void EmAround::Visibility()
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
 		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
-			DrawString(100, 300, "î≠å©", 0xffffff);
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
 		else {
-			DrawString(100, 300, "çıìGíÜ", 0xffffff);
 			if (_individualData.plFoundFlag == true) {
 				LoseSight();
 			}
@@ -235,12 +232,10 @@ void EmAround::Visibility()
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
-			DrawString(100, 300, "î≠å©", 0xffffff);
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
 		else {
-			DrawString(100, 300, "çıìGíÜ", 0xffffff);
 			_individualData.plFoundFlag = false;
 			_individualData.dataSendFlag = true;
 		}
@@ -263,7 +258,6 @@ void EmAround::LoseSight()
 			_individualData.dataSendFlag = false;
 		}
 	}
-
 }
 void EmAround::EnemyFalter()
 {
@@ -326,14 +320,16 @@ void EmAround::Draw(Position2 offset)
 	else {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
 	}
-	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
+	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {
-		_emEye.SetCenter(_pos.x , _pos.y  + (_emRect.h / 4), _emEye.r);
+		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 	}
 	else if (_dir == DIR_RIGHT) {
-		_emEye.SetCenter(_pos.x+ _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
 	}
+#ifdef _DEBUG
 	_emRect.Draw(offset);
+#endif
 	_emEye.Draw(offset);
 }
 
