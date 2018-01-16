@@ -23,6 +23,7 @@
 #include "HitClass.h"
 #include "EnemyServer.h"
 #include "Midpoint.h"
+#include "TimeManager.h"
 
 GameScene::GameScene()
 {
@@ -32,6 +33,7 @@ GameScene::GameScene()
 	_rope = new Rope(_player);
 	_server = new EnemyServer();
 	_mid = new Midpoint();
+	_timer = new TimeManager();
 	_cam = Camera::GetInstance();
 	// ϯ�߲ݽ�ݽ
 	_map = MapCtl::GetInstance();
@@ -73,6 +75,7 @@ GameScene::GameScene()
 	_player->Getclass(_hit,_rope);
 	
 	_mid->GetClass(_player);
+	_timer->StartTimer();
 	//GameInit();
 	count = 0;
 }
@@ -81,6 +84,7 @@ GameScene::~GameScene()
 {
 	delete _player;
 
+	delete _timer;
 	delete _mid;
 	delete _rope;
 	delete _fac;
@@ -123,7 +127,7 @@ void GameScene::NormalUpdata(Input* input)
 	_server->Updata();
 
 	Draw(offset);
-
+	_timer->Updata();
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
@@ -144,6 +148,8 @@ void GameScene::NormalUpdata(Input* input)
 		_rtData.goalFlag = false;
 	}
 	if (_player->EnterDoor()) {
+		_timer->StopTimer();
+		_rtData.goalTime = _timer->ShowTimer();
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}

@@ -16,6 +16,7 @@ class HitClass;
 class Camera;
 class EnemyServer;
 class Midpoint;
+class TimeManager;
 
 class GimmickFactory;
 class EnemyFactory;
@@ -33,6 +34,7 @@ private:
 	MapCtl* _map;
 	EnemyServer* _server;
 	Midpoint* _mid;
+	TimeManager* _timer;
 	//‰¼‚Å‚·
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;

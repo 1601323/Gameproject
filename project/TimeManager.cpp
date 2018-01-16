@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include <ctime>
+#include <iostream>
 #include "Geometry.h"
 #include "GameMain.h"
 #include "TimeManager.h"
@@ -22,11 +23,12 @@ void TimeManager::Updata()
 {
 	if (timerFlag == true) {
 		flameCnt++;
+		if (flameCnt % 60 == 0) {
+			timerCnt++;
+		}
 	}
 	
-	if (flameCnt % 60 == 0) {
-		timerCnt++;
-	}
+
 	if (timerCnt > 999) {
 		timerCnt = 999;
 	}
