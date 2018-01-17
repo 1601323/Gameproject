@@ -11,12 +11,14 @@ class Gimmick;
 class Player;
 class Enemy;
 class MapCtl;
-class Rope;//仮置き
+class Rope;
 class HitClass;
 class Camera;
 class EnemyServer;
 class Midpoint;
 class TimeManager;
+
+class ModelManager;
 
 class GimmickFactory;
 class EnemyFactory;
@@ -38,7 +40,9 @@ private:
 	//仮です
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
+
 	const char* mapName;
+
 	RESULT_DATA _rtData;
 
 	int count;			//遷移確認用（あとで削除します）

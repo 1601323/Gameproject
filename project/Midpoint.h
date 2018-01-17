@@ -1,10 +1,14 @@
 #pragma once
 class HitClass;
+class ModelMgr;
+
 class Midpoint
 {
 private:
 	HitClass* _hit;
 	Player* _pl;
+	ModelMgr* _modelmgr;
+
 	void GetPoint();	//’†ŠÔ’n“_‚É‚½‚Ç‚è’…‚¢‚½‚±‚Æ‚ğ¦‚·
 	void FollowDir();	//‚Â‚¢‚Ä‚¢‚­‚½‚ß‚Ì•ûŒü‚È‚Ç‚ğ‚±‚±‚Åİ’è
 
@@ -16,6 +20,7 @@ private:
 	bool bubbleFlag;
 	int cnt;
 	int bubble;
+	int modelhandle;
 public:
 	Midpoint();
 	~Midpoint();	
