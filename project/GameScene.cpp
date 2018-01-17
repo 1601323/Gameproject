@@ -74,28 +74,11 @@ GameScene::GameScene()
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(250, 130));
-=======
-<<<<<<< HEAD
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
-=======
-	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(250, 130));
->>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
+
+	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(250, 130));
 	_hit = new HitClass(_fac, _emFac);
 
 	//_server = new EnemyServer();
@@ -200,29 +183,9 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_mid->Updata();
 }
 //ロープを使っているときに呼び出される
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
-{	
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
-void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
-{	
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
-void GameScene::UsingRopeUpdata(Input* input,Position2& offset)
-{	
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
+
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 {
-
->>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
 	//_cam->Update();
 	for (auto& gim : _fac->GimmickList()) {		//ropeに左右されるギミックだけUpdataを呼び出す
 		if (gim->GetType() == GIM_FALL || gim->GetType() == GIM_ATTRACT) {

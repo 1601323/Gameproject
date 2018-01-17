@@ -7,17 +7,7 @@
 #include "HitClass.h"
 #include "MapCtl.h"
 #include "ModelMgr.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 {
 	_hit = new HitClass();
@@ -139,50 +129,34 @@ void GimPull::Move()
 
 void GimPull::Draw(Position2 offset) 
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	if (_state != GM_END&& _state!=GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
-=======
-<<<<<<< HEAD
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
-	MV1SetScale(modelhandle, VGet(10.f, 10.f, 10.f));
-	//MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	if (_state != GM_END&& _state != GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
+		MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
+		MV1SetScale(modelhandle, VGet(10.f, 10.f, 10.f));
+		//MV1DrawModel(modelhandle);
+		_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 
-	if (_state != GM_END) {			//END以外であれば色は同じまま
-=======
-	if (_state != GM_END&& _state!=GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
->>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-=======
->>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
-	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
-		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
-	}
-	else if (_state == GM_PAUSE) {
-		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 0, 255), true);
-	}
-	else if (_state == GM_END) {	//ENDになったら赤に変える
-		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y),(int) (_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
-	}
-	else{}
-	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
-	//_gmRect.Draw();	
-	_gmRect.SetCenter(_pos.x+ (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
+		if (_state != GM_END) {			//END以外であれば色は同じまま
+			if (_state != GM_END&& _state != GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
+			//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
+				DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
+			}
+			else if (_state == GM_PAUSE) {
+				DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 0, 255), true);
+			}
+			else if (_state == GM_END) {	//ENDになったら赤に変える
+				DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
+			}
+			else {}
+			//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
+			//_gmRect.Draw();	
+			_gmRect.SetCenter(_pos.x + (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
 #ifdef _DEBUG
-	_gmRect.Draw(offset);	
-	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
-	DrawPixel(_pos.x - offset.x , _pos.y - offset.y , 0xff00ff);
+			_gmRect.Draw(offset);
+			DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2), 0xffffff);
+			DrawPixel(_pos.x - offset.x, _pos.y - offset.y, 0xff00ff);
 #endif
+		}
+	}
 }
 //あたり矩形を返す
 Rect& GimPull::GetRect() 
