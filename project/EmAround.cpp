@@ -54,11 +54,8 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 
 EmAround::~EmAround()
 {
-<<<<<<< HEAD
 	//delete _pl;
 	_modelmgr->ModelIdAllDelete();
-=======
->>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
 	delete _hit;
 }
 
