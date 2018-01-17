@@ -161,20 +161,11 @@ void GameScene::JudgeTransition()
 		_updater = &GameScene::TransitionUpdata;
 	}
 	if (_player->GetcharState() == ST_DETH) {
-		if (_rtData.life > 0) {
-			//リトライ
-			_rtData.life--;
-			_updater = &GameScene::TransitionUpdata;
-
-		}
-		else {
-			_rtData.transFlag = true;
-		}
-	}
-	if (_rtData.transFlag == true) {
+		_rtData.life--;
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}
+	
 }
 void GameScene::ObjectUpdata(Input* input, Position2& offset)
 {
@@ -199,7 +190,6 @@ void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 	_emFac->EnemyFalter();
 	_rope->Updata(input, offset);
 	_player->Update(input);
-
 }
 //クリアした後、リザルトに遷移するためのupdataです
 void GameScene::TransitionUpdata(Input* input)

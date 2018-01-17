@@ -46,9 +46,7 @@ private:
 	RESULT_DATA _rtData;
 
 	int count;			//遷移確認用（あとで削除します）
-	
 	void GameInit();											//ゲーム開始時の初期化を行います
-
 	void NormalUpdata(Input* input);							//全体のUpdata
 	void ObjectUpdata(Input* input,Position2& offset);			//各ｷｬﾗｸﾀｰなどのUpdataを呼び出す
 	void UsingRopeUpdata(Input* input,Position2& offset);		//ﾛｰﾌﾟを使用しているときのUpdataを呼び出す
