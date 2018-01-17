@@ -99,13 +99,13 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 	//}
 	//ドアのところで上を押すとはいれるようにしたほうがいいらしい
 	if (count * 2 >= _pl.GetRect().w) {
-		_clearData.clearFlag = true;
+		_clearData.midFlag = true;
 #ifdef _DEBUG
 		DrawString(100,30,"クリアできるよ",GetColor(244,244,244));
 #endif
 	}
 	else {
-		_clearData.clearFlag = false;
+		_clearData.midFlag = false;
 #ifdef _DEBUG
 		DrawString(100, 30, "クリアできないよ", GetColor(244, 244, 244));
 #endif
@@ -144,7 +144,7 @@ GIMMICK_TYPE& SensorDoor::GetType()
 {
 	return _gimType;
 }
-CLEAR_DATA& SensorDoor::GetClearData()
+RESULT_DATA& SensorDoor::GetClearData()
 {
 	return _clearData;
 }

@@ -12,6 +12,7 @@
 //#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define MAP_SIZE_Y (15)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define STAGE_MAX (6)			//ステージの数（仮）
+#define PLAYER_MAX (3)			//ﾌﾟﾚｲﾔｰの残機
 
 //プレイヤーの状態について
 enum CHAR_ST {
@@ -210,19 +211,15 @@ struct ENEMY_DATA
 	Circle lookRange;
 	float lookAngle;
 };
-//クリア判定について
-struct CLEAR_DATA
-{
-	CLEAR_DATA() :clearFlag(false) {}
-	bool clearFlag;
-};
 //ゴール時のデータについて
 struct RESULT_DATA
 {
-	RESULT_DATA() :transFlag(false),goalFlag(false), goalTime(0), foundCount(0) {}
-	bool transFlag;
-	bool goalFlag;
+	RESULT_DATA() :transFlag(false), midFlag(false),goalFlag(false), goalTime(0),life(PLAYER_MAX), foundCount(0) {}
+	bool transFlag;			//画面遷移用フラグ
+	bool midFlag;			//中間点に到着しているか
+	bool goalFlag;			//ゴールに到達したかどうか
 	float goalTime;
+	int life;
 	int foundCount;
 };
 inline

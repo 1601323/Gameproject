@@ -54,6 +54,7 @@ private:
 	void UsingRopeUpdata(Input* input,Position2& offset);		//ﾛｰﾌﾟを使用しているときのUpdataを呼び出す
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
 	void Draw(Position2& offset);
+	void JudgeTransition();
 public:
 	GameScene();
 	~GameScene();

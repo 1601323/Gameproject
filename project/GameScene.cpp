@@ -45,9 +45,6 @@ GameScene::GameScene()
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
-
-	_map->Load("map/1218_001.map");
-
 	//_map->Load("map/1218_001.map");
 	_map->Load(mapName);
 
@@ -74,15 +71,10 @@ GameScene::GameScene()
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(250, 130));
-
 	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
-
-	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(250, 130));
 	_hit = new HitClass(_fac, _emFac);
 
 	//_server = new EnemyServer();
-
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit, _rope);
@@ -92,11 +84,9 @@ GameScene::GameScene()
 	//GameInit();
 	count = 0;
 }
-
 GameScene::~GameScene()
 {
 	delete _player;
-
 	delete _timer;
 	delete _mid;
 	delete _rope;
@@ -114,7 +104,6 @@ void GameScene::GameInit()
 	case 0:
 		mapName = "map/1218_001.map";
 		break;
-
 	case 1:
 		mapName = "map/1218_001.map";
 		break;
@@ -125,7 +114,6 @@ void GameScene::GameInit()
 		break;
 	}
 }
-
 void GameScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
@@ -153,6 +141,11 @@ void GameScene::NormalUpdata(Input* input)
 		DrawString(200, 200, "idek", 0xfffff);
 	}
 #endif
+	JudgeTransition();
+}
+void GameScene::JudgeTransition()
+{
+	GameMain& gm = GameMain::Instance();
 	//クリアによる画面遷移を仮実装
 	if (_mid->ReturnGetFlag() == true) {
 		_rtData.goalFlag = true;
@@ -168,7 +161,17 @@ void GameScene::NormalUpdata(Input* input)
 		_updater = &GameScene::TransitionUpdata;
 	}
 	if (_player->GetcharState() == ST_DETH) {
-		_rtData.goalFlag = false;
+		if (_rtData.life > 0) {
+			//リトライ
+			_rtData.life--;
+			_updater = &GameScene::TransitionUpdata;
+
+		}
+		else {
+			_rtData.transFlag = true;
+		}
+	}
+	if (_rtData.transFlag == true) {
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}

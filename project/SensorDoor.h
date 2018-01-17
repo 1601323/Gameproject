@@ -39,6 +39,6 @@ public:
 	void Updata();
 	Rect& GetRect();
 	GIMMICK_TYPE& GetType();
-	CLEAR_DATA& GetClearData();
+	RESULT_DATA& GetClearData();
 };
 

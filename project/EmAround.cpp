@@ -176,7 +176,8 @@ void EmAround::CheckMove()
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN){	//–¢”­Œ©ó‘Ô‚Å‚ ‚ê‚Î
 		if (_dir == DIR_LEFT) {		//¶‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
 			if (_map->GetChipType(nextLeftPos) == CHIP_N_CLIMB_WALL ||
-				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL ) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
+				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL	||
+				_map->GetChipType(nextLeftPos)== CHIP_ROPE_ATTRACT) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
 				moveFlag = true;	//Œü‚«‚ð”½“]‚³‚¹‚é	
 			}
 			else if (_map->GetChipType(nextLeftDown) != CHIP_N_CLIMB_WALL &&
@@ -188,7 +189,8 @@ void EmAround::CheckMove()
 		}
 		else {		//‰E‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
 			if (_map->GetChipType(nextRightPos) == CHIP_N_CLIMB_WALL ||
-				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
+				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL	 ||
+				_map->GetChipType(nextRightPos) == CHIP_ROPE_ATTRACT) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
 				moveFlag = true;	//Œü‚«‚ð”½“]‚³‚¹‚é
 			}
 			else if (_map->GetChipType(nextRightDown) != CHIP_N_CLIMB_WALL &&
