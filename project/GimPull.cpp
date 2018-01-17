@@ -8,8 +8,11 @@
 #include "MapCtl.h"
 #include "ModelMgr.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 =======
 >>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 
@@ -138,9 +141,12 @@ void GimPull::Draw(Position2 offset)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (_state != GM_END&& _state!=GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 =======
 >>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
@@ -153,6 +159,9 @@ void GimPull::Draw(Position2 offset)
 	if (_state != GM_END&& _state!=GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
 >>>>>>> 16caecdf3faa4687dc0311ea0ee71890d6a73bf4
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
+=======
 >>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
 =======
 >>>>>>> c523a166f8adccf1e8947f58b64bb7f3dadd1e48
