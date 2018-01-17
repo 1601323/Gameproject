@@ -23,12 +23,12 @@ public:
 	Gimmick();
 	~Gimmick();
 	Rect _gmRect;
-	CLEAR_DATA _clearData;
+	RESULT_DATA _clearData;
 	GIMMICK_TYPE _gimType;
 	virtual Rect& GetRect();
 	GimmickState _state;
 	virtual GIMMICK_TYPE& GetType();
-	virtual CLEAR_DATA& GetClearData();
+	virtual RESULT_DATA& GetClearData();
 
 	void NextState();
 	GimmickState nowState();

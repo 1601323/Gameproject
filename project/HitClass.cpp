@@ -130,7 +130,7 @@ bool HitClass::GimmickEnter(Object& act)
 {
 	for (auto& gimmick : _fac->GimmickList()) {
 		if (IsHit(gimmick->GetRect(), act.GetRect())) {
-			if (gimmick->GetClearData().clearFlag == true) {
+			if (gimmick->GetClearData().midFlag == true) {
 				if (gimmick->GetRect().Left() <= act.GetRect().Left()
 				&&  act.GetRect().Right() <=gimmick->GetRect().Right())
 				return true;

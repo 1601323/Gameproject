@@ -32,12 +32,15 @@ private:
 	Circle _emEye;
 	Position2 _pos;
 	Position2 _tmpOffset;
+	EnemyServerData _individualData;	//エネミー本部に送るデータ
 
 	float emSpeed; 
 	float upAngle;
 	float downAngle;
 
+	void SetMove();		//動きについてセットする
 	void setDir(void);	//向き
+	void Visibility();	//視界判定
 	void LookPl(void);	//プレイヤー発見時
 	void LoseSight();
 	void moveFear(void);	//怯み状態

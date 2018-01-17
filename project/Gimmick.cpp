@@ -8,7 +8,7 @@
 Gimmick::Gimmick( )
 {
 	_state = GM_NONE;
-	_clearData.clearFlag = false;
+	_clearData.midFlag = false;
 }
 
 
@@ -39,7 +39,7 @@ void Gimmick::Updata()
 
 }
 //‚Æ‚è‚ ‚¦‚¸‚ ‚½‚è”»’è—p‚Ì•Ï”‚ğ•Ô‚·
-CLEAR_DATA& Gimmick::GetClearData()
+RESULT_DATA& Gimmick::GetClearData()
 {
 	return _clearData;
 }

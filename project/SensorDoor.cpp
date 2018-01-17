@@ -8,12 +8,14 @@
 #include "HitClass.h"
 #include "Player.h"
 #include "Gimmick.h"
+#include "ModelMgr.h"
 #define HEIGHT 100	//ドアの縦幅（とりあえず固定）
 #define WIDTH 60	//ドアの横幅（とりあ以下略）
 
 SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 {
 	//_hit = new HitClass();
+	_modelmgr = ModelMgr::Instance();
 	openFlag = false;
 	//posのオフセット
 	_pos.x = pos.x +(MAP_CHIP_SIZE_X/2);
@@ -26,11 +28,15 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	_state = GM_NONE;
 	enterFlag = false;
 	_gimType = GIM_DOOR;
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/エレベーター/センサードア.pmx", SCENE_RESULT);
+	AttachIndex = MV1AttachAnim(modelhandle, 1, -1, false);
+	totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
 }
 
 SensorDoor::~SensorDoor()
 {
 	delete _hit;
+	_modelmgr->ModelIdAllDelete();
 }
 void SensorDoor::Updata() 
 {
@@ -93,19 +99,29 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 	//}
 	//ドアのところで上を押すとはいれるようにしたほうがいいらしい
 	if (count * 2 >= _pl.GetRect().w) {
-		_clearData.clearFlag = true;
-
+		_clearData.midFlag = true;
+#ifdef _DEBUG
 		DrawString(100,30,"クリアできるよ",GetColor(244,244,244));
+#endif
 	}
 	else {
-		_clearData.clearFlag = false;
+		_clearData.midFlag = false;
+#ifdef _DEBUG
 		DrawString(100, 30, "クリアできないよ", GetColor(244, 244, 244));
+#endif
 
 	}
 }
 
 void SensorDoor::Draw(Position2 offset)
 {
+
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+200, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
+	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
+	// MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+
 	//外枠の表示
 	DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0xffffffff,false);
 	//右扉
@@ -114,7 +130,9 @@ void SensorDoor::Draw(Position2 offset)
 	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)),(int)( _pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x - count ), (int)_pos.y - offset.y, 0xffffffff, true);
 
 	_gmRect.SetCenter(_pos.x , _pos.y - (HEIGHT / 2));
+#ifdef _DEBUG
 	_gmRect.Draw(offset);
+#endif
 }
 
 Rect& SensorDoor::GetRect() 
@@ -126,7 +144,7 @@ GIMMICK_TYPE& SensorDoor::GetType()
 {
 	return _gimType;
 }
-CLEAR_DATA& SensorDoor::GetClearData()
+RESULT_DATA& SensorDoor::GetClearData()
 {
 	return _clearData;
 }

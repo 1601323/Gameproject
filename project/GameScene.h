@@ -11,11 +11,14 @@ class Gimmick;
 class Player;
 class Enemy;
 class MapCtl;
-class Rope;//仮置き
+class Rope;
 class HitClass;
 class Camera;
 class EnemyServer;
 class Midpoint;
+class TimeManager;
+
+class ModelManager;
 
 class GimmickFactory;
 class EnemyFactory;
@@ -33,22 +36,23 @@ private:
 	MapCtl* _map;
 	EnemyServer* _server;
 	Midpoint* _mid;
+	TimeManager* _timer;
 	//仮です
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
 
+	const char* mapName;
 
 	RESULT_DATA _rtData;
 
 	int count;			//遷移確認用（あとで削除します）
-	
 	void GameInit();											//ゲーム開始時の初期化を行います
-
 	void NormalUpdata(Input* input);							//全体のUpdata
 	void ObjectUpdata(Input* input,Position2& offset);			//各ｷｬﾗｸﾀｰなどのUpdataを呼び出す
 	void UsingRopeUpdata(Input* input,Position2& offset);		//ﾛｰﾌﾟを使用しているときのUpdataを呼び出す
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
 	void Draw(Position2& offset);
+	void JudgeTransition();
 public:
 	GameScene();
 	~GameScene();

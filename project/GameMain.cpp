@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include <stdio.h>
 #include <iostream>
+#include "Assert.h"
 #include "GameMain.h"
 #include "Scene.h"
 #include "TitleScene.h"
@@ -101,6 +102,23 @@ void GameMain::ClearDataSave()
 	fread((char*)&_bestData,sizeof(_bestData),1,file);
 	fclose(file);
 }
+//最新のプレイデータを保存します
+void GameMain::NewDataSet()
+{
+	_newData[nowStage] = _resultData;
+}
+//ベストスコアのﾃﾞｰﾀを保存します
+void GameMain::BestDataSet()
+{
+	if (_bestData[nowStage].goalFlag == false) {	//一回もプレイされていないとき
+		_bestData[nowStage] =_resultData;
+	}
+	//タイムを比較
+	else if (_bestData[nowStage].goalTime >= _newData[nowStage].goalTime) {
+		_bestData[nowStage] = _resultData;
+	}
+
+}
 //リザルトに関してのデータをセットします
 void GameMain::SetResultData(RESULT_DATA rt)
 {
@@ -110,6 +128,24 @@ void GameMain::SetResultData(RESULT_DATA rt)
 RESULT_DATA GameMain::GetResultData()
 {
 	return _resultData;
+}
+//現在のステージを受け取ります
+void GameMain::SetNowStage(int num)
+{
+	nowStage = num;
+}
+//現在のステージ番号を返します
+int GameMain::GetNowStage()
+{
+	cout <<_bestData[nowStage].goalTime << endl;
+	return nowStage;
+}
+//タイトルに強制遷移を行います
+void GameMain::TransTitle()
+{
+	if (CheckHitKey(KEY_INPUT_T) && CheckHitKey(KEY_INPUT_LCONTROL)) {
+		ChangeScene(new TitleScene());
+	}
 }
 //ゲームの実行のメイン部分
 void GameMain::Run()
@@ -143,7 +179,7 @@ void GameMain::Run()
 		{
 			break;
 		}
-
+		TransTitle();
 		input->Update();
 		input->InputSet();
 		//scene.func(&scene, input);

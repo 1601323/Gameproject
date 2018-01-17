@@ -19,9 +19,7 @@ typedef std::list<std::shared_ptr<Enemy>> EnemyList_t;
 
 EnemyFactory::EnemyFactory(Player& p,Rope& r,EnemyServer& s):_player(p),_rope(r),_server(s)
 {
-
 }
-
 
 EnemyFactory::~EnemyFactory()
 {

@@ -1,3 +1,4 @@
+
 #include <DxLib.h>
 #include <math.h>
 #include "Assert.h"
@@ -8,12 +9,17 @@
 #include "HitClass.h"
 #include "Player.h"
 #include "Rope.h"
+#include "ModelMgr.h"
+#include "GameMain.h"
+#include "ModelMgr.h"
 
 #include "Math.h"
 
 EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(pl),_rope(rope),_server(server)
 {
 	_map = MapCtl::GetInstance();
+	_modelmgr = ModelMgr::Instance();
+
 	//_pl = new Player();
 	_hit = new HitClass();
 	_pos.x = pos.x;
@@ -41,12 +47,16 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 }
 
 
 EmAround::~EmAround()
 {
+
 	//delete _pl;
+	_modelmgr->ModelIdAllDelete();
 	delete _hit;
 }
 
@@ -57,7 +67,6 @@ void EmAround::Updata()
 	Gravity();
 	Visibility();
 	Move();
-	//•`‰æ‚ÍƒQ[ƒ€ƒV[ƒ“‚Å‚Ü‚Æ‚ß‚Äs‚¤
 }
 //‚¢‚¢ˆ—‚ª•‚‚©‚Î‚È‚©‚Á‚½‚Ì‚Å‚±‚±‚Åmove‚ÌŠÇ—‚³‚¹‚Ä‚¢‚Ü‚·
 void EmAround::Move()
@@ -90,8 +99,7 @@ void EmAround::Move()
 	//if(_state == EM_ST_DIS )
 	//‹¯‚Ýó‘Ô‚ÌŽž
 	if (_state == EM_ST_FEAR) {
-	moveFear();
-
+		moveFear();
 	}
 }
 void EmAround::BasicMove()
@@ -128,7 +136,7 @@ void EmAround::InterMove()
 				_dir = DIR_RIGHT;
 			}
 			else {
-				ASSERT();
+				Assert(__FILE__, __LINE__);
 			}
 		}
 	}
@@ -168,7 +176,8 @@ void EmAround::CheckMove()
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN){	//–¢”­Œ©ó‘Ô‚Å‚ ‚ê‚Î
 		if (_dir == DIR_LEFT) {		//¶‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
 			if (_map->GetChipType(nextLeftPos) == CHIP_N_CLIMB_WALL ||
-				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL ) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
+				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL	||
+				_map->GetChipType(nextLeftPos)== CHIP_ROPE_ATTRACT) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
 				moveFlag = true;	//Œü‚«‚ð”½“]‚³‚¹‚é	
 			}
 			else if (_map->GetChipType(nextLeftDown) != CHIP_N_CLIMB_WALL &&
@@ -180,7 +189,8 @@ void EmAround::CheckMove()
 		}
 		else {		//‰E‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
 			if (_map->GetChipType(nextRightPos) == CHIP_N_CLIMB_WALL ||
-				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
+				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL	 ||
+				_map->GetChipType(nextRightPos) == CHIP_ROPE_ATTRACT) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
 				moveFlag = true;	//Œü‚«‚ð”½“]‚³‚¹‚é
 			}
 			else if (_map->GetChipType(nextRightDown) != CHIP_N_CLIMB_WALL &&
@@ -199,14 +209,11 @@ void EmAround::Visibility()
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
-
 		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
-			DrawString(100, 300, "”­Œ©", 0xffffff);
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
 		else {
-			DrawString(100, 300, "õ“G’†", 0xffffff);
 			if (_individualData.plFoundFlag == true) {
 				LoseSight();
 			}
@@ -214,12 +221,10 @@ void EmAround::Visibility()
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
 		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
-			DrawString(100, 300, "”­Œ©", 0xffffff);
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
 		else {
-			DrawString(100, 300, "õ“G’†", 0xffffff);
 			if (_individualData.plFoundFlag == true) {
 				LoseSight();
 			}
@@ -227,12 +232,10 @@ void EmAround::Visibility()
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
-			DrawString(100, 300, "”­Œ©", 0xffffff);
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
 		else {
-			DrawString(100, 300, "õ“G’†", 0xffffff);
 			_individualData.plFoundFlag = false;
 			_individualData.dataSendFlag = true;
 		}
@@ -255,7 +258,6 @@ void EmAround::LoseSight()
 			_individualData.dataSendFlag = false;
 		}
 	}
-
 }
 void EmAround::EnemyFalter()
 {
@@ -307,21 +309,28 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
+	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_HEIGHT -_pos.y - (_emRect.h),0));
+	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
+	MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
+	
 	if (_state != EM_ST_FEAR) {
-		DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
+		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}
 	else {
-		DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
+		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
 	}
-	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
+	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {
-		_emEye.SetCenter(_pos.x - offset.x, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 	}
 	else if (_dir == DIR_RIGHT) {
-		_emEye.SetCenter(_pos.x - offset.x + _emRect.w, _pos.y - offset.y + (_emRect.h / 4), _emEye.r);
+		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
 	}
+#ifdef _DEBUG
 	_emRect.Draw(offset);
-	_emEye.Draw();
+#endif
+	_emEye.Draw(offset);
 }
 
 void EmAround::GetClass(HitClass* hit, Player& pl)

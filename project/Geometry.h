@@ -11,6 +11,8 @@
 #define MAP_SIZE_X (28)			//スクロール非対応マップの大きさ28
 //#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define MAP_SIZE_Y (15)			// ﾏｯﾌﾟのｻｲｽﾞ
+#define STAGE_MAX (6)			//ステージの数（仮）
+#define PLAYER_MAX (3)			//ﾌﾟﾚｲﾔｰの残機
 
 //プレイヤーの状態について
 enum CHAR_ST {
@@ -121,10 +123,22 @@ struct Vector2
 };
 //わかりやすくポジションに置き換える
 typedef Vector2 Position2;
+
+//こっちは三次元だぞ!
+struct Vector3
+{
+	Vector3() :x(0), y(0) {}
+	Vector3(float inx, float iny,float inz) : x(inx), y(iny), z(inz){}
+	float x, y, z;
+};
+//ポジションに置き換える
+typedef Vector3 Position3;
+
 //場所の矩形について
 struct Rect
 {
 	Position2 pos;
+
 	int w, h;
 	Rect() :pos(0, 0), w(0), h(0) {}
 
@@ -197,19 +211,15 @@ struct ENEMY_DATA
 	Circle lookRange;
 	float lookAngle;
 };
-//クリア判定について
-struct CLEAR_DATA
-{
-	CLEAR_DATA() :clearFlag(false) {}
-	bool clearFlag;
-};
 //ゴール時のデータについて
 struct RESULT_DATA
 {
-	RESULT_DATA() :transFlag(false),goalFlag(false), goalTime(0), foundCount(0) {}
-	bool transFlag;
-	bool goalFlag;
+	RESULT_DATA() :transFlag(false), midFlag(false),goalFlag(false), goalTime(0),life(PLAYER_MAX), foundCount(0) {}
+	bool transFlag;			//画面遷移用フラグ
+	bool midFlag;			//中間点に到着しているか
+	bool goalFlag;			//ゴールに到達したかどうか
 	float goalTime;
+	int life;
 	int foundCount;
 };
 inline

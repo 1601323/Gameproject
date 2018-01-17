@@ -16,7 +16,7 @@ private:
 	INPUT_INFO _inpInfo;
 
 	int nowNum;
-	int mapNumber[6];
+	int mapNumber[STAGE_MAX];
 	int SelectMap;
 
 	int w;

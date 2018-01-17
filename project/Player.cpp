@@ -89,15 +89,16 @@ void Player::Draw(Position2& offset)
 	default:
 		break;
 	}
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
+
 #ifdef _DEBUG
 	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
 	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-#endif
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2) , _pos.y + (_plRect.h / 2));
 	_plRect.Draw(offset);
+#endif
 }
 
 //移動系の処理

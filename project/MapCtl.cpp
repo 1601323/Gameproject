@@ -134,11 +134,11 @@ unsigned int MapCtl::GetMapID(Position2 idPos)
 // ﾏｯﾌﾟチップ描画[座標,ﾁｯﾌﾟ番号]
 void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
-	auto color = GetColor(0, 0, 0);
+	auto color = GetColor(0, 50, 50);
 	switch (num)			// ﾏｯﾌﾟﾁｯﾌﾟ別に描画
 	{
 	case CHIP_BLANK:		// 何もない
-		color = GetColor(0, 0, 0);
+		color = GetColor(0, 50, 50);
 		break;
 	case CHIP_N_CLIMB_WALL:	// 登れない壁	
 		color = GetColor(85, 44, 32);

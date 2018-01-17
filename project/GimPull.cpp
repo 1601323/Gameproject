@@ -2,20 +2,25 @@
 #include <iostream>
 #include "Geometry.h"
 #include "GimPull.h"
+#include "Player.h"
 #include "Rope.h"
 #include "HitClass.h"
 #include "MapCtl.h"
+#include "ModelMgr.h"
 
-
-GimPull::GimPull(Position2 pos,Rope& r):_rope(r),_pos(pos)
+GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 {
 	_hit = new HitClass();
+	_modelmgr = ModelMgr::Instance();
+
 	_map = MapCtl::GetInstance();
 	_state = GM_NONE;
 	_gmRect.w = 32*3;
 	_gmRect.h = 32;
 	count = 60;
 	_gimType = GIM_ATTRACT;
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ/丸底フラスコ.pmx", SCENE_RESULT);
+
 }
 
 
@@ -30,7 +35,7 @@ void GimPull::Updata(Input& _input)
 	_key = _input.GetInput(1).key;
 	_lastKey = _input.GetLastKey();
 	_inpInfo = _input.GetInput(1);
-	if (_state == GM_NONE) {
+	if (_state == GM_NONE || _state == GM_PAUSE) {
 		CheckDoMove();
 	}
 	if (_state == GM_HIT||_state == GM_MOVE) {
@@ -41,7 +46,7 @@ void GimPull::Updata(Input& _input)
 
 void GimPull::CheckDoMove() 
 {
-	if (_state != GM_END) {
+	if (_state != GM_END ) {
 		////ロープとのあたり判定を取る
 		//if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
 		//	//当たっていたら
@@ -58,7 +63,7 @@ void GimPull::CheckDoMove()
 				_state = GM_MOVE;
 			}
 		}
-		//デバック用　ｴﾝﾀｰで作動（移動量を設定しないと頭おかしい挙動をします）
+		//デバック用　ｴﾝﾀｰで作動
 		//if (_inpInfo.key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
 		//	_state = GM_HIT;
 		//}
@@ -92,6 +97,10 @@ void GimPull::Move()
 				_state = GM_END;
 				count = 60;
 			}
+			else if (_hit->IsHit(_player.GetRect(), nextPos[0]) || _hit->IsHit(_player.GetRect(), nextPos[1])) {
+				_state = GM_PAUSE;
+				
+			}
 			else {
 				_pos.x += _rope.GetRopeVec().x;
 			}
@@ -100,6 +109,9 @@ void GimPull::Move()
 			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK || _map->GetChipType(downPos[1]) == CHIP_BLANK) {
 				_state = GM_END;
 				count = 60;
+			}
+			else if (_hit->IsHit(_player.GetRect(), nextPos[0])|| _hit->IsHit(_player.GetRect(), nextPos[1])) {
+				_state = GM_PAUSE;
 			}
 			else {
 				_pos.x += abs(_rope.GetRopeVec().x);
@@ -115,23 +127,31 @@ void GimPull::Move()
 	}
 }
 
-void GimPull::Draw(Position2 offset) 
+void GimPull::Draw(Position2 offset)
 {
-	if (_state != GM_END) {			//END以外であれば色は同じまま
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
+	MV1SetScale(modelhandle, VGet(10.f, 10.f, 10.f));
+	//MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	if (_state != GM_END&& _state != GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
 	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
-		DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
+		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
+	}
+	else if (_state == GM_PAUSE) {
+		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 0, 255), true);
 	}
 	else if (_state == GM_END) {	//ENDになったら赤に変える
-		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y),(int) (_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
+		DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
 	}
-	else{}
+	else {}
 	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
 	//_gmRect.Draw();	
-	_gmRect.SetCenter(_pos.x+ (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
-	_gmRect.Draw(offset);	
-	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2),0xffffff);
-	DrawPixel(_pos.x - offset.x , _pos.y - offset.y , 0xff00ff);
-
+	_gmRect.SetCenter(_pos.x + (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
+#ifdef _DEBUG
+	_gmRect.Draw(offset);
+	DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2), 0xffffff);
+	DrawPixel(_pos.x - offset.x, _pos.y - offset.y, 0xff00ff);
+#endif
 }
 //あたり矩形を返す
 Rect& GimPull::GetRect() 
