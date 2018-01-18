@@ -26,6 +26,14 @@ HitClass::HitClass()
 HitClass::~HitClass()
 {
 }
+void HitClass::GetClass(GimmickFactory* f)
+{
+	_fac = f;
+}
+void HitClass::GetClass(EnemyFactory* ef)
+{
+	_emFac = ef;
+}
 //あたり判定です。GetRectを持っている奴らなら呼び出して使えるはず
 //例
 //　HitClass* _hit = new HitClass();

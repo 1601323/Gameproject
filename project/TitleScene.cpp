@@ -9,6 +9,7 @@
 TitleScene::TitleScene()
 {
 	_updater = &TitleScene::NormalUpdata;
+	_menu = GAME_START;
 }
 
 
@@ -18,9 +19,9 @@ TitleScene::~TitleScene()
 void TitleScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
-	KEY key = input->GetInput(1).key;
-	KEY lastKey = input->GetLastKey();
-	INPUT_INFO inpInfo = input->GetInput(1);
+	key = input->GetInput(1).key;
+	lastKey = input->GetLastKey();
+	inpInfo = input->GetInput(1);
 #ifdef _DEBUG
 	DrawString(10,0,"ƒ^ƒCƒgƒ‹",GetColor(255,255,255));
 #endif
@@ -28,7 +29,10 @@ void TitleScene::NormalUpdata(Input* input)
 		gm.Instance().ChangeScene(new SelectScene());
 	}
 }
+void TitleScene::MenuSelect()
+{
 
+}
 SCENE_TYPE TitleScene::GetScene()
 {
 	return SCENE_TITLE;

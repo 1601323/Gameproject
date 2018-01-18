@@ -218,7 +218,7 @@ struct RESULT_DATA
 	bool transFlag;			//画面遷移用フラグ
 	bool midFlag;			//中間点に到着しているか
 	bool goalFlag;			//ゴールに到達したかどうか
-	float goalTime;
+	int goalTime;
 	int life;
 	int foundCount;
 };

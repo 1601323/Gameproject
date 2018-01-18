@@ -13,7 +13,7 @@ class EmAround :
 	public Enemy
 {
 private:
-	HitClass* _hit;
+	HitClass& _hit;
 	Player& _pl;
 	Rope& _rope;
 	EnemyServer& _server;
@@ -52,7 +52,7 @@ private:
 	void LoseSight();		//ÌßÚ²Ô°‚ğŒ©¸‚Á‚½‚Æ‚«
 	void Gravity();			//d—Í”»’è
 public:
-	EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server);
+	EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit);
 	~EmAround();
 
 	void Updata();	

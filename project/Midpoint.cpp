@@ -16,6 +16,7 @@ Midpoint::Midpoint()
 	//マップから受け取るようにする
 	_pos.x = 400;
 	_pos.y = 100;
+	initPos = _pos;
 	tmpDir = DIR_RIGHT;
 	//大きさについてはとりあえずチップの大きさと一緒にしておく
 	_hitRect.w = 32;
@@ -116,4 +117,8 @@ bool Midpoint::ReturnGetFlag()
 Rect& Midpoint::GetRect()
 {
 	return _hitRect;
+}
+Position2& Midpoint:: GetInitPos()
+{
+	return initPos;
 }

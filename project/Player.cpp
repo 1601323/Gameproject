@@ -57,7 +57,7 @@ void Player::Update(Input* input)
 	setMove(input);
 	//Ω√∞¿Ωêßå‰
 	setState();
-	HitToEnemy();		//ìGÇ∆ìñÇΩÇ¡ÇΩÇ∆Ç´
+	//HitToEnemy();		//ìGÇ∆ìñÇΩÇ¡ÇΩÇ∆Ç´
 
 	//std::cout << _pos.x << std::endl;
 	//std::cout << _pos.y << std::endl;
@@ -145,11 +145,11 @@ void Player::setDir(Input* input)
 			_state = ST_MOVE;
 		}
 		//è„
-		else if (input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
+		else if (_inpInfo.key.keybit.R_UP_BUTTON || input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_UP;
 		}
-		else if (input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN &&
+		else if (_inpInfo.key.keybit.R_RIGHT_BUTTON || input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_DOWN;
 		}
@@ -425,11 +425,11 @@ bool Player::moveWall(void)
 		if (moveFlag) {
 			if (_inpInfo.num >= 1)
 			{
-				if (_dir == DIR_UP)
+				if (_dir == DIR_UP || _key.keybit.L_UP_BUTTON)
 				{
 					vy = -WALL_SPEED;
 				}
-				else if (_dir == DIR_DOWN)
+				else if (_dir == DIR_DOWN  ||_key.keybit.L_DOWN_BUTTON)
 				{
 					vy = WALL_SPEED;
 				}
@@ -749,4 +749,8 @@ bool Player::EnterDoor()
 		}
 	}
 	return false;
+}
+void Player::SetRetryPos(Position2 midPos)
+{
+	_pos = midPos;
 }
