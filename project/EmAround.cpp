@@ -15,13 +15,13 @@
 
 #include "Math.h"
 
-EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(pl),_rope(rope),_server(server)
+EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit):_pl(pl),_rope(rope),_server(server),_hit(hit)
 {
 	_map = MapCtl::GetInstance();
 	_modelmgr = ModelMgr::Instance();
 
 	//_pl = new Player();
-	_hit = new HitClass();
+	//_hit = new HitClass();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
 	_initPos = _pos;
@@ -57,7 +57,7 @@ EmAround::~EmAround()
 
 	//delete _pl;
 	_modelmgr->ModelIdAllDelete();
-	delete _hit;
+	//delete _hit;
 }
 
 void EmAround::Updata()
@@ -177,7 +177,7 @@ void EmAround::CheckMove()
 		if (_dir == DIR_LEFT) {		//ç∂ë§Ç…ìÆÇ¢ÇƒÇ¢ÇÈÇ∆Ç´
 			if (_map->GetChipType(nextLeftPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL	||
-				_map->GetChipType(nextLeftPos)== CHIP_ROPE_ATTRACT) {	//ç∂Ç™ï«Ç≈Ç†ÇÍÇŒ
+				(_hit.GimmickHit(nextLeftPos) && _hit.GimmickHitType(nextLeftPos) == GIM_ATTRACT)) {	//ç∂Ç™ï«Ç≈Ç†ÇÍÇŒ
 				moveFlag = true;	//å¸Ç´ÇîΩì]Ç≥ÇπÇÈ	
 			}
 			else if (_map->GetChipType(nextLeftDown) != CHIP_N_CLIMB_WALL &&
@@ -190,7 +190,7 @@ void EmAround::CheckMove()
 		else {		//âEë§Ç…ìÆÇ¢ÇƒÇ¢ÇÈÇ∆Ç´
 			if (_map->GetChipType(nextRightPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL	 ||
-				_map->GetChipType(nextRightPos) == CHIP_ROPE_ATTRACT) {	//âEÇ™ï«Ç≈Ç†ÇÍÇŒ												
+				(_hit.GimmickHit(nextRightPos) && _hit.GimmickHitType(nextRightPos) == GIM_ATTRACT)) {	//âEÇ™ï«Ç≈Ç†ÇÍÇŒ												
 				moveFlag = true;	//å¸Ç´ÇîΩì]Ç≥ÇπÇÈ
 			}
 			else if (_map->GetChipType(nextRightDown) != CHIP_N_CLIMB_WALL &&
@@ -209,7 +209,7 @@ void EmAround::Visibility()
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
-		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -220,7 +220,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -231,7 +231,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -262,7 +262,7 @@ void EmAround::LoseSight()
 void EmAround::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
 			DrawString(100, 100, "ìGÇ…ìñÇΩÇ¡ÇΩÇÊÅI", 0xffffff);
 			_state = EM_ST_FEAR;
 		}
@@ -335,7 +335,7 @@ void EmAround::Draw(Position2 offset)
 
 void EmAround::GetClass(HitClass* hit, Player& pl)
 {
-	_hit = hit;
+	//_hit = hit;
 	_pl = pl;
 }
 Rect& EmAround::GetRect()

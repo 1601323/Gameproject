@@ -57,7 +57,7 @@ void Player::Update(Input* input)
 	setMove(input);
 	//½Ã°À½§Œä
 	setState();
-	HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
+	//HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
 
 	//std::cout << _pos.x << std::endl;
 	//std::cout << _pos.y << std::endl;

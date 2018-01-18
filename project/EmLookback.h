@@ -13,7 +13,7 @@ class EmLookback :
 	public Enemy
 {
 private:
-	HitClass* _hit;
+	HitClass& _hit;
 	EnemyServer& _server;
 	DIR _dir;			//·¬×‚ÌŒü‚«
 	MapCtl* _map;
@@ -48,7 +48,7 @@ private:
 	void EnemyFalter();					//‹¯‚İó‘Ô‚É‘JˆÚ‚·‚é
 	void returnDir(Position2 offset);	//Œü‚¢‚Ä‚¢‚é•ûŒü‚ğ•Ô‚·
 public:
-	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server);
+	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();
 	Rect _emRect;
 	Rect& GetRect();
