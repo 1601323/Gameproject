@@ -750,3 +750,7 @@ bool Player::EnterDoor()
 	}
 	return false;
 }
+void Player::SetRetryPos(Position2 midPos)
+{
+	_pos = midPos;
+}

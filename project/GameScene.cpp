@@ -68,7 +68,7 @@ GameScene::GameScene()
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
 	_hit = new HitClass(_fac, _emFac);
 
 	//_server = new EnemyServer();
@@ -164,14 +164,15 @@ void GameScene::JudgeTransition()
 	GameMain& gm = GameMain::Instance();
 	//クリアによる画面遷移を仮実装
 	if (_mid->ReturnGetFlag() == true) {
-		_rtData.goalFlag = true;
+		_rtData.midFlag = true;
 	}
 	else
 	{
-		_rtData.goalFlag = false;
+		_rtData.midFlag = false;
 	}
 	if (_player->EnterDoor()) {
 		_timer->StopTimer();
+		_rtData.goalFlag = true;
 		_rtData.goalTime = _timer->ShowTimer();
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
@@ -193,7 +194,6 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_mid->Updata();
 }
 //ロープを使っているときに呼び出される
-
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 {
 	//_cam->Update();
@@ -220,19 +220,29 @@ void GameScene::TransitionUpdata(Input* input)
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	if (count >= 120) {
-		if (gm.GetResultData().life <= 0) {
+		if (_rtData.goalFlag == true) {
 			gm.Instance().ChangeScene(new ResultScene());
 		}
-		else {
+		else if (gm.GetResultData().life >= 0) {
 			RetryProcess();
-			_updater =& GameScene::FadeInUpdata;
+			_updater = &GameScene::FadeInUpdata;
+		}
+		else {
+			gm.Instance().ChangeScene(new ResultScene());
 		}
 		count = 0;
 	}
 }
 void GameScene::RetryProcess()
 {
-	_player->SetInitPos();
+	if (_rtData.midFlag == true) {
+		_player->SetRetryPos(_mid->GetInitPos());
+	}
+	else
+	{
+		_player->SetInitPos();
+	}
+	_mid->Updata();
 	for (auto& em : _emFac->EnemyList()) {
 		em->SetInitPos();
 	}

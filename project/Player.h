@@ -35,7 +35,7 @@ private:
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
 	Position2 _pos;						//ｷｬﾗの座標
-	DIR _dir;							//ｷｬﾗの向きﾄ
+	DIR _dir;							//ｷｬﾗの向き
 	Position2 initPos;					//初期位置保存
 	float vx;							//x速度
 	float vy;							//y速度
@@ -43,19 +43,12 @@ private:
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
-	bool moveRopeJumpFlag;					//ﾛｰﾌﾟｼﾞｬﾝﾌﾟ処理
+	bool moveRopeJumpFlag;				//ﾛｰﾌﾟｼﾞｬﾝﾌﾟ処理
 	void HitToEnemy();					//敵と当たった時
 	char keyData[256];
 	char oldkeyData[256];
 
-public:
-	Player();
-	~Player();
-	Rect _plRect;
-	Rect& GetRect();
-	void Update(Input* input);
-	void Draw(Position2& offset);
-	void setMove(Input* input);					//移動関数
+	void setMove(Input* input);			//移動関数
 	void setState(void);				//ｽﾃｰﾀｽ制御
 	void setDir(Input* input);			//向き制御
 	void gravity(void);					//重力
@@ -65,10 +58,20 @@ public:
 	bool moveRope(void);				//ﾛｰﾌﾟ状態
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
+
+public:
+	Player();
+	~Player();
+	Rect _plRect;
+	Rect& GetRect();
+	void Update(Input* input);
+	void Draw(Position2& offset);
+
 	CHAR_ST GetcharState(void);			//ｽﾃｰﾀｽ取得
 	Position2& GetPos(void);			//pos取得
-	void SetInitPos();			//初期位置を返す
+	void SetInitPos();					//初期位置を返す
 	DIR GetDir(void);					//dir取得	
+	void SetRetryPos(Position2 midPos);
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
 
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
