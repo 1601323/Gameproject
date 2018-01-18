@@ -16,6 +16,8 @@ Player::Player()
 {
 	_pos.x = 200.0f;
 	_pos.y = 300.0f;
+	initPos.x = _pos.x;
+	initPos.y = _pos.y;
 	_state = ST_DEF;
 	vx = 0.0f;
 	vy = 0.0f;
@@ -733,7 +735,11 @@ DIR Player::GetDir(void)
 {
 	return _dir;
 }
-
+//‰ŠúˆÊ’u‚ð•Ô‚·
+void Player::SetInitPos()
+{
+	_pos = initPos;
+}
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {

@@ -16,6 +16,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_map = MapCtl::GetInstance();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
+	_initPos = _pos;
 	_dir = DIR_RIGHT;
 	_emRect.w = 32;
 	_emRect.h = 32;
@@ -254,6 +255,10 @@ void EmLookback::GetClass(HitClass * hit, Player & pl)
 {
 	_hit = hit;
 	_player = pl;
+}
+void EmLookback::SetInitPos()
+{
+	_pos = _initPos;
 }
 //オフセットの為向いている方向を確認します
 void EmLookback::returnDir(Position2 offset)
