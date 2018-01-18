@@ -36,6 +36,7 @@ private:
 	CHAR_ST _state;						//ｷｬﾗの状態
 	Position2 _pos;						//ｷｬﾗの座標
 	DIR _dir;							//ｷｬﾗの向きﾄ
+	Position2 initPos;					//初期位置保存
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
@@ -66,6 +67,7 @@ public:
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
 	CHAR_ST GetcharState(void);			//ｽﾃｰﾀｽ取得
 	Position2& GetPos(void);			//pos取得
+	void SetInitPos();			//初期位置を返す
 	DIR GetDir(void);					//dir取得	
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
 

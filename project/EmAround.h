@@ -18,6 +18,7 @@ private:
 	Rope& _rope;
 	EnemyServer& _server;
 	Position2 _pos;
+	Position2 _initPos;
 	Rect _emRect;
 	Circle _emEye;
 	ENEMY_STATE _state;
@@ -59,6 +60,7 @@ public:
 	ENEMY_STATE & GetState();
 	void EnemyFalter();		//‹¯‚İó‘Ô‚É‚È‚éğŒ
 	void GetClass(HitClass* hit,Player& pl);		//ƒNƒ‰ƒXó‚¯æ‚è—p
+	void SetInitPos();
 
 	void Draw(Position2 offset);
 };

@@ -24,7 +24,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 	_hit = new HitClass();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
-
+	_initPos = _pos;
 	_emRect.w = 30;
 	_emRect.h = 30;	
 	_emEye.pos.x = _pos.x;
@@ -345,4 +345,8 @@ Rect& EmAround::GetRect()
 ENEMY_STATE& EmAround::GetState()
 {
 	return _state;
+}
+void EmAround::SetInitPos()
+{
+	_pos = _initPos;
 }

@@ -34,7 +34,7 @@
 
 GameScene::GameScene()
 {
-	_updater = &GameScene::NormalUpdata;
+	_updater = &GameScene::FadeInUpdata;
 	GameInit();
 	_player = new Player();
 	_rope = new Rope(_player);
@@ -56,12 +56,9 @@ GameScene::GameScene()
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
 	//ギミック呼び出し用の関数です。
 	//このように宣言するとどこでも設置できるので確認等につかってください
-	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(200,40));				//センサードア
-	//_fac->Create(CHIP_TYPE::CHIP_BUTTON_1,Position2(380,420));			//消えるﾎﾞﾀﾝ
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
-	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(700,430));				//センサードア
 	//マップを読み取り、リストにギミックを持たせます。
 	auto gimData = _map->getChipPosData();
 	for (auto& data : gimData) {
@@ -114,9 +111,28 @@ void GameScene::GameInit()
 		break;
 	}
 }
-void GameScene::NormalUpdata(Input* input)
+void GameScene::FadeInUpdata(Input* input) 
 {
 	GameMain& gm = GameMain::Instance();
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+	_cam->Update();
+	Position2& offset = _cam->ReturnOffset();
+	_map->Draw(offset);
+	Draw(offset);
+	count++;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220 - (count*2));
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (count >= 60) {
+		_updater = &GameScene::NormalUpdata;
+		count = 0;
+	}
+}
+void GameScene::NormalUpdata(Input* input)
+{
+	UpdateManager();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	_map->Draw(offset);
@@ -204,8 +220,27 @@ void GameScene::TransitionUpdata(Input* input)
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	if (count >= 120) {
-		gm.Instance().ChangeScene(new ResultScene());
+		if (gm.GetResultData().life <= 0) {
+			gm.Instance().ChangeScene(new ResultScene());
+		}
+		else {
+			RetryProcess();
+			_updater =& GameScene::FadeInUpdata;
+		}
+		count = 0;
 	}
+}
+void GameScene::RetryProcess()
+{
+	_player->SetInitPos();
+	for (auto& em : _emFac->EnemyList()) {
+		em->SetInitPos();
+	}
+}
+//この先まとめるかもしれないので仮設置
+void GameScene::UpdateManager()
+{
+
 }
 void GameScene::Draw(Position2& offset)
 {
