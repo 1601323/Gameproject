@@ -107,11 +107,13 @@ void Player::Draw(Position2& offset)
 void Player::setMove(Input* input)
 {
 	setDir(input);
+
+
+
 	moveJump();
 	moveWall();
 
 	moveRope();
-
 	accelePL();
 	//EnterDoor();
 }
@@ -145,15 +147,18 @@ void Player::setDir(Input* input)
 			_state = ST_MOVE;
 		}
 		//ã
-		else if (_inpInfo.key.keybit.R_UP_BUTTON || input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
+		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
+			input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_UP;
 		}
-		else if (_inpInfo.key.keybit.R_RIGHT_BUTTON || input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN &&
+		else if (_inpInfo.key.keybit.R_DOWN_BUTTON ||
+			input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_DOWN;
 		}
 		else if(!_inpInfo.key.keybit.R_LEFT_BUTTON || 	!_inpInfo.key.keybit.R_RIGHT_BUTTON ||
+			!_inpInfo.key.keybit.R_UP_BUTTON || !_inpInfo.key.keybit.R_DOWN_BUTTON ||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_RIGHT||input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_LEFT||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_UP   ||input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_DOWN){
 			//‰Ÿ‚µ‚Ä‚È‚¢
@@ -197,6 +202,9 @@ bool Player::accelePL(void)
 					if (vx < -MAX_SPEED) {
 						vx = -MAX_SPEED;
 					}
+				}
+				else {
+
 				}
 			}
 			else {
