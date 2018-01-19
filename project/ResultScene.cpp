@@ -25,7 +25,7 @@ void ResultScene::NormalUpdata(Input* input)
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
 	_rtData = gm.GetResultData();
-	if (gm.GetResultData().goalFlag == true) {
+	if (gm.GetResultData().goalFlag == true && gm.GetResultData().midFlag) {
 		GameClear();
 	}
 	else {

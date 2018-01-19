@@ -14,6 +14,7 @@ SelectScene::SelectScene()
 	_updater = &SelectScene::NormalUpdata;
 	SelectMap = mapNumber[0];
 	nowNum = 0;
+	_minSensingValueL = SV_HIGH;
 
 	w = 90;
 	h = 60;
@@ -53,26 +54,14 @@ void SelectScene::Select()
 	//ステージ選択
 	if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !lastKey.keybit.R_RIGHT_BUTTON) {
 		nowNum += 1;
-		if (nowNum >= 6) {
+		if (nowNum >= STAGE_MAX) {
 			nowNum = 0;
 		}
 	}
 	else if (_inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
 		nowNum -= 1;
 		if (nowNum < 0) {
-			nowNum = 5;
-		}
-	}
-	else if (_inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
-		nowNum += 3;
-		if (nowNum >= 6) {
-			nowNum -= 6;
-		}
-	}
-	else if (_inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
-		nowNum -= 3;
-		if (nowNum < 0) {
-			nowNum += 6;
+			nowNum = STAGE_MAX-1;
 		}
 	}
 	else {
@@ -88,6 +77,6 @@ void SelectScene::Draw()
 			DrawBox(90 + 100 * x, 90 + 100 * y, 90 + 100 * x + w, 90 + 100 * y + h, 0x223344, true);
 		}
 	}
-	DrawBox(90 + 100 * (nowNum % 3), 90 + 100 * (nowNum / 3), 90 + 100 * (nowNum % 3) + w, 90 + 100 * (nowNum / 3) + h, 0x999999, true);
+	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
 	//cout << nowNum << endl;
 }

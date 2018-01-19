@@ -8,6 +8,8 @@ enum TITLE_MENU {
 };
 class Input;
 
+enum SENSING_VALUE;
+
 class TitleScene :
 	public Scene
 {
@@ -18,7 +20,9 @@ private:
 	void(TitleScene::*_updater)(Input* input);
 	TITLE_MENU _menu;
 	void NormalUpdata(Input* input);
-	void MenuSelect();
+	void MenuSelect(Input* input);
+	void Draw();
+	SENSING_VALUE _minSensingValueL;
 public:
 	TitleScene();
 	~TitleScene();

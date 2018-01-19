@@ -175,7 +175,6 @@ void Player::setDir(Input* input)
 	DrawFormatString(80, 260, 0xffffff, "%f", angle);
 #endif
 }
-
 //à⁄ìÆêßå‰
 bool Player::accelePL(void)
 {
@@ -204,7 +203,6 @@ bool Player::accelePL(void)
 					}
 				}
 				else {
-
 				}
 			}
 			else {
@@ -754,6 +752,7 @@ void Player::SetInitPos()
 void Player::SetInitPos(Position2 p)
 {
 	_pos = p;
+	initPos = _pos;
 }
 bool Player::EnterDoor()
 {
