@@ -15,6 +15,9 @@ public:
 	HitClass();
 	~HitClass();
 
+	void GetClass(GimmickFactory* f);
+	void GetClass(EnemyFactory* ef);
+
 	static bool IsHit(Rect& rcA, Rect& rcB);		//Rect“¯Žm‚Ì‚ ‚½‚è”»’è
 	static bool IsHit(Rect& rc,Position2& pos);		//Rect‚Æ“_‚Ì‚ ‚½‚è”»’è
 	static bool IsHit(Circle& cirA,Circle& cirB);	//‰~‚Æ‰~‚Ì‚ ‚½‚è”»’è

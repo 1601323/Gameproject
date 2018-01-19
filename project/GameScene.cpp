@@ -34,7 +34,7 @@
 
 GameScene::GameScene()
 {
-	_updater = &GameScene::NormalUpdata;
+	_updater = &GameScene::FadeInUpdata;
 	GameInit();
 	_player = new Player();
 	_rope = new Rope(_player);
@@ -47,6 +47,7 @@ GameScene::GameScene()
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
 	//_map->Load("map/1218_001.map");
 	_map->Load(mapName);
+	_hit = new HitClass();
 
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
@@ -56,23 +57,28 @@ GameScene::GameScene()
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
 	//ギミック呼び出し用の関数です。
 	//このように宣言するとどこでも設置できるので確認等につかってください
-	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(200,40));				//センサードア
-	//_fac->Create(CHIP_TYPE::CHIP_BUTTON_1,Position2(380,420));			//消えるﾎﾞﾀﾝ
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
-	//_fac->Create(CHIP_TYPE::CHIP_DOOR, Position2(700,430));				//センサードア
 	//マップを読み取り、リストにギミックを持たせます。
 	auto gimData = _map->getChipPosData();
 	for (auto& data : gimData) {
 		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
 			_fac->Create(static_cast<CHIP_TYPE>(data.chipType), Position2(data.posX, data.posY));
+		if (data.chipType == CHIP_DOOR) {
+			_player->SetInitPos(Position2(data.posX, data.posY));
+		}
 	}
+	_hit->GetClass(_fac);
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
-	_emFac = new EnemyFactory(*_player, *_rope, *_server);
+	_emFac = new EnemyFactory(*_player, *_rope, *_server, * _hit);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 130));
-	_hit = new HitClass(_fac, _emFac);
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
+
+
+	_hit->GetClass(_emFac);
+	//_hit = new HitClass(_fac, _emFac);
 
 	//_server = new EnemyServer();
 	//ファクトリーのリストを利用したhitを返します
@@ -102,7 +108,7 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/1218_001.map";
+		mapName = "map/1.19.map";
 		break;
 	case 1:
 		mapName = "map/1218_001.map";
@@ -114,9 +120,28 @@ void GameScene::GameInit()
 		break;
 	}
 }
-void GameScene::NormalUpdata(Input* input)
+void GameScene::FadeInUpdata(Input* input) 
 {
 	GameMain& gm = GameMain::Instance();
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+	_cam->Update();
+	Position2& offset = _cam->ReturnOffset();
+	_map->Draw(offset);
+	Draw(offset);
+	count++;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220 - (count*2));
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (count >= 60) {
+		_updater = &GameScene::NormalUpdata;
+		count = 0;
+	}
+}
+void GameScene::NormalUpdata(Input* input)
+{
+	UpdateManager();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	_map->Draw(offset);
@@ -148,14 +173,15 @@ void GameScene::JudgeTransition()
 	GameMain& gm = GameMain::Instance();
 	//クリアによる画面遷移を仮実装
 	if (_mid->ReturnGetFlag() == true) {
-		_rtData.goalFlag = true;
+		_rtData.midFlag = true;
 	}
 	else
 	{
-		_rtData.goalFlag = false;
+		_rtData.midFlag = false;
 	}
 	if (_player->EnterDoor()) {
 		_timer->StopTimer();
+		_rtData.goalFlag = true;
 		_rtData.goalTime = _timer->ShowTimer();
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
@@ -177,7 +203,6 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_mid->Updata();
 }
 //ロープを使っているときに呼び出される
-
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 {
 	//_cam->Update();
@@ -204,8 +229,38 @@ void GameScene::TransitionUpdata(Input* input)
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	if (count >= 120) {
-		gm.Instance().ChangeScene(new ResultScene());
+		if (_rtData.goalFlag == true) {
+			gm.Instance().ChangeScene(new ResultScene());
+		}
+		else if (gm.GetResultData().life >= 0) {
+			RetryProcess();
+			_updater = &GameScene::FadeInUpdata;
+		}
+		else {
+			gm.Instance().ChangeScene(new ResultScene());
+		}
+		count = 0;
 	}
+}
+void GameScene::RetryProcess()
+{
+	if (_rtData.midFlag == true) {
+		_player->SetRetryPos(_mid->GetInitPos());
+	}
+	else
+	{
+		_player->SetInitPos();
+	}
+	_mid->Updata();
+	for (auto& em : _emFac->EnemyList()) {
+		em->SetInitPos();
+	}
+	_server->ServerInit();
+}
+//この先まとめるかもしれないので仮設置
+void GameScene::UpdateManager()
+{
+
 }
 void GameScene::Draw(Position2& offset)
 {

@@ -9,13 +9,14 @@
 
 
 
-EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& server) :_player(pl), _rope(rope), _server(server)
+EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& server,HitClass& hit) :_player(pl), _rope(rope), _server(server),_hit(hit)
 {
-	_hit = new HitClass();
+	//_hit = new HitClass();
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
+	_initPos = _pos;
 	_dir = DIR_RIGHT;
 	_emRect.w = 32;
 	_emRect.h = 32;
@@ -43,7 +44,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 
 EmLookback::~EmLookback()
 {
-	delete _hit;
+	//delete _hit;
 }
 
 void EmLookback::Updata()
@@ -144,7 +145,7 @@ void EmLookback::Visibility()
 	////視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
-		if (_hit->EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -155,7 +156,7 @@ void EmLookback::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit->EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -166,7 +167,7 @@ void EmLookback::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit->EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -179,18 +180,24 @@ void EmLookback::Visibility()
 }
 void EmLookback::LookPl(void)
 {
+	Position2 nextRightPos;
+	nextRightPos.x = _pos.x + _emRect.w;
+	nextRightPos.y = _pos.y + (_emRect.h / 2);
+	Position2 nextLeftPos;
+	nextLeftPos.x = _pos.x;
+	nextLeftPos.y = _pos.y + (_emRect.h / 2);
 	//プレイヤーを見つけたら追いかけてくる
 	//今は向いている方向に動くようにしている
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		if (_dir == DIR_LEFT) {
-			if (_map->GetChipType({ _pos.x ,_pos.y + (_emRect.h / 2) }) == CHIP_BLANK
-				|| _map->GetChipType({ _pos.x ,_pos.y + (_emRect.h / 2) }) == CHIP_ROPE_FALL) {
+			if (_map->GetChipType(nextLeftPos) == CHIP_BLANK
+				|| _hit.GimmickHitType(nextLeftPos) != GIM_ATTRACT) {
 				_pos.x -= emSpeed;
 			}
 		}
 		else if (_dir == DIR_RIGHT) {
-			if (_map->GetChipType({ _pos.x + _emRect.w,_pos.y + (_emRect.h / 2) }) == CHIP_BLANK
-				|| _map->GetChipType({ _pos.x + _emRect.w,_pos.y + (_emRect.h / 2) }) == CHIP_ROPE_FALL) {
+			if (_map->GetChipType(nextRightPos) == CHIP_BLANK
+				|| _hit.GimmickHitType(nextRightPos) != GIM_ATTRACT) {
 				_pos.x += emSpeed;
 			}
 		}
@@ -215,7 +222,7 @@ void EmLookback::moveFear(void)
 void EmLookback::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
 			_state = EM_ST_FEAR;
 		}
 		else {
@@ -252,8 +259,12 @@ ENEMY_STATE& EmLookback::GetState()
 }
 void EmLookback::GetClass(HitClass * hit, Player & pl)
 {
-	_hit = hit;
+	//_hit = hit;
 	_player = pl;
+}
+void EmLookback::SetInitPos()
+{
+	_pos = _initPos;
 }
 //オフセットの為向いている方向を確認します
 void EmLookback::returnDir(Position2 offset)

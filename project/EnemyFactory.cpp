@@ -7,6 +7,7 @@
 #include "Geometry.h"
 #include "GameScene.h"
 #include "Enemy.h"
+#include "HitClass.h"
 #include "EnemyFactory.h"
 #include "EnemyServer.h"
 
@@ -17,7 +18,7 @@ using namespace std;
 using Enemy_ptr = std::shared_ptr<Enemy>;
 typedef std::list<std::shared_ptr<Enemy>> EnemyList_t;
 
-EnemyFactory::EnemyFactory(Player& p,Rope& r,EnemyServer& s):_player(p),_rope(r),_server(s)
+EnemyFactory::EnemyFactory(Player& p,Rope& r,EnemyServer& s,HitClass& h):_player(p),_rope(r),_server(s),_hit(h)
 {
 }
 
@@ -32,10 +33,10 @@ std::weak_ptr<Enemy>EnemyFactory::Create(ENEMY_TYPE et,Position2 pos)
 	case ENEMY_NONE:
 		break;
 	case ENEMY_TURN:
-		_enemyList.push_back(Enemy_ptr(new EmLookback(pos,_player,_rope,_server)));
+		_enemyList.push_back(Enemy_ptr(new EmLookback(pos,_player,_rope,_server,_hit)));
 		break;
 	case ENEMY_WARKING:
-		_enemyList.push_back(Enemy_ptr(new EmAround(pos,_player,_rope,_server)));
+		_enemyList.push_back(Enemy_ptr(new EmAround(pos,_player,_rope,_server,_hit)));
 		break;
 	case ENEMY_MIMICRY:
 		break;

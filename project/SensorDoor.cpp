@@ -116,10 +116,10 @@ void SensorDoor::CheckHit()	//‚ ‚½‚è”»’è‚ÌêŠ‚É‚Â‚¢‚Ä
 void SensorDoor::Draw(Position2 offset)
 {
 
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+200, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+200, SCREEN_SIZE_X - _pos.y + offset.y, 0));
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
-	// MV1DrawModel(modelhandle);
+	//MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 
 	//ŠO˜g‚Ì•\Ž¦

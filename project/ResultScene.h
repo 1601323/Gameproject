@@ -7,6 +7,7 @@ class ResultScene :
 	public Scene
 {
 private:
+	RESULT_DATA _rtData;
 	void(ResultScene::*_updater)(Input* input);
 	void NormalUpdata(Input* input);
 

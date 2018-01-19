@@ -129,7 +129,7 @@ void GimPull::Move()
 
 void GimPull::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_HEIGHT - _pos.y - offset.y, 0));
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x, SCREEN_SIZE_X - _pos.y - offset.y, 0));
 	MV1SetScale(modelhandle, VGet(10.f, 10.f, 10.f));
 	//MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);

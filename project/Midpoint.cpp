@@ -16,6 +16,7 @@ Midpoint::Midpoint()
 	//マップから受け取るようにする
 	_pos.x = 400;
 	_pos.y = 100;
+	initPos = _pos;
 	tmpDir = DIR_RIGHT;
 	//大きさについてはとりあえずチップの大きさと一緒にしておく
 	_hitRect.w = 32;
@@ -86,7 +87,7 @@ void Midpoint::FollowDir()
 }
 void Midpoint::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_HEIGHT - _pos.y - (_hitRect.h), 0));
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
 	MV1SetScale(modelhandle, VGet(0.2f, 0.2f, 0.2f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
@@ -116,4 +117,8 @@ bool Midpoint::ReturnGetFlag()
 Rect& Midpoint::GetRect()
 {
 	return _hitRect;
+}
+Position2& Midpoint:: GetInitPos()
+{
+	return initPos;
 }

@@ -3,15 +3,15 @@
 #include <math.h>
 #include <cmath>
 
-#define SCREEN_SIZE_X (640)	// 画面解像度：横
-#define SCREEN_SIZE_Y (480)	// 画面解像度：縦
+#define SCREEN_SIZE_X (800)	// 画面解像度：横
+#define SCREEN_SIZE_Y (640)	// 画面解像度：縦
 
 #define MAP_CHIP_SIZE_X (32)	// 1ﾁｯﾌﾟあたりの大きさ
 #define MAP_CHIP_SIZE_Y (32)	// 1ﾁｯﾌﾟあたりの大きさ
-#define MAP_SIZE_X (28)			//スクロール非対応マップの大きさ28
+#define MAP_SIZE_X (30)			//スクロール非対応マップの大きさ28
 //#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
-#define MAP_SIZE_Y (15)			// ﾏｯﾌﾟのｻｲｽﾞ
-#define STAGE_MAX (6)			//ステージの数（仮）
+#define MAP_SIZE_Y (25)			// ﾏｯﾌﾟのｻｲｽﾞ
+#define STAGE_MAX (3)			//ステージの数（仮）
 #define PLAYER_MAX (3)			//ﾌﾟﾚｲﾔｰの残機
 
 //プレイヤーの状態について
@@ -218,7 +218,7 @@ struct RESULT_DATA
 	bool transFlag;			//画面遷移用フラグ
 	bool midFlag;			//中間点に到着しているか
 	bool goalFlag;			//ゴールに到達したかどうか
-	float goalTime;
+	int goalTime;
 	int life;
 	int foundCount;
 };

@@ -13,6 +13,7 @@ private:
 	void FollowDir();	//ついていくための方向などをここで設定
 
 	Position2 _pos;
+	Position2 initPos;
 	Rect _hitRect;
 	DIR tmpDir;			//プレイヤーの向いている方向を保持する
 	bool GetFlag;		//目的物を取得したかどうかのフラグ
@@ -29,5 +30,6 @@ public:
 	void Draw(Position2 offset);
 	bool ReturnGetFlag();		//中間地点にたどり着いているかいないかを返す
 	Rect& GetRect();
+	Position2& GetInitPos();
 };
 

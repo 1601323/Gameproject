@@ -16,6 +16,8 @@ Player::Player()
 {
 	_pos.x = 200.0f;
 	_pos.y = 300.0f;
+	initPos.x = _pos.x;
+	initPos.y = _pos.y;
 	_state = ST_DEF;
 	vx = 0.0f;
 	vy = 0.0f;
@@ -66,7 +68,7 @@ void Player::Draw(Position2& offset)
 {
 	//cout << offset.x << endl;
 	//時機
-	DrawBox((int)_pos.x -offset.x, (int)_pos.y +offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
+	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
@@ -105,13 +107,15 @@ void Player::Draw(Position2& offset)
 void Player::setMove(Input* input)
 {
 	setDir(input);
+
+
+
 	moveJump();
 	moveWall();
 
 	moveRope();
-
 	accelePL();
-	//EnterDoor();
+	EnterDoor();
 }
 
 //ｽﾃｰﾀｽ系の処理
@@ -143,15 +147,18 @@ void Player::setDir(Input* input)
 			_state = ST_MOVE;
 		}
 		//上
-		else if (input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
+		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
+			input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_UP;
 		}
-		else if (input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN &&
+		else if (_inpInfo.key.keybit.R_DOWN_BUTTON ||
+			input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_DOWN;
 		}
 		else if(!_inpInfo.key.keybit.R_LEFT_BUTTON || 	!_inpInfo.key.keybit.R_RIGHT_BUTTON ||
+			!_inpInfo.key.keybit.R_UP_BUTTON || !_inpInfo.key.keybit.R_DOWN_BUTTON ||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_RIGHT||input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_LEFT||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_UP   ||input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_DOWN){
 			//押してない
@@ -168,7 +175,6 @@ void Player::setDir(Input* input)
 	DrawFormatString(80, 260, 0xffffff, "%f", angle);
 #endif
 }
-
 //移動制御
 bool Player::accelePL(void)
 {
@@ -195,6 +201,8 @@ bool Player::accelePL(void)
 					if (vx < -MAX_SPEED) {
 						vx = -MAX_SPEED;
 					}
+				}
+				else {
 				}
 			}
 			else {
@@ -423,11 +431,11 @@ bool Player::moveWall(void)
 		if (moveFlag) {
 			if (_inpInfo.num >= 1)
 			{
-				if (_dir == DIR_UP)
+				if (_dir == DIR_UP || _key.keybit.L_UP_BUTTON)
 				{
 					vy = -WALL_SPEED;
 				}
-				else if (_dir == DIR_DOWN)
+				else if (_dir == DIR_DOWN  ||_key.keybit.L_DOWN_BUTTON)
 				{
 					vy = WALL_SPEED;
 				}
@@ -700,12 +708,10 @@ void Player::gravity(void)
 			JumpFlag = true;
 		}
 	}
-
 	//ﾛｰﾌﾟ状態ならうごけない
 	if (_state == ST_ROPE) {
 		vy = 0.0f;
 	}
-
 	//加速度を足す
 	//速度調整のため２で割っている
 	_pos.y += (int)vy / 2.0f;
@@ -733,7 +739,21 @@ DIR Player::GetDir(void)
 {
 	return _dir;
 }
-
+//初期位置に戻す
+void Player::SetInitPos()
+{
+	_pos = initPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	_state = ST_DEF;
+}
+//初期位置をセットする
+void Player::SetInitPos(Position2 p)
+{
+	_pos = p;
+	initPos = _pos;
+}
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
@@ -743,4 +763,12 @@ bool Player::EnterDoor()
 		}
 	}
 	return false;
+}
+void Player::SetRetryPos(Position2 midPos)
+{
+	_pos = midPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	_state = ST_DEF;
 }
