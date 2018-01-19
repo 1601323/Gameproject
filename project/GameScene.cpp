@@ -65,6 +65,9 @@ GameScene::GameScene()
 	for (auto& data : gimData) {
 		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
 			_fac->Create(static_cast<CHIP_TYPE>(data.chipType), Position2(data.posX, data.posY));
+		if (data.chipType == CHIP_DOOR) {
+			_player->SetInitPos(Position2(data.posX, data.posY));
+		}
 	}
 	_hit->GetClass(_fac);
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
@@ -103,7 +106,7 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/1218_001.map";
+		mapName = "map/1.19.map";
 		break;
 	case 1:
 		mapName = "map/1218_001.map";

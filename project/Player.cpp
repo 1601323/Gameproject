@@ -68,7 +68,7 @@ void Player::Draw(Position2& offset)
 {
 	//cout << offset.x << endl;
 	//時機
-	DrawBox((int)_pos.x -offset.x, (int)_pos.y +offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
+	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
@@ -710,12 +710,10 @@ void Player::gravity(void)
 			JumpFlag = true;
 		}
 	}
-
 	//ﾛｰﾌﾟ状態ならうごけない
 	if (_state == ST_ROPE) {
 		vy = 0.0f;
 	}
-
 	//加速度を足す
 	//速度調整のため２で割っている
 	_pos.y += (int)vy / 2.0f;
@@ -743,7 +741,7 @@ DIR Player::GetDir(void)
 {
 	return _dir;
 }
-//初期位置を返す
+//初期位置に戻す
 void Player::SetInitPos()
 {
 	_pos = initPos;
@@ -751,6 +749,11 @@ void Player::SetInitPos()
 	vx = 0.0f;
 	vy = 0.0f;
 	_state = ST_DEF;
+}
+//初期位置をセットする
+void Player::SetInitPos(Position2 p)
+{
+	_pos = p;
 }
 bool Player::EnterDoor()
 {

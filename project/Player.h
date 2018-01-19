@@ -69,7 +69,8 @@ public:
 
 	CHAR_ST GetcharState(void);			//ｽﾃｰﾀｽ取得
 	Position2& GetPos(void);			//pos取得
-	void SetInitPos();					//初期位置を返す
+	void SetInitPos();					//初期位置に戻す
+	void SetInitPos(Position2 p);		//初期位置をセットする
 	DIR GetDir(void);					//dir取得	
 	void SetRetryPos(Position2 midPos);
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
