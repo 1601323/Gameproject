@@ -9,7 +9,7 @@ private:
 	void(SelectScene::*_updater)(Input* input);
 	void NormalUpdata(Input* input);
 	void Draw();
-	void Select();
+	void Select(Input* input);
 
 	KEY key;
 	KEY lastKey;
@@ -19,6 +19,7 @@ private:
 	int nowNum;
 	int mapNumber[STAGE_MAX];
 	int SelectMap;
+	bool selectFlag;		//セレクトのキーの制御フラグ
 
 	int w;
 	int h;
