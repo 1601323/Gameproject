@@ -206,14 +206,18 @@ void EmLookback::LookPl(void)
 	//¡‚ÍŒü‚¢‚Ä‚¢‚é•ûŒü‚É“®‚­‚æ‚¤‚É‚µ‚Ä‚¢‚é
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		if (_dir == DIR_LEFT) {
-			if (_map->GetChipType(nextLeftPos) == CHIP_BLANK
-				|| _hit.GimmickHitType(nextLeftPos) != GIM_ATTRACT) {
+			if (_map->GetChipType(nextLeftPos) == CHIP_BLANK||
+				_map->GetChipType(nextLeftPos) != CHIP_CLIMB_WALL&&
+				_map->GetChipType(nextLeftPos) != CHIP_N_CLIMB_WALL
+				&& _hit.GimmickHitType(nextLeftPos) != GIM_ATTRACT) {
 				_pos.x -= emSpeed;
 			}
 		}
 		else if (_dir == DIR_RIGHT) {
-			if (_map->GetChipType(nextRightPos) == CHIP_BLANK
-				|| _hit.GimmickHitType(nextRightPos) != GIM_ATTRACT) {
+			if (_map->GetChipType(nextRightPos) == CHIP_BLANK ||
+				_map->GetChipType(nextRightPos) != CHIP_CLIMB_WALL &&
+				_map->GetChipType(nextRightPos) != CHIP_N_CLIMB_WALL&&
+				 _hit.GimmickHitType(nextRightPos) != GIM_ATTRACT) {
 				_pos.x += emSpeed;
 			}
 		}
@@ -262,13 +266,31 @@ void EmLookback::LoseSight()
 }
 void EmLookback::ReturnPoint()
 {
+	Position2 nextRightPos;
+	nextRightPos.x = _pos.x + _emRect.w;
+	nextRightPos.y = _pos.y + (_emRect.h / 2);
+	Position2 nextLeftPos;
+	nextLeftPos.x = _pos.x;
+	nextLeftPos.y = _pos.y + (_emRect.h / 2);
 	if (_pos.x - _initPos.x >= 20) {	//“G‚Ì‚Ù‚¤‚ªinit‚æ‚è‰E‘¤‚É‚¢‚é
-		_dir = DIR_LEFT;
-		_pos.x -= emSpeed;
+		if (_map->GetChipType(nextLeftPos) == CHIP_BLANK ||
+			_map->GetChipType(nextLeftPos) != CHIP_CLIMB_WALL&&
+			_map->GetChipType(nextLeftPos) != CHIP_N_CLIMB_WALL&& 
+			_hit.GimmickHitType(nextLeftPos) != GIM_ATTRACT) {
+
+			_dir = DIR_LEFT;
+			_pos.x -= emSpeed;
+		}
 	}
 	else if (_pos.x - _initPos.x <= -20) {
-		_dir = DIR_RIGHT;
-		_pos.x += emSpeed;
+		if (_map->GetChipType(nextRightPos) == CHIP_BLANK ||
+			_map->GetChipType(nextRightPos) != CHIP_CLIMB_WALL &&
+			_map->GetChipType(nextRightPos) != CHIP_N_CLIMB_WALL&&
+			_hit.GimmickHitType(nextRightPos) != GIM_ATTRACT) {
+
+			_dir = DIR_RIGHT;
+			_pos.x += emSpeed;
+		}
 	}
 	else {
 		returnFlag = false;
