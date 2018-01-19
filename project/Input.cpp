@@ -154,7 +154,7 @@ void Input::InputSet()
 			inpInfo[padNum].key.keybit.L_THUMB = input.Buttons[XINPUT_BUTTON_LEFT_THUMB];         // LBﾎﾞﾀﾝ NUMの+ｷｰ
 			inpInfo[padNum].key.keybit.R_THUMB = input.Buttons[XINPUT_BUTTON_RIGHT_THUMB];        // RBﾎﾞﾀﾝ NUMの+ｷｰ
 
-			inpInfo[padNum].key.keybit.R_DOWN_BUTTON = input.Buttons[PAD_INPUT_DOWN];             // 右ｽﾃｨｯｸ NUM　下
+			inpInfo[padNum].key.keybit.R_DOWN_BUTTON = input.Buttons[XINPUT_BUTTON_DPAD_DOWN];    // 右ｽﾃｨｯｸ NUM　下
 			inpInfo[padNum].key.keybit.R_RIGHT_BUTTON = input.Buttons[XINPUT_BUTTON_DPAD_RIGHT];  // 右ｽﾃｨｯｸ NUM　右
 			inpInfo[padNum].key.keybit.R_LEFT_BUTTON = input.Buttons[XINPUT_BUTTON_DPAD_LEFT];    // 右ｽﾃｨｯｸ NUM　左
 			inpInfo[padNum].key.keybit.R_UP_BUTTON = input.Buttons[XINPUT_BUTTON_DPAD_UP];	      // 右ｽﾃｨｯｸ NUM　上

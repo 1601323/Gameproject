@@ -87,7 +87,7 @@ void Midpoint::FollowDir()
 }
 void Midpoint::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_HEIGHT - _pos.y - (_hitRect.h), 0));
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_Y - _pos.y - (_hitRect.h), 0));
 	MV1SetScale(modelhandle, VGet(0.2f, 0.2f, 0.2f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);

@@ -3,8 +3,8 @@
 #include <math.h>
 #include <cmath>
 
-#define SCREEN_SIZE_X (640)	// 画面解像度：横
-#define SCREEN_SIZE_Y (480)	// 画面解像度：縦
+#define SCREEN_SIZE_X (800)	// 画面解像度：横
+#define SCREEN_SIZE_Y (640)	// 画面解像度：縦
 
 #define MAP_CHIP_SIZE_X (32)	// 1ﾁｯﾌﾟあたりの大きさ
 #define MAP_CHIP_SIZE_Y (32)	// 1ﾁｯﾌﾟあたりの大きさ

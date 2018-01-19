@@ -57,7 +57,7 @@ void Player::Update(Input* input)
 	setMove(input);
 	//½Ã°À½§Œä
 	setState();
-	//HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
+	HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
 
 	//std::cout << _pos.x << std::endl;
 	//std::cout << _pos.y << std::endl;
@@ -115,7 +115,7 @@ void Player::setMove(Input* input)
 
 	moveRope();
 	accelePL();
-	//EnterDoor();
+	EnterDoor();
 }
 
 //½Ã°À½Œn‚Ìˆ—
@@ -747,6 +747,10 @@ DIR Player::GetDir(void)
 void Player::SetInitPos()
 {
 	_pos = initPos;
+	//‰Á‘¬“x‚àŒ³‚É–ß‚·
+	vx = 0.0f;
+	vy = 0.0f;
+	_state = ST_DEF;
 }
 bool Player::EnterDoor()
 {
@@ -761,4 +765,8 @@ bool Player::EnterDoor()
 void Player::SetRetryPos(Position2 midPos)
 {
 	_pos = midPos;
+	//‰Á‘¬“x‚àŒ³‚É–ß‚·
+	vx = 0.0f;
+	vy = 0.0f;
+	_state = ST_DEF;
 }

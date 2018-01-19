@@ -81,7 +81,7 @@ void SelectScene::Select()
 void SelectScene::Draw()
 {
 	//背景色
-	DrawBox(0, 0, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT, 0xffffff, true);
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0xffffff, true);
 	//ステージ選択用の四角
 	for (int y = 0; y < 2; y++) {
 		for (int x = 0; x < 3; x++) {
