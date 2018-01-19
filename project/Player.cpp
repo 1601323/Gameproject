@@ -57,7 +57,7 @@ void Player::Update(Input* input)
 	setMove(input);
 	//½Ã°À½§Œä
 	setState();
-	HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
+	//HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
 
 	//std::cout << _pos.x << std::endl;
 	//std::cout << _pos.y << std::endl;
@@ -699,10 +699,10 @@ void Player::gravity(void)
 		else {
 			//‰º•”‚É‰½‚à‚È‚©‚Á‚½‚çd—Í‚ğ‘«‚·
 			//‘¬“x’²®‚Ì‚½‚ß3‚ÅŠ„‚Á‚Ä‚¢‚é
-			vy += GRABITY / 3.0f;
+			vy += GRAVITY / 3.0f;
 			//ˆê‰Max’l‚ğİ’è‚µ‚Ä‚¨‚­
-			if (vy > MAX_GRABITY) {
-				vy = MAX_GRABITY;
+			if (vy > MAX_GRAVITY) {
+				vy = MAX_GRAVITY;
 			}
 			//‹ó’†‚¾‚Á‚½‚ç‚Æ‚è‚ ‚¦‚¸¼Ş¬İÌßó‘Ô
 			JumpFlag = true;

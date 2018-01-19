@@ -26,8 +26,11 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_emType = ENEMY_TURN;
 	_state = EM_ST_MOVE;
 
+	vx = 0.0f;
+	vy = 0.0f;
 	upAngle = 120;
 	downAngle = 60;
+	returnFlag = false;
 	emSpeed = 1;
 	LookCount = 0;
 	FearCount = 180;
@@ -49,8 +52,16 @@ EmLookback::~EmLookback()
 
 void EmLookback::Updata()
 {
-	SetMove();
+	if (returnFlag == true) {
+		ReturnPoint();
+	}
+	else {
+		SetMove();
+	}
+
 	Visibility();
+
+	Gravity();
 }
 
 void EmLookback::Draw(Position2 offset)
@@ -76,6 +87,12 @@ void EmLookback::Draw(Position2 offset)
 	}
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+	if (_dir == DIR_RIGHT) {
+		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+	}
+	else if (_dir == DIR_LEFT) {
+		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+	}
 	returnDir(offset);
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
 	_emEye.Draw(offset);
@@ -120,11 +137,11 @@ void EmLookback::setDir(void)
 		}
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
-			_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
+			//_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
 		}
 		else {
 			_dir = DIR_LEFT;
-			_emEye.SetCenter(_pos.x , _pos.y + (_emRect.h / 4), _emEye.r);
+			//_emEye.SetCenter(_pos.x , _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 	}
 	else {
@@ -176,7 +193,6 @@ void EmLookback::Visibility()
 			_individualData.dataSendFlag = true;
 		}
 	}
-
 }
 void EmLookback::LookPl(void)
 {
@@ -240,8 +256,48 @@ void EmLookback::LoseSight()
 			_server.GetInfo(_individualData);
 			_individualData.plFoundFlag = false;
 			_individualData.dataSendFlag = false;
+			returnFlag = true;
 		}
 	}
+}
+void EmLookback::ReturnPoint()
+{
+	if (_pos.x - _initPos.x >= 20) {	//敵のほうがinitより右側にいる
+		_dir = DIR_LEFT;
+		_pos.x -= emSpeed;
+	}
+	else if (_pos.x - _initPos.x <= -20) {
+		_dir = DIR_RIGHT;
+		_pos.x += emSpeed;
+	}
+	else {
+		returnFlag = false;
+	}
+}
+//重力について
+void EmLookback::Gravity()
+{
+	Position2 nextPosDown[3];
+	//右
+	nextPosDown[0].x = _pos.x + (_emRect.w - 2);
+	nextPosDown[0].y = _pos.y + (vy / 2) + (_emRect.h);
+	//左
+	nextPosDown[1].x = _pos.x + 2;
+	nextPosDown[1].y = _pos.y + (vy / 2) + (_emRect.h);
+	//中心
+	nextPosDown[2].x = _pos.x + (_emRect.w / 2);
+	nextPosDown[2].y = _pos.y + (vy / 2) + (_emRect.h);
+	for (int f = 0; f < 3; f++) {
+		if (_map->GetChipType(nextPosDown[f]) == CHIP_N_CLIMB_WALL ||
+			_map->GetChipType(nextPosDown[f]) == CHIP_CLIMB_WALL) {
+			vy = 0.0f;
+			break;
+		}
+		else {
+			vy += GRAVITY / 3.0f;
+		}
+	}
+	_pos.y += (int)vy;
 }
 Rect & EmLookback::GetRect()
 {
@@ -270,13 +326,16 @@ void EmLookback::SetInitPos()
 void EmLookback::returnDir(Position2 offset)
 {
 	if (_state == EM_ST_MOVE) {
-		if (LookCount < 0) {
-			_dir = DIR_RIGHT;
-			_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-		}
-		else {
-			_dir = DIR_LEFT;
-			_emEye.SetCenter(_pos.x , _pos.y  + (_emRect.h / 4), _emEye.r);
+		if (returnFlag == false) {
+
+			if (LookCount < 0) {
+				_dir = DIR_RIGHT;
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+			}
+			else {
+				_dir = DIR_LEFT;
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+			}
 		}
 	}
 	else {
