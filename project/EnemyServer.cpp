@@ -33,7 +33,14 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 EnemyServer::~EnemyServer()
 {
 }
-
+void EnemyServer::ServerInit()
+{
+	_commonData._level = ALERT_LEVEL_1;
+	_commonData.dataSendFlag = false;
+	_commonData.plFoundFlag = false;
+	vigiCnt = 0;
+	decreaseCnt = 0;
+}
 void EnemyServer::Updata()
 {
 	AlertManager();

@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Geometry.h"
-#define SCREEN_SIZE_WIDTH  640
-#define SCREEN_SIZE_HEIGHT 480
 
 enum SCENE_TYPE {
 	SCENE_TITLE,

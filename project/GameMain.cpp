@@ -150,6 +150,7 @@ void GameMain::TransTitle()
 //ƒQ[ƒ€‚ÌÀs‚ÌƒƒCƒ“•”•ª
 void GameMain::Run()
 {
+	DxLib::SetGraphMode(SCREEN_SIZE_X,SCREEN_SIZE_Y,32);
 	ChangeWindowMode(true);
 	//KeyState key;
 

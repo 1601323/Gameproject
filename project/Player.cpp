@@ -57,7 +57,7 @@ void Player::Update(Input* input)
 	setMove(input);
 	//ｽﾃｰﾀｽ制御
 	setState();
-	//HitToEnemy();		//敵と当たったとき
+	HitToEnemy();		//敵と当たったとき
 
 	//std::cout << _pos.x << std::endl;
 	//std::cout << _pos.y << std::endl;
@@ -68,7 +68,7 @@ void Player::Draw(Position2& offset)
 {
 	//cout << offset.x << endl;
 	//時機
-	DrawBox((int)_pos.x -offset.x, (int)_pos.y +offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
+	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
@@ -115,7 +115,7 @@ void Player::setMove(Input* input)
 
 	moveRope();
 	accelePL();
-	//EnterDoor();
+	EnterDoor();
 }
 
 //ｽﾃｰﾀｽ系の処理
@@ -175,7 +175,6 @@ void Player::setDir(Input* input)
 	DrawFormatString(80, 260, 0xffffff, "%f", angle);
 #endif
 }
-
 //移動制御
 bool Player::accelePL(void)
 {
@@ -204,7 +203,6 @@ bool Player::accelePL(void)
 					}
 				}
 				else {
-
 				}
 			}
 			else {
@@ -710,12 +708,10 @@ void Player::gravity(void)
 			JumpFlag = true;
 		}
 	}
-
 	//ﾛｰﾌﾟ状態ならうごけない
 	if (_state == ST_ROPE) {
 		vy = 0.0f;
 	}
-
 	//加速度を足す
 	//速度調整のため２で割っている
 	_pos.y += (int)vy / 2.0f;
@@ -743,10 +739,20 @@ DIR Player::GetDir(void)
 {
 	return _dir;
 }
-//初期位置を返す
+//初期位置に戻す
 void Player::SetInitPos()
 {
 	_pos = initPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	_state = ST_DEF;
+}
+//初期位置をセットする
+void Player::SetInitPos(Position2 p)
+{
+	_pos = p;
+	initPos = _pos;
 }
 bool Player::EnterDoor()
 {
@@ -761,4 +767,8 @@ bool Player::EnterDoor()
 void Player::SetRetryPos(Position2 midPos)
 {
 	_pos = midPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	_state = ST_DEF;
 }

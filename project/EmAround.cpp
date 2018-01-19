@@ -54,10 +54,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 
 EmAround::~EmAround()
 {
-
-	//delete _pl;
 	_modelmgr->ModelIdAllDelete();
-	//delete _hit;
 }
 
 void EmAround::Updata()
@@ -309,11 +306,10 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_HEIGHT -_pos.y - (_emRect.h),0));
+	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_Y -_pos.y + offset.y - (_emRect.h),0));
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
-	
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}

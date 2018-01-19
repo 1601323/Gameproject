@@ -47,6 +47,7 @@ GameScene::GameScene()
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
 	//_map->Load("map/1218_001.map");
 	_map->Load(mapName);
+	_hit = new HitClass();
 
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
@@ -54,7 +55,6 @@ GameScene::GameScene()
 	//// ﾀｰｹﾞｯﾄ指定
 	_cam->SetTarget(_player);	// player基準
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
-	_hit = new HitClass();
 	//ギミック呼び出し用の関数です。
 	//このように宣言するとどこでも設置できるので確認等につかってください
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
@@ -65,12 +65,17 @@ GameScene::GameScene()
 	for (auto& data : gimData) {
 		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
 			_fac->Create(static_cast<CHIP_TYPE>(data.chipType), Position2(data.posX, data.posY));
+		if (data.chipType == CHIP_DOOR) {
+			_player->SetInitPos(Position2(data.posX, data.posY));
+		}
 	}
 	_hit->GetClass(_fac);
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server, * _hit);
-	_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
-	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
+	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 416));
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
+	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
+
 
 	_hit->GetClass(_emFac);
 	//_hit = new HitClass(_fac, _emFac);
@@ -103,7 +108,7 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/1218_001.map";
+		mapName = "map/1.19.map";
 		break;
 	case 1:
 		mapName = "map/1218_001.map";
@@ -250,6 +255,7 @@ void GameScene::RetryProcess()
 	for (auto& em : _emFac->EnemyList()) {
 		em->SetInitPos();
 	}
+	_server->ServerInit();
 }
 //この先まとめるかもしれないので仮設置
 void GameScene::UpdateManager()
