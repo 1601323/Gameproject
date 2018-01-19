@@ -26,6 +26,7 @@ public:
 	virtual void Draw(Position2 offset) =0 ;
 	virtual void EnemyFalter() =0;
 	virtual ENEMY_STATE& GetState();
+	virtual void SetInitPos() = 0;
 	ENEMY_ALERT AlertLevel();				//Œ»İ‚ÌŒx‰úƒŒƒxƒ‹‚ğ•Ô‚·
 };
 

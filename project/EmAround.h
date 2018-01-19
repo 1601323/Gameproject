@@ -13,11 +13,12 @@ class EmAround :
 	public Enemy
 {
 private:
-	HitClass* _hit;
+	HitClass& _hit;
 	Player& _pl;
 	Rope& _rope;
 	EnemyServer& _server;
 	Position2 _pos;
+	Position2 _initPos;
 	Rect _emRect;
 	Circle _emEye;
 	ENEMY_STATE _state;
@@ -51,7 +52,7 @@ private:
 	void LoseSight();		//ﾌﾟﾚｲﾔｰを見失ったとき
 	void Gravity();			//重力判定
 public:
-	EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server);
+	EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit);
 	~EmAround();
 
 	void Updata();	
@@ -59,6 +60,7 @@ public:
 	ENEMY_STATE & GetState();
 	void EnemyFalter();		//怯み状態になる条件
 	void GetClass(HitClass* hit,Player& pl);		//クラス受け取り用
+	void SetInitPos();
 
 	void Draw(Position2 offset);
 };

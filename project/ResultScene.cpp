@@ -24,8 +24,8 @@ void ResultScene::NormalUpdata(Input* input)
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
-
-	if (gm.GetResultData().goalFlag == true) {
+	_rtData = gm.GetResultData();
+	if (gm.GetResultData().goalFlag == true && gm.GetResultData().midFlag) {
 		GameClear();
 	}
 	else {
@@ -44,6 +44,7 @@ void ResultScene::GameClear()
 	GameMain& gm = GameMain::Instance();
 	gm.NewDataSet();
 	gm.BestDataSet();
+	DrawFormatString(100,150,0xffffff,"%d",_rtData.goalTime);
 #ifdef _DEBUG
 	DrawString(100,100,"Clear",0xff00ff);
 #endif

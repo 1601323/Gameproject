@@ -15,16 +15,16 @@
 
 #include "Math.h"
 
-EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(pl),_rope(rope),_server(server)
+EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit):_pl(pl),_rope(rope),_server(server),_hit(hit)
 {
 	_map = MapCtl::GetInstance();
 	_modelmgr = ModelMgr::Instance();
 
 	//_pl = new Player();
-	_hit = new HitClass();
+	//_hit = new HitClass();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
-
+	_initPos = _pos;
 	_emRect.w = 30;
 	_emRect.h = 30;	
 	_emEye.pos.x = _pos.x;
@@ -54,10 +54,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server):_pl(
 
 EmAround::~EmAround()
 {
-
-	//delete _pl;
 	_modelmgr->ModelIdAllDelete();
-	delete _hit;
 }
 
 void EmAround::Updata()
@@ -177,7 +174,7 @@ void EmAround::CheckMove()
 		if (_dir == DIR_LEFT) {		//¶‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
 			if (_map->GetChipType(nextLeftPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL	||
-				_map->GetChipType(nextLeftPos)== CHIP_ROPE_ATTRACT) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
+				(_hit.GimmickHit(nextLeftPos) && _hit.GimmickHitType(nextLeftPos) == GIM_ATTRACT)) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
 				moveFlag = true;	//Œü‚«‚ð”½“]‚³‚¹‚é	
 			}
 			else if (_map->GetChipType(nextLeftDown) != CHIP_N_CLIMB_WALL &&
@@ -190,7 +187,7 @@ void EmAround::CheckMove()
 		else {		//‰E‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
 			if (_map->GetChipType(nextRightPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL	 ||
-				_map->GetChipType(nextRightPos) == CHIP_ROPE_ATTRACT) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
+				(_hit.GimmickHit(nextRightPos) && _hit.GimmickHitType(nextRightPos) == GIM_ATTRACT)) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
 				moveFlag = true;	//Œü‚«‚ð”½“]‚³‚¹‚é
 			}
 			else if (_map->GetChipType(nextRightDown) != CHIP_N_CLIMB_WALL &&
@@ -209,7 +206,7 @@ void EmAround::Visibility()
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
-		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -220,7 +217,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -231,7 +228,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit->EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -262,7 +259,7 @@ void EmAround::LoseSight()
 void EmAround::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
 			DrawString(100, 100, "“G‚É“–‚½‚Á‚½‚æI", 0xffffff);
 			_state = EM_ST_FEAR;
 		}
@@ -309,11 +306,10 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_HEIGHT -_pos.y - (_emRect.h),0));
+	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_Y -_pos.y + offset.y - (_emRect.h),0));
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
-	
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}
@@ -335,7 +331,7 @@ void EmAround::Draw(Position2 offset)
 
 void EmAround::GetClass(HitClass* hit, Player& pl)
 {
-	_hit = hit;
+	//_hit = hit;
 	_pl = pl;
 }
 Rect& EmAround::GetRect()
@@ -345,4 +341,8 @@ Rect& EmAround::GetRect()
 ENEMY_STATE& EmAround::GetState()
 {
 	return _state;
+}
+void EmAround::SetInitPos()
+{
+	_pos = _initPos;
 }

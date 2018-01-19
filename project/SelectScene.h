@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 class Input;
-
+enum SENSING_VALUE;
 class SelectScene :
 	public Scene
 {
@@ -14,6 +14,7 @@ private:
 	KEY key;
 	KEY lastKey;
 	INPUT_INFO _inpInfo;
+	SENSING_VALUE _minSensingValueL;
 
 	int nowNum;
 	int mapNumber[STAGE_MAX];

@@ -150,6 +150,7 @@ void GameMain::TransTitle()
 //ゲームの実行のメイン部分
 void GameMain::Run()
 {
+	DxLib::SetGraphMode(SCREEN_SIZE_X,SCREEN_SIZE_Y,32);
 	ChangeWindowMode(true);
 	//KeyState key;
 
@@ -169,7 +170,7 @@ void GameMain::Run()
 	else
 	{
 		//newの先を切り替えることでそれぞれ確認できます
-		ChangeScene(new GameScene());
+		ChangeScene(new TitleScene());
 	}
 	ClearDataLoad();
 	while (ProcessMessage() == 0) {

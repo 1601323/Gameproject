@@ -8,8 +8,12 @@
 
 #define CAMERA_LEFT_POS (0)
 #define CAMERA_RIGHT_POS	  ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - SCREEN_SIZE_X)
-#define CAMERA_MOVE_POS		   (MAP_CHIP_SIZE_X * 6)
-#define CAMERA_MOVE_LIMIT_POS ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - (SCREEN_SIZE_X - (MAP_CHIP_SIZE_X * 6)))
+#define CAMERA_UP_POS (0)
+#define CAMERA_DOWN_POS		  ((MAP_CHIP_SIZE_Y * MAP_SIZE_Y) - SCREEN_SIZE_Y)
+#define CAMERA_MOVE_POS_X		   (MAP_CHIP_SIZE_X * 6)
+#define CAMERA_MOVE_POS_Y		(MAP_CHIP_SIZE_Y *6)
+#define CAMERA_MOVE_LIMIT_POS_X ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - (SCREEN_SIZE_X - (MAP_CHIP_SIZE_X * 6)))
+#define CAMERA_MOVE_LIMIT_POS_Y ((MAP_CHIP_SIZE_Y * MAP_SIZE_Y) - (SCREEN_SIZE_Y - (MAP_CHIP_SIZE_Y * 6)))
 
 Camera* Camera::cam_ptr = nullptr;
 
@@ -40,7 +44,6 @@ Camera * Camera::GetInstance(void)
 	{
 		cam_ptr = new Camera();
 	}
-
 	return cam_ptr;
 }
 
@@ -64,19 +67,32 @@ void Camera::Update()
 	auto pPos = _player->GetPos();
 
 	// ç∂ë§ÇÃÇ∏ÇÁÇ≥Ç»Ç¢Ç∆Ç´
-	if (pPos.x < CAMERA_MOVE_POS) 
-	{
+	if (pPos.x < CAMERA_MOVE_POS_X) {
 		tmpPos.x = CAMERA_LEFT_POS;	
 	}
 	// ê^ÇÒíÜÇÃÇ∏ÇÁÇ∑Ç∆Ç´
-	else if ((pPos.x >= CAMERA_MOVE_POS) && (pPos.x <  CAMERA_MOVE_LIMIT_POS)) 
-	{
-		tmpPos.x = pPos.x - CAMERA_MOVE_POS;
+	else if ((pPos.x >= CAMERA_MOVE_POS_X) && (pPos.x <  CAMERA_MOVE_LIMIT_POS_X)) {
+		tmpPos.x = pPos.x - CAMERA_MOVE_POS_X;
 	}
 	// âEë§ÇÃÇ∏ÇÁÇ≥Ç»Ç¢Ç∆Ç´
-	else if (pPos.x >= CAMERA_MOVE_LIMIT_POS) 
-	{
+	else if (pPos.x >= CAMERA_MOVE_LIMIT_POS_X) {
 		tmpPos.x = CAMERA_RIGHT_POS;
+	}
+	else {
+	}
+	//è„ë§ÇÃÇ∏ÇÁÇ≥Ç»Ç¢Ç∆Ç´
+	if (pPos.y < CAMERA_MOVE_POS_Y){
+		tmpPos.y = CAMERA_UP_POS;
+	}
+	//ê^ÇÒíÜÇÃÇ∏ÇÁÇ∑Ç∆Ç´
+	else if ((pPos.y >= CAMERA_MOVE_POS_Y) && (pPos.y < CAMERA_MOVE_LIMIT_POS_Y)){
+		tmpPos.y = pPos.y - CAMERA_MOVE_POS_Y;
+	}
+	//â∫ë§ÇÃÇ∏ÇÁÇ≥Ç»Ç¢Ç∆Ç´
+	else if (pPos.y >= CAMERA_MOVE_LIMIT_POS_Y){
+		tmpPos.y = CAMERA_DOWN_POS;
+	}
+	else {
 	}
 }
 
@@ -84,7 +100,6 @@ void Camera::Update()
 bool Camera::SetGameScrSize(Position2 gmScrSize)
 {
 	GameScrSize = gmScrSize;
-
 	return true;
 }
 
@@ -92,7 +107,6 @@ bool Camera::SetGameScrSize(Position2 gmScrSize)
 bool Camera::SetCamAreaOffset(Position2 offset)
 {
 	CamOffset = offset;
-
 	return true;
 }
 
