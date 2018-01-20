@@ -22,6 +22,8 @@ Player::Player()
 	vx = 0.0f;
 	vy = 0.0f;
 	vanCnt = 60 * VANISH_CNT;	//とりあえず３秒
+	feverFlag = false;
+	feverTime = 60 * FEVER_CNT;
 	//_hit = new HitClass();
 	_plRect.w = 32;
 	_plRect.h = 32;
@@ -51,66 +53,29 @@ void Player::Update(Input* input)
 	_inpInfo = input->GetInput(1);
 	memcpy(oldkeyData, keyData, sizeof(keyData));
 	GetHitKeyStateAll(keyData);
-	//重力
-	gravity();
-	//移動制御
-	setMove(input);
+
+	if (feverFlag == true) {
+		FeverGravity();
+		FeverUpdata(input);
+	}
+	else if (feverFlag == false) {
+		//重力
+		gravity();
+		//移動制御
+		setMove(input);
+	}
 	//ｽﾃｰﾀｽ制御
 	setState();
 	//HitToEnemy();		//敵と当たったとき
-
-	//std::cout << _pos.x << std::endl;
-	//std::cout << _pos.y << std::endl;
-
-}
-
-void Player::Draw(Position2& offset)
-{
-	//cout << offset.x << endl;
-	//時機
-	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
-	switch (_state)
-	{
-		//ｽﾃﾙｽ状態
-	case ST_VANISH:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
-		break;
-		//ﾛｰﾌﾟ状態
-	case ST_ROPE:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
-		break;
-		//壁登り状態
-	case ST_WALL:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
-		break;
-		//ﾌｨｰﾊﾞｰ状態
-	case ST_FEVER:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-		DrawString((int)_pos.x  - 20 -offset.x, (int)_pos.y  - 20 -offset.y, "＼FEVER／", 0x0000ff);
-		break;
-	default:
-		break;
-	}
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
-
-#ifdef _DEBUG
-	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
-	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
-	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
-	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	_plRect.Draw(offset);
-#endif
 }
 
 //移動系の処理
 void Player::setMove(Input* input)
 {
 	setDir(input);
-
 	moveJump();
+	//setState();
 	moveWall();
-
 	moveRope();
 	accelePL();
 	EnterDoor();
@@ -120,9 +85,19 @@ void Player::setMove(Input* input)
 void Player::setState(void)
 {
 	stFever();
-	stVanish();
+	if (_state != ST_FEVER) {
+		stVanish();
+	}
 }
-
+void Player::FeverUpdata(Input* input)
+{
+	setDir(input);
+	FeverJump();
+	moveWall();
+	moveRope();
+	moveFever();
+	EnterDoor();
+}
 //向きを決める
 void Player::setDir(Input* input)
 {
@@ -176,76 +151,7 @@ void Player::setDir(Input* input)
 //移動制御
 bool Player::accelePL(void)
 {
-	//キーボードとパッドで移動処理を分けています
-	//移動(ゲームパッド)
-	if (_inpInfo.num >= 1)
-	{
-		//ここのL_SensingFlagがうまく更新されていないとみた!! (error中)
-		//入力しっぱなしでコンパイルすると動きます
-		if (_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)
-		{
-			if ((vx - ACCEL_X )< playerSpeedTable[_inpInfo.L_Stick.L_SensingFlag])
-			{
-				if (_dir == DIR_RIGHT)
-				{
-					vx += ACCEL_X;
-					if (vx > MAX_SPEED) {
-						vx = MAX_SPEED;
-					}
-				}
-				else if(_dir == DIR_LEFT)
-				{
-					vx -= ACCEL_X;
-					if (vx < -MAX_SPEED) {
-						vx = -MAX_SPEED;
-					}
-				}
-				else {
-				}
-			}
-			else {
-				vx = playerSpeedTable[_inpInfo.L_Stick.L_SensingFlag];
-			}
-		}
-		else {
-			if (JumpFlag == false) {
-				if (vx < 0) {
-					vx++;
-				}
-				if (vx > 0) {
-					vx--;
-				}
-			}
-		}
-	}
-	else
-	{
-	    //移動(キーボード)
-		if (_inpInfo.key.keybit.R_RIGHT_BUTTON)
-		{
-			vx += ACCEL_X;
-			if (vx > MAX_SPEED) {
-				vx = MAX_SPEED;
-			}
-		}
-		else if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
-			vx -= ACCEL_X;
-			if (vx < -MAX_SPEED) {
-				vx = -MAX_SPEED;
-			}
-		}
-		else {
-			if (JumpFlag == false) {
-				if (vx < 0) {
-					vx++;
-				}
-				if (vx > 0) {
-					vx--;
-				}
-			}
-		}
-	}
-
+	InputSetMove();
 	//マップとの当たり判定
 	//2ドットほど判定を狭めている
 	//右
@@ -290,7 +196,78 @@ bool Player::accelePL(void)
 	_pos.x += (int)vx;
 	return false;
 }
-
+void Player::InputSetMove()
+{
+	//キーボードとパッドで移動処理を分けています
+	//移動(ゲームパッド)
+	if (_inpInfo.num >= 1)
+	{
+		//ここのL_SensingFlagがうまく更新されていないとみた!! (error中)
+		//入力しっぱなしでコンパイルすると動きます
+		if (_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)
+		{
+			if ((vx - ACCEL_X)< playerSpeedTable[_inpInfo.L_Stick.L_SensingFlag])
+			{
+				if (_dir == DIR_RIGHT)
+				{
+					vx += ACCEL_X;
+					if (vx > MAX_SPEED) {
+						vx = MAX_SPEED;
+					}
+				}
+				else if (_dir == DIR_LEFT)
+				{
+					vx -= ACCEL_X;
+					if (vx < -MAX_SPEED) {
+						vx = -MAX_SPEED;
+					}
+				}
+				else {
+				}
+			}
+			else {
+				vx = playerSpeedTable[_inpInfo.L_Stick.L_SensingFlag];
+			}
+		}
+		else {
+			if (JumpFlag == false) {
+				if (vx < 0) {
+					vx++;
+				}
+				if (vx > 0) {
+					vx--;
+				}
+			}
+		}
+	}
+	else
+	{
+		//移動(キーボード)
+		if (_inpInfo.key.keybit.R_RIGHT_BUTTON)
+		{
+			vx += ACCEL_X;
+			if (vx > MAX_SPEED) {
+				vx = MAX_SPEED;
+			}
+		}
+		else if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
+			vx -= ACCEL_X;
+			if (vx < -MAX_SPEED) {
+				vx = -MAX_SPEED;
+			}
+		}
+		else {
+			if (JumpFlag == false) {
+				if (vx < 0) {
+					vx++;
+				}
+				if (vx > 0) {
+					vx--;
+				}
+			}
+		}
+	}
+}
 //壁移動の処理
 bool Player::moveWall(void)
 {
@@ -574,7 +551,48 @@ bool Player::moveRope(void)
 	}
 	return false;
 }
+void Player::moveFever()
+{
+	InputSetMove();
+	Position2 nextPosRight[2];
+	//右下	
+	nextPosRight[0].x = _pos.x + vx + (_plRect.w - 2);
+	nextPosRight[0].y = _pos.y + (_plRect.h - 1);
+	//右上
+	nextPosRight[1].x = _pos.x + vx + (_plRect.w - 2);
+	nextPosRight[1].y = _pos.y;
 
+	for (int j = 0; j < 2; j++) {
+		//登れる壁と登れない壁、ギミックとの判定
+		if (_map->GetChipType(nextPosRight[j]) == CHIP_N_CLIMB_WALL
+			|| (_hit->GimmickHit(nextPosRight[j]) && (_hit->GimmickHitType(nextPosRight[j]) != GIM_FALL) && _hit->GimmickHitType(nextPosRight[j]) != GIM_DOOR)) {
+			vx = 0.0f;
+			break;
+		}
+	}
+
+	//
+	//左
+	Position2 nextPosLeft[2];
+	//左下
+	nextPosLeft[0].x = _pos.x + vx + 2;
+	nextPosLeft[0].y = _pos.y + (_plRect.h - 1);
+	//左上
+	nextPosLeft[1].x = _pos.x + vx + 2;
+	nextPosLeft[1].y = _pos.y;
+
+	for (int j = 0; j < 2; j++) {
+		//登れる壁と登れない壁、ギミックとの判定
+		if (_map->GetChipType(nextPosLeft[j]) == CHIP_N_CLIMB_WALL
+			|| (_hit->GimmickHit(nextPosLeft[j]) && _hit->GimmickHitType(nextPosLeft[j]) != GIM_FALL&&_hit->GimmickHitType(nextPosLeft[j]) != GIM_DOOR)) {
+			vx = 0.0f;
+			break;
+		}
+	}
+	//加速度を足す
+	_pos.x += (int)vx;
+
+}
 //ｽﾃﾙｽ状態の処理
 //3秒動かなかったら消える
 bool Player::stVanish(void)
@@ -603,8 +621,21 @@ bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
 	if (keyData[KEY_INPUT_Z]) {
-		_state = ST_FEVER;
+		if (feverFlag == false) {
+			feverFlag = true;
+		}
 	}
+	if (feverFlag == true) {
+		_state = ST_FEVER;
+		feverTime--;
+	}
+	if (feverTime < 0) {
+		feverFlag = false;
+		feverTime = 60 * FEVER_CNT;
+	}
+#ifdef _DEBUG
+	DrawFormatString(600,10,0xffffff,"%d",feverTime);
+#endif
 	return false;
 }
 
@@ -654,16 +685,106 @@ bool Player::moveJump(void)
 	//左上
 	nextPosUP[1].x = _pos.x + 2;
 	nextPosUP[1].y = _pos.y + (vy / 2);
-	//登れる壁、登れない壁との判定
+		//登れる壁、登れない壁との判定
 	for (int j = 0; j < 2; j++) {
 		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
-		 || _map->GetChipType(nextPosUP[j]) == CHIP_CLIMB_WALL) {
+			|| _map->GetChipType(nextPosUP[j]) == CHIP_CLIMB_WALL
+			|| _hit->GimmickHitType(nextPosUP[j]) == GIM_ATTRACT) {
 			vy = 0.0f;
 			break;
 		}
 	}
 	return false;
 }
+void Player::FeverJump()
+{
+	//flagがtrueならｼﾞｬﾝﾌﾟ状態
+	if (JumpFlag == true) {
+		_state = ST_JUMP;
+	}
+	//ｼﾞｬﾝﾌﾟ
+	if (JumpFlag == false) {
+		if (_inpInfo.num >= 1) {
+			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+				vy = -JUMP_POWER;
+				JumpFlag = true;
+			}
+		}
+		else {
+			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
+				vy = -JUMP_POWER;
+				JumpFlag = true;
+			}
+		}
+	}
+	else {
+		//放物線を見せるために加速度にMAX_SPEEDを設定
+		//良くない
+		if (_state == ST_ROPE) {
+			if (_inpInfo.key.keybit.R_RIGHT_BUTTON) {
+				vx = MAX_SPEED;
+			}
+			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
+				vx = -MAX_SPEED;
+			}
+		}
+	}
+	//マップとの判定
+	//2ドットほど判定を狭めている
+	//上部の当たり判定
+	Position2 nextPosUP[2];
+	//右上	
+	nextPosUP[0].x = _pos.x + (_plRect.w - 2);
+	nextPosUP[0].y = _pos.y + (vy / 2);
+	//左上
+	nextPosUP[1].x = _pos.x + 2;
+	nextPosUP[1].y = _pos.y + (vy / 2);
+	for (int j = 0; j < 2; j++) {
+		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
+			||_hit->GimmickHitType(nextPosUP[j]) == GIM_ATTRACT) {
+			vy = 0.0f;
+			break;
+		}
+	}
+}
+void Player::Draw(Position2& offset)
+{
+	//時機
+	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
+	switch (_state)
+	{
+		//ｽﾃﾙｽ状態
+	case ST_VANISH:
+		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
+		break;
+		//ﾛｰﾌﾟ状態
+	case ST_ROPE:
+		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+		break;
+		//壁登り状態
+	case ST_WALL:
+		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+		break;
+		//ﾌｨｰﾊﾞｰ状態
+	case ST_FEVER:
+		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
+		DrawString((int)_pos.x  - 20 -offset.x, (int)_pos.y  - 20 -offset.y, "＼FEVER／", 0x0000ff);
+		break;
+	default:
+		break;
+	}
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
+
+#ifdef _DEBUG
+	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
+	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
+	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
+	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
+	_plRect.Draw(offset);
+#endif
+}
+
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
 {
@@ -722,7 +843,77 @@ void Player::gravity(void)
 	//速度調整のため２で割っている
 	_pos.y += (int)vy / 2.0f;
 }
-
+//フィーバー時の重力です
+void Player::FeverGravity()
+{
+	//壁登り状態なら重力は無視
+	if (_state == ST_WALL) {
+		return;
+	}
+	//マップとの判定
+	//2ドットほど判定を狭めている
+	Position2 nextPosDown[3];
+	//右下	
+	nextPosDown[0].x = _pos.x + (_plRect.w - 2);
+	nextPosDown[0].y = _pos.y + (vy / 2) + (_plRect.h);
+	//左下
+	nextPosDown[1].x = _pos.x + 2;
+	nextPosDown[1].y = _pos.y + (vy / 2) + (_plRect.h);
+	//真ん中
+	nextPosDown[2].x = _pos.x + (_plRect.w / 2);
+	nextPosDown[2].y = _pos.y + (vy / 2) + (_plRect.h);
+	//苦肉の策
+	Position2 nextPosDown2[3];
+	//右下
+	nextPosDown2[0].x = nextPosDown[0].x;
+	nextPosDown2[0].y = nextPosDown[0].y - 2;
+	//左下
+	nextPosDown2[1].x = nextPosDown[1].x;
+	nextPosDown2[1].y = nextPosDown[1].y - 2;
+	//真ん中
+	nextPosDown2[2].x = nextPosDown[2].x;
+	nextPosDown2[2].y = nextPosDown[2].y - 2;
+	//登れる壁、登れない壁との判定
+	for (int j = 0; j < 3; j++) {
+/*		if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
+			vy = 0.0f;
+			JumpFlag = false;
+			break;
+		}
+		else*/ if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
+			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
+			vy = 0.0f;
+			JumpFlag = false;
+			break;
+		}
+		else {
+			//下部に何もなかったら重力を足す
+			//速度調整のため3で割っている
+			vy += GRAVITY / 3.0f;
+			//一応Max値を設定しておく
+			if (vy > MAX_GRAVITY) {
+				vy = MAX_GRAVITY;
+			}
+			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
+			JumpFlag = true;
+		}
+	}if (JumpFlag == true && vy > 0) {
+		for (int j = 0; j < 3; j++) {
+			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
+				vy = 0.0f;
+				JumpFlag = false;
+				break;
+			}
+		}
+	}
+	//ﾛｰﾌﾟ状態ならうごけない
+	if (_state == ST_ROPE) {
+		vy = 0.0f;
+	}
+	//加速度を足す
+	//速度調整のため２で割っている
+	_pos.y += (int)vy / 2.0f;
+}
 //Rect取得
 Rect& Player::GetRect()
 {
