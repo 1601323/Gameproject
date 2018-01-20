@@ -1,0 +1,53 @@
+<ns0:pmxstatus xmlns:ns0="local" xml:lang="jp"><pmdinfo><name /><name_e /><comment /><comment_e /></pmdinfo>
+<morphs><!--表情グループ 0:使用不可 1:まゆ 2:目 3:リップ 4:その他-->
+</morphs>
+<bones><bone add_move="0" add_rot="0" b_name="Bone.007" fixed_axis="0" ik="0" index="0" local_axis="0" movable="1" name="Bone.007" name_e="Bone.007" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.008" fixed_axis="0" ik="0" index="1" local_axis="0" movable="1" name="Bone.008" name_e="Bone.008" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.009" fixed_axis="0" ik="0" index="2" local_axis="0" movable="1" name="Bone.009" name_e="Bone.009" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.010" fixed_axis="0" ik="0" index="3" local_axis="0" movable="1" name="Bone.010" name_e="Bone.010" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.011" fixed_axis="0" ik="0" index="4" local_axis="0" movable="1" name="Bone.011" name_e="Bone.011" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.012" fixed_axis="0" ik="0" index="5" local_axis="0" movable="1" name="Bone.012" name_e="Bone.012" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.013" fixed_axis="0" ik="0" index="6" local_axis="0" movable="1" name="Bone.013" name_e="Bone.013" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.014" fixed_axis="0" ik="0" index="7" local_axis="0" movable="1" name="Bone.014" name_e="Bone.014" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.015" fixed_axis="0" ik="0" index="8" local_axis="0" movable="1" name="Bone.015" name_e="Bone.015" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.016" fixed_axis="0" ik="0" index="9" local_axis="0" movable="1" name="Bone.016" name_e="Bone.016" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.017" fixed_axis="0" ik="0" index="10" local_axis="0" movable="1" name="Bone.017" name_e="Bone.017" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.018" fixed_axis="0" ik="0" index="11" local_axis="0" movable="1" name="Bone.018" name_e="Bone.018" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.019" fixed_axis="0" ik="0" index="12" local_axis="0" movable="1" name="Bone.019" name_e="Bone.019" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.020" fixed_axis="0" ik="0" index="13" local_axis="0" movable="1" name="Bone.020" name_e="Bone.020" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.021" fixed_axis="0" ik="0" index="14" local_axis="0" movable="1" name="Bone.021" name_e="Bone.021" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.022" fixed_axis="0" ik="0" index="15" local_axis="0" movable="1" name="Bone.022" name_e="Bone.022" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.023" fixed_axis="0" ik="0" index="16" local_axis="0" movable="1" name="Bone.023" name_e="Bone.023" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Bone.024" fixed_axis="0" ik="0" index="17" local_axis="0" movable="1" name="Bone.024" name_e="Bone.024" operational="1" power="1.0" rotatable="1" visible="1" />
+</bones>
+<labels>
+<label index="0" name="Root" name_e="Root" type="1"><tab index="0" name="Bone.007" type="bone" />
+</label>
+<label index="1" name="表情" name_e="Exp" type="1" />
+<label index="2" name="骨" name_e="Bone" type="0"><tab index="0" name="Bone.007" type="bone" />
+<tab index="1" name="Bone.008" type="bone" />
+<tab index="2" name="Bone.009" type="bone" />
+<tab index="3" name="Bone.010" type="bone" />
+<tab index="4" name="Bone.011" type="bone" />
+<tab index="5" name="Bone.012" type="bone" />
+<tab index="6" name="Bone.013" type="bone" />
+<tab index="7" name="Bone.014" type="bone" />
+<tab index="8" name="Bone.015" type="bone" />
+<tab index="9" name="Bone.016" type="bone" />
+<tab index="10" name="Bone.017" type="bone" />
+<tab index="11" name="Bone.018" type="bone" />
+<tab index="12" name="Bone.019" type="bone" />
+<tab index="13" name="Bone.020" type="bone" />
+<tab index="14" name="Bone.021" type="bone" />
+<tab index="15" name="Bone.022" type="bone" />
+<tab index="16" name="Bone.023" type="bone" />
+<tab index="17" name="Bone.024" type="bone" />
+</label>
+</labels>
+<materials><material b_name="Material" both="0" drop_shadow="1" edge_size="1.0" ground_shadow="1" index="0" name="Material" name_e="Material" on_edge="1" on_shadow="1" toon="0" use_systemtoon="1"><edge_color a="1.0" b="0.0" g="0.0" r="0.0" /></material>
+</materials>
+<rigid_bodies>
+</rigid_bodies>
+<constraints>
+</constraints>
+</ns0:pmxstatus>
