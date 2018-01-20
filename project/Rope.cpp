@@ -9,6 +9,7 @@
 #include "HitClass.h"
 #include "MapCtl.h"
 #include "Geometry.h"
+#include "ModelMgr.h"
 
 Rope::Rope() 
 {
@@ -20,6 +21,7 @@ Rope::Rope(Player* player)
 {
 	_player = player;
 	_mapctl = MapCtl::GetInstance();
+	_modelmgr = ModelMgr::Instance();
 	RopeInit();
 }
 
@@ -75,6 +77,13 @@ void Rope::RopeInit(void)
 	RotationPos = { 0,-20 };
 	_vec = { 0.f,0.f };
 	rote = 0.0f;
+
+	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sitamodel5.pmx", SCENE_RESULT);
+	AnimAttachIndex = MV1GetAnimIndex(modelhandle, "sitaAnimetion");
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
+
+	AnimNowTime = 0.0f;
+	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 
 	//0～19 の20
 	for (int j = 0; j < ROPE_LENGTH_MAX; j++)
@@ -261,18 +270,32 @@ void Rope::SelectDir(Input* input)
 	if (_state == ST_ROPE_SELECT)
 	{
 		//発射前にぐるぐる回しています 仮の動きなのですごい適当
-		theta -= 30;
-		_RopeCircle.SetCenter(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2),
-			                  RotationPos.y - _tmpOffset.y +(_RopeRect.h / 2), range);
-		_RopeCircle.Draw();
+		//theta -= 30;
+		//_RopeCircle.SetCenter(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2),
+		//	                  RotationPos.y - _tmpOffset.y +(_RopeRect.h / 2), range);
+		//_RopeCircle.Draw();
 
-		_vec.x = cos(AngleRad(theta)) *  SetVec().x;
-		_vec.y = sin(AngleRad(theta)) *  SetVec().y;
+		//_vec.x = cos(AngleRad(theta)) *  SetVec().x;
+		//_vec.y = sin(AngleRad(theta)) *  SetVec().y;
 
-		RotationPos.x = RotationPos.x + _vec.x;
-		RotationPos.y = RotationPos.y + _vec.y;
-		//くるくるの線
-		DrawLineSet(_rope[0], RotationPos,0xffffff);
+		//RotationPos.x = RotationPos.x + _vec.x;
+		//RotationPos.y = RotationPos.y + _vec.y;
+		////くるくるの線
+		//DrawLineSet(_rope[0], RotationPos,0xffffff);
+
+		AnimNowTime += 1.0f;
+		// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
+		if (AnimNowTime >= AnimTotalTime)
+		{
+			// 新しいアニメーション再生時間は、アニメーション再生時間からアニメーション総時間を引いたもの
+			AnimNowTime -= AnimTotalTime;
+		}
+		MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
+
+		MV1SetPosition(modelhandle, VGet(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2), SCREEN_SIZE_Y - RotationPos.y + _tmpOffset.y - (_RopeRect.h), 0));
+		MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+		MV1DrawFrame(modelhandle,0);
+		_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
 
 
 		//ロープくるくる解除 Readyの状態に戻す
