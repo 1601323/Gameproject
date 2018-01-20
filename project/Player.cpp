@@ -108,8 +108,6 @@ void Player::setMove(Input* input)
 {
 	setDir(input);
 
-
-
 	moveJump();
 	moveWall();
 
@@ -400,7 +398,6 @@ bool Player::moveWall(void)
 			moveFlag = true;
 			break;
 		}
-	
 		else {
 			moveFlag = false;
 		}
@@ -475,6 +472,15 @@ bool Player::moveWall(void)
 		nextPosDown.y = _pos.y + vy + (_plRect.h - 1);
 		if (_map->GetChipType(nextPosDown) == CHIP_CLIMB_WALL
 		 || _map->GetChipType(nextPosDown) == CHIP_N_CLIMB_WALL) {
+			vy = 0.0f;
+		}
+		//ã‚ª•Ç‚¾‚Á‚½‚Æ‚«‚ÍŽ~‚Ü‚é
+		Position2 nextPosUp;
+		nextPosUp.x = _pos.x + (_plRect.w/2);
+		nextPosUp.y = _pos.y + vy;
+		if (_map->GetChipType(nextPosUp) == CHIP_CLIMB_WALL
+			|| _map->GetChipType(nextPosUp) == CHIP_N_CLIMB_WALL
+			|| _hit->GimmickHitType(nextPosUp) == GIM_ATTRACT) {
 			vy = 0.0f;
 		}
 
