@@ -18,6 +18,7 @@ class Input;
 class Player;
 class HitClass;
 class MapCtl;
+class ModelMgr;
 
 struct Rect;
 struct Circle;
@@ -47,11 +48,20 @@ enum ROPE_CURVE_DIR
 class Rope : public Object
 {
 private:
+
+	ModelMgr* _modelmgr;
+
 	Position2 RotationPos;    //èÄîıíÜÇ…Ç≠ÇÈÇ≠ÇÈâÒÇ∑pos
 	bool RopeTurnFlag;
 	bool dirFlag;
 	bool padFlag;
 	int time;
+
+	int modelhandle;
+	float  AnimTotalTime;
+	float  AnimNowTime;
+	int    AnimAttachIndex;
+
 	float range;
 	float theta;
 	float omega;
