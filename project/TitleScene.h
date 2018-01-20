@@ -19,6 +19,7 @@ private:
 	INPUT_INFO inpInfo;
 	void(TitleScene::*_updater)(Input* input);
 	TITLE_MENU _menu;
+	bool operateFlag;
 	void NormalUpdata(Input* input);
 	void MenuSelect(Input* input);
 	void Draw();

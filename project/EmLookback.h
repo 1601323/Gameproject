@@ -38,7 +38,9 @@ private:
 	float emSpeed; 
 	float upAngle;
 	float downAngle;
-
+	bool returnFlag;
+	float vx;
+	float vy;
 	void SetMove();						//動きについてセットする
 	void setDir(void);					//向き
 	void Visibility();					//視界判定
@@ -46,7 +48,9 @@ private:
 	void LoseSight();
 	void moveFear(void);				//怯み状態
 	void EnemyFalter();					//怯み状態に遷移する
+	void ReturnPoint();					//元の位置に戻っていく
 	void returnDir(Position2 offset);	//向いている方向を返す
+	void Gravity();
 public:
 	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();

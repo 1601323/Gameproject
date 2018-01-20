@@ -1,7 +1,6 @@
 #pragma once
 #include "Enemy.h"
 
-#define GRAVITY 0.9f
 class MapCtl;
 class HitClass;
 class Player;
