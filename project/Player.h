@@ -4,9 +4,8 @@
 #include "Input.h"
 
 #define ACCEL_X (0.3f)					//加速度
-#define GRABITY (0.9f)					//重力
 #define MAX_SPEED (3.0f)				//ｽﾋﾟｰﾄﾞのMAX値
-#define MAX_GRABITY (15.0f)				//重力のMAX値
+#define MAX_GRAVITY (15.0f)				//重力のMAX値
 #define WALL_SPEED (1.0f)				//壁登りのｽﾋﾟｰﾄﾞ
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ

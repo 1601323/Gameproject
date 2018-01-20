@@ -11,6 +11,7 @@ TitleScene::TitleScene()
 	_updater = &TitleScene::NormalUpdata;
 	_menu = GAME_START;
 	_minSensingValueL = SV_HIGH;
+	operateFlag = false;
 }
 
 
@@ -23,7 +24,9 @@ void TitleScene::NormalUpdata(Input* input)
 	key = input->GetInput(1).key;
 	lastKey = input->GetLastKey();
 	inpInfo = input->GetInput(1);
-	MenuSelect(input);
+	if (operateFlag == false) {
+		MenuSelect(input);
+	}
 	Draw();
 #ifdef _DEBUG
 	DrawString(10,0,"タイトル",GetColor(255,255,255));
@@ -31,6 +34,9 @@ void TitleScene::NormalUpdata(Input* input)
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (_menu == GAME_START) {
 			gm.Instance().ChangeScene(new SelectScene());
+		}
+		else if (_menu == GAME_EXPLAIN) {
+			operateFlag = !operateFlag;
 		}
 	}
 }
@@ -94,4 +100,10 @@ void TitleScene::Draw()
 		DrawBox(400, 200, 500, 300, 0xffffff, true);
 	}
 	DrawString(450,250,"explain",0xffff99);
+
+	if (operateFlag == true) {
+		DrawBox(200, 400, 500, 500, 0xffffff, true);
+		DrawString(220,410,"未実装",0x000000);
+		DrawString(250,450,"もう一度エンターで選択を解除",0x000000);
+	}
 }
