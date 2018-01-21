@@ -78,8 +78,8 @@ void Rope::RopeInit(void)
 	_vec = { 0.f,0.f };
 	rote = 0.0f;
 
-	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sitamodel5.pmx", SCENE_RESULT);
-	AnimAttachIndex = MV1GetAnimIndex(modelhandle, "sitaAnimetion");
+	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sitamodelSecond.pmx", SCENE_RESULT);
+	AnimAttachIndex = MV1GetAttachAnim(modelhandle,0);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
 
 	AnimNowTime = 0.0f;
@@ -294,7 +294,7 @@ void Rope::SelectDir(Input* input)
 
 		MV1SetPosition(modelhandle, VGet(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2), SCREEN_SIZE_Y - RotationPos.y + _tmpOffset.y - (_RopeRect.h), 0));
 		MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-		MV1DrawFrame(modelhandle,0);
+		MV1DrawFrame(modelhandle,20);
 		_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
 
 

@@ -17,6 +17,7 @@ class Camera;
 class MapCtl;
 class Rope;
 class GameScene;
+class ModelMgr;
 
 struct L_STICK;
 struct R_STICK;
@@ -74,6 +75,9 @@ private:
 	void FeverWall();					//フィーバー用の壁移動処理
 
 	Position2 tmpOffset;
+	//いきなりなのでここに書いてます
+	ModelMgr* _modelmgr;
+	int modelhandle;
 public:
 	Player();
 	~Player();
