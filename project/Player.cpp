@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Geometry.h"
 #include "Rope.h"
+#include "ModelMgr.h"
 
 #include <iostream>
 using namespace std;
@@ -37,6 +38,9 @@ Player::Player()
 	deathFlag = true;
 	helpFever = false;
 	_minSensingValueL = SV_HIGH;
+	//‚Æ‚è‚ ‚¦‚¸“¯‚¶‚æ‚¤‚É
+	_modelmgr = ModelMgr::Instance();
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 
 }
 Player::~Player()
@@ -1070,6 +1074,10 @@ void Player::FeverJump()
 }
 void Player::Draw(Position2& offset)
 {
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+(_plRect.w/2) , SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), 0));
+	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	//MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 	//Žž‹@
 	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
 	switch (_state)

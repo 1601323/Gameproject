@@ -48,7 +48,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 
-	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	//modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 }
 
 
@@ -307,9 +307,9 @@ void EmAround::Gravity()
 void EmAround::Draw(Position2 offset)
 {
 	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_Y -_pos.y + offset.y - (_emRect.h),0));
-	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
-	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
+	//MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
+	//MV1DrawModel(modelhandle);
+	//_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}
