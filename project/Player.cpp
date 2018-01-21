@@ -1088,21 +1088,23 @@ void Player::Draw(Position2& offset)
 		//½ÃÙ½ó‘Ô
 	case ST_VANISH:
 		alfa = max(alfa-1, tranceMax);
-		MV1SetOpacityRate(modelhandle, alfa / 255.f);
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//Û°Ìßó‘Ô
 	case ST_ROPE:
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+		alfa = 255;
 		break;
 		//•Ç“o‚èó‘Ô
 	case ST_WALL:
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+		alfa = 255;
 		break;
 		//Ì¨°ÊÞ°ó‘Ô
 	case ST_FEVER:
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
 		DrawString((int)_pos.x  - 20 -offset.x, (int)_pos.y  - 20 -offset.y, "_FEVER^", 0x0000ff);
+		alfa = 255;
 		break;
 	default:
 		break;
@@ -1110,6 +1112,7 @@ void Player::Draw(Position2& offset)
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	tmpOffset = offset;
 
+	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 
@@ -1293,6 +1296,7 @@ void Player::SetInitPos()
 	//‰Á‘¬“x‚àŒ³‚É–ß‚·
 	vx = 0.0f;
 	vy = 0.0f;
+	alfa = 255;
 	_state = ST_DEF;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
@@ -1320,6 +1324,7 @@ void Player::SetRetryPos(Position2 midPos)
 	vx = 0.0f;
 	vy = 0.0f;
 	_state = ST_DEF;
+	alfa = 255;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
 }
