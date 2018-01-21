@@ -78,6 +78,8 @@ private:
 	//‚¢‚«‚È‚è‚È‚Ì‚Å‚±‚±‚É‘‚¢‚Ä‚Ü‚·
 	ModelMgr* _modelmgr;
 	int modelhandle;
+	int alfa;
+	int tranceMax;
 public:
 	Player();
 	~Player();
