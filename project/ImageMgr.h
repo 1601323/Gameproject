@@ -1,4 +1,5 @@
 #pragma once
+enum SCENE_TYPE;
 class ImageMgr
 {
 private:

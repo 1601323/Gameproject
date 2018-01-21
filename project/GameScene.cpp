@@ -7,6 +7,7 @@
 #include <vector>
 #include "Geometry.h"
 #include "Assert.h"
+#include "ImageMgr.h"
 #include "GameScene.h"
 #include "GameMain.h"
 #include "Input.h"
@@ -34,6 +35,7 @@
 
 GameScene::GameScene()
 {
+	ImageMgr& im = ImageMgr::Instance();
 	_updater = &GameScene::FadeInUpdata;
 	GameInit();
 	_player = new Player();
@@ -72,7 +74,7 @@ GameScene::GameScene()
 	_hit->GetClass(_fac);
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server, * _hit);
-	_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
+	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
 
@@ -84,7 +86,6 @@ GameScene::GameScene()
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit, _rope);
-
 	_mid->GetClass(_player);
 	_timer->StartTimer();
 	//GameInit();
@@ -108,13 +109,13 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/1.19.map";
+		mapName = "map/119.map";
 		break;
 	case 1:
-		mapName = "map/1.19.map";
+		mapName = "map/map2.map";
 		break;
 	case 2:
-		mapName = "map/1.19.map";
+		mapName = "map/119.map";
 		break;
 	default:
 		ASSERT();
@@ -131,6 +132,7 @@ void GameScene::FadeInUpdata(Input* input)
 	Position2& offset = _cam->ReturnOffset();
 	_map->Draw(offset);
 	Draw(offset);
+	DrawUI();
 	count++;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220 - (count*2));
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
@@ -157,6 +159,7 @@ void GameScene::NormalUpdata(Input* input)
 
 	Draw(offset);
 	_timer->Updata();
+	DrawUI();
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
@@ -272,6 +275,15 @@ void GameScene::Draw(Position2& offset)
 	_player->Draw(offset);
 	_server->Draw(offset);
 	_mid->Draw(offset);
+}
+void GameScene::DrawUI()
+{
+	ImageMgr& im = ImageMgr::Instance();
+	GameMain& gm = GameMain::Instance();
+
+	for (int f = 0; f < gm.GetResultData().life; f++) {
+		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("仮image/UI/UI_life.png", SCENE_RESULT),true);
+	}
 }
 //シーン遷移のために用意
 SCENE_TYPE GameScene::GetScene()

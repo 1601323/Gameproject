@@ -19,47 +19,47 @@ struct SceneStruct;
 Input* input;
 
 
-//typedef void(*Function)(SceneStruct* scene, Input* input);
+typedef void(*Function)(SceneStruct* scene, Input* input);
 
-//struct SceneStruct {
-//	Function func;
-//
-//};
-////シーンの用意
-////とりあえずゲームのシーンだけ用意しておく
-////追加があればここに随時足していく
-////仕様変更の可能性あり
-//void titleScene(SceneStruct* scene,Input* input);
-//void selectScene(SceneStruct* scene, Input* input);
-//void stageScene(SceneStruct* scene, Input* input);
-//void clearScene(SceneStruct* scene,Input* input);
-//void gameOverScene(SceneStruct* scene, Input* input);
-//
-//void titleScene(SceneStruct* scene,Input* input)
-//{
-//	scene->func = titleScene;
-//	DrawString(0,10,"タイトルシーン",GetColor(255,255,255));
-//}
-//void selectScene(SceneStruct* scene,Input* input)
-//{
-//	scene->func = selectScene;
-//	DrawString(0,10,"セレクトシーン",GetColor(255,255,255));
-//}
-//void stageScene(SceneStruct* scene, Input*input) 
-//{
-//	scene->func = stageScene;
-//	DrawString(0, 10, "ゲームシーン", GetColor(255, 255, 255));
-//}
-//void clearScene(SceneStruct* scene,Input* input)
-//{
-//	scene->func = clearScene;
-//	DrawString(0,10,"クリアシーン",GetColor(255,255,255));
-//}
-//void gameOverScene(SceneStruct* scene,Input* input)
-//{
-//	scene->func = gameOverScene;
-//	DrawString(0,10,"ゲームオーバーシーン",GetColor(255,255,255));
-//}
+struct SceneStruct {
+	Function func;
+
+};
+//シーンの用意
+//とりあえずゲームのシーンだけ用意しておく
+//追加があればここに随時足していく
+//仕様変更の可能性あり
+void titleScene(SceneStruct* scene,Input* input);
+void selectScene(SceneStruct* scene, Input* input);
+void stageScene(SceneStruct* scene, Input* input);
+void clearScene(SceneStruct* scene,Input* input);
+void gameOverScene(SceneStruct* scene, Input* input);
+
+void titleScene(SceneStruct* scene,Input* input)
+{
+	scene->func = titleScene;
+	DrawString(0,10,"タイトルシーン",GetColor(255,255,255));
+}
+void selectScene(SceneStruct* scene,Input* input)
+{
+	scene->func = selectScene;
+	DrawString(0,10,"セレクトシーン",GetColor(255,255,255));
+}
+void stageScene(SceneStruct* scene, Input*input) 
+{
+	scene->func = stageScene;
+	DrawString(0, 10, "ゲームシーン", GetColor(255, 255, 255));
+}
+void clearScene(SceneStruct* scene,Input* input)
+{
+	scene->func = clearScene;
+	DrawString(0,10,"クリアシーン",GetColor(255,255,255));
+}
+void gameOverScene(SceneStruct* scene,Input* input)
+{
+	scene->func = gameOverScene;
+	DrawString(0,10,"ゲームオーバーシーン",GetColor(255,255,255));
+}
 
 GameMain::GameMain()
 {
@@ -138,6 +138,7 @@ void GameMain::SetNowStage(int num)
 int GameMain::GetNowStage()
 {
 	//cout <<_bestData[nowStage].goalTime << endl;
+	cout << nowStage << endl;
 	return nowStage;
 }
 //タイトルに強制遷移を行います
@@ -162,8 +163,8 @@ void GameMain::Run()
 	//最初に遷移するシーンを選択しています。
 	//ほかのシーンにするときは上下どちらも変更してください
 	//現在使用してないです
-	//SceneStruct scene = { titleScene };
-	//ChangeScene(new TitleScene());
+	SceneStruct scene = { titleScene };
+	ChangeScene(new TitleScene());
 	if (_scene != nullptr) {
 		ImageMgr::Instance().ImageManager(_scene->GetScene());
 	}

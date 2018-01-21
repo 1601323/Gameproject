@@ -16,6 +16,7 @@ MapCtl::MapCtl()
 // ﾃﾞｽﾄﾗｸﾀ
 MapCtl::~MapCtl()
 {
+
 }
 
 // 生成用
@@ -58,6 +59,7 @@ void MapCtl::Load(const char* fileName)
 	{
 		return;
 	}
+
 	// 情報格納用
 	MapFileHeader header = {};
 	// 読み込み[Map情報,読み込むデータサイズ,読み込む回数,どの場所化のポインタ]

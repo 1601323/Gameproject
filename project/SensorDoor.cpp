@@ -62,10 +62,6 @@ void SensorDoor::CheckDoMove()
 #endif
 	}
 	else if (_state == GM_MOVE) {	//ドアを閉める
-#ifdef _DEBUG
-		DrawString(30, 30, "閉まるよ！", 0xff22ffff);
-		DrawString(40, 40, "move!", 0xffffffff);
-#endif
 		doorCount++;
 		if (doorCount % 2 == 0) {
 			if (count > 0) {
@@ -74,10 +70,6 @@ void SensorDoor::CheckDoMove()
 		}
 	}
 	else if (_state == GM_MOVE2) {	//ドアを開ける
-#ifdef _DEBUG
-		DrawString(30, 30, "開くよ！", 0x22ffffff);
-		DrawString(40, 40, "move2!", 0xffffffff);
-#endif
 		doorCount++;
 		if (doorCount % 2 == 0) {
 			if (count < WIDTH / 2) {
