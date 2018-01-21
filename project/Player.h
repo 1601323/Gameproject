@@ -9,6 +9,7 @@
 #define WALL_SPEED (1.0f)				//壁登りのｽﾋﾟｰﾄﾞ
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
+#define FEVER_CNT (10)					//フィーバーの時間
 
 class Input;
 class HitClass;
@@ -39,6 +40,8 @@ private:
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
+	bool feverFlag;						//フィーバーフラグ
+	int feverTime;						//フィーバーの時間
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
@@ -52,11 +55,18 @@ private:
 	void setDir(Input* input);			//向き制御
 	void gravity(void);					//重力
 	bool accelePL(void);				//移動処理
+	void InputSetMove();				//移動処理の中の入力を受け持ちます
 	bool moveJump(void);				//ｼﾞｬﾝﾌﾟ処理
 	bool moveWall(void);				//壁移動処理
 	bool moveRope(void);				//ﾛｰﾌﾟ状態
+	void moveFever();
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
+
+	void FeverUpdata(Input* input);					//フィーバー時に呼び出す全体の処理
+	void FeverJump();					//フィーバー用のジャンプ処理
+	void FeverGravity();
+
 
 public:
 	Player();

@@ -45,6 +45,7 @@ public:
 	Position2 GetChipPos(Position2 idPos);	// MapChipの座標返す[左上座標]
 	CHIP_TYPE GetChipType(Position2 idPos);	// ﾁｯﾌﾟﾀｲﾌﾟ取得用
 	unsigned int GetMapID(Position2 idPos);	// ﾏｯﾌﾟﾁｯﾌﾟID取得[座標]
+	unsigned int GetMapNum(Position2 getPos);	//マップチップの番号を取得
 	void Draw(void);			// 描画
 	void Draw(Position2 offset);
 	void Load(const char* fileName);		// 読み込み 
