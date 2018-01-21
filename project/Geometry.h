@@ -94,6 +94,11 @@ enum ENEMY_STATE {
 	EM_ST_RE_DIS,	//ﾌﾟﾚｲﾔｰが見つかったとき(戻ってくるとき)
 	EM_ST_FEAR		//怯み状態
 };
+//アイテムの種類について
+enum ITEM_TYPE {
+	ITEM_FEVER,
+	ITEM_MAX
+};
 //敵の警戒度について
 enum ENEMY_ALERT {
 	ALERT_LEVEL_1,

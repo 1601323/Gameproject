@@ -9,9 +9,6 @@
 #include "EmLookback.h"
 #include "EnemyServer.h"
 
-
-
-
 EnemyServer::EnemyServer()
 {
 	_commonData._level = ALERT_LEVEL_1;
@@ -87,8 +84,8 @@ void EnemyServer::Draw(Position2 offset)
 #ifdef _DEBUG
 	DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
 #endif
-	DrawBox(400, 30, 400 + vigiCnt, 60, 0xffff25, true);
-	DrawBox(400,30,500,60,0xff00ff,false);
+	DrawBox(600, 30, 600 + vigiCnt, 60, 0xffff25, true);
+	DrawBox(600,30,700,60,0xff00ff,false);
 }
 //Œ»İ‚ÌŒx‰úƒŒƒxƒ‹‚ğ•Ô‚·
 ENEMY_ALERT EnemyServer::AlertLevel()

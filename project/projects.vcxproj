@@ -142,6 +142,9 @@
     <ClCompile Include="HitClass.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemFactory.cpp" />
+    <ClCompile Include="ItFever.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCtl.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -178,6 +181,9 @@
     <ClInclude Include="HitClass.h" />
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemFactory.h" />
+    <ClInclude Include="ItFever.h" />
     <ClInclude Include="MapCtl.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Midpoint.h" />
