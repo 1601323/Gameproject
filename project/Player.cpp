@@ -10,6 +10,7 @@
 #include "ModelMgr.h"
 
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 
@@ -41,6 +42,8 @@ Player::Player()
 	//とりあえず同じように
 	_modelmgr = ModelMgr::Instance();
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	alfa = 255;
+	tranceMax = 50;
 
 }
 Player::~Player()
@@ -900,6 +903,7 @@ bool Player::stVanish(void)
 	//壁登り状態で動いていたらｽﾃﾙｽにならない
 	if (_state == ST_MOVE||_state==ST_JUMP||_state==ST_ROPE||vy!=0) {
 		vanCnt = 60 * VANISH_CNT;
+		alfa = 255;
 		deathFlag = true;
 	}
 
@@ -1076,34 +1080,42 @@ void Player::Draw(Position2& offset)
 {
 	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+(_plRect.w/2) , SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), 0));
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-	//MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	
 	//時機
 	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
 	case ST_VANISH:
+		alfa = max(alfa-1, tranceMax);
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//ﾛｰﾌﾟ状態
 	case ST_ROPE:
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+		alfa = 255;
 		break;
 		//壁登り状態
 	case ST_WALL:
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+		alfa = 255;
 		break;
 		//ﾌｨｰﾊﾞｰ状態
 	case ST_FEVER:
 		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
 		DrawString((int)_pos.x  - 20 -offset.x, (int)_pos.y  - 20 -offset.y, "＼FEVER／", 0x0000ff);
+		alfa = 255;
 		break;
 	default:
 		break;
 	}
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	tmpOffset = offset;
+
+	MV1SetOpacityRate(modelhandle, alfa / 255.f);
+	MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+
 //#ifdef _DEBUG
 //	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 //	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
@@ -1284,6 +1296,7 @@ void Player::SetInitPos()
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;
+	alfa = 255;
 	_state = ST_DEF;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
@@ -1311,6 +1324,7 @@ void Player::SetRetryPos(Position2 midPos)
 	vx = 0.0f;
 	vy = 0.0f;
 	_state = ST_DEF;
+	alfa = 255;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
 }
