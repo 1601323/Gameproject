@@ -55,8 +55,8 @@ void Player::Update(Input* input)
 	GetHitKeyStateAll(keyData);
 
 	if (feverFlag == true) {
-		FeverGravity();
 		FeverUpdata(input);
+		FeverGravity();
 	}
 	else if (feverFlag == false) {
 		//d—Í
@@ -92,10 +92,12 @@ void Player::setState(void)
 void Player::FeverUpdata(Input* input)
 {
 	setDir(input);
+	InputSetMove();
 	FeverJump();
-	moveWall();
 	moveRope();
 	moveFever();
+	moveWall();
+
 	EnterDoor();
 }
 //Œü‚«‚ğŒˆ‚ß‚é
