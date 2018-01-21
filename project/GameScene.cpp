@@ -111,12 +111,13 @@ void GameScene::GameInit()
 		mapName = "map/1.19.map";
 		break;
 	case 1:
-		mapName = "map/1218_001.map";
+		mapName = "map/1.19.map";
+		break;
+	case 2:
+		mapName = "map/1.19.map";
 		break;
 	default:
-		//マップの数が決まり次第、アサートに切り替え
-		mapName = "map/1218_001.map";
-		//ASSERT();
+		ASSERT();
 		break;
 	}
 }

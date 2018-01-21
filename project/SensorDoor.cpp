@@ -48,6 +48,8 @@ void SensorDoor::Updata()
 
 void SensorDoor::CheckDoMove()
 {
+	//時間があり次第、プレイヤーがドアの前で↑を押すと開いてリザルト画面に飛ばす処理を書きます。書いてくれてもいいよ
+	//あれだったら。クリア条件を見たいしていないけどゴールする？みたいな文を出してもいいかもしれない
 	if (_pl.GetcharState() == ST_VANISH|| _pl.GetcharState() == ST_FEVER) {	//もしﾌﾟﾚｲﾔｰがステルス、もしくはフィーバー状態だったら
 		_state = GM_MOVE2;
 	}
@@ -98,19 +100,21 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 	//else {
 	//}
 	//ドアのところで上を押すとはいれるようにしたほうがいいらしい
-	if (count * 2 >= _pl.GetRect().w) {
+	//if (count * 2 >= _pl.GetRect().w) {
+	//仕様変更に基づいて、いつでも上を押すとゴールできるようになっています
+	//簡単なUIで説明をしたほうがいいかもしれない
 		_clearData.midFlag = true;
-#ifdef _DEBUG
-		DrawString(100,30,"クリアできるよ",GetColor(244,244,244));
-#endif
-	}
-	else {
-		_clearData.midFlag = false;
-#ifdef _DEBUG
-		DrawString(100, 30, "クリアできないよ", GetColor(244, 244, 244));
-#endif
-
-	}
+//#ifdef _DEBUG
+//		DrawString(100,30,"クリアできるよ",GetColor(244,244,244));
+//#endif
+//	}
+//	else {
+//		_clearData.midFlag = false;
+//#ifdef _DEBUG
+//		DrawString(100, 30, "クリアできないよ", GetColor(244, 244, 244));
+//#endif
+//
+//	}
 }
 
 void SensorDoor::Draw(Position2 offset)

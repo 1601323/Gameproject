@@ -34,6 +34,8 @@ Player::Player()
 	moveFlag = false;
 	fMoveRight = true;
 	fMoveLeft = true;
+	deathFlag = true;
+	helpFever = false;
 	_minSensingValueL = SV_HIGH;
 
 }
@@ -59,7 +61,6 @@ void Player::Update(Input* input)
 	if (feverFlag == true) {
 		FeverUpdata(input);
 		FeverGravity();
-		cout << vy << endl;
 	}
 	else if (feverFlag == false) {
 		//重力
@@ -69,7 +70,7 @@ void Player::Update(Input* input)
 	}
 	//ｽﾃｰﾀｽ制御
 	setState();
-	//HitToEnemy();		//敵と当たったとき
+	HitToEnemy();		//敵と当たったとき
 }
 
 //移動系の処理
@@ -393,6 +394,21 @@ bool Player::moveWall(void)
 			moveFlag = false;
 		}
 	}
+	if (_map->GetChipType(WallPosTop[0]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosMiddl[0]) == CHIP_CLIMB_WALL) {
+		if (WallFlag == true)
+			fMoveRight = false;
+	}
+	else {
+		fMoveRight = true;
+	}
+	if (_map->GetChipType(WallPosTop[1]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosMiddl[1]) == CHIP_CLIMB_WALL) {
+		if (WallFlag == true)
+			fMoveLeft = false;
+	}
+	else
+	{
+		fMoveLeft = true;
+	}
 	//半分以上で壁に張り付いてしまったときは半分まで下げる
 	Position2 offsetPos[2];
 	offsetPos[0].x = WallPosMiddl[0].x;
@@ -528,7 +544,7 @@ bool Player::moveWall(void)
 	}
 
 #ifdef _DEBUG
-	DrawFormatString(10, 430, 0xffffff, "flag::%d", moveFlag);
+	//DrawFormatString(10, 430, 0xffffff, "flag::%d", moveFlag);
 #endif // _DEBUG
 	return false;
 }
@@ -880,10 +896,12 @@ bool Player::stVanish(void)
 	//壁登り状態で動いていたらｽﾃﾙｽにならない
 	if (_state == ST_MOVE||_state==ST_JUMP||_state==ST_ROPE||vy!=0) {
 		vanCnt = 60 * VANISH_CNT;
+		deathFlag = true;
 	}
 
 	if (vanCnt <= 0) {
 		_state = ST_VANISH;
+		deathFlag = false;
 	}
 #ifdef _DEBUG
 	DrawFormatString(0, 120, 0xffffff, "%d", vanCnt);
@@ -906,14 +924,27 @@ bool Player::stFever(void)
 		}
 		else {
 			_state = ST_FEVER;
-			//feverTime--;
+			deathFlag = false;
+			feverTime--;
 		}
-
 	}
 	if (feverTime < 0) {
-		feverFlag = false;
-		feverTime = 60 * FEVER_CNT;
+		if (plPlaceCheck() == false)
+		{
+			helpFever = true;
+			feverTime = -1;
+		}
+		else {
+			helpFever = false;
+			feverFlag = false;
+			feverTime = 60 * FEVER_CNT;
+		}
+		if (plPlaceCheck() == true) {
+			feverFlag = false;
+			feverTime = 60 * FEVER_CNT;
+		}
 	}
+
 #ifdef _DEBUG
 	DrawFormatString(600,10,0xffffff,"%d",feverTime);
 #endif
@@ -1065,21 +1096,26 @@ void Player::Draw(Position2& offset)
 	}
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	tmpOffset = offset;
-#ifdef _DEBUG
-	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
-	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
-	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
-	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	_plRect.Draw(offset);
-#endif
+//#ifdef _DEBUG
+//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
+//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
+//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
+//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
+//	_plRect.Draw(offset);
+//#endif
 }
 
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
 {
 	if (_hit->EnemyHit(*this)) {
-		_state = ST_DETH;
+		if (deathFlag == true) {
+			_state = ST_DETH;
+		}
+		else if (deathFlag == false) {
+			//死なない
+		}
 	}
 	else
 	{
@@ -1160,44 +1196,13 @@ void Player::FeverGravity()
 	//真ん中
 	nextPosDown2[2].x = nextPosDown[2].x;
 	nextPosDown2[2].y = nextPosDown[2].y - 8;
-	//壁のぼり状態に対しての解決を図る
-	Position2 nextRightPos[2];
-	nextRightPos[0].x = _pos.x + (_plRect.w ) +5;
-	nextRightPos[0].y = _pos.y + (_plRect.h/2);
-	DrawPixel(nextRightPos[0].x- tmpOffset.x, nextRightPos[0].y- tmpOffset.y, 0xffffff);
-	nextRightPos[1].x = nextRightPos[0].x - 4;
-	nextRightPos[1].y = nextRightPos[0].y;
-	Position2 nextLeftPos[2];
-	nextLeftPos[0].x = _pos.x -5;
-	nextLeftPos[0].y = _pos.y + (_plRect.h/2);
-	DrawPixel(nextLeftPos[0].x - tmpOffset.x, nextLeftPos[0].y - tmpOffset.y, 0xffffff);
-
-	nextLeftPos[1].x = nextLeftPos[0].x + 4;
-	nextLeftPos[1].y = nextLeftPos[1].y;
 	//壁登り状態なら重力は無視
 	if (_state == ST_WALL) {
 		return;
-		//if ((_map->GetChipType(nextRightPos[0]) != _map->GetChipType(nextLeftPos[0]))
-		//	|| (_map->GetChipType(nextLeftPos[0]) != _map->GetChipType(nextRightPos[0]))) {
-		//	return;
-		//}
-		//else {
-		//	vy += GRAVITY*2;
-		//	if (vy > MAX_GRAVITY) {
-		//		vy = MAX_GRAVITY;
-		//	}
-	 //		//_pos.y += vy ;
-		//	//return;
-		//}
 	}
 	//登れない壁との判定
 	for (int j = 0; j < 3; j++) {
-/*		if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
-			vy = 0.0f;
-			JumpFlag = false;
-			break;
-		}
-		else*/ if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
+ if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
@@ -1232,6 +1237,16 @@ void Player::FeverGravity()
 	//速度調整のため２で割っている
 	_pos.y += (int)vy / 2.0f;
 }
+bool Player::plPlaceCheck()
+{
+	if (	_map->GetChipType(_plRect.LeftTop())		!= CHIP_BLANK 
+		||	_map->GetChipType(_plRect.LeftBottom())		!= CHIP_BLANK
+		||	_map->GetChipType(_plRect.RightTop())		!= CHIP_BLANK
+		||	_map->GetChipType(_plRect.RightBottom())	!= CHIP_BLANK) {
+		return false;
+	}
+	return true;
+}
 //Rect取得
 Rect& Player::GetRect()
 {
@@ -1262,6 +1277,8 @@ void Player::SetInitPos()
 	vx = 0.0f;
 	vy = 0.0f;
 	_state = ST_DEF;
+	feverFlag = false;
+	feverTime = 60 * FEVER_CNT;
 }
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
@@ -1286,4 +1303,6 @@ void Player::SetRetryPos(Position2 midPos)
 	vx = 0.0f;
 	vy = 0.0f;
 	_state = ST_DEF;
+	feverFlag = false;
+	feverTime = 60 * FEVER_CNT;
 }
