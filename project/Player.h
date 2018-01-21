@@ -46,6 +46,8 @@ private:
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
 	bool moveRopeJumpFlag;				//ﾛｰﾌﾟｼﾞｬﾝﾌﾟ処理
+	bool fMoveRight;
+	bool fMoveLeft;
 	void HitToEnemy();					//敵と当たった時
 	char keyData[256];
 	char oldkeyData[256];
@@ -63,11 +65,12 @@ private:
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
 
-	void FeverUpdata(Input* input);					//フィーバー時に呼び出す全体の処理
+	void FeverUpdata(Input* input);		//フィーバー時に呼び出す全体の処理
 	void FeverJump();					//フィーバー用のジャンプ処理
-	void FeverGravity();
+	void FeverGravity();				//フィーバー用の重力処理
+	void FeverWall();					//フィーバー用の壁移動処理
 
-
+	Position2 tmpOffset;
 public:
 	Player();
 	~Player();
