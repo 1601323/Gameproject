@@ -16,6 +16,7 @@ MapCtl::MapCtl()
 // ﾃﾞｽﾄﾗｸﾀ
 MapCtl::~MapCtl()
 {
+
 }
 
 // 生成用
@@ -58,6 +59,7 @@ void MapCtl::Load(const char* fileName)
 	{
 		return;
 	}
+
 	// 情報格納用
 	MapFileHeader header = {};
 	// 読み込み[Map情報,読み込むデータサイズ,読み込む回数,どの場所化のポインタ]
@@ -130,7 +132,17 @@ unsigned int MapCtl::GetMapID(Position2 idPos)
 	}
 	return CHIP_MAX;
 }
-
+unsigned int MapCtl::GetMapNum(Position2 idPos)
+{
+	Position2 tmpPos = { idPos.x / MAP_CHIP_SIZE_X,idPos.y / MAP_CHIP_SIZE_Y };
+	// 範囲
+	if (static_cast<int>(tmpPos.x) >= 0 && static_cast<int>(tmpPos.x) < MAP_SIZE_X
+		&&  static_cast<int>(tmpPos.y) >= 0 && static_cast<int>(tmpPos.y) < MAP_SIZE_Y)
+	{
+		return((static_cast<int>(tmpPos.y) * MAP_SIZE_X) + static_cast<int>(tmpPos.x));
+	}
+	return CHIP_MAX;
+}
 // ﾏｯﾌﾟチップ描画[座標,ﾁｯﾌﾟ番号]
 void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
@@ -182,18 +194,18 @@ void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 		//	break;
 	}
 	DrawBox(x * 32 + 0 -offset.x, y * 32 + 0 -offset.y, (x * 32) + 32 - offset.x, (y * 32) + 32 -offset.y, color, true);
-
-// ﾃﾞﾊﾞｯｸ用
-#ifdef _DEBUG
-	DrawString(20,  10, "BLANK",		GetColor(255, 255, 255));
-	DrawString(75,  10, "登れない壁",	GetColor(0, 0, 0));
-	DrawString(170, 10, "登れる壁",		GetColor(115, 66, 41));
-	DrawString(240, 10, "ドア",			GetColor(55, 52, 52));
-	DrawString(290, 10, "ボタン1",		GetColor(101, 79, 56));
-	DrawString(370, 10, "ﾛｰﾌﾟ引",		GetColor(202, 81, 55));
-	DrawString(460, 10, "ﾛｰﾌﾟ落",		GetColor(0, 102, 0));
-#else
-	#endif
+//
+//// ﾃﾞﾊﾞｯｸ用
+//#ifdef _DEBUG
+//	DrawString(20,  10, "BLANK",		GetColor(255, 255, 255));
+//	DrawString(75,  10, "登れない壁",	GetColor(0, 0, 0));
+//	DrawString(170, 10, "登れる壁",		GetColor(115, 66, 41));
+//	DrawString(240, 10, "ドア",			GetColor(55, 52, 52));
+//	DrawString(290, 10, "ボタン1",		GetColor(101, 79, 56));
+//	DrawString(370, 10, "ﾛｰﾌﾟ引",		GetColor(202, 81, 55));
+//	DrawString(460, 10, "ﾛｰﾌﾟ落",		GetColor(0, 102, 0));
+//#else
+//	#endif
 }
 
 //ギミックにデータをもらうために追加してます

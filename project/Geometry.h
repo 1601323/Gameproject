@@ -94,6 +94,11 @@ enum ENEMY_STATE {
 	EM_ST_RE_DIS,	//ﾌﾟﾚｲﾔｰが見つかったとき(戻ってくるとき)
 	EM_ST_FEAR		//怯み状態
 };
+//アイテムの種類について
+enum ITEM_TYPE {
+	ITEM_FEVER,
+	ITEM_MAX
+};
 //敵の警戒度について
 enum ENEMY_ALERT {
 	ALERT_LEVEL_1,
@@ -160,10 +165,15 @@ struct Rect
 		return pos;
 	}
 	//上下左右を確認する
-	float Left() { return pos.x - (w / 2); }
-	float Top() { return pos.y - (h / 2); }
-	float Right() { return pos.x + (w / 2); }
-	float Bottom() { return pos.y + (h / 2); }
+	float Left()	{ return pos.x - (w / 2); }
+	float Top()		{ return pos.y - (h / 2); }
+	float Right()	{ return pos.x + (w / 2); }
+	float Bottom()	{ return pos.y + (h / 2); }
+	//四つ角をPositioin2で返す
+	Position2 LeftTop()		 { return Position2(Left() ,Top());		}
+	Position2 LeftBottom()	 { return Position2(Left() ,Bottom()-2);	}
+	Position2 RightTop()	 { return Position2(Right(),Top());		}
+	Position2 RightBottom()	 { return Position2(Right(),Bottom()-2);	}
 	//あたり矩形を表示する
 	void Draw(unsigned int color = 0xff00ffff) {
 		DrawBox((int)Left(), (int)Top(), (int)Right(), (int)Bottom(), color, false);

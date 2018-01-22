@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "DxLib.h"
+#include "Geometry.h"
 #include "GameMain.h"
 #include "ImageMgr.h"
 

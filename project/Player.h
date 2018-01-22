@@ -9,6 +9,7 @@
 #define WALL_SPEED (1.0f)				//壁登りのｽﾋﾟｰﾄﾞ
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
+#define FEVER_CNT (10)					//フィーバーの時間
 
 class Input;
 class HitClass;
@@ -16,6 +17,7 @@ class Camera;
 class MapCtl;
 class Rope;
 class GameScene;
+class ModelMgr;
 
 struct L_STICK;
 struct R_STICK;
@@ -39,10 +41,16 @@ private:
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
+	bool feverFlag;						//フィーバーフラグ
+	int feverTime;						//フィーバーの時間
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
 	bool moveRopeJumpFlag;				//ﾛｰﾌﾟｼﾞｬﾝﾌﾟ処理
+	bool fMoveRight;					//ﾌｨｰﾊﾞｰ時、壁のぼりを制御するフラグ
+	bool fMoveLeft;						//同上
+	bool deathFlag;						//まさに死亡フラグ（_stateでは管理しきれないみたいなので
+	bool helpFever;						//ﾌｨｰﾊﾞｰ終了時の補正のために用意
 	void HitToEnemy();					//敵と当たった時
 	char keyData[256];
 	char oldkeyData[256];
@@ -52,12 +60,26 @@ private:
 	void setDir(Input* input);			//向き制御
 	void gravity(void);					//重力
 	bool accelePL(void);				//移動処理
+	void InputSetMove();				//移動処理の中の入力を受け持ちます
 	bool moveJump(void);				//ｼﾞｬﾝﾌﾟ処理
 	bool moveWall(void);				//壁移動処理
 	bool moveRope(void);				//ﾛｰﾌﾟ状態
+	void moveFever();
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
+	bool plPlaceCheck();				//ﾌｨｰﾊﾞｰ終了時、ﾌﾟﾚｲﾔｰが壁の中にいないかチェックします
 
+	void FeverUpdata(Input* input);		//フィーバー時に呼び出す全体の処理
+	void FeverJump();					//フィーバー用のジャンプ処理
+	void FeverGravity();				//フィーバー用の重力処理
+	void FeverWall();					//フィーバー用の壁移動処理
+
+	Position2 tmpOffset;
+	//いきなりなのでここに書いてます
+	ModelMgr* _modelmgr;
+	int modelhandle;
+	int alfa;
+	int tranceMax;
 public:
 	Player();
 	~Player();

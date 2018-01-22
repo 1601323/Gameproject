@@ -14,8 +14,8 @@ Midpoint::Midpoint()
 	_modelmgr = ModelMgr::Instance();
 	GetFlag = false;
 	//マップから受け取るようにする
-	_pos.x = 400;
-	_pos.y = 100;
+	_pos.x = 350;
+	_pos.y = 150;
 	initPos = _pos;
 	tmpDir = DIR_RIGHT;
 	//大きさについてはとりあえずチップの大きさと一緒にしておく

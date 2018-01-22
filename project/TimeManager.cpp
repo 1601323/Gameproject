@@ -27,8 +27,6 @@ void TimeManager::Updata()
 			timerCnt++;
 		}
 	}
-	
-
 	if (timerCnt > 999) {
 		timerCnt = 999;
 	}
@@ -40,7 +38,6 @@ void TimeManager::StartTimer()
 {
 	timerFlag = true;
 }
-
 void TimeManager::StopTimer()
 {
 	timerFlag = false;
