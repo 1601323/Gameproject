@@ -80,6 +80,9 @@ private:
 	int modelhandle;
 	int alfa;
 	int tranceMax;
+	float  AnimTotalTime;
+	float  AnimNowTime;
+	int    AnimAttachIndex;
 public:
 	Player();
 	~Player();
