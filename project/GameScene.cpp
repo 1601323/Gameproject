@@ -129,8 +129,8 @@ void GameScene::FadeInUpdata(Input* input)
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
 	_cam->Update();
-	DrawBack();
 	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
 	_map->Draw(offset);
 	Draw(offset);
 	DrawUI();
@@ -145,10 +145,11 @@ void GameScene::FadeInUpdata(Input* input)
 }
 void GameScene::NormalUpdata(Input* input)
 {
-	DrawBack();
 	UpdateManager();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
+
 	_map->Draw(offset);
 	//€∞ÃﬂégópíÜÇÕìGÇ»Ç«Ç™é~Ç‹ÇÈ
 	if (_player->GetcharState() == ST_ROPE) {
@@ -226,9 +227,9 @@ void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 void GameScene::TransitionUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
-	DrawBack();
 	//_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
 	_map->Draw(offset);
 	Draw(offset);
 	DrawUI();
@@ -290,14 +291,14 @@ void GameScene::DrawUI()
 	}
 }
 //îwåiï`âÊ
-void GameScene::DrawBack()
+void GameScene::DrawBack(Position2 offset)
 {
 	//Ç‹ÇæëΩèdÉXÉNÉçÅ[ÉãÇÕÇµÇ»Ç¢Ç≈Ç∑
 	ImageMgr& im = ImageMgr::Instance();
-	DrawGraph(0,0,im.ImageIdReturn("âºimage/Game/backOmage.png",SCENE_RESULT),true);
-	DrawGraph(0, 0, im.ImageIdReturn("âºimage/Game/back3.png", SCENE_RESULT), true);
-	DrawGraph(0, 0, im.ImageIdReturn("âºimage/Game/back2.png.png", SCENE_RESULT), true);
-	DrawGraph(0, 0, im.ImageIdReturn("âºimage/Game/back1.png", SCENE_RESULT), true);
+	DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("âºimage/Game/backOmage.png",SCENE_RESULT),true);
+	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back3.png", SCENE_RESULT), true);
+	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back2.png", SCENE_RESULT), true);
+	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back1.png", SCENE_RESULT), true);
 
 }
 //ÉVÅ[ÉìëJà⁄ÇÃÇΩÇﬂÇ…ópà”

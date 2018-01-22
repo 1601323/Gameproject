@@ -57,7 +57,7 @@ private:
 	void UpdateManager();											//updata‚Ì‚½‚Ñ‚ÉŒÄ‚Ño‚·ŠÖ”‚ğ‚Ü‚Æ‚ß‚Ä‚¨‚­
 	void Draw(Position2& offset);
 	void DrawUI();	
-	void DrawBack();
+	void DrawBack(Position2 offset);
 	void JudgeTransition();
 public:
 	GameScene();
