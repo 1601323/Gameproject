@@ -1088,23 +1088,23 @@ void Player::Draw(Position2& offset)
 		//Ω√ŸΩèÛë‘
 	case ST_VANISH:
 		alfa = max(alfa-1, tranceMax);
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//€∞ÃﬂèÛë‘
 	case ST_ROPE:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
 		alfa = 255;
 		break;
 		//ï«ìoÇËèÛë‘
 	case ST_WALL:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
 		alfa = 255;
 		break;
 		//Ã®∞ ﬁ∞èÛë‘
 	case ST_FEVER:
-		DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
 		DrawString((int)_pos.x  - 20 -offset.x, (int)_pos.y  - 20 -offset.y, "Å_FEVERÅ^", 0x0000ff);
-		alfa = 255;
+		alfa = 50;
 		break;
 	default:
 		break;
