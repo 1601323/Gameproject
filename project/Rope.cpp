@@ -106,13 +106,13 @@ void Rope::DrawRopeRect(void)
 
 	if (RopeTurnFlag)
 	{
-		DrawLineSet(_rope[0], _rope[*itr - 1], 0xfffffff);
+		DrawLineSet(_rope[0], _rope[*itr - 1], 0xff0000);
 	}
 	else 
 	{
 		if (*itr != ROPE_LENGTH_MAX - 1)//軌道線を描画
 		{
-			DrawLineSet(_rope[*itr], _rope[*itr + 1], 0xfffffff);
+			DrawLineSet(_rope[*itr], _rope[*itr + 1], 0xff0000);
 		}
 	}
 
@@ -270,32 +270,32 @@ void Rope::SelectDir(Input* input)
 	if (_state == ST_ROPE_SELECT)
 	{
 		//発射前にぐるぐる回しています 仮の動きなのですごい適当
-		//theta -= 30;
-		//_RopeCircle.SetCenter(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2),
-		//	                  RotationPos.y - _tmpOffset.y +(_RopeRect.h / 2), range);
-		//_RopeCircle.Draw();
+		theta -= 30;
+		_RopeCircle.SetCenter(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2),
+			                  RotationPos.y - _tmpOffset.y +(_RopeRect.h / 2), range);
+		_RopeCircle.Draw();
 
-		//_vec.x = cos(AngleRad(theta)) *  SetVec().x;
-		//_vec.y = sin(AngleRad(theta)) *  SetVec().y;
+		_vec.x = cos(AngleRad(theta)) *  SetVec().x;
+		_vec.y = sin(AngleRad(theta)) *  SetVec().y;
 
-		//RotationPos.x = RotationPos.x + _vec.x;
-		//RotationPos.y = RotationPos.y + _vec.y;
-		////くるくるの線
-		//DrawLineSet(_rope[0], RotationPos,0xffffff);
+		RotationPos.x = RotationPos.x + _vec.x;
+		RotationPos.y = RotationPos.y + _vec.y;
+		//くるくるの線
+		DrawLineSet(_rope[0], RotationPos,0xff0000);
 
-		AnimNowTime += 1.0f;
-		// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
-		if (AnimNowTime >= AnimTotalTime)
-		{
-			// 新しいアニメーション再生時間は、アニメーション再生時間からアニメーション総時間を引いたもの
-			AnimNowTime -= AnimTotalTime;
-		}
-		MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
+		//AnimNowTime += 1.0f;
+		//// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
+		//if (AnimNowTime >= AnimTotalTime)
+		//{
+		//	// 新しいアニメーション再生時間は、アニメーション再生時間からアニメーション総時間を引いたもの
+		//	AnimNowTime -= AnimTotalTime;
+		//}
+		//MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 
-		MV1SetPosition(modelhandle, VGet(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2), SCREEN_SIZE_Y - RotationPos.y + _tmpOffset.y - (_RopeRect.h), 0));
-		MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-		MV1DrawFrame(modelhandle,20);
-		_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
+		//MV1SetPosition(modelhandle, VGet(RotationPos.x - _tmpOffset.x + (_RopeRect.w / 2), SCREEN_SIZE_Y - RotationPos.y + _tmpOffset.y - (_RopeRect.h), 0));
+		//MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+		//MV1DrawFrame(modelhandle,20);
+		//_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
 
 
 		//ロープくるくる解除 Readyの状態に戻す
@@ -389,7 +389,7 @@ void Rope::Extended(Input* input)
 		{
 			//その場で描画
 			_RopeCircle.Draw();
-			DrawLineSet(_rope[0], _rope[18], 0xfffffff);
+			DrawLineSet(_rope[0], _rope[18], 0xff0000);
 			time--;
 		}
 		else {
