@@ -11,6 +11,7 @@ MapCtl* MapCtl::ptr = nullptr;
 // ｺﾝｽﾄﾗｸﾀ
 MapCtl::MapCtl()
 {
+		LoadDivGraph("仮image/chip.png",8,4,2,32,32,chipImage);
 }
 
 // ﾃﾞｽﾄﾗｸﾀ
@@ -26,7 +27,6 @@ MapCtl* MapCtl::GetInstance(void) {
 	{
 		ptr = new MapCtl();
 	}
-
 	return ptr;
 }
 
@@ -147,53 +147,54 @@ unsigned int MapCtl::GetMapNum(Position2 idPos)
 void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
 	auto color = GetColor(0, 50, 50);
-	switch (num)			// ﾏｯﾌﾟﾁｯﾌﾟ別に描画
-	{
-	case CHIP_BLANK:		// 何もない
-		color = GetColor(0, 50, 50);
-		break;
-	case CHIP_N_CLIMB_WALL:	// 登れない壁	
-		color = GetColor(85, 44, 32);
-		break;
-	case CHIP_CLIMB_WALL:	// 登れる壁
-		color = GetColor(115, 66, 41);
-		break;
-		// ｷﾞﾐｯｸ用
-	case CHIP_DOOR:			// ドア
-// ﾃﾞﾊﾞｯｸ
-#ifdef _DEGUB
-		color = GetColor(55, 52, 52);
-#endif
-		break;
-	case CHIP_BUTTON_1:		// ボタン
-		color = GetColor(101, 79, 56);
-		break;
-	case CHIP_ROPE_ATTRACT:	// ﾛｰﾌﾟ引き寄せる
-		color = GetColor(202, 81, 55);
-		break;
-	case CHIP_ROPE_FALL:	// ﾛｰﾌﾟ落とす
-// ﾃﾞﾊﾞｯｸ
-#ifdef _DEBUG
-		color = GetColor(0, 102, 0);
-#endif
-		break;
-		//case CHIP_FREE_1:		// 自由に使って
-		//color = GetColor(198,54,89);
-		//break;
-		//case CHIP_FREE_2:		// 自由に使って
-		//	color = GetColor(255,235,88);
-		//	break;
-		//case CHIP_FREE_3:		// 自由に使って
-		//	color = GetColor(160,202,90);
-		//	break;
-		//case CHIP_FREE_4:		// 自由に使って
-		//	color = GetColor(223,84,100);
-		//	break;
-		//case CHIP_FREE_5:		// 自由に使って
-		//	color = GetColor(28,51,112);
-		//	break;
-	}
-	DrawBox(x * 32 + 0 -offset.x, y * 32 + 0 -offset.y, (x * 32) + 32 - offset.x, (y * 32) + 32 -offset.y, color, true);
+//	switch (num)			// ﾏｯﾌﾟﾁｯﾌﾟ別に描画
+//	{
+//	case CHIP_BLANK:		// 何もない
+//		color = GetColor(0, 50, 50);
+//		break;
+//	case CHIP_N_CLIMB_WALL:	// 登れない壁	
+//		color = GetColor(85, 44, 32);
+//		break;
+//	case CHIP_CLIMB_WALL:	// 登れる壁
+//		color = GetColor(115, 66, 41);
+//		break;
+//		// ｷﾞﾐｯｸ用
+//	case CHIP_DOOR:			// ドア
+//// ﾃﾞﾊﾞｯｸ
+//#ifdef _DEGUB
+//		color = GetColor(55, 52, 52);
+//#endif
+//		break;
+//	case CHIP_BUTTON_1:		// ボタン
+//		color = GetColor(101, 79, 56);
+//		break;
+//	case CHIP_ROPE_ATTRACT:	// ﾛｰﾌﾟ引き寄せる
+//		color = GetColor(202, 81, 55);
+//		break;
+//	case CHIP_ROPE_FALL:	// ﾛｰﾌﾟ落とす
+//// ﾃﾞﾊﾞｯｸ
+//#ifdef _DEBUG
+//		color = GetColor(0, 102, 0);
+//#endif
+//		break;
+//		//case CHIP_FREE_1:		// 自由に使って
+//		//color = GetColor(198,54,89);
+//		//break;
+//		//case CHIP_FREE_2:		// 自由に使って
+//		//	color = GetColor(255,235,88);
+//		//	break;
+//		//case CHIP_FREE_3:		// 自由に使って
+//		//	color = GetColor(160,202,90);
+//		//	break;
+//		//case CHIP_FREE_4:		// 自由に使って
+//		//	color = GetColor(223,84,100);
+//		//	break;
+//		//case CHIP_FREE_5:		// 自由に使って
+//		//	color = GetColor(28,51,112);
+//		//	break;
+//	}
+	DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
+	//DrawBox(x * 32 + 0 -offset.x, y * 32 + 0 -offset.y, (x * 32) + 32 - offset.x, (y * 32) + 32 -offset.y, color, true);
 //
 //// ﾃﾞﾊﾞｯｸ用
 //#ifdef _DEBUG

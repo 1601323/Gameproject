@@ -50,6 +50,8 @@ public:
 	void Draw(Position2 offset);
 	void Load(const char* fileName);		// 読み込み 
 
+	int chipImage[8];
+
 	//ギミック用に追加
 	//CHIP_TYPEとPositionをもつデータ
 	//std::vector<ChipPosData> chipPosData;
