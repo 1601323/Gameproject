@@ -1132,7 +1132,7 @@ void Player::Draw(Position2& offset)
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.4f);
 
 //#ifdef _DEBUG
 //	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
