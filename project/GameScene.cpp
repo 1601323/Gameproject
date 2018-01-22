@@ -129,6 +129,7 @@ void GameScene::FadeInUpdata(Input* input)
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
 	_cam->Update();
+	DrawBack();
 	Position2& offset = _cam->ReturnOffset();
 	_map->Draw(offset);
 	Draw(offset);
@@ -144,6 +145,7 @@ void GameScene::FadeInUpdata(Input* input)
 }
 void GameScene::NormalUpdata(Input* input)
 {
+	DrawBack();
 	UpdateManager();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
@@ -224,10 +226,12 @@ void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 void GameScene::TransitionUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	DrawBack();
 	//_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	_map->Draw(offset);
 	Draw(offset);
+	DrawUI();
 	count++;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100 + count);
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
@@ -284,6 +288,17 @@ void GameScene::DrawUI()
 	for (int f = 0; f < gm.GetResultData().life; f++) {
 		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("‰¼image/UI/UI_life.png", SCENE_RESULT),true);
 	}
+}
+//”wŒi•`‰æ
+void GameScene::DrawBack()
+{
+	//‚Ü‚¾‘½dƒXƒNƒ[ƒ‹‚Í‚µ‚È‚¢‚Å‚·
+	ImageMgr& im = ImageMgr::Instance();
+	DrawGraph(0,0,im.ImageIdReturn("‰¼image/Game/backOmage.png",SCENE_RESULT),true);
+	DrawGraph(0, 0, im.ImageIdReturn("‰¼image/Game/back3.png", SCENE_RESULT), true);
+	DrawGraph(0, 0, im.ImageIdReturn("‰¼image/Game/back2.png.png", SCENE_RESULT), true);
+	DrawGraph(0, 0, im.ImageIdReturn("‰¼image/Game/back1.png", SCENE_RESULT), true);
+
 }
 //ƒV[ƒ“‘JˆÚ‚Ì‚½‚ß‚É—pˆÓ
 SCENE_TYPE GameScene::GetScene()
