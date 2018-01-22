@@ -41,7 +41,9 @@ Player::Player()
 	_minSensingValueL = SV_HIGH;
 	//とりあえず同じように
 	_modelmgr = ModelMgr::Instance();
-	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("player_model/player.pmx", SCENE_RESULT);
+	AnimAttachIndex = MV1AttachAnim(modelhandle, 0,-1,false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
 	alfa = 255;
 	tranceMax = 50;
 
@@ -125,6 +127,13 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
 			_state = ST_MOVE;
+			AnimNowTime += 1.0f;
+			// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
+			if (AnimNowTime >= AnimTotalTime)
+			{
+				// 新しいアニメーション再生時間は、アニメーション再生時間からアニメーション総時間を引いたもの
+				AnimNowTime = 0;
+			}
 		}
 		//左
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON ||
@@ -132,6 +141,12 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
 			_state = ST_MOVE;
+			AnimNowTime += 1.0f;
+			// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
+			if (AnimNowTime >= AnimTotalTime)
+			{
+				AnimNowTime = 0;
+			}
 		}
 		//上
 		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
@@ -1078,8 +1093,10 @@ void Player::FeverJump()
 }
 void Player::Draw(Position2& offset)
 {
+	
 	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+(_plRect.w/2) , SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), 0));
-	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	MV1SetRotationXYZ(modelhandle,VGet(0.f,80.f,0.f));
+	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
 	
 	//時機
 	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, true);
@@ -1113,6 +1130,7 @@ void Player::Draw(Position2& offset)
 	tmpOffset = offset;
 
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
+	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 
