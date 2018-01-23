@@ -76,11 +76,11 @@ void Midpoint::FollowDir()
 	_pos.x = _pl->GetPos().x;
 	_pos.y = _pl->GetPos().y;
 	if (tmpDir == DIR_RIGHT) {
-		_pos.x = _pl->GetPos().x -30;
+		_pos.x = _pl->GetPos().x - 45;
 		_pos.y = _pl->GetPos().y - bubble;
 	}
 	else if (tmpDir == DIR_LEFT) {
-		_pos.x = _pl->GetPos().x + 30;
+		_pos.x = _pl->GetPos().x + 45;
 		_pos.y = _pl->GetPos().y -bubble;
 	}
 
