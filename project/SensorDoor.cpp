@@ -57,9 +57,7 @@ void SensorDoor::CheckDoMove()
 		_state = GM_MOVE;
 	}
 	if (_state == GM_NONE) {		//Å‰‚Ìó‘Ô‚Å‚ ‚ê‚Î‰½‚à‚µ‚È‚¢
-#ifdef _DEBUG
-		DrawString(40, 40, "none!", 0xffffffff);
-#endif
+
 	}
 	else if (_state == GM_MOVE) {	//ƒhƒA‚ğ•Â‚ß‚é
 		doorCount++;

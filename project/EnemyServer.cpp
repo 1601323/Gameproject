@@ -2,8 +2,13 @@
 #include <iostream>
 #include <algorithm>
 #include <math.h>
+#include <map>
+#include <string>
+#include <vector>
 #include "Geometry.h"
+#include "GameMain.h"
 //#include "EnemyFactory.h"
+#include "ImageMgr.h"
 #include "Enemy.h"
 #include "EmAround.h"
 #include "EmLookback.h"
@@ -16,6 +21,8 @@ EnemyServer::EnemyServer()
 	_commonData.plFoundFlag = false;
 	vigiCnt = 0;
 	decreaseCnt = 0;
+	ImageMgr& im = ImageMgr::Instance();
+	data = im.ImageIdReturn("‰¼image/UI/Patrite.png",SCENE_RESULT);
 }
 EnemyServer::EnemyServer(EnemyFactory* f)
 {
@@ -25,6 +32,8 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 	_commonData.plFoundFlag = false;
 	vigiCnt = 0;
 	decreaseCnt = 0;
+	ImageMgr& im = ImageMgr::Instance();
+	data = im.ImageIdReturn("‰¼image/UI/Patrite.png", SCENE_RESULT);
 }
 
 EnemyServer::~EnemyServer()
@@ -57,12 +66,17 @@ void EnemyServer::GetInfo(EnemyServerData inData)
 {
 	//ÌßÚ²Ô°”­Œ©î•ñ‚ªã‚ª‚Á‚Ä‚«‚½‚çƒŒƒxƒ‹‚ğã‚°‚é
 	if (inData.plFoundFlag == true) {
-		vigiCnt += 25;
-		if (0 <= vigiCnt &&vigiCnt <= 50) {
+		vigiCnt += 10;
+		if (0 <= vigiCnt &&vigiCnt <= 30) {
 			_commonData._level = ALERT_LEVEL_1;
 		}
-		else if (50< vigiCnt &&vigiCnt <= 100) {
+		else if (30< vigiCnt &&vigiCnt <= 80) {
 			_commonData._level = ALERT_LEVEL_2;
+		}
+		else if (80 < vigiCnt && vigiCnt <= 100) {
+			_commonData._level = ALERT_LEVEL_3;
+		}
+		else {
 		}
 		inData.dataSendFlag = false;
 	}
@@ -86,6 +100,7 @@ void EnemyServer::Draw(Position2 offset)
 #endif
 	DrawBox(600, 30, 600 + vigiCnt, 60, 0xffff25, true);
 	DrawBox(600,30,700,60,0xff00ff,false);
+	DrawGraph(700,30,data,true);
 }
 //Œ»İ‚ÌŒx‰úƒŒƒxƒ‹‚ğ•Ô‚·
 ENEMY_ALERT EnemyServer::AlertLevel()
