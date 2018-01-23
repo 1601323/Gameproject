@@ -9,6 +9,8 @@ private:
 	EnemyServerData _commonData;
 	int decreaseCnt;
 	void AlertManager();
+
+	int data;
 public:
 	EnemyServer();
 	EnemyServer(EnemyFactory* f);
