@@ -260,11 +260,12 @@ void EmAround::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
+#ifdef _DEBUG
 			DrawString(100, 100, "ìGÇ…ìñÇΩÇ¡ÇΩÇÊÅI", 0xffffff);
+#endif
 			_state = EM_ST_FEAR;
 		}
 		else {
-			DrawString(100, 100, "Ç§Ç•Ç¢", 0xffffff);
 		}
 	}
 }

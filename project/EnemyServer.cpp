@@ -22,7 +22,8 @@ EnemyServer::EnemyServer()
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
-	data = im.ImageIdReturn("‰¼image/UI/Patrite.png",SCENE_RESULT);
+	lightImage = im.ImageIdReturn("‰¼image/UI/Patrite2.png",SCENE_RESULT);
+	gaugeImage = im.ImageIdReturn("‰¼image/UI/UI_WarningGage1.png",SCENE_RESULT);
 }
 EnemyServer::EnemyServer(EnemyFactory* f)
 {
@@ -33,7 +34,9 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
-	data = im.ImageIdReturn("‰¼image/UI/Patrite.png", SCENE_RESULT);
+	lightImage = im.ImageIdReturn("‰¼image/UI/Patrite2.png",SCENE_RESULT);
+	gaugeImage = im.ImageIdReturn("‰¼image/UI/UI_WarningGage1.png", SCENE_RESULT);
+
 }
 
 EnemyServer::~EnemyServer()
@@ -95,12 +98,23 @@ void EnemyServer::SetAlert()
 }
 void EnemyServer::Draw(Position2 offset) 
 {
+	ImageMgr& im = ImageMgr::Instance();
 #ifdef _DEBUG
 	DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
-#endif
 	DrawBox(600, 30, 600 + vigiCnt, 60, 0xffff25, true);
 	DrawBox(600,30,700,60,0xff00ff,false);
-	DrawGraph(700,30,data,true);
+#endif
+	//êŠ‚ÍŠ®‘S‚É‚ÍŒˆ’è‚µ‚Ä‚¢‚È‚¢
+	SetDrawBright(0,0,255);
+	DrawExtendGraph(500,30,500+(vigiCnt*2),90,im.ImageIdReturn("‰¼image/UI/UI_WarningGage1.png", SCENE_RESULT),true);
+	DrawExtendGraph(500, 30,700,90 ,im.ImageIdReturn("‰¼image/UI/UI_WarningGage.png",SCENE_RESULT), true);
+
+	//F•Ï‰»‚ğÀ‘•
+	SetDrawBright(0,0,255);
+	DrawGraph(670, 5, lightImage, true);
+	SetDrawBright(255,255,255);
+	DrawGraph(670,5,im.ImageIdReturn("‰¼image/UI/Patrite1.png",SCENE_RESULT),true);
+
 }
 //Œ»İ‚ÌŒx‰úƒŒƒxƒ‹‚ğ•Ô‚·
 ENEMY_ALERT EnemyServer::AlertLevel()
