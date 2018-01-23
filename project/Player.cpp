@@ -39,20 +39,25 @@ Player::Player()
 	deathFlag = true;
 	helpFever = false;
 	_minSensingValueL = SV_HIGH;
+	alfa = 255;
+	tranceMax = 50;
+	modelDirAngle = 0.f;
+
 	//とりあえず同じように
 	_modelmgr = ModelMgr::Instance();
 	modelhandle = _modelmgr->ModelIdReturn("player_model/player.pmx", SCENE_RESULT);
-	AnimAttachIndex = MV1AttachAnim(modelhandle, 0,-1,false);
-	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
-	MV1SetRotationXYZ(modelhandle, VGet(0.f, 80.f, 0.f));
-	alfa = 255;
-	tranceMax = 50;
-
+	for (int i = 0;i < ACTION_MAX; i++)
+	{
+		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
+		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
+	}
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, -0.3f, 0.0f));
 }
 Player::~Player()
 {
 	//delete _hit;
 	//delete _rope;
+	_modelmgr->ModelIdAllDelete();
 }
 //更新されたHitClassを受け取るための関数です
 void Player::Getclass(HitClass* h, Rope*r)
@@ -81,6 +86,7 @@ void Player::Update(Input* input)
 	//ｽﾃｰﾀｽ制御
 	setState();
 	HitToEnemy();		//敵と当たったとき
+	AnimationSwitching();
 }
 
 //移動系の処理
@@ -123,19 +129,30 @@ void Player::setDir(Input* input)
 
 	if (_state != ST_ROPE) {
 		//右
-		if (_inpInfo.key.keybit.R_RIGHT_BUTTON  ||
+		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
 			_state = ST_MOVE;
-			MV1SetRotationXYZ(modelhandle, VGet(0.f, 80.f, 0.f));
-			AnimNowTime += 1.0f;
-			// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
-			if (AnimNowTime >= AnimTotalTime)
-			{
-				// 新しいアニメーション再生時間は、アニメーション再生時間からアニメーション総時間を引いたもの
-				AnimNowTime = 0;
-			}
+
+			MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(-90.f), 0.f));
+			//for (int i = 0; i < ACTION_MAX; i++)
+			//{
+			//	if (AnimIndex[i] == ACTION_WALK)
+			//	{
+			//		continue;
+			//	}
+			//	MV1DetachAnim(modelhandle, AnimIndex[i]);
+			//}
+
+			//MV1AttachAnim(modelhandle, ACTION_WALK, -1, false);
+			//MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
+			//AnimNowTime[ACTION_WALK] += 1.0f;
+			//// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
+			//if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
+			//{
+			//	AnimNowTime[ACTION_WALK] = 0;
+			//}
 		}
 		//左
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON ||
@@ -143,13 +160,8 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
 			_state = ST_MOVE;
-			MV1SetRotationXYZ(modelhandle, VGet(0.f, 20.f, 0.f));
-			AnimNowTime += 1.0f;
-			// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
-			if (AnimNowTime >= AnimTotalTime)
-			{
-				AnimNowTime = 0;
-			}
+			MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(90.f), 0.f));
+
 		}
 		//上
 		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
@@ -169,6 +181,25 @@ void Player::setDir(Input* input)
 			//押してない
 			_dir = DIR_NON;
 			_state = ST_STOP;
+
+			//いらないアニメーションをデタッチ(これをやらないとほかのアニメーションも動き出すのでぐちゃぐちゃ)
+		/*	for (int i = 0; i < ACTION_MAX; i++)
+			{
+				if (AnimIndex[i] == ACTION_WAIT)
+				{
+					continue;
+				}
+				MV1DetachAnim(modelhandle, AnimIndex[i]);
+			}
+
+			MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
+			MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
+			AnimNowTime[ACTION_WAIT] += 1.0f;
+
+			if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
+			{
+				AnimNowTime[ACTION_WAIT] = 0;
+			}*/
 		}
 		else {
 		}
@@ -1096,11 +1127,6 @@ void Player::FeverJump()
 }
 void Player::Draw(Position2& offset)
 {
-	
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+(_plRect.w/2) , SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), 0));
-	//MV1SetRotationXYZ(modelhandle,VGet(0.f,80.f,0.f));
-	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
-	
 	//時機
 	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, false);
 	switch (_state)
@@ -1132,10 +1158,11 @@ void Player::Draw(Position2& offset)
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	tmpOffset = offset;
 
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_plRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), 0));
+	MV1SetScale(modelhandle, VGet(2.f, 2.f, 2.f));
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
-	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.4f);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
 
 //#ifdef _DEBUG
 //	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
@@ -1348,4 +1375,59 @@ void Player::SetRetryPos(Position2 midPos)
 	alfa = 255;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+}
+
+void Player::AnimationSwitching(void)
+{
+	switch (_state)
+	{
+		//通常状態
+	case ST_DEF:
+	case ST_STOP:
+		for (int i = 0; i < ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_WAIT)
+			{
+				continue;
+			}
+			MV1DetachAnim(modelhandle, AnimIndex[i]);
+		}
+
+		MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
+		AnimTotalTime[ACTION_WAIT] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[ACTION_WAIT]);
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
+		AnimNowTime[ACTION_WAIT] += 1.0f;
+
+		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
+		{
+			AnimNowTime[ACTION_WAIT] = 0;
+		}
+		break;
+	case ST_MOVE:
+		for (int i = 0; i < ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_WALK)
+			{
+				continue;
+			}
+			MV1DetachAnim(modelhandle, AnimIndex[i]);
+		}
+		MV1AttachAnim(modelhandle, ACTION_WALK, -1, false);
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
+		AnimNowTime[ACTION_WALK] += 1.0f;
+
+		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
+		{
+			AnimNowTime[ACTION_WALK] = 0;
+		}
+		break;
+		//ﾛｰﾌﾟ状態
+	case ST_ROPE:
+		break;
+		//壁登り状態
+	case ST_WALL:
+		break;
+	default:
+		break;
+	}
 }

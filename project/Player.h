@@ -23,6 +23,7 @@ struct L_STICK;
 struct R_STICK;
 
 enum SENSING_VALUE;
+enum PLAYER_ACTIONS;
 
 class Player :public Object
 {
@@ -74,15 +75,18 @@ private:
 	void FeverGravity();				//フィーバー用の重力処理
 	void FeverWall();					//フィーバー用の壁移動処理
 
+	void AnimationSwitching(void);      //アニメーション切り替えよう関数
+
 	Position2 tmpOffset;
 	//いきなりなのでここに書いてます
 	ModelMgr* _modelmgr;
 	int modelhandle;
 	int alfa;
 	int tranceMax;
-	float  AnimTotalTime;
-	float  AnimNowTime;
-	int    AnimAttachIndex;
+	float  AnimTotalTime[ACTION_MAX];
+	float  AnimNowTime[ACTION_MAX];
+	float modelDirAngle;
+	int  AnimIndex[ACTION_MAX];
 public:
 	Player();
 	~Player();

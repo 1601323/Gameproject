@@ -12,7 +12,7 @@
 #define ROPE_RECT_H (20)         //rect—p‚Ì‚‚³
 #define ROPE_OMEGA (2.f)         //‚±‚±‚ğ‚¢‚¶‚é‚±‚Æ‚Å1‰ñ‚Å“®‚­rect circle‚Ìpos‚ğ•Ï‚¦‚ê‚Ü‚·
 #define ROPE_LENGTH_MAX (20)     //ƒ[ƒv‚ÌÅ‘å’·
-#define WAIT_TIME (30)           //L‚Ñ‚«‚Á‚½Œã‚Ì‚¿ŠÔ
+#define WAIT_TIME (0)           //L‚Ñ‚«‚Á‚½Œã‚Ì‚¿ŠÔ
 
 class Input;
 class Player;
