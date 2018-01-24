@@ -93,7 +93,7 @@ void GimPull::Move()
 	count -= 1;
 	if (count > 0) {
 		if (_state == GM_HIT) {			//´ÝÀ°‚à‚µ‚­‚ÍÛ°Ìß‚Ì“–‚½‚Á‚½êŠ‚ª’†S‚æ‚è¶‘¤
-			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT || _map->GetChipType(downPos[0]) == CHIP_BLANK) {
+			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT ||(_map->GetChipType(downPos[0]) == CHIP_BLANK&& _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
 				_state = GM_END;
 				count = 60;
 			}
@@ -106,7 +106,7 @@ void GimPull::Move()
 			}
 		}
 		else if (_state == GM_MOVE) {	//rope‚Ì“–‚½‚Á‚½êŠ‚ª’†S‚æ‚è‰E‘¤
-			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK || _map->GetChipType(downPos[1]) == CHIP_BLANK) {
+			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK ||( _map->GetChipType(downPos[1]) == CHIP_BLANK && _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
 				_state = GM_END;
 				count = 60;
 			}
