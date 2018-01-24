@@ -3,16 +3,15 @@
 #include "Object.h"
 #include "Input.h"
 
-#define ROPE_SPEED (15)          //移動スピード
+#define ROPE_SPEED (6.5f)          //移動スピード
 #define ROPE_THETA (45.f)        //ロープの斜めの角度右向きver
 #define ROPE_THETA2 (135.f)      //ロープの斜めの角度左向きver
 #define STRAIGHT_RAD (180.f)     //直線時のRad
 #define ROPE_RANGE (5.f)         //circle用の半径
 #define ROPE_RECT_W (20)         //rect用の幅
 #define ROPE_RECT_H (20)         //rect用の高さ
-#define ROPE_OMEGA (2.f)         //ここをいじることで1回で動くrect circleのposを変えれます
-#define ROPE_LENGTH_MAX (20)     //ロープの最大長
-#define WAIT_TIME (0)           //伸びきった後の持ち時間
+#define ROPE_OMEGA (1.0f)         //ここをいじることで1回で動くrect circleのposを変えれます
+#define ROPE_LENGTH_MAX (45)     //ロープの最大長
 
 class Input;
 class Player;
@@ -51,34 +50,31 @@ private:
 
 	ModelMgr* _modelmgr;
 
-	Position2 RotationPos;    //準備中にくるくる回すpos
 	bool RopeTurnFlag;
 	bool dirFlag;
 	bool padFlag;
-	int time;
+	bool tongueHitTurn;
 
-	int modelhandle;
+	int    modelhandle;
 	float  AnimTotalTime;
 	float  AnimNowTime;
 	int    AnimAttachIndex;
 
+	int mentenanceNum;//モデルの描画のために仮で置いている調整用の値
+
 	float range;
-	float theta;
-	float omega;
-	float rote;
+	float RopeAngle_Y;
+	float RopeAngle_Z;
 
 	void RopeInit(void);
 	void DrawRopeRect(void);
 	void SetRope(void);
-	void SetCurveRope(void);
 	void DirChange(void);
-	void ThetaSet(void);
 	void CheckPad(void);
-	void DrawLineSet(Position2 startpos,Position2 endpos,int color);
+	//void DrawLineSet(Position2 startpos,Position2 endpos,int color);
 	Position2 SetVec(void);
-
 	float SetRopeRad(void);
-	float SetRopeRadCurve(void);
+	void SetRopeRadForDrawZ(void);
 
 public:
 	Rope();

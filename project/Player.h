@@ -11,6 +11,9 @@
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
 #define FEVER_CNT (10)					//フィーバーの時間
 
+// カメラと注視点の距離
+#define CAMERA_LOOK_AT_DISTANCE		20.0f
+
 class Input;
 class HitClass;
 class Camera;
@@ -23,7 +26,6 @@ struct L_STICK;
 struct R_STICK;
 
 enum SENSING_VALUE;
-enum PLAYER_ACTIONS;
 
 class Player :public Object
 {
@@ -36,9 +38,9 @@ private:
 	Rope* _rope;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
-	Position2 _pos;						//ｷｬﾗの座標
+	Position3 _pos;						//ｷｬﾗの座標
 	DIR _dir;							//ｷｬﾗの向き
-	Position2 initPos;					//初期位置保存
+	Position3 initPos;					//初期位置保存
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
@@ -87,6 +89,14 @@ private:
 	float  AnimNowTime[ACTION_MAX];
 	float modelDirAngle;
 	int  AnimIndex[ACTION_MAX];
+	float  CameraHAngle;
+	float  CameraVAngle;
+	float  SinParam;
+	float  CosParam;
+	float outlineNum;
+	Position3 TempMoveVector;
+	void SetCameraDirForPlayer(void);
+
 public:
 	Player();
 	~Player();
