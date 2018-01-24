@@ -90,7 +90,8 @@ GameScene::GameScene()
 	_timer->StartTimer();
 	//GameInit();
 	count = 0;
-	numberImage = im.ImageIdReturn("‰¼image/UI/NewNum.png",SCENE_RESULT);
+	//numberImage = im.ImageIdReturn("‰¼image/UI/NewNum.png",SCENE_RESULT);
+
 }
 GameScene::~GameScene()
 {
@@ -317,6 +318,7 @@ void GameScene::DrawUI()
 	for (int f = 0; f < gm.GetResultData().life; f++) {
 		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("‰¼image/UI/UI_life.png", SCENE_RESULT),true);
 	}
+	_timer->Draw();
 }
 //”wŒi•`‰æ
 void GameScene::DrawBack(Position2 offset)

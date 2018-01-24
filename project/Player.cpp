@@ -553,6 +553,7 @@ bool Player::moveWall(void)
 					//‰E‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL && !(_hit->GimmickHit(*this)&& _hit->GimmickHitType(*this) ==GIM_ATTRACT)) {
 						_pos.y = tmpPos.y;
+						_pos.x += 3;
 						WallFlag = false;
 					}
 				}
@@ -560,6 +561,7 @@ bool Player::moveWall(void)
 					//¶‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL && !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)) {
 						_pos.y = tmpPos.y;
+						_pos.x -= 3;
 						WallFlag = false;
 					}
 				}
