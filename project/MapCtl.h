@@ -23,9 +23,10 @@ struct MapFileHeader {
 #pragma pack()
 
 struct MapData {
-	vector<unsigned char>data;
+	vector<unsigned char>data[LAYER_MAX];
 	unsigned int x;
 	unsigned int y;
+	unsigned int layer;
 };
 
 //ｷﾞﾐｯｸで利用するデータ

@@ -13,6 +13,7 @@
 //#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define MAP_SIZE_Y (25)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define STAGE_MAX (3)			//ステージの数（仮）
+#define LAYER_MAX (3)			//レイヤー枚数
 #define PLAYER_MAX (3)			//ﾌﾟﾚｲﾔｰの残機
 
 //プレイヤーの状態について

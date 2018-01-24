@@ -27,6 +27,7 @@ EnemyServer::EnemyServer()
 	lampColor.red = 0;
 	lampColor.green = 0;
 	lampColor.blue = 255;
+	cnt = 0;
 }
 EnemyServer::EnemyServer(EnemyFactory* f)
 {
@@ -39,7 +40,7 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 	ImageMgr& im = ImageMgr::Instance();
 	lightImage = im.ImageIdReturn("‰¼image/UI/Patrite2.png",SCENE_RESULT);
 	gaugeImage = im.ImageIdReturn("‰¼image/UI/UI_WarningGage1.png", SCENE_RESULT);
-
+	cnt = 0;
 }
 
 EnemyServer::~EnemyServer()
@@ -52,9 +53,16 @@ void EnemyServer::ServerInit()
 	_commonData.plFoundFlag = false;
 	vigiCnt = 0;
 	decreaseCnt = 0;
+	cnt = 0;
 }
 void EnemyServer::Updata()
 {
+	if (cnt <= 50) {
+		cnt++;
+	}
+	else {
+		cnt *= -1;
+	}
 	AlertManager();
 	SetLampColor();
 }
@@ -134,13 +142,16 @@ void EnemyServer::Draw(Position2 offset)
 //#endif
 	//êŠ‚ÍŠ®‘S‚É‚ÍŒˆ’è‚µ‚Ä‚¢‚È‚¢
 	SetDrawBright(0,0,255);
-	DrawExtendGraph(550,30,550+(vigiCnt*2),60,im.ImageIdReturn("‰¼image/UI/UI_WarningGage1.png", SCENE_RESULT),true);
-	DrawExtendGraph(550, 30,750,60 ,im.ImageIdReturn("‰¼image/UI/UI_WarningGage.png",SCENE_RESULT), true);
+	DrawExtendGraph(530,30,530+(vigiCnt*2),60,im.ImageIdReturn("‰¼image/UI/UI_WarningGage1.png", SCENE_RESULT),true);
+	DrawExtendGraph(530, 30,730,60 ,im.ImageIdReturn("‰¼image/UI/UI_WarningGage.png",SCENE_RESULT), true);
 
 	//F•Ï‰»‚ðŽÀ‘•
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
 	SetDrawBright(lampColor.red,lampColor.green,lampColor.blue);
 	DrawExtendGraph(700, 0,770,85, lightImage, true);
 	SetDrawBright(255,255,255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	DrawExtendGraph(700,0,770,85,im.ImageIdReturn("‰¼image/UI/Patrite1.png",SCENE_RESULT),true);
 
 }

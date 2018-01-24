@@ -115,7 +115,7 @@ void GameScene::GameInit()
 		mapName = "map/map2.map";
 		break;
 	case 2:
-		mapName = "map/119.map";
+		mapName = "map/3.map";
 		break;
 	default:
 		ASSERT();
