@@ -96,17 +96,25 @@ void MapCtl::Load(const char* fileName)
 //}
 void MapCtl::Draw(Position2 offset)
 {
-	for (auto itr = mapData.begin(); itr != mapData.end(); itr++)
-	{
-		for (int y = 0; y < itr->second.y; y++)
+	//for (auto itr = mapData.begin(); itr != mapData.end(); itr++)
+	//{
+	//	for (int y = 0; y < itr->second.y; y++)
+	//	{
+	//		for (int x = 0; x < itr->second.x; x++)
+	//		{
+	//			// À•W‚ÆÁ¯Ìß”Ô†
+	//			DrawMapChip(x, y ,offset, itr->second.data[(y * itr->second.x + x)]);
+	//		}
+	//	}
+	//}
+		for (int y = 0; y < mapData[filedata].y; y++)
 		{
-			for (int x = 0; x < itr->second.x; x++)
+			for (int x = 0; x < mapData[filedata].x; x++)
 			{
 				// À•W‚ÆÁ¯Ìß”Ô†
-				DrawMapChip(x, y ,offset, itr->second.data[(y * itr->second.x + x)]);
+				DrawMapChip(x, y, offset, mapData[filedata].data[(y * mapData[filedata].x + x)]);
 			}
 		}
-	}
 }
 // Á¯ÌßÀ²ÌßŽæ“¾—p
 CHIP_TYPE MapCtl::GetChipType(Position2 idPos)
@@ -215,19 +223,16 @@ std::vector<ChipPosData>MapCtl::getChipPosData()
 	std::vector<ChipPosData> chipPosData;
 
 	chipPosData.clear();
-	for (auto itr = mapData.begin(); itr != mapData.end(); itr++)
+	for (int y = 0; y < mapData[filedata].y; y++)
 	{
-		for (int y = 0; y < itr->second.y; y++)
+		for (int x = 0; x < mapData[filedata].x; x++)
 		{
-			for (int x = 0; x < itr->second.x; x++)
-			{
-				ChipPosData d = {};
-				d.posX = x*MAP_CHIP_SIZE_X;
-				d.posY = y*MAP_CHIP_SIZE_X;
-				d.chipType = itr->second.data[(y * itr->second.x + x)];
-				//if (d.chipType < 3)continue;
-				chipPosData.push_back(d);
-			}
+			ChipPosData d = {};
+			d.posX = x*MAP_CHIP_SIZE_X;
+			d.posY = y*MAP_CHIP_SIZE_X;
+			d.chipType = mapData[filedata].data[(y * mapData[filedata].x + x)];
+			//if (d.chipType < 3)continue;
+			chipPosData.push_back(d);
 		}
 	}
 	return chipPosData;

@@ -9,6 +9,9 @@ private:
 	EnemyServerData _commonData;
 	int decreaseCnt;
 	void AlertManager();
+	int lightImage;
+	int gaugeImage;
+
 public:
 	EnemyServer();
 	EnemyServer(EnemyFactory* f);
