@@ -1,4 +1,7 @@
 #pragma once
+#include <map>
+#include <string>
+#include <vector>
 enum SCENE_TYPE;
 class ImageMgr
 {
