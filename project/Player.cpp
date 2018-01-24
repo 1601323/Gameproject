@@ -720,21 +720,21 @@ void Player::FeverWall()
 		}
 	}
 	//壁に貫通してほしくないです！！！！！！！！！！！
-	if (_map->GetChipType(WallPosTop[0]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosMiddl[0]) == CHIP_CLIMB_WALL) {
-		if(WallFlag == true)
-		fMoveRight = false;
-	}
-	else {
-		fMoveRight = true;
-	}
-	if (_map->GetChipType(WallPosTop[1]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosMiddl[1]) == CHIP_CLIMB_WALL) {
-		if (WallFlag == true)
-			fMoveLeft = false;
-	}
-	else
-	{
-		fMoveLeft = true;
-	}
+	//if (_map->GetChipType(WallPosTop[0]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosMiddl[0]) == CHIP_CLIMB_WALL) {
+	//	if(WallFlag == true)
+	//	fMoveRight = false;
+	//}
+	//else {
+	//	fMoveRight = true;
+	//}
+	//if (_map->GetChipType(WallPosTop[1]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosMiddl[1]) == CHIP_CLIMB_WALL) {
+	//	if (WallFlag == true)
+	//		fMoveLeft = false;
+	//}
+	//else
+	//{
+	//	fMoveLeft = true;
+	//}
 	//半分以上で壁に張り付いてしまったときは半分まで下げる
 	Position2 offsetPos[2];
 	offsetPos[0].x = WallPosMiddl[0].x;
@@ -862,6 +862,21 @@ void Player::FeverWall()
 					}
 				}
 			}
+		}
+		if (_map->GetChipType(WallPosTop[0]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL) {
+			if (WallFlag == true)
+				fMoveRight = false;
+		}
+		else {
+			fMoveRight = true;
+		}
+		if (_map->GetChipType(WallPosTop[1]) == CHIP_CLIMB_WALL || _map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL) {
+			if (WallFlag == true)
+				fMoveLeft = false;
+		}
+		else
+		{
+			fMoveLeft = true;
 		}
 		_pos.y += vy;
 	}
