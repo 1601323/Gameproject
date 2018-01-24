@@ -32,6 +32,8 @@ public:
 	void SetAlert();						//警戒度をセットする
 	ENEMY_ALERT AlertLevel();				//現在の警戒レベルを返す
 	void ServerInit();						//初期化を行います
+	void SetMidFlag(bool mid);
+	bool SendMidFlag();
 
 	void Draw(Position2 offset);
 };

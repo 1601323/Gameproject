@@ -35,6 +35,7 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 	_commonData._level = ALERT_LEVEL_1;
 	_commonData.dataSendFlag = false;
 	_commonData.plFoundFlag = false;
+	_commonData.midFlag = false;
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
@@ -161,4 +162,14 @@ void EnemyServer::Draw(Position2 offset)
 ENEMY_ALERT EnemyServer::AlertLevel()
 {
 	return _commonData._level;
+}
+//ﾌﾟﾚｲﾔｰが中間地点を取得したかどうかをもらう
+void EnemyServer::SetMidFlag(bool mid)
+{
+	_commonData.midFlag = mid;
+}
+//敵全体に中間地点情報を渡す
+bool EnemyServer::SendMidFlag()
+{
+	return _commonData.midFlag;
 }

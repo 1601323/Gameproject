@@ -1,6 +1,7 @@
 
 #include <DxLib.h>
 #include <math.h>
+#include <iostream>
 #include "Assert.h"
 #include "Geometry.h"
 #include "EnemyServer.h"
@@ -46,6 +47,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	//ŒÂ‘Ìƒf[ƒ^‰Šú‰»
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
+	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
@@ -63,6 +65,8 @@ void EmAround::Updata()
 	_emData.lookRange = _emEye;
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
+	_individualData.midFlag = _server.SendMidFlag();
+	cout << _individualData.midFlag << endl;
 	Gravity();
 	Visibility();
 	Move();
@@ -364,4 +368,7 @@ ENEMY_STATE& EmAround::GetState()
 void EmAround::SetInitPos()
 {
 	_pos = _initPos;
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }

@@ -108,10 +108,11 @@ enum ENEMY_ALERT {
 };
 struct EnemyServerData {
 
-	EnemyServerData():plFoundFlag(false),dataSendFlag(false){}
+	EnemyServerData():plFoundFlag(false),dataSendFlag(false),midFlag(false),_level(ALERT_LEVEL_1){}
 
 	bool plFoundFlag;
 	bool dataSendFlag;
+	bool midFlag;
 	ENEMY_ALERT _level;
 };
 //ƒL[“ü—Í‚É‚Â‚¢‚Ä
