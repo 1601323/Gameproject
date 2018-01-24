@@ -82,16 +82,18 @@ void EnemyServer::GetInfo(EnemyServerData inData)
 	//ÌßÚ²Ô°”­Œ©î•ñ‚ªã‚ª‚Á‚Ä‚«‚½‚çƒŒƒxƒ‹‚ğã‚°‚é
 	if (inData.plFoundFlag == true) {
 		vigiCnt += 10;
-		if (0 <= vigiCnt &&vigiCnt <= 30) {
+		if (0 <= vigiCnt &&vigiCnt <= 40) {
 			_commonData._level = ALERT_LEVEL_1;
 		}
-		else if (30< vigiCnt &&vigiCnt <= 80) {
+		else if (40< vigiCnt &&vigiCnt <= 80) {
 			_commonData._level = ALERT_LEVEL_2;
 		}
 		else if (80 < vigiCnt && vigiCnt <= 100) {
 			_commonData._level = ALERT_LEVEL_3;
 		}
 		else {
+	
+		
 		}
 		inData.dataSendFlag = false;
 	}
