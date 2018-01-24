@@ -59,8 +59,10 @@ EmAround::~EmAround()
 
 void EmAround::Updata()
 {
+	SetRange();
 	_emData.lookRange = _emEye;
 	_emData.lookAngle = 60;
+	_emData.lookDir = _dir;
 	Gravity();
 	Visibility();
 	Move();
@@ -202,9 +204,9 @@ void EmAround::CheckMove()
 //Ž‹ŠE‚É‚Â‚¢‚Ä
 void EmAround::Visibility()
 {
-	_emData.lookAngle = 60;
-	_emData.lookDir = _dir;
-	_emData.lookRange = _emEye;
+	//_emData.lookAngle = 60;
+	//_emData.lookDir = _dir;
+	//_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
@@ -329,7 +331,23 @@ void EmAround::Draw(Position2 offset)
 #endif
 	_emEye.Draw(offset);
 }
-
+void EmAround::SetRange()
+{
+	//ƒTƒCƒY‚Í‰¼
+	_individualData._level = _server.AlertLevel();
+	if (_individualData._level == ALERT_LEVEL_1) {
+		_emEye.r = 40;
+	}
+	else if (_individualData._level == ALERT_LEVEL_2) {
+		_emEye.r = 50;
+	}
+	else if (_individualData._level == ALERT_LEVEL_3) {
+		_emEye.r = 80;
+	}
+	else {
+		_emEye.r = 40;
+	}
+}
 void EmAround::GetClass(HitClass* hit, Player& pl)
 {
 	//_hit = hit;

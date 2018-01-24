@@ -115,7 +115,7 @@ void GameScene::GameInit()
 		mapName = "map/map2.map";
 		break;
 	case 2:
-		mapName = "map/119.map";
+		mapName = "map/3.map";
 		break;
 	default:
 		ASSERT();
@@ -173,6 +173,10 @@ void GameScene::NormalUpdata(Input* input)
 		DrawString(200, 200, "idek", 0xfffff);
 	}
 #endif
+
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
+		_updater = &GameScene::PauseUpdata;
+	}
 	JudgeTransition();
 }
 void GameScene::JudgeTransition()
@@ -249,6 +253,27 @@ void GameScene::TransitionUpdata(Input* input)
 			gm.Instance().ChangeScene(new ResultScene());
 		}
 		count = 0;
+	}
+}
+void GameScene::PauseUpdata(Input* input) 
+{
+	GameMain& gm = GameMain::Instance();
+	//_cam->Update();
+	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
+	_map->Draw(offset);
+	Draw(offset);
+	DrawUI();
+#ifdef _DEBUG
+	DrawBox(300,100,500,300,0xabcdef,true);
+	DrawString(320,150,"PAUSE",0xffffff);
+#endif
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
+		_updater = &GameScene::NormalUpdata;
 	}
 }
 void GameScene::RetryProcess()

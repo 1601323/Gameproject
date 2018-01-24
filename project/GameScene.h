@@ -52,6 +52,7 @@ private:
 	void UsingRopeUpdata(Input* input,Position2& offset);		//ﾛｰﾌﾟを使用しているときのUpdataを呼び出す
 	void FadeInUpdata(Input* intput);							//フェードインを行います
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
+	void PauseUpdata(Input* input);
 
 	void RetryProcess();
 	void UpdateManager();											//updataのたびに呼び出す関数をまとめておく

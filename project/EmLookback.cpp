@@ -52,6 +52,8 @@ EmLookback::~EmLookback()
 
 void EmLookback::Updata()
 {
+	SetRange();
+	_emData.lookRange = _emEye;
 	if (returnFlag == true) {
 		ReturnPoint();
 	}
@@ -156,9 +158,6 @@ void EmLookback::setDir(void)
 }
 void EmLookback::Visibility()
 {
-	_emData.lookAngle = 60;
-	_emData.lookDir = _dir;
-	_emData.lookRange = _emEye;
 	////éãäEîªíË(ÉvÉåÉCÉÑÅ[Çå©Ç¬ÇØÇΩÇ∆Ç´)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
@@ -320,6 +319,22 @@ void EmLookback::Gravity()
 		}
 	}
 	_pos.y += (int)vy;
+}
+void EmLookback::SetRange()
+{
+	_individualData._level = _server.AlertLevel();
+	if (_individualData._level == ALERT_LEVEL_1) {
+		_emEye.r = 40;
+	}
+	else if (_individualData._level == ALERT_LEVEL_2) {
+		_emEye.r = 50;
+	}
+	else if (_individualData._level == ALERT_LEVEL_3) {
+		_emEye.r = 80;
+	}
+	else {
+		_emEye.r = 40;
+	}
 }
 Rect & EmLookback::GetRect()
 {

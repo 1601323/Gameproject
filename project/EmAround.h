@@ -50,6 +50,8 @@ private:
 	void moveFear();		//‹¯‚İó‘Ô‚ÉŠÖ‚µ‚Ä
 	void LoseSight();		//ÌßÚ²Ô°‚ğŒ©¸‚Á‚½‚Æ‚«
 	void Gravity();			//d—Í”»’è
+	void SetRange();		//‹ŠE‚ÌL‚³‚ğƒŒƒxƒ‹•Ê‚É”»’è‚µ‚Ü‚·
+
 public:
 	EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit);
 	~EmAround();

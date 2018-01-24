@@ -2,6 +2,13 @@
 #include "Geometry.h"
 class EnemyFactory;
 
+struct SetColor {
+	SetColor() :red(0), green(0), blue(0) {}
+	int red;
+	int green;
+	int blue;
+};
+
 class EnemyServer
 {
 private:
@@ -11,7 +18,10 @@ private:
 	void AlertManager();
 	int lightImage;
 	int gaugeImage;
+	int cnt;			//‰¼
+	SetColor lampColor;
 
+	void SetLampColor();
 public:
 	EnemyServer();
 	EnemyServer(EnemyFactory* f);
