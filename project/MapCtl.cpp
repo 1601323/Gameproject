@@ -67,12 +67,16 @@ void MapCtl::Load(const char* fileName)
 	// mapｻｲｽﾞ
 	mapData[fileName].x = header.map_sx;
 	mapData[fileName].y = header.map_sy;
+	mapData[fileName].layer = header.layer;
 	// fseek[FILEﾎﾟｲﾝﾀ,移動ﾊﾞｲﾄ,ﾌｧｲﾙの現在地]
 	fseek(fp, 6, SEEK_CUR);
+	for (int f = 0; f < header.layer; f++) {
+
 	// ﾏｯﾌﾟﾃﾞｰﾀの大きさ確保
-	mapData[fileName].data.resize(header.map_sx*header.map_sy);
+	mapData[fileName].data[f].resize(header.map_sx*header.map_sy);
 	// fread[ﾎﾟｲﾝﾀ,ﾃﾞｰﾀの長さ,ﾃﾞｰﾀ数,fileﾎﾟｲﾝﾀ]
-	fread(&mapData[fileName].data[0], header.map_sx * header.map_sy * (header.chp_mode + 1) * header.layer, 1, fp);
+		fread(&mapData[fileName].data[f][0], header.map_sx * header.map_sy * (header.chp_mode + 1) /** header.layer*/, 1, fp);
+	}
 	// クローズ
 	fclose(fp);
 	// データ渡す
@@ -96,25 +100,16 @@ void MapCtl::Load(const char* fileName)
 //}
 void MapCtl::Draw(Position2 offset)
 {
-	//for (auto itr = mapData.begin(); itr != mapData.end(); itr++)
-	//{
-	//	for (int y = 0; y < itr->second.y; y++)
-	//	{
-	//		for (int x = 0; x < itr->second.x; x++)
-	//		{
-	//			// 座標とﾁｯﾌﾟ番号
-	//			DrawMapChip(x, y ,offset, itr->second.data[(y * itr->second.x + x)]);
-	//		}
-	//	}
-	//}
+	for (int f = 0; f < mapData[filedata].layer; f++) {
 		for (int y = 0; y < mapData[filedata].y; y++)
 		{
 			for (int x = 0; x < mapData[filedata].x; x++)
 			{
 				// 座標とﾁｯﾌﾟ番号
-				DrawMapChip(x, y, offset, mapData[filedata].data[(y * mapData[filedata].x + x)]);
+				DrawMapChip(x, y, offset, mapData[filedata].data[f][(y * mapData[filedata].x + x)]);
 			}
 		}
+	}
 }
 // ﾁｯﾌﾟﾀｲﾌﾟ取得用
 CHIP_TYPE MapCtl::GetChipType(Position2 idPos)
@@ -123,7 +118,7 @@ CHIP_TYPE MapCtl::GetChipType(Position2 idPos)
 	if (static_cast<int>(tmpPos.x) >= 0 && static_cast<int>(tmpPos.x) < MAP_SIZE_X
 	&&  static_cast<int>(tmpPos.y) >= 0 && static_cast<int>(tmpPos.y) < MAP_SIZE_Y)
 	{
-		return (CHIP_TYPE)mapData[filedata].data[(static_cast<int>(tmpPos.y) * MAP_SIZE_X) + static_cast<int>(tmpPos.x)];
+		return (CHIP_TYPE)mapData[filedata].data[0][(static_cast<int>(tmpPos.y) * MAP_SIZE_X) + static_cast<int>(tmpPos.x)];
 	}
 	return CHIP_MAX;
 }
@@ -136,7 +131,7 @@ unsigned int MapCtl::GetMapID(Position2 idPos)
 	if (static_cast<int>(tmpPos.x) >= 0 && static_cast<int>(tmpPos.x) < MAP_SIZE_X
 	&&  static_cast<int>(tmpPos.y) >= 0 && static_cast<int>(tmpPos.y) < MAP_SIZE_Y)
 	{
-		return mapData[filedata].data[(static_cast<int>(tmpPos.y) * MAP_SIZE_X) + static_cast<int>(tmpPos.x)];
+		return mapData[filedata].data[0][(static_cast<int>(tmpPos.y) * MAP_SIZE_X) + static_cast<int>(tmpPos.x)];
 	}
 	return CHIP_MAX;
 }
@@ -230,7 +225,7 @@ std::vector<ChipPosData>MapCtl::getChipPosData()
 			ChipPosData d = {};
 			d.posX = x*MAP_CHIP_SIZE_X;
 			d.posY = y*MAP_CHIP_SIZE_X;
-			d.chipType = mapData[filedata].data[(y * mapData[filedata].x + x)];
+			d.chipType = mapData[filedata].data[0][(y * mapData[filedata].x + x)];
 			//if (d.chipType < 3)continue;
 			chipPosData.push_back(d);
 		}
