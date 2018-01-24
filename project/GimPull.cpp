@@ -83,21 +83,22 @@ void GimPull::Move()
 	//‘«Œ³”»’è‚ð’Ç‰Á
 	Position2 downPos[2];
 	//‰E‰º
-	downPos[0].x = _pos.x + (_gmRect.w) - 15;
-	downPos[0].y = _pos.y + (_gmRect.h) + 15;
+	downPos[0].x = _pos.x + (_gmRect.w) - 20;
+	downPos[0].y = _pos.y + (_gmRect.h) + 20;
 	//¶‰º
-	downPos[1].x = _pos.x + 15;
-	downPos[1].y = _pos.y + (_gmRect.h) + 15;
+	downPos[1].x = _pos.x + 20;
+	downPos[1].y = _pos.y + (_gmRect.h) + 20;
 	//Û°Ìß‚ÌˆÚ“®—Ê‚ðŒ©‚Ä‚»‚ê‚É]‚¢ˆÚ“®‚·‚é—\’è
 	//count -=abs(_rope.GetRopeVec().x);
 	count -= 1;
 	if (count > 0) {
+		cout << _pos.x << endl;
 		if (_state == GM_HIT) {			//´ÝÀ°‚à‚µ‚­‚ÍÛ°Ìß‚Ì“–‚½‚Á‚½êŠ‚ª’†S‚æ‚è¶‘¤
 			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT ||(_map->GetChipType(downPos[0]) == CHIP_BLANK&& _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
 				_state = GM_END;
 				count = 60;
 			}
-			else if (_hit->IsHit(_player.GetRect(), nextPos[0]) || _hit->IsHit(_player.GetRect(), nextPos[1])) {
+			else if (_hit->IsHit(_player.GetRect(), nextPos[0]) || _hit->IsHit(_player.GetRect(), nextPos[1]) ||_hit->IsHit(_player.GetRect(),GetRect())) {
 				_state = GM_PAUSE;
 				
 			}
@@ -106,11 +107,11 @@ void GimPull::Move()
 			}
 		}
 		else if (_state == GM_MOVE) {	//rope‚Ì“–‚½‚Á‚½êŠ‚ª’†S‚æ‚è‰E‘¤
-			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK ||( _map->GetChipType(downPos[1]) == CHIP_BLANK && _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
+			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK &&_map->GetChipType(nextPos[0]) != CHIP_ROPE_ATTRACT ||( _map->GetChipType(downPos[1]) == CHIP_BLANK && _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
 				_state = GM_END;
 				count = 60;
 			}
-			else if (_hit->IsHit(_player.GetRect(), nextPos[0])|| _hit->IsHit(_player.GetRect(), nextPos[1])) {
+			else if (_hit->IsHit(_player.GetRect(), nextPos[0])|| _hit->IsHit(_player.GetRect(), nextPos[1]) || _hit->IsHit(_player.GetRect(), GetRect())) {
 				_state = GM_PAUSE;
 			}
 			else {

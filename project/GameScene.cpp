@@ -90,6 +90,7 @@ GameScene::GameScene()
 	_timer->StartTimer();
 	//GameInit();
 	count = 0;
+	numberImage = im.ImageIdReturn("‰¼image/UI/NewNum.png",SCENE_RESULT);
 }
 GameScene::~GameScene()
 {
@@ -145,6 +146,7 @@ void GameScene::FadeInUpdata(Input* input)
 }
 void GameScene::NormalUpdata(Input* input)
 {
+	GameMain& gm = GameMain::Instance();
 	UpdateManager();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
@@ -158,6 +160,7 @@ void GameScene::NormalUpdata(Input* input)
 	else {
 		ObjectUpdata(input, offset);
 	}
+	_server->SetMidFlag(_rtData.midFlag);
 	_server->Updata();
 
 	Draw(offset);

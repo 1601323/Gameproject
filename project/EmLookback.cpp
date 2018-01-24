@@ -42,7 +42,6 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
-
 }
 
 EmLookback::~EmLookback()
@@ -54,6 +53,7 @@ void EmLookback::Updata()
 {
 	SetRange();
 	_emData.lookRange = _emEye;
+	_individualData.midFlag = _server.SendMidFlag();
 	if (returnFlag == true) {
 		ReturnPoint();
 	}
@@ -358,6 +358,9 @@ void EmLookback::GetClass(HitClass * hit, Player & pl)
 void EmLookback::SetInitPos()
 {
 	_pos = _initPos;
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }
 //オフセットの為向いている方向を確認します
 void EmLookback::returnDir(Position2 offset)
