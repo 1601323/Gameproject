@@ -1,3 +1,7 @@
+#include <DxLib.h>
+#include "Geometry.h"
+#include "GameMain.h"
+#include "ImageMgr.h"
 #include "Enemy.h"
 #include "Object.h"
 #include "HitClass.h"
@@ -9,6 +13,7 @@ Enemy::Enemy()
 {
 	_commonData._level = ALERT_LEVEL_1;
 	_state = EM_ST_NONE;
+	vigiImage = ImageMgr::Instance().ImageIdReturn("‰¼image/see.png",SCENE_RESULT);
 }
 
 

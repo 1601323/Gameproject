@@ -325,10 +325,18 @@ void EmAround::Draw(Position2 offset)
 	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {
 		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage, 66.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else if (_dir == DIR_RIGHT) {
 		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage, 16.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
 #ifdef _DEBUG
 	_emRect.Draw(offset);
 #endif
