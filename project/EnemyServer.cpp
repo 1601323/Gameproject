@@ -24,6 +24,9 @@ EnemyServer::EnemyServer()
 	ImageMgr& im = ImageMgr::Instance();
 	lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png",SCENE_RESULT);
 	gaugeImage = im.ImageIdReturn("仮image/UI/UI_WarningGage1.png",SCENE_RESULT);
+	lampColor.red = 0;
+	lampColor.green = 0;
+	lampColor.blue = 255;
 }
 EnemyServer::EnemyServer(EnemyFactory* f)
 {
@@ -53,6 +56,7 @@ void EnemyServer::ServerInit()
 void EnemyServer::Updata()
 {
 	AlertManager();
+	SetLampColor();
 }
 void EnemyServer::AlertManager()
 {
@@ -96,24 +100,48 @@ void EnemyServer::SetAlert()
 		_commonData._level = ALERT_LEVEL_2;
 	}
 }
+//警戒ランプの色を設定します
+void EnemyServer::SetLampColor()
+{
+	if (_commonData._level == ALERT_LEVEL_1) {
+		lampColor.blue = 255;
+		lampColor.green = 0;
+		lampColor.red = 0;
+	}
+	else if (_commonData._level == ALERT_LEVEL_2) {
+		lampColor.green = 255;
+		lampColor.red = 255;
+		lampColor.blue = 0;
+	}
+	else if (_commonData._level == ALERT_LEVEL_3) {
+		lampColor.red = 255;
+		lampColor.green = 0;
+		lampColor.blue = 0;
+	}
+	else {
+		lampColor.red = 255;
+		lampColor.green = 255;
+		lampColor.blue = 255;
+	}
+}
 void EnemyServer::Draw(Position2 offset) 
 {
 	ImageMgr& im = ImageMgr::Instance();
-#ifdef _DEBUG
-	DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
-	DrawBox(600, 30, 600 + vigiCnt, 60, 0xffff25, true);
-	DrawBox(600,30,700,60,0xff00ff,false);
-#endif
+//#ifdef _DEBUG
+//	DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
+//	DrawBox(600, 30, 600 + vigiCnt, 60, 0xffff25, true);
+//	DrawBox(600,30,700,60,0xff00ff,false);
+//#endif
 	//場所は完全には決定していない
 	SetDrawBright(0,0,255);
-	DrawExtendGraph(500,30,500+(vigiCnt*2),90,im.ImageIdReturn("仮image/UI/UI_WarningGage1.png", SCENE_RESULT),true);
-	DrawExtendGraph(500, 30,700,90 ,im.ImageIdReturn("仮image/UI/UI_WarningGage.png",SCENE_RESULT), true);
+	DrawExtendGraph(550,30,550+(vigiCnt*2),60,im.ImageIdReturn("仮image/UI/UI_WarningGage1.png", SCENE_RESULT),true);
+	DrawExtendGraph(550, 30,750,60 ,im.ImageIdReturn("仮image/UI/UI_WarningGage.png",SCENE_RESULT), true);
 
 	//色変化を実装
-	SetDrawBright(0,0,255);
-	DrawGraph(670, 5, lightImage, true);
+	SetDrawBright(lampColor.red,lampColor.green,lampColor.blue);
+	DrawExtendGraph(700, 0,770,85, lightImage, true);
 	SetDrawBright(255,255,255);
-	DrawGraph(670,5,im.ImageIdReturn("仮image/UI/Patrite1.png",SCENE_RESULT),true);
+	DrawExtendGraph(700,0,770,85,im.ImageIdReturn("仮image/UI/Patrite1.png",SCENE_RESULT),true);
 
 }
 //現在の警戒レベルを返す
