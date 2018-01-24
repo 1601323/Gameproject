@@ -66,7 +66,6 @@ void EmAround::Updata()
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
 	_individualData.midFlag = _server.SendMidFlag();
-	cout << _individualData.midFlag << endl;
 	Gravity();
 	Visibility();
 	Move();
