@@ -90,6 +90,7 @@ GameScene::GameScene()
 	_timer->StartTimer();
 	//GameInit();
 	count = 0;
+	numberImage = im.ImageIdReturn("‰¼image/UI/NewNum.png",SCENE_RESULT);
 }
 GameScene::~GameScene()
 {
