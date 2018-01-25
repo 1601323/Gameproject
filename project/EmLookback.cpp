@@ -327,7 +327,7 @@ void EmLookback::SetRange()
 		_emEye.r = 40;
 	}
 	else if (_individualData._level == ALERT_LEVEL_2) {
-		_emEye.r = 50;
+		_emEye.r = 60;
 	}
 	else if (_individualData._level == ALERT_LEVEL_3) {
 		_emEye.r = 80;
