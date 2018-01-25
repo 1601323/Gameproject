@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include <iostream>
 #include "Geometry.h"
+#include "ImageMgr.h"
 #include "GameMain.h"
 #include "SelectScene.h"
 #include "Input.h"
@@ -102,12 +103,27 @@ void SelectScene::Select(Input* input)
 }
 void SelectScene::Draw()
 {
-	//背景色
-	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0xffffff, true);
+	ImageMgr& im = ImageMgr::Instance();
+
+	int redu = 40;
+	//背景
+	DrawGraph(0, 0, im.ImageIdReturn("仮image/select.png",SCENE_GAME),true);
+
 	//ステージ選択用の四角
-	for (int x = 0; x < 3; x++) {
-		DrawBox(90 + 100 * x, 90  , 90 + 100 * x + w, 90  + h, 0x223344, true);
+	//for (int x = 0; x < 3; x++) {
+	//	DrawBox(90 + 100 * x, 90  , 90 + 100 * x + w, 90  + h, 0x223344, true);
+	//}
+	for (int f = 0; f < STAGE_MAX; f++) {
+		if (f == nowNum) {	//選ばれていたら拡大表示
+			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("仮image/stage.png", SCENE_GAME), true);
+		}
+		else
+		{
+			DrawExtendGraph(10+ 260*f+redu, 60+redu ,10+260+ 260*f-redu,60+260 -redu,im.ImageIdReturn("仮image/stage.png", SCENE_GAME), true);
+		}
 	}
-	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
-	//cout << nowNum << endl;
+
+	DrawGraph(70, 450, im.ImageIdReturn("仮image/textbox.png",SCENE_GAME), true);
+//	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
+	DrawFormatString(90,470,0x000000,"Stage %d です",nowNum);
 }
