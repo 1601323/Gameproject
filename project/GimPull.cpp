@@ -72,6 +72,7 @@ void GimPull::CheckDoMove()
 
 void GimPull::Move()
 {
+	float inx = _rope.GetRopeVec().x;
 	//行く先の壁を確認
 	Position2 nextPos[2];
 	//右
@@ -80,6 +81,14 @@ void GimPull::Move()
 	//左
 	nextPos[1].x = _pos.x - 15;
 	nextPos[1].y = _pos.y;
+
+	Position2 nextPos2[2];
+	//右
+	nextPos2[0].x = _pos.x + (_gmRect.w) + inx;
+	nextPos2[0].y = _pos.y;
+	//左
+	nextPos2[1].x = _pos.x + inx;
+	nextPos2[1].y = _pos.y;
 	//足元判定を追加
 	Position2 downPos[2];
 	//右下
@@ -94,11 +103,11 @@ void GimPull::Move()
 	if (count > 0) {
 		cout << _pos.x << endl;
 		if (_state == GM_HIT) {			//ｴﾝﾀｰもしくはﾛｰﾌﾟの当たった場所が中心より左側
-			if (_map->GetChipType(nextPos[1]) != CHIP_BLANK &&_map->GetChipType(nextPos[1]) != CHIP_ROPE_ATTRACT ||(_map->GetChipType(downPos[0]) == CHIP_BLANK&& _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
+			if (_map->GetChipType(nextPos2[1]) != CHIP_BLANK &&_map->GetChipType(nextPos2[1]) != CHIP_ROPE_ATTRACT /*||(_map->GetChipType(downPos[0]) == CHIP_BLANK&& _map->GetChipType(downPos[1]) == CHIP_BLANK)*/) {
 				_state = GM_END;
 				count = 60;
 			}
-			else if (_hit->IsHit(_player.GetRect(), nextPos[0]) || _hit->IsHit(_player.GetRect(), nextPos[1]) ||_hit->IsHit(_player.GetRect(),GetRect())) {
+			else if (_hit->IsHit(_player.GetRect(), nextPos2[0]) || _hit->IsHit(_player.GetRect(), nextPos2[1]) ||_hit->IsHit(_player.GetRect(),GetRect())) {
 				_state = GM_PAUSE;
 				
 			}
@@ -107,11 +116,11 @@ void GimPull::Move()
 			}
 		}
 		else if (_state == GM_MOVE) {	//ropeの当たった場所が中心より右側
-			if (_map->GetChipType(nextPos[0]) != CHIP_BLANK &&_map->GetChipType(nextPos[0]) != CHIP_ROPE_ATTRACT ||( _map->GetChipType(downPos[1]) == CHIP_BLANK && _map->GetChipType(downPos[1]) == CHIP_BLANK)) {
+			if (_map->GetChipType(nextPos2[0]) != CHIP_BLANK &&_map->GetChipType(nextPos2[0]) != CHIP_ROPE_ATTRACT/* ||( _map->GetChipType(downPos[1]) == CHIP_BLANK && _map->GetChipType(downPos[1]) == CHIP_BLANK)*/) {
 				_state = GM_END;
 				count = 60;
 			}
-			else if (_hit->IsHit(_player.GetRect(), nextPos[0])|| _hit->IsHit(_player.GetRect(), nextPos[1]) || _hit->IsHit(_player.GetRect(), GetRect())) {
+			else if (_hit->IsHit(_player.GetRect(), nextPos2[0])|| _hit->IsHit(_player.GetRect(), nextPos2[1]) || _hit->IsHit(_player.GetRect(), GetRect())) {
 				_state = GM_PAUSE;
 			}
 			else {
