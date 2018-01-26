@@ -78,6 +78,7 @@ private:
 	void FeverWall();					//フィーバー用の壁移動処理
 
 	void AnimationSwitching(void);      //アニメーション切り替えよう関数
+	Position2 modelPlayerPos;
 
 	Position2 tmpOffset;
 	//いきなりなのでここに書いてます
@@ -95,7 +96,6 @@ private:
 	float  CosParam;
 	float outlineNum;
 	Position3 TempMoveVector;
-	void SetCameraDirForPlayer(void);
 
 public:
 	Player();
@@ -116,5 +116,7 @@ public:
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
+
+	Position2& GetModelPos(void);
 };
 

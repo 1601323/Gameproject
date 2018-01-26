@@ -18,7 +18,6 @@ Player::Player()
 {
 	_pos.x = 200.0f;
 	_pos.y = 300.0f;
-	_pos.z = 0.83f;
 	initPos.x = _pos.x;
 	initPos.y = _pos.y;
 	_state = ST_DEF;
@@ -47,17 +46,17 @@ Player::Player()
 	//とりあえず同じように
 	_modelmgr = ModelMgr::Instance();
 	modelhandle = _modelmgr->ModelIdReturn("player_model/player.pmx", SCENE_RESULT);
-	for (int i = 0; i < ACTION_MAX; i++)
+	for (int i = 0; i <= ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
 	}
-	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.0f, 0.0f));
+	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
 	CameraHAngle = 0.0f;
 	CameraVAngle = 0.0f;
-	// カメラのクリッピング距離を設定
-	//SetCameraNearFar(100.0f, 5000.0f);
 
+	modelPlayerPos.x = 0;
+	modelPlayerPos.y = 0;
 }
 Player::~Player()
 {
@@ -92,7 +91,6 @@ void Player::Update(Input* input)
 	//ｽﾃｰﾀｽ制御
 	setState();
 	HitToEnemy();		//敵と当たったとき
-	AnimationSwitching();
 }
 
 //移動系の処理
@@ -1111,7 +1109,9 @@ void Player::FeverJump()
 void Player::Draw(Position2& offset)
 {
 	//時機
-	DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x + 32 - offset.x, (int)_pos.y + 32 - offset.y, 0xffffff, false);
+	DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y-32, (int)_pos.x + 32 - offset.x, (int)_pos.y + 32 - offset.y, 0xffffff, false);
+	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
+	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
 	outlineNum = 0.1f;
 	switch (_state)
 	{
@@ -1143,25 +1143,13 @@ void Player::Draw(Position2& offset)
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_plRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), _pos.z));
+	MV1SetPosition(modelhandle, VGet(modelPlayerPos.x, modelPlayerPos.y, _pos.z));
 	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 
-	//SetCameraDirForPlayer();
+	AnimationSwitching();
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, outlineNum);
-
-
-	VECTOR sc = ConvWorldPosToScreenPos(VGet(SCREEN_SIZE_X, SCREEN_SIZE_Y, 0.f));
-	DrawBox(sc.x - 5, sc.y - 5, sc.x + 5, sc.y + 5, 0xff00000, TRUE);
-
-	//#ifdef _DEBUG
-	DrawFormatString(400, 240, 0xff0000, "%f", sc.x);
-	DrawFormatString(400, 270, 0xff0000, "%f", sc.y);
-	DrawFormatString(400, 300, 0xff0000, "%f", sc.z);
-	DrawFormatString(400, 350, 0xff0000, "%f", _pos.x);
-	DrawFormatString(400, 380, 0xff0000, "%f", _pos.y);
-	DrawFormatString(400, 410, 0xff0000, "%f", _pos.z);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
@@ -1375,6 +1363,11 @@ void Player::SetRetryPos(Position2 midPos)
 	feverTime = 60 * FEVER_CNT;
 }
 
+Position2& Player::GetModelPos(void)
+{
+	return modelPlayerPos;
+}
+
 void Player::AnimationSwitching(void)
 {
 	switch (_state)
@@ -1382,17 +1375,15 @@ void Player::AnimationSwitching(void)
 		//通常状態
 	case ST_DEF:
 	case ST_STOP:
-		for (int i = 0; i < ACTION_MAX; i++)
+		for (int i = 0; i <= ACTION_MAX; i++)
 		{
 			if (AnimIndex[i] == ACTION_WAIT)
 			{
 				continue;
 			}
-			MV1DetachAnim(modelhandle, AnimIndex[i]);
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i],0.0f);
 		}
-
-		MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
-		AnimTotalTime[ACTION_WAIT] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[ACTION_WAIT]);
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
 		AnimNowTime[ACTION_WAIT] += 1.0f;
 
@@ -1402,22 +1393,15 @@ void Player::AnimationSwitching(void)
 		}
 		break;
 	case ST_MOVE:
-
-		SinParam = sin(AngleRad(CameraHAngle));
-		CosParam = cos(AngleRad(CameraHAngle));
-		TempMoveVector.x = vx * CosParam - _pos.z * SinParam;
-		TempMoveVector.y = 0.0f;
-		VGet(_pos.x, _pos.y,_pos.z) = VAdd(VGet(_pos.x, _pos.y, _pos.z), VGet(TempMoveVector.x, TempMoveVector.y, TempMoveVector.z));
-
-		for (int i = 0; i < ACTION_MAX; i++)
+		for (int i = 0; i <= ACTION_MAX; i++)
 		{
 			if (AnimIndex[i] == ACTION_WALK)
 			{
 				continue;
 			}
-			MV1DetachAnim(modelhandle, AnimIndex[i]);
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
 		}
-		MV1AttachAnim(modelhandle, ACTION_WALK, -1, false);
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WALK], 1.0f);
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
 		AnimNowTime[ACTION_WALK] += 1.0f;
 
@@ -1425,71 +1409,50 @@ void Player::AnimationSwitching(void)
 		{
 			AnimNowTime[ACTION_WALK] = 0;
 		}
+
 		break;
 		//ﾛｰﾌﾟ状態
 	case ST_ROPE:
 		break;
 		//壁登り状態
 	case ST_WALL:
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_CLIMB)
+			{
+				continue;
+			}
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+		}
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_CLIMB], 1.0f);
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_CLIMB], AnimNowTime[ACTION_CLIMB]);
+		AnimNowTime[ACTION_CLIMB] += 1.0f;
+
+		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
+		{
+			AnimNowTime[ACTION_CLIMB] = 0;
+		}
+
+		break;
+	case ST_JUMP:
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_JUMP)
+			{
+				continue;
+			}
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+		}
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_JUMP], 1.0f);
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
+		AnimNowTime[ACTION_JUMP] += 1.0f;
+
+		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
+		{
+			AnimNowTime[ACTION_JUMP] = 0;
+		}
 		break;
 	default:
 		break;
 	}
-}
-
-void  Player::SetCameraDirForPlayer(void)
-{
-	/*MATRIX view = GetCameraViewMatrix();
-	MATRIX proj = GetCameraProjectionMatrix();
-	float world_w = (float)SCREEN_SIZE_X / 2.f;
-	float world_h = (float)SCREEN_SIZE_Y / 2.f;
-	MATRIX viewport = {
-		world_w , 0 , 0 , 0 ,
-		0 ,-world_h , 0 , 0 ,
-		0 , 0 , 1 , 0 ,
-		world_w , world_h , 0 , 1
-	};
-	VECTOR modelScreenPos, tmp;
-	tmp = VGet(_pos.x, _pos.y, _pos.z);
-	tmp = VTransform(tmp, view);
-	tmp = VTransform(tmp, proj);
-	tmp.x /= tmp.z;
-	tmp.y /= tmp.z; 
-	tmp.z /= tmp.z;
-	modelScreenPos = VTransform(tmp, viewport);*/
-	VECTOR TempPosition1;
-	VECTOR TempPosition2;
-	VECTOR CameraPosition;
-	VECTOR CameraLookAtPosition;
-
-	// 注視点はキャラクターモデルの座標から CAMERA_LOOK_AT_HEIGHT 分だけ高い位置
-	CameraLookAtPosition = VGet(_pos.x, _pos.y, _pos.z);
-	// カメラの位置はカメラの水平角度と垂直角度から算出
-
-	// 最初に垂直角度を反映した位置を算出
-	SinParam = sin(AngleRad(CameraVAngle));
-	CosParam = cos(AngleRad(CameraVAngle));
-	TempPosition1.x = 0.0;
-	TempPosition1.y = SinParam * CAMERA_LOOK_AT_DISTANCE;
-	TempPosition1.z = -CosParam * CAMERA_LOOK_AT_DISTANCE;
-
-	// 次に水平角度を反映した位置を算出
-	SinParam = sin(AngleRad(CameraHAngle));
-	CosParam = cos(AngleRad(CameraHAngle));
-	TempPosition2.x = CosParam * TempPosition1.x - SinParam * TempPosition1.z;
-	TempPosition2.y = TempPosition1.y;
-	TempPosition2.z = SinParam * TempPosition1.x + CosParam * TempPosition1.z;
-
-	// 算出した座標に注視点の位置を加算したものがカメラの位置
-	CameraPosition = VAdd(TempPosition2, CameraLookAtPosition);
-
-	// カメラの設定に反映する
-	SetCameraPositionAndTarget_UpVecY(CameraPosition,CameraLookAtPosition);
-
-	ConvWorldPosToScreenPos(CameraLookAtPosition);
-#ifdef _DEBUG
-	DrawFormatString(100, 240, 0x000000, "%f", CameraLookAtPosition.x);
-	DrawFormatString(100, 270, 0x000000, "%f", CameraLookAtPosition.y);
-	DrawFormatString(100, 300, 0x000000, "%f", CameraLookAtPosition.z);
-#endif
 }
