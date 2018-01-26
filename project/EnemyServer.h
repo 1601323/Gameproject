@@ -17,7 +17,6 @@ private:
 	int decreaseCnt;
 	void AlertManager();
 	int lightImage;
-	int gaugeImage;
 	int cnt;			//‰¼
 	SetColor lampColor;
 
