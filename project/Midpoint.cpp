@@ -77,6 +77,7 @@ void Midpoint::GetPoint()
 		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
 			GetFlag = true;
 			uiFlag = false;
+			initPos = _midPos;
 		}
 	}
 }
@@ -186,4 +187,14 @@ Rect& Midpoint::GetRect2()
 Position2& Midpoint:: GetInitPos()
 {
 	return initPos;
+}
+void Midpoint::SetInitPos(CHIP_TYPE c,Position2 p)
+{
+	if (c == CHIP_MID_KEY) {
+		_pos = p;
+		initPos = _pos;
+	}
+	else if (c == CHIP_MID_SAFE) {
+		_midPos = p;
+	}
 }
