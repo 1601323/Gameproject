@@ -211,7 +211,7 @@ void EmAround::CheckMove()
 void EmAround::Visibility()
 {
 	//_emData.lookAngle = 60;
-	//_emData.lookDir = _dir;
+	_emData.lookDir = _dir;
 	//_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {

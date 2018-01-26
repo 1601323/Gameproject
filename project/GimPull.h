@@ -19,6 +19,7 @@ private:
 	Position2 _pos;
 	MapCtl* _map;
 	ModelMgr* _modelmgr;
+	Position2 _initPos;
 	//Šm”F—p
 	KEY _key;
 	KEY _lastKey;
