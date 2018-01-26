@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include <iostream>
 #include "Geometry.h"
+#include "Input.h"
 #include "Player.h"
 #include "HitClass.h"
 #include "GameMain.h"
@@ -43,10 +44,21 @@ Midpoint::~Midpoint()
 	_modelmgr->ModelIdAllDelete();
 }
 
+void Midpoint::Updata(Input* input)
+{
+	_key = input->GetInput(1).key;
+	_lastKey = input->GetLastKey();
+	_inpInfo = input->GetInput(1);
+	GetPoint();
+	if (GetFlag == true||checkpointFlag == true) {
+		FollowDir();
+	}
+}
+//リトライ処理のために用意
 void Midpoint::Updata()
 {
 	GetPoint();
-	if (GetFlag == true||checkpointFlag == true) {
+	if (GetFlag == true || checkpointFlag == true) {
 		FollowDir();
 	}
 }
@@ -58,7 +70,9 @@ void Midpoint::GetPoint()
 	}
 	//目的物取得条件
 	if (checkpointFlag == true && _hit->IsHit(GetRect2(), _pl->GetRect())) {
-		GetFlag = true;
+		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+			GetFlag = true;
+		}
 	}
 }
 void Midpoint::FollowDir()
@@ -114,12 +128,14 @@ void Midpoint::Draw(Position2 offset)
 {
 	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
 	MV1SetScale(modelhandle, VGet(0.2f, 0.2f, 0.2f));
-	MV1DrawModel(modelhandle);
+	//MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 
-	if (checkpointFlag == false) {
+	if (checkpointFlag == false && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+		MV1DrawModel(modelhandle);
+
 #ifdef _DEBUG
 		_hitRect.Draw(offset);
 #endif
@@ -128,6 +144,8 @@ void Midpoint::Draw(Position2 offset)
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
 		//よく考えたら当たり判定取得した後いらないよね
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+		MV1DrawModel(modelhandle);
+
 #ifdef _DEBUG
 		_hitRect.Draw(offset);
 #endif

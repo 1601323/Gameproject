@@ -1,4 +1,5 @@
 #pragma once
+class Input;
 class HitClass;
 class ModelMgr;
 
@@ -8,6 +9,9 @@ private:
 	HitClass* _hit;
 	Player* _pl;
 	ModelMgr* _modelmgr;
+	KEY _key;
+	KEY _lastKey;
+	INPUT_INFO _inpInfo;
 
 	void GetPoint();	//’†ŠÔ’n“_‚É‚½‚Ç‚è’…‚¢‚½‚±‚Æ‚ğ¦‚·
 	void FollowDir();	//‚Â‚¢‚Ä‚¢‚­‚½‚ß‚Ì•ûŒü‚È‚Ç‚ğ‚±‚±‚Åİ’è
@@ -29,6 +33,7 @@ private:
 public:
 	Midpoint();
 	~Midpoint();	
+	void Updata(Input* input);
 	void Updata();
 	void GetClass(Player* p);
 	void Draw(Position2 offset);

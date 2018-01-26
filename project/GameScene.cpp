@@ -215,7 +215,7 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_rope->Updata(input, offset);
 	_player->Update(input);
 	_emFac->Updata();
-	_mid->Updata();
+	_mid->Updata(input);
 }
 //ロープを使っているときに呼び出される
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
