@@ -38,9 +38,7 @@ void TimeManager::Updata()
 	if (timerCnt > 999) {
 		timerCnt = 999;
 	}
-#ifdef _DEBUG
-	DrawFormatString(100, 20, 0xff4444, "%d", timerCnt);
-#endif
+
 }
 void TimeManager::StartTimer()
 {

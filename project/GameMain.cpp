@@ -137,8 +137,6 @@ void GameMain::SetNowStage(int num)
 //現在のステージ番号を返します
 int GameMain::GetNowStage()
 {
-	//cout <<_bestData[nowStage].goalTime << endl;
-	cout << nowStage << endl;
 	return nowStage;
 }
 //タイトルに強制遷移を行います
