@@ -122,9 +122,11 @@ void Rope::DrawRopeRect(void)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, RopeAngle_Y, RopeAngle_Z));
 	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 	MV1SetPosition(modelhandle, VGet(_player->GetModelPos().x - mentenanceNum_X + _RopeRect.w / 2, _player->GetModelPos().y- mentenanceNum_Y, 0));
-	MV1SetScale(modelhandle, VGet(5.f, 5.f, 5.f));
+	MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
+
+	DrawFormatString(400, 280, 0xff0000,"%f", (SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY));
 
 	_RopeCircle.Draw(_tmpOffset);
 }
