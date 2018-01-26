@@ -1337,8 +1337,7 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		if (_inpInfo.key.keybit.R_UP_BUTTON) {
-			DrawString(30, 360, "ÉNÉäÉAÇµÇΩÇÊ", GetColor(255, 255, 255));
+		if (_key.keybit.B_BUTTON &&! _lastKey.keybit.B_BUTTON) {
 			return true;
 		}
 	}

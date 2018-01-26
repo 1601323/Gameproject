@@ -294,9 +294,10 @@ void GameScene::PauseUpdata(Input* input)
 		_updater = &GameScene::NormalUpdata;
 	}
 }
+//ƒŠƒgƒ‰ƒCŽž‚Ì‰Šú‰»ŒÄ‚Ño‚µ‚ð‚Ü‚Æ‚ß‚½‚à‚Ì
 void GameScene::RetryProcess()
 {
-	if (_rtData.midFlag == true) {
+	if (_mid->ReturnCheckFlag() || _mid->ReturnGetFlag()/*_rtData.midFlag == true*/) {
 		_player->SetRetryPos(_mid->GetInitPos());
 	}
 	else
