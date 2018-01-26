@@ -125,7 +125,7 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/119.map";
+		mapName = "map/ch.map";
 		break;
 	case 1:
 		mapName = "map/map2.map";

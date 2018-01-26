@@ -80,8 +80,8 @@ enum GIMMICK_TYPE {
 //“G‚ÌŽí—Þ‚É‚Â‚¢‚Ä
 enum ENEMY_TYPE {
 	ENEMY_NONE,
-	ENEMY_TURN,			//U‚è•Ô‚é“G
-	ENEMY_WARKING,		//•à‚«‰ñ‚é“G
+	ENEMY_WARKING = 8,		//•à‚«‰ñ‚é“G
+	ENEMY_TURN = 9, 			//U‚è•Ô‚é“G
 	ENEMY_MIMICRY		//‹[‘Ô‚·‚é“G
 };
 //“G‚Ìó‘Ô‚É‚Â‚¢‚Ä
