@@ -49,6 +49,7 @@ GameScene::GameScene()
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
 	//_map->Load("map/1218_001.map");
 	_map->Load(mapName);
+	auto chipData = _map->getChipPosData();
 	_hit = new HitClass();
 
 	//_map->Load("map/1.map");
@@ -63,13 +64,13 @@ GameScene::GameScene()
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//マップを読み取り、リストにギミックを持たせます。
-	auto gimData = _map->getChipPosData();
-	for (auto& data : gimData) {
-		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
+	//auto gimData = _map->getChipPosData();
+	for (auto& data : chipData) {
+		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_PLAYER_POS)
 			_fac->Create(static_cast<CHIP_TYPE>(data.chipType), Position2(data.posX, data.posY));
-		if (data.chipType == CHIP_DOOR) {
-			_player->SetInitPos(Position2(data.posX, data.posY));
-		}
+		//if (data.chipType == CHIP_DOOR) {
+		//	_player->SetInitPos(Position2(data.posX, data.posY));
+		//}
 	}
 	_hit->GetClass(_fac);
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
@@ -77,8 +78,21 @@ GameScene::GameScene()
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
 	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
-
-
+	for (auto& data : chipData) {
+		//ﾌﾟﾚｲﾔｰの場所設定
+		if (data.chipType == CHIP_ENEMY_AROUND || data.chipType == CHIP_ENEMY_LOOK) {
+			_emFac->Create(static_cast<ENEMY_TYPE>(data.chipType),Position2(data.posX,data.posY));
+		}
+	}
+	//その他チップから必要なデータを読み込みます
+	for (auto& other : chipData) {
+		if (other.chipType == CHIP_PLAYER_POS) {
+			_player->SetInitPos(Position2(other.posX,other.posY));
+		}
+		if (other.chipType == CHIP_MID_KEY || other.chipType == CHIP_MID_SAFE) {
+			_mid->SetInitPos(static_cast<CHIP_TYPE>(other.chipType),Position2(other.posX,other.posY));
+		}
+	}
 	_hit->GetClass(_emFac);
 	//_hit = new HitClass(_fac, _emFac);
 
@@ -117,7 +131,7 @@ void GameScene::GameInit()
 		mapName = "map/map2.map";
 		break;
 	case 2:
-		mapName = "map/3.map";
+		mapName = "map/na.map";
 		break;
 	default:
 		ASSERT();
@@ -215,7 +229,7 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_rope->Updata(input, offset);
 	_player->Update(input);
 	_emFac->Updata();
-	_mid->Updata();
+	_mid->Updata(input);
 }
 //ロープを使っているときに呼び出される
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
