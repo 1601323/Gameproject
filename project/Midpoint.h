@@ -25,6 +25,7 @@ private:
 	DIR tmpDir;			//プレイヤーの向いている方向を保持する
 	bool checkpointFlag;//鍵を手に入れたかどうかについて
 	bool GetFlag;		//目的物を取得したかどうかのフラグ
+	bool uiFlag;		//UIを表示するためのフラグ
 	//実験
 	bool bubbleFlag;
 	int cnt;

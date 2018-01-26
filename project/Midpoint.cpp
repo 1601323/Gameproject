@@ -29,6 +29,7 @@ Midpoint::Midpoint()
 	_midRect.w = 32;
 	_midRect.h = 32;
 
+	uiFlag = false;
 	cnt = 0;
 	bubbleFlag = false;
 	bubble = 0;
@@ -70,8 +71,12 @@ void Midpoint::GetPoint()
 	}
 	//ñ⁄ìIï®éÊìæèåè
 	if (checkpointFlag == true && _hit->IsHit(GetRect2(), _pl->GetRect())) {
+		if (GetFlag == false && checkpointFlag == true) {
+			uiFlag = true;
+		}
 		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
 			GetFlag = true;
+			uiFlag = false;
 		}
 	}
 }
@@ -156,6 +161,9 @@ void Midpoint::Draw(Position2 offset)
 	}
 	else if(GetFlag == true ){
 		DrawCircle(_midPos.x - offset.x + (_midRect.w / 2) , _midPos.y - offset.y + (_midRect.h / 2), 12, GetColor(0, 240, 44), true);
+	}
+	if (uiFlag == true) {
+		DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"Å_B!!Å^",0x00ff00);
 	}
 	_midRect.Draw(offset);
 }
