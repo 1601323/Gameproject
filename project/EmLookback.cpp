@@ -158,7 +158,8 @@ void EmLookback::setDir(void)
 }
 void EmLookback::Visibility()
 {
-	////視界判定(プレイヤーを見つけたとき)
+	_emData.lookDir = _dir;
+	//視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
 		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
