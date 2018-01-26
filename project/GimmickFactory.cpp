@@ -46,12 +46,6 @@ std::weak_ptr<Gimmick>GimmickFactory::Create(CHIP_TYPE gt,Position2 pos)
 	case CHIP_TYPE::CHIP_ROPE_FALL:
 		_gimmickList.push_back(Gimmick_ptr(new GimDrop(pos,_rope,_player)));
 		break;
-	case CHIP_TYPE::CHIP_FREE_1:
-	case CHIP_TYPE::CHIP_FREE_2:
-	case CHIP_TYPE::CHIP_FREE_3:
-	case CHIP_TYPE::CHIP_FREE_4:
-	case CHIP_TYPE::CHIP_FREE_5:
-		break;
 	default:
 		ASSERT();	//‘z’èŠO‚ª—ˆ‚½ê‡Assert‚ğo‚·
 		break;
