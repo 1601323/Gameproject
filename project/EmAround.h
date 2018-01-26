@@ -39,6 +39,7 @@ private:
 	int fearCnt;			//‚Ğ‚é‚ñ‚Å‚¢‚é•b”
 
 	int modelhandle;//‚©‚è
+	float modelDirAngle;
 
 	void Move();			//“G‚Ì“®‚«‚É‚Â‚¢‚Ä‚ÌŠÇ—‚ğs‚¤
 

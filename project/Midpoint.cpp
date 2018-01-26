@@ -33,7 +33,7 @@ Midpoint::Midpoint()
 	cnt = 0;
 	bubbleFlag = false;
 	bubble = 0;
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/Œ®/Œ®2-10.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/‹àŒÉ/’†Œ^‹àŒÉ75.pmd", SCENE_RESULT);
 }
 void Midpoint::GetClass(Player* p)
 {
@@ -133,9 +133,10 @@ void Midpoint::FollowDir()
 void Midpoint::Draw(Position2 offset)
 {
 	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
-	MV1SetScale(modelhandle, VGet(0.2f, 0.2f, 0.2f));
-	//MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f, 5.0f, 0.0f));
+	MV1SetScale(modelhandle, VGet(2.f, 2.f, 2.f));
+	MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
 
 	if (checkpointFlag == false && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);

@@ -52,8 +52,6 @@ Player::Player()
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
 	}
 	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
-	CameraHAngle = 0.0f;
-	CameraVAngle = 0.0f;
 
 	modelPlayerPos.x = 0;
 	modelPlayerPos.y = 0;
@@ -138,7 +136,7 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
 			_state = ST_MOVE;
-			modelDirAngle = AngleRad(-90.f) - CameraHAngle;
+			modelDirAngle = AngleRad(-90.f);
 		}
 		//ç∂
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON ||
@@ -146,7 +144,7 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
 			_state = ST_MOVE;
-			modelDirAngle = AngleRad(90.f) - CameraHAngle;
+			modelDirAngle = AngleRad(90.f);
 		}
 		//è„
 		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
