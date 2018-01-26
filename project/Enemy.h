@@ -22,6 +22,8 @@ public:
 	virtual Rect&GetRect();
 	virtual ENEMY_TYPE& GetType();
 
+	int vigiImage[3];
+
 	virtual void Updata() =0;
 	virtual void Draw(Position2 offset) =0 ;
 	virtual void EnemyFalter() =0;

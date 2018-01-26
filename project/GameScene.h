@@ -42,6 +42,10 @@ private:
 	EnemyFactory* _emFac;
 
 	const char* mapName;
+	int numberImage;
+	int second;
+	int tenex;
+	int hunex;
 
 	RESULT_DATA _rtData;
 

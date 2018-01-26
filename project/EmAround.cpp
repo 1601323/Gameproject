@@ -1,6 +1,7 @@
 
 #include <DxLib.h>
 #include <math.h>
+#include <iostream>
 #include "Assert.h"
 #include "Geometry.h"
 #include "EnemyServer.h"
@@ -46,6 +47,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	//個体データ初期化
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
+	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
@@ -63,6 +65,7 @@ void EmAround::Updata()
 	_emData.lookRange = _emEye;
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
+	_individualData.midFlag = _server.SendMidFlag();
 	Gravity();
 	Visibility();
 	Move();
@@ -322,15 +325,24 @@ void EmAround::Draw(Position2 offset)
 	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {
 		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else if (_dir == DIR_RIGHT) {
 		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
 #ifdef _DEBUG
 	_emRect.Draw(offset);
 #endif
 	_emEye.Draw(offset);
 }
+
 void EmAround::SetRange()
 {
 	//サイズは仮
@@ -339,7 +351,7 @@ void EmAround::SetRange()
 		_emEye.r = 40;
 	}
 	else if (_individualData._level == ALERT_LEVEL_2) {
-		_emEye.r = 50;
+		_emEye.r = 60;
 	}
 	else if (_individualData._level == ALERT_LEVEL_3) {
 		_emEye.r = 80;
@@ -364,4 +376,7 @@ ENEMY_STATE& EmAround::GetState()
 void EmAround::SetInitPos()
 {
 	_pos = _initPos;
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }

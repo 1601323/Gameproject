@@ -40,11 +40,11 @@ enum CHIP_TYPE {
 	CHIP_BUTTON_1,		//  4 ボタン
 	CHIP_ROPE_ATTRACT,	//  5 ロープ引き寄せる
 	CHIP_ROPE_FALL,		//  6 ロープﾌﾟ落とす
-	CHIP_FREE_1,		//  7 自由
-	CHIP_FREE_2,		//  8 自由
-	CHIP_FREE_3,		//  9 自由
-	CHIP_FREE_4,		// 10 自由
-	CHIP_FREE_5,		// 11 自由
+	CHIP_PLAYER_POS,	//  7 ﾌﾟﾚｲﾔｰの初期位置
+	CHIP_ENEMY_AROUND,	//  8 歩き回る敵
+	CHIP_ENEMY_LOOK,	//  9 振り返る敵
+	CHIP_MID_KEY,		// 10 中間点：鍵
+	CHIP_MID_SAFE,		// 11 中間点：金庫
 	CHIP_MAX
 };
 
@@ -108,10 +108,11 @@ enum ENEMY_ALERT {
 };
 struct EnemyServerData {
 
-	EnemyServerData():plFoundFlag(false),dataSendFlag(false){}
+	EnemyServerData():plFoundFlag(false),dataSendFlag(false),midFlag(false),_level(ALERT_LEVEL_1){}
 
 	bool plFoundFlag;
 	bool dataSendFlag;
+	bool midFlag;
 	ENEMY_ALERT _level;
 };
 //キー入力について

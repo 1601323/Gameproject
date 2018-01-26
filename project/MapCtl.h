@@ -35,7 +35,12 @@ struct ChipPosData {
 	float posX;
 	float posY;
 };
-
+//ｴﾈﾐｰで利用するﾃﾞｰﾀ
+struct EnemyPosData {
+	char enemyType;
+	float posX;
+	float posY;
+};
 class MapCtl
 {
 public:
@@ -59,6 +64,8 @@ public:
 	//ギミックのための追加です
 	//チップタイプと場所を読み込む
 	vector<ChipPosData> getChipPosData();
+	//敵用に追加
+	vector<EnemyPosData> getEnemyData();
 private:
 	static MapCtl* ptr;					// ﾎﾟｲﾝﾀ	
 	shared_ptr<Object> obj;
