@@ -11,6 +11,9 @@
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
 #define FEVER_CNT (10)					//フィーバーの時間
 
+// カメラと注視点の距離
+#define CAMERA_LOOK_AT_DISTANCE		20.0f
+
 class Input;
 class HitClass;
 class Camera;
@@ -35,9 +38,9 @@ private:
 	Rope* _rope;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
-	Position2 _pos;						//ｷｬﾗの座標
+	Position3 _pos;						//ｷｬﾗの座標
 	DIR _dir;							//ｷｬﾗの向き
-	Position2 initPos;					//初期位置保存
+	Position3 initPos;					//初期位置保存
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
@@ -74,15 +77,26 @@ private:
 	void FeverGravity();				//フィーバー用の重力処理
 	void FeverWall();					//フィーバー用の壁移動処理
 
+	void AnimationSwitching(void);      //アニメーション切り替えよう関数
+	Position2 modelPlayerPos;
+
 	Position2 tmpOffset;
 	//いきなりなのでここに書いてます
 	ModelMgr* _modelmgr;
 	int modelhandle;
 	int alfa;
 	int tranceMax;
-	float  AnimTotalTime;
-	float  AnimNowTime;
-	int    AnimAttachIndex;
+	float  AnimTotalTime[ACTION_MAX];
+	float  AnimNowTime[ACTION_MAX];
+	float modelDirAngle;
+	int  AnimIndex[ACTION_MAX];
+	float  CameraHAngle;
+	float  CameraVAngle;
+	float  SinParam;
+	float  CosParam;
+	float outlineNum;
+	Position3 TempMoveVector;
+
 public:
 	Player();
 	~Player();
@@ -102,5 +116,7 @@ public:
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
+
+	Position2& GetModelPos(void);
 };
 

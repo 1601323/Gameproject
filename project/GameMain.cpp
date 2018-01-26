@@ -12,6 +12,7 @@
 #include "Input.h"
 #include "Math.h"
 #include "ImageMgr.h"
+#include "ModelMgr.h"
 
 using namespace std;
 

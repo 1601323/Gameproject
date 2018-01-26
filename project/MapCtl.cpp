@@ -12,6 +12,7 @@ MapCtl* MapCtl::ptr = nullptr;
 MapCtl::MapCtl()
 {
 		LoadDivGraph("仮image/マップチップ.png",8,8,1,32,32,chipImage);
+
 }
 
 // ﾃﾞｽﾄﾗｸﾀ

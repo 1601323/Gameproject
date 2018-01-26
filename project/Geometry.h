@@ -10,7 +10,7 @@
 #define MAP_CHIP_SIZE_X (32)	// 1ﾁｯﾌﾟあたりの大きさ
 #define MAP_CHIP_SIZE_Y (32)	// 1ﾁｯﾌﾟあたりの大きさ
 #define MAP_SIZE_X (30)			//スクロール非対応マップの大きさ28
-//#define MAP_SIZE_X (28)			// ﾏｯﾌﾟのｻｲｽﾞ
+//#define MAP_SIZE_X (28)	    // ﾏｯﾌﾟのｻｲｽﾞ
 #define MAP_SIZE_Y (25)			// ﾏｯﾌﾟのｻｲｽﾞ
 #define STAGE_MAX (3)			//ステージの数（仮）
 #define LAYER_MAX (3)			//レイヤー枚数
@@ -106,6 +106,15 @@ enum ENEMY_ALERT {
 	ALERT_LEVEL_2,
 	ALERT_LEVEL_3
 };
+//プレイヤーのアクション
+enum PLAYER_ACTIONS{
+	ACTION_WAIT,   //待機モーション
+	ACTION_JUMP,   //飛ぶモーション
+	ACTION_CLIMB,  //のぼるモーション
+	ACTION_WALK,   //歩くモーション
+	ACTION_MAX
+};
+
 struct EnemyServerData {
 
 	EnemyServerData():plFoundFlag(false),dataSendFlag(false),midFlag(false),_level(ALERT_LEVEL_1){}
