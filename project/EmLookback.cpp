@@ -6,7 +6,7 @@
 #include "EnemyServer.h"
 #include "Player.h"
 #include "Rope.h"
-
+#include "ModelMgr.h"
 
 
 EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& server,HitClass& hit) :_player(pl), _rope(rope), _server(server),_hit(hit)
@@ -14,6 +14,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	//_hit = new HitClass();
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
+	_modelmgr = ModelMgr::Instance();
 	_pos.x = pos.x;
 	_pos.y = pos.y;
 	_initPos = _pos;
@@ -42,6 +43,9 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+	modelDirAngle = 0.0f;
 }
 
 EmLookback::~EmLookback()
@@ -68,21 +72,26 @@ void EmLookback::Updata()
 
 void EmLookback::Draw(Position2 offset)
 {
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_emRect.h), 0));
+	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 	switch (_state)
 	{
 	case EM_ST_NONE:
 	case EM_ST_MOVE:
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0xff0000, true);
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0xff0000, true);
 		break;
 	case EM_ST_DIS:
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x0000ff, true);
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x0000ff, true);
 		break;
 	case EM_ST_RETURN:
 		break;
 	case EM_ST_RE_DIS:
 		break;
 	case EM_ST_FEAR:
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x00ff00, true);
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x00ff00, true);
 		break;
 	default:
 		break;
@@ -90,9 +99,11 @@ void EmLookback::Draw(Position2 offset)
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 	if (_dir == DIR_RIGHT) {
+		modelDirAngle = AngleRad(-90.0f);
 		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 	}
 	else if (_dir == DIR_LEFT) {
+		modelDirAngle = AngleRad(90.0f);
 		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 	}
 	returnDir(offset);
@@ -148,9 +159,11 @@ void EmLookback::setDir(void)
 	}
 	else {
 		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.0f);
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.0f);
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		LookCount = 0;

@@ -67,6 +67,7 @@ void ModelMgr::SetMaterialDotLine(int modelhandle, float DotLineNum)
 
 	for (int i = 0; i < materialNum; i++)
 	{
+		MV1SetMaterialOutLineWidth(modelhandle,i, DotLineNum);
 		MV1SetMaterialOutLineDotWidth(modelhandle, i, DotLineNum);
 	}
 }
