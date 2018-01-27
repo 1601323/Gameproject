@@ -10,9 +10,9 @@
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
 #define FEVER_CNT (10)					//フィーバーの時間
-
-// カメラと注視点の距離
-#define CAMERA_LOOK_AT_DISTANCE		20.0f
+#define ANIMATION_SPEED_SLOW (0.3f)     //アニメーションの速さ(超低速)
+#define ANIMATION_SPEED_DEF (0.5f)      //アニメーションの速さ(低速)
+#define ANIMATION_SPEED_HIGH (0.8f)     //アニメーションの速さ(普通)
 
 class Input;
 class HitClass;

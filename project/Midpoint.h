@@ -31,8 +31,9 @@ private:
 	bool bubbleFlag;
 	int cnt;
 	int bubble;
-	int modelhandle;
+	int Safehandle;
 	int keyhandle;
+	int Targethandle;
 public:
 	Midpoint();
 	~Midpoint();	
