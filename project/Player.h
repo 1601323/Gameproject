@@ -90,10 +90,6 @@ private:
 	float  AnimNowTime[ACTION_MAX];
 	float modelDirAngle;
 	int  AnimIndex[ACTION_MAX];
-	float  CameraHAngle;
-	float  CameraVAngle;
-	float  SinParam;
-	float  CosParam;
 	float outlineNum;
 	Position3 TempMoveVector;
 

@@ -124,7 +124,7 @@ void Rope::DrawRopeRect(void)
 	MV1SetPosition(modelhandle, VGet(_player->GetModelPos().x - mentenanceNum_X + _RopeRect.w / 2, _player->GetModelPos().y- mentenanceNum_Y, 0));
 	MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
 	DrawFormatString(400, 280, 0xff0000,"%f", (SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY));
 
