@@ -29,7 +29,7 @@ Player::Player()
 	feverTime = 60 * FEVER_CNT;
 	//_hit = new HitClass();
 	_plRect.w = 32;
-	_plRect.h = 32;
+	_plRect.h = 50;
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	_map = MapCtl::GetInstance();
 	//_rope = new Rope(this);
@@ -183,15 +183,17 @@ bool Player::accelePL(void)
 	//マップとの当たり判定
 	//2ドットほど判定を狭めている
 	//右
-	Position2 nextPosRight[2];
+	Position2 nextPosRight[3];
 	//右下	
 	nextPosRight[0].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[0].y = _pos.y + (_plRect.h - 1);
 	//右上
 	nextPosRight[1].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[1].y = _pos.y;
-
-	for (int j = 0; j < 2; j++) {
+	//右真ん中
+	nextPosRight[2].x = _pos.x + vx + (_plRect.w - 2);
+	nextPosRight[2].y = _pos.y + (_plRect.h/2);
+	for (int j = 0; j < 3; j++) {
 		//登れる壁と登れない壁、ギミックとの判定
 		if (_map->GetChipType(nextPosRight[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosRight[j]) == CHIP_CLIMB_WALL
@@ -203,15 +205,17 @@ bool Player::accelePL(void)
 
 	//
 	//左
-	Position2 nextPosLeft[2];
+	Position2 nextPosLeft[3];
 	//左下
 	nextPosLeft[0].x = _pos.x + vx + 2;
 	nextPosLeft[0].y = _pos.y + (_plRect.h - 1);
 	//左上
 	nextPosLeft[1].x = _pos.x + vx + 2;
 	nextPosLeft[1].y = _pos.y;
-
-	for (int j = 0; j < 2; j++) {
+	//左真ん中
+	nextPosLeft[2].x = _pos.x + vx + 2;
+	nextPosLeft[2].y = _pos.y + (_plRect.h/2);
+	for (int j = 0; j < 3; j++) {
 		//登れる壁と登れない壁、ギミックとの判定
 		if (_map->GetChipType(nextPosLeft[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosLeft[j]) == CHIP_CLIMB_WALL
@@ -1024,6 +1028,8 @@ bool Player::moveJump(void)
 	//左上
 	nextPosUP[1].x = _pos.x + 2;
 	nextPosUP[1].y = _pos.y + (vy / 2);
+	Position2 nextPos[2];
+
 	//登れる壁、登れない壁との判定
 	for (int j = 0; j < 2; j++) {
 		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
@@ -1145,7 +1151,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	//	_plRect.Draw(offset);
+		_plRect.Draw(offset);
 	//#endif
 }
 
@@ -1327,7 +1333,7 @@ void Player::SetInitPos()
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position3(p.x,p.y,0.f);
+	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);
 	initPos = _pos;
 }
 bool Player::EnterDoor()
