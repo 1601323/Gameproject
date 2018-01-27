@@ -100,6 +100,7 @@ public:
 	INPUT_INFO _inputinfo;
 	Rect _RopeRect;
 	Circle _RopeCircle;
+	Circle _RopeCircle2;
 	Position2 _HitPos;
 	Position2 _vec;
 	Position2 _tmpOffset;			//•`‰æ—pµÌ¾¯Ä’l

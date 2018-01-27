@@ -1098,7 +1098,7 @@ void Player::FeverJump()
 void Player::Draw(Position2& offset)
 {
 	//éûã@
-	DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y-32, (int)_pos.x + 32 - offset.x, (int)_pos.y + 32 - offset.y, 0xffffff, false);
+	DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x + 32 - offset.x, (int)_pos.y + 32 - offset.y, 0xffffff, false);
 	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
 	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
 	outlineNum = 0.0f;
@@ -1107,7 +1107,7 @@ void Player::Draw(Position2& offset)
 		//Ω√ŸΩèÛë‘
 	case ST_VANISH:
 		alfa = max(alfa - 1, tranceMax);
-		outlineNum = 0.5f;
+		outlineNum = 0.0f;
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//€∞ÃﬂèÛë‘

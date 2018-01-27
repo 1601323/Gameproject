@@ -136,15 +136,15 @@ void Midpoint::Draw(Position2 offset)
 {
 	//‹àŒÉ‚Ìƒ‚ƒfƒ‹
 	MV1SetPosition(modelhandle, VGet(_modelPos.x - offset.x + (_midRect.w / 2),SCREEN_SIZE_Y - _modelPos.y + offset.y - (_midRect.h), 0));
-	MV1SetRotationXYZ(modelhandle, VGet(AngleRad(-20.0f), 0.0f, 0.0f));
-	MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f ,0.0f, 0.0f));
+	MV1SetScale(modelhandle, VGet(2.f, 2.f, 2.f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
 	MV1SetPosition(keyhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
 	MV1SetScale(keyhandle, VGet(0.2f, 0.2f, 0.2f));
-	//MV1DrawModel(keyhandle);
-	_modelmgr->SetMaterialDotLine(keyhandle, 0.2f);
+	MV1DrawModel(keyhandle);
+	_modelmgr->SetMaterialDotLine(keyhandle, 0.0f);
 
 	if (checkpointFlag == false && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);

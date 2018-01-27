@@ -100,6 +100,8 @@ void Rope::DrawRopeRect(void)
 	//circle
 	_RopeCircle.SetCenter(_rope[*itr].x , SCREEN_SIZE_Y -_rope[*itr].y - _tmpOffset.y + RopeHitModelNumY, range);
 
+	_RopeCircle2.SetCenter(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY-50, range);
+
 	//if (RopeTurnFlag)
 	//{
 	//	DrawLineSet(_rope[0], _rope[*itr - 1], 0xff0000);
@@ -126,9 +128,11 @@ void Rope::DrawRopeRect(void)
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
-	DrawFormatString(400, 280, 0xff0000,"%f", (SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY));
+	//DrawFormatString(400, 280, 0xff0000,"%f", (SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY));
 
 	_RopeCircle.Draw(_tmpOffset);
+	_RopeCircle2.Draw(_tmpOffset);
+
 }
 
 //DrawLineをまとめた関数 offset値の設定が分かりにくかったから
@@ -332,7 +336,9 @@ void Rope::Extending(Input* input)
 			//伸ばしている最中にギミックやステージにあたれば強制的に戻す
 			if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle())||
 				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY)) == CHIP_CLIMB_WALL)
+				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
+				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY-50)) == CHIP_N_CLIMB_WALL ||
+				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY-50)) == CHIP_CLIMB_WALL)
 			{
 				_HitPos = _rope[*itr];
 				itr = last;
@@ -532,20 +538,20 @@ void Rope::SetRopeRadForDrawZ(void)
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
 		mentenanceNum_Y = -110 + _RopeRect.h / 2;
 		mentenanceNum_X = dirFlag ? -40 : 70;
-		RopeHitModelNumY = 370;
+		RopeHitModelNumY = 430;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
 		mentenanceNum_Y = -20 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -55 : 70;
-		RopeHitModelNumY = 380;
+		mentenanceNum_X = dirFlag ? -50 : 70;
+		RopeHitModelNumY = 410;
 		break;
 	case ROPE_DIR_NON:
 	case ROPE_DIR_STRAIGHT:
 		RopeAngle_Z = AngleRad(0.f);
 		mentenanceNum_Y = -70 +_RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -90: 100;
-		RopeHitModelNumY = 400;
+		mentenanceNum_X = dirFlag ? -60: 90;
+		RopeHitModelNumY = 420;
 		break;
 	default:
 		break;
