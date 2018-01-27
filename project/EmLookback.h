@@ -8,6 +8,7 @@ class EnemyServer;
 class Player;
 class MapCtl;
 class Rope;
+class ModelMgr;
 
 class EmLookback :
 	public Enemy
@@ -17,6 +18,7 @@ private:
 	EnemyServer& _server;
 	DIR _dir;			//ｷｬﾗの向き
 	MapCtl* _map;
+	ModelMgr* _modelmgr;
 
 	Player& _player;
 	Rope& _rope;
@@ -26,6 +28,9 @@ private:
 	//void Draw();
 	int circle;
 	int loseSightCnt;	//PLが認識範囲から外れて見失うまでのカウント
+
+	int modelhandle;
+	float modelDirAngle;
 
 	ENEMY_STATE _state;
 	ENEMY_DATA _emData;

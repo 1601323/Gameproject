@@ -38,7 +38,7 @@ private:
 	int loseSightCnt;		//PLが認識範囲から外れて見失うまでのカウント
 	int fearCnt;			//ひるんでいる秒数
 
-	int modelhandle;//かり
+	int modelhandle;
 	float modelDirAngle;
 
 	void Move();			//敵の動きについての管理を行う

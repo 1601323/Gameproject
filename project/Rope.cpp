@@ -98,7 +98,7 @@ void Rope::RopeInit(void)
 void Rope::DrawRopeRect(void)
 {
 	//circle
-	_RopeCircle.SetCenter(_rope[*itr].x , SCREEN_SIZE_Y -_rope[*itr].y - _tmpOffset.y + RopeHitModelNumY, range);
+	_RopeCircle.SetCenter(_rope[*itr].x , SCREEN_SIZE_Y -_rope[*itr].y /*- _tmpOffset.y*/ + RopeHitModelNumY, range);
 
 	//if (RopeTurnFlag)
 	//{
@@ -331,8 +331,8 @@ void Rope::Extending(Input* input)
 
 			//伸ばしている最中にギミックやステージにあたれば強制的に戻す
 			if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle())||
-				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY)) == CHIP_CLIMB_WALL)
+				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y /*- _tmpOffset.y*/ + RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
+				_mapctl->GetChipType(Position2(_rope[*itr].x, SCREEN_SIZE_Y - _rope[*itr].y /*- _tmpOffset.y*/ + RopeHitModelNumY)) == CHIP_CLIMB_WALL)
 			{
 				_HitPos = _rope[*itr];
 				itr = last;
