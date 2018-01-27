@@ -1373,11 +1373,11 @@ void Player::AnimationSwitching(void)
 		}
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
-		AnimNowTime[ACTION_WAIT] += 1.0f;
+		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_SLOW;
 
 		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
 		{
-			AnimNowTime[ACTION_WAIT] = 0;
+			AnimNowTime[ACTION_WAIT] = 0.f;
 		}
 		break;
 	case ST_MOVE:
@@ -1391,11 +1391,11 @@ void Player::AnimationSwitching(void)
 		}
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WALK], 1.0f);
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
-		AnimNowTime[ACTION_WALK] += 1.0f;
+		AnimNowTime[ACTION_WALK] += ANIMATION_SPEED_HIGH;
 
 		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
 		{
-			AnimNowTime[ACTION_WALK] = 0;
+			AnimNowTime[ACTION_WALK] = 0.f;
 		}
 
 		break;
@@ -1414,11 +1414,11 @@ void Player::AnimationSwitching(void)
 		}
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_CLIMB], 1.0f);
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_CLIMB], AnimNowTime[ACTION_CLIMB]);
-		AnimNowTime[ACTION_CLIMB] += 1.0f;
+		AnimNowTime[ACTION_CLIMB] += ANIMATION_SPEED_HIGH;
 
 		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
 		{
-			AnimNowTime[ACTION_CLIMB] = 0;
+			AnimNowTime[ACTION_CLIMB] = 0.f;
 		}
 
 		break;
@@ -1433,11 +1433,11 @@ void Player::AnimationSwitching(void)
 		}
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_JUMP], 1.0f);
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
-		AnimNowTime[ACTION_JUMP] += 1.0f;
+		AnimNowTime[ACTION_JUMP] += ANIMATION_SPEED_DEF;
 
 		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
 		{
-			AnimNowTime[ACTION_JUMP] = 0;
+			AnimNowTime[ACTION_JUMP] = 0.f;
 		}
 		break;
 	default:
