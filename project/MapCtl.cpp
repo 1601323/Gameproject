@@ -5,14 +5,18 @@
 #include "Camera.h"
 #include "Player.h"
 #include "MapCtl.h"
+#include "ModelMgr.h"
 
 MapCtl* MapCtl::ptr = nullptr;
 
 // ｺﾝｽﾄﾗｸﾀ
 MapCtl::MapCtl()
 {
-		LoadDivGraph("仮image/マップチップ.png",8,8,1,32,32,chipImage);
-
+	LoadDivGraph("仮image/マップチップ.png",8,8,1,32,32,chipImage);
+	_modelmgr = ModelMgr::Instance();
+	//chipModelHandle[1] = _modelmgr->ModelIdReturn("wall＿model/wall.pmx", SCENE_RESULT);
+	chipModelHandle[1] = _modelmgr->ModelIdReturn("wall＿model/wall.pmx", SCENE_RESULT);
+	chipModelHandle[2] = _modelmgr->ModelIdReturn("wall＿model/wall2.pmx", SCENE_RESULT);
 }
 
 // ﾃﾞｽﾄﾗｸﾀ
@@ -137,7 +141,11 @@ void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
 	auto color = GetColor(0, 50, 50);
 
-	DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
+	//DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
+	MV1SetPosition(chipModelHandle[num], VGet(x*32 - offset.x+20, SCREEN_SIZE_Y -y*32 + offset.y-20,0));
+	MV1SetScale(chipModelHandle[num], VGet(3.18f, 3.18f, 3.18f));
+	MV1DrawModel(chipModelHandle[num]);
+	_modelmgr->SetMaterialDotLine(chipModelHandle[num],0.0f);
 }
 
 //ギミックにデータをもらうために追加してます
