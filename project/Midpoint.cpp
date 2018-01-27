@@ -20,6 +20,7 @@ Midpoint::Midpoint()
 	//mid2ÇÃèÍèäÇéÛÇØéÊÇÈ
 	_midPos.x = 600;
 	_midPos.y = 480;
+	_modelPos = _midPos;
 	initPos = _pos;
 	tmpDir = DIR_RIGHT;
 	//ëÂÇ´Ç≥Ç…Ç¬Ç¢ÇƒÇÕÇ∆ÇËÇ†Ç¶Ç∏É`ÉbÉvÇÃëÂÇ´Ç≥Ç∆àÍèèÇ…ÇµÇƒÇ®Ç≠
@@ -34,6 +35,7 @@ Midpoint::Midpoint()
 	bubbleFlag = false;
 	bubble = 0;
 	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/ã‡å…/íÜå^ã‡å…75.pmd", SCENE_RESULT);
+	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/åÆ/åÆ2-10.pmx", SCENE_RESULT);
 }
 void Midpoint::GetClass(Player* p)
 {
@@ -132,16 +134,22 @@ void Midpoint::FollowDir()
 }
 void Midpoint::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2),SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
+	//ã‡å…ÇÃÉÇÉfÉã
+	MV1SetPosition(modelhandle, VGet(_modelPos.x - offset.x + (_midRect.w / 2),SCREEN_SIZE_Y - _modelPos.y + offset.y - (_midRect.h), 0));
 	MV1SetRotationXYZ(modelhandle, VGet(AngleRad(-20.0f), 0.0f, 0.0f));
 	MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
+	MV1SetPosition(keyhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
+	MV1SetScale(keyhandle, VGet(0.2f, 0.2f, 0.2f));
+	//MV1DrawModel(keyhandle);
+	_modelmgr->SetMaterialDotLine(keyhandle, 0.2f);
+
 	if (checkpointFlag == false && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
-		MV1DrawModel(modelhandle);
+		MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
 		_hitRect.Draw(offset);
@@ -151,7 +159,7 @@ void Midpoint::Draw(Position2 offset)
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
 		//ÇÊÇ≠çlÇ¶ÇΩÇÁìñÇΩÇËîªíËéÊìæÇµÇΩå„Ç¢ÇÁÇ»Ç¢ÇÊÇÀ
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
-		MV1DrawModel(modelhandle);
+		MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
 		_hitRect.Draw(offset);
@@ -160,9 +168,11 @@ void Midpoint::Draw(Position2 offset)
 	if (GetFlag == false) {
 		DrawBox(_midPos.x - offset.x, _midPos.y - offset.y, _midPos.x + _midRect.w - offset.x, _midPos.y + _midRect.h - offset.y, 0xcccccc, true);
 		_midRect.SetCenter(_midPos.x+(_midRect.w/2),_midPos.y+(_midRect.h /2));
+		MV1DrawModel(modelhandle);
 	}
 	else if(GetFlag == true ){
 		DrawCircle(_midPos.x - offset.x + (_midRect.w / 2) , _midPos.y - offset.y + (_midRect.h / 2), 12, GetColor(0, 240, 44), true);
+		MV1DrawModel(modelhandle);
 	}
 	if (uiFlag == true) {
 		DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"Å_B!!Å^",0x00ff00);
@@ -197,5 +207,6 @@ void Midpoint::SetInitPos(CHIP_TYPE c,Position2 p)
 	}
 	else if (c == CHIP_MID_SAFE) {
 		_midPos = p;
+		_modelPos = p;
 	}
 }
