@@ -15,8 +15,11 @@ MapCtl::MapCtl()
 	LoadDivGraph("仮image/マップチップ.png",8,8,1,32,32,chipImage);
 	_modelmgr = ModelMgr::Instance();
 	//chipModelHandle[1] = _modelmgr->ModelIdReturn("wall＿model/wall.pmx", SCENE_RESULT);
-	chipModelHandle[1] = _modelmgr->ModelIdReturn("wall＿model/wall.pmx", SCENE_RESULT);
-	chipModelHandle[2] = _modelmgr->ModelIdReturn("wall＿model/wall2.pmx", SCENE_RESULT);
+	//chipModelHandle[2] = _modelmgr->ModelIdReturn("wall＿model/wall2.pmx", SCENE_RESULT);
+	//リトライしたら
+	chipModelHandle[1] = MV1LoadModel("wall＿model/wall.pmx");
+	chipModelHandle[2] = MV1LoadModel("wall＿model/wall2.pmx");
+
 }
 
 // ﾃﾞｽﾄﾗｸﾀ
