@@ -15,12 +15,13 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
 	_modelmgr = ModelMgr::Instance();
+	_emRect.w = 32;
+	_emRect.h = 64;
 	_pos.x = pos.x;
-	_pos.y = pos.y;
+	_pos.y = pos.y -32;//座標がマップチップ一個分の左上で登録されているので、座標からレクトサイズ－マップチップサイズする
 	_initPos = _pos;
 	_dir = DIR_RIGHT;
-	_emRect.w = 32;
-	_emRect.h = 32;
+
 	_emEye.pos.x = _pos.x;
 	_emEye.pos.y = _pos.y + (_emRect.h / 4);
 	_emEye.r = 40;
@@ -101,10 +102,18 @@ void EmLookback::Draw(Position2 offset)
 	if (_dir == DIR_RIGHT) {
 		modelDirAngle = AngleRad(-90.0f);
 		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	}
 	else if (_dir == DIR_LEFT) {
 		modelDirAngle = AngleRad(90.0f);
 		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	}
 	returnDir(offset);
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));

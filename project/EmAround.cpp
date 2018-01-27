@@ -23,11 +23,12 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 
 	//_pl = new Player();
 	//_hit = new HitClass();
-	_pos.x = pos.x;
-	_pos.y = pos.y;
-	_initPos = _pos;
 	_emRect.w = 30;
-	_emRect.h = 30;	
+	_emRect.h = 60;	
+	_pos.x = pos.x;
+	_pos.y = pos.y -30;
+	_initPos = _pos;
+
 	_emEye.pos.x = _pos.x;
 	_emEye.pos.y = _pos.y + (_emRect.h / 4);
 	_emEye.r = 40;
