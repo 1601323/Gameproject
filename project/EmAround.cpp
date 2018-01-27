@@ -1,6 +1,7 @@
 
 #include <DxLib.h>
 #include <math.h>
+#include <iostream>
 #include "Assert.h"
 #include "Geometry.h"
 #include "EnemyServer.h"
@@ -46,6 +47,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	//個体データ初期化
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
+	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
@@ -59,8 +61,11 @@ EmAround::~EmAround()
 
 void EmAround::Updata()
 {
+	SetRange();
 	_emData.lookRange = _emEye;
 	_emData.lookAngle = 60;
+	_emData.lookDir = _dir;
+	_individualData.midFlag = _server.SendMidFlag();
 	Gravity();
 	Visibility();
 	Move();
@@ -202,9 +207,9 @@ void EmAround::CheckMove()
 //視界について
 void EmAround::Visibility()
 {
-	_emData.lookAngle = 60;
+	//_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
-	_emData.lookRange = _emEye;
+	//_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
@@ -260,11 +265,12 @@ void EmAround::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
+#ifdef _DEBUG
 			DrawString(100, 100, "敵に当たったよ！", 0xffffff);
+#endif
 			_state = EM_ST_FEAR;
 		}
 		else {
-			DrawString(100, 100, "うぇい", 0xffffff);
 		}
 	}
 }
@@ -319,16 +325,41 @@ void EmAround::Draw(Position2 offset)
 	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_dir == DIR_LEFT) {
 		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else if (_dir == DIR_RIGHT) {
 		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
 #ifdef _DEBUG
 	_emRect.Draw(offset);
 #endif
 	_emEye.Draw(offset);
 }
 
+void EmAround::SetRange()
+{
+	//サイズは仮
+	_individualData._level = _server.AlertLevel();
+	if (_individualData._level == ALERT_LEVEL_1) {
+		_emEye.r = 40;
+	}
+	else if (_individualData._level == ALERT_LEVEL_2) {
+		_emEye.r = 60;
+	}
+	else if (_individualData._level == ALERT_LEVEL_3) {
+		_emEye.r = 80;
+	}
+	else {
+		_emEye.r = 40;
+	}
+}
 void EmAround::GetClass(HitClass* hit, Player& pl)
 {
 	//_hit = hit;
@@ -345,4 +376,7 @@ ENEMY_STATE& EmAround::GetState()
 void EmAround::SetInitPos()
 {
 	_pos = _initPos;
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }

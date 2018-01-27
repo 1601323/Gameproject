@@ -200,7 +200,7 @@ void Input::InputSet()
 STICK_DIR Input::GetStickDir(float stick)
 {	
 	//cout <<(int)( stick / AngleRad(60.f)) << endl;
-	cout << stick << endl;
+	//cout << stick << endl;
 	if ((int)(stick / AngleRad(60.f)) == 2 ||		// ‰E 60“x
 		(int)(stick / AngleRad(60.f)) == 3) {
 		return SD_RIGHT;

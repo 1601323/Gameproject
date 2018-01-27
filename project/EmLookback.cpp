@@ -42,7 +42,6 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
-
 }
 
 EmLookback::~EmLookback()
@@ -52,6 +51,9 @@ EmLookback::~EmLookback()
 
 void EmLookback::Updata()
 {
+	SetRange();
+	_emData.lookRange = _emEye;
+	_individualData.midFlag = _server.SendMidFlag();
 	if (returnFlag == true) {
 		ReturnPoint();
 	}
@@ -156,10 +158,8 @@ void EmLookback::setDir(void)
 }
 void EmLookback::Visibility()
 {
-	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
-	_emData.lookRange = _emEye;
-	////視界判定(プレイヤーを見つけたとき)
+	//視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
 		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
@@ -321,6 +321,22 @@ void EmLookback::Gravity()
 	}
 	_pos.y += (int)vy;
 }
+void EmLookback::SetRange()
+{
+	_individualData._level = _server.AlertLevel();
+	if (_individualData._level == ALERT_LEVEL_1) {
+		_emEye.r = 40;
+	}
+	else if (_individualData._level == ALERT_LEVEL_2) {
+		_emEye.r = 60;
+	}
+	else if (_individualData._level == ALERT_LEVEL_3) {
+		_emEye.r = 80;
+	}
+	else {
+		_emEye.r = 40;
+	}
+}
 Rect & EmLookback::GetRect()
 {
 	return _emRect;
@@ -343,6 +359,9 @@ void EmLookback::GetClass(HitClass * hit, Player & pl)
 void EmLookback::SetInitPos()
 {
 	_pos = _initPos;
+	_individualData.dataSendFlag = false;
+	_individualData.plFoundFlag = false;
+	_individualData._level = ALERT_LEVEL_1;
 }
 //オフセットの為向いている方向を確認します
 void EmLookback::returnDir(Position2 offset)

@@ -42,6 +42,10 @@ private:
 	EnemyFactory* _emFac;
 
 	const char* mapName;
+	int numberImage;
+	int second;
+	int tenex;
+	int hunex;
 
 	RESULT_DATA _rtData;
 
@@ -52,10 +56,13 @@ private:
 	void UsingRopeUpdata(Input* input,Position2& offset);		//ﾛｰﾌﾟを使用しているときのUpdataを呼び出す
 	void FadeInUpdata(Input* intput);							//フェードインを行います
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
+	void PauseUpdata(Input* input);
 
 	void RetryProcess();
 	void UpdateManager();											//updataのたびに呼び出す関数をまとめておく
 	void Draw(Position2& offset);
+	void DrawUI();	
+	void DrawBack(Position2 offset);
 	void JudgeTransition();
 public:
 	GameScene();

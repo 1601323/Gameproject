@@ -2,6 +2,13 @@
 #include "Geometry.h"
 class EnemyFactory;
 
+struct SetColor {
+	SetColor() :red(0), green(0), blue(0) {}
+	int red;
+	int green;
+	int blue;
+};
+
 class EnemyServer
 {
 private:
@@ -9,6 +16,11 @@ private:
 	EnemyServerData _commonData;
 	int decreaseCnt;
 	void AlertManager();
+	int lightImage;
+	int cnt;			//仮
+	SetColor lampColor;
+
+	void SetLampColor();
 public:
 	EnemyServer();
 	EnemyServer(EnemyFactory* f);
@@ -19,6 +31,8 @@ public:
 	void SetAlert();						//警戒度をセットする
 	ENEMY_ALERT AlertLevel();				//現在の警戒レベルを返す
 	void ServerInit();						//初期化を行います
+	void SetMidFlag(bool mid);
+	bool SendMidFlag();
 
 	void Draw(Position2 offset);
 };

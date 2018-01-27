@@ -7,6 +7,7 @@
 #include <vector>
 #include "Geometry.h"
 #include "Assert.h"
+#include "ImageMgr.h"
 #include "GameScene.h"
 #include "GameMain.h"
 #include "Input.h"
@@ -34,6 +35,7 @@
 
 GameScene::GameScene()
 {
+	ImageMgr& im = ImageMgr::Instance();
 	_updater = &GameScene::FadeInUpdata;
 	GameInit();
 	_player = new Player();
@@ -47,6 +49,7 @@ GameScene::GameScene()
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
 	//_map->Load("map/1218_001.map");
 	_map->Load(mapName);
+	auto chipData = _map->getChipPosData();
 	_hit = new HitClass();
 
 	//_map->Load("map/1.map");
@@ -61,22 +64,35 @@ GameScene::GameScene()
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ロープで移動する足場
 	//マップを読み取り、リストにギミックを持たせます。
-	auto gimData = _map->getChipPosData();
-	for (auto& data : gimData) {
-		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_MAX)
+	//auto gimData = _map->getChipPosData();
+	for (auto& data : chipData) {
+		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_PLAYER_POS)
 			_fac->Create(static_cast<CHIP_TYPE>(data.chipType), Position2(data.posX, data.posY));
-		if (data.chipType == CHIP_DOOR) {
-			_player->SetInitPos(Position2(data.posX, data.posY));
-		}
+		//if (data.chipType == CHIP_DOOR) {
+		//	_player->SetInitPos(Position2(data.posX, data.posY));
+		//}
 	}
 	_hit->GetClass(_fac);
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server, * _hit);
-	_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
+	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
-
-
+	for (auto& data : chipData) {
+		//ﾌﾟﾚｲﾔｰの場所設定
+		if (data.chipType == CHIP_ENEMY_AROUND || data.chipType == CHIP_ENEMY_LOOK) {
+			_emFac->Create(static_cast<ENEMY_TYPE>(data.chipType),Position2(data.posX,data.posY));
+		}
+	}
+	//その他チップから必要なデータを読み込みます
+	for (auto& other : chipData) {
+		if (other.chipType == CHIP_PLAYER_POS) {
+			_player->SetInitPos(Position2(other.posX,other.posY));
+		}
+		if (other.chipType == CHIP_MID_KEY || other.chipType == CHIP_MID_SAFE) {
+			_mid->SetInitPos(static_cast<CHIP_TYPE>(other.chipType),Position2(other.posX,other.posY));
+		}
+	}
 	_hit->GetClass(_emFac);
 	//_hit = new HitClass(_fac, _emFac);
 
@@ -84,11 +100,12 @@ GameScene::GameScene()
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit, _rope);
-
 	_mid->GetClass(_player);
 	_timer->StartTimer();
 	//GameInit();
 	count = 0;
+	//numberImage = im.ImageIdReturn("仮image/UI/NewNum.png",SCENE_RESULT);
+
 }
 GameScene::~GameScene()
 {
@@ -108,15 +125,16 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/1.19.map";
+		mapName = "map/ch.map";
 		break;
 	case 1:
-		mapName = "map/1218_001.map";
+		mapName = "map/map2.map";
+		break;
+	case 2:
+		mapName = "map/na.map";
 		break;
 	default:
-		//マップの数が決まり次第、アサートに切り替え
-		mapName = "map/1218_001.map";
-		//ASSERT();
+		ASSERT();
 		break;
 	}
 }
@@ -128,8 +146,10 @@ void GameScene::FadeInUpdata(Input* input)
 	INPUT_INFO inpInfo = input->GetInput(1);
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
 	_map->Draw(offset);
 	Draw(offset);
+	DrawUI();
 	count++;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220 - (count*2));
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
@@ -141,9 +161,12 @@ void GameScene::FadeInUpdata(Input* input)
 }
 void GameScene::NormalUpdata(Input* input)
 {
+	GameMain& gm = GameMain::Instance();
 	UpdateManager();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
+
 	_map->Draw(offset);
 	//ﾛｰﾌﾟ使用中は敵などが止まる
 	if (_player->GetcharState() == ST_ROPE) {
@@ -152,10 +175,12 @@ void GameScene::NormalUpdata(Input* input)
 	else {
 		ObjectUpdata(input, offset);
 	}
+	_server->SetMidFlag(_rtData.midFlag);
 	_server->Updata();
 
 	Draw(offset);
 	_timer->Updata();
+	DrawUI();
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
@@ -166,6 +191,10 @@ void GameScene::NormalUpdata(Input* input)
 		DrawString(200, 200, "idek", 0xfffff);
 	}
 #endif
+
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
+		_updater = &GameScene::PauseUpdata;
+	}
 	JudgeTransition();
 }
 void GameScene::JudgeTransition()
@@ -200,7 +229,7 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_rope->Updata(input, offset);
 	_player->Update(input);
 	_emFac->Updata();
-	_mid->Updata();
+	_mid->Updata(input);
 }
 //ロープを使っているときに呼び出される
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
@@ -222,8 +251,10 @@ void GameScene::TransitionUpdata(Input* input)
 	GameMain& gm = GameMain::Instance();
 	//_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
 	_map->Draw(offset);
 	Draw(offset);
+	DrawUI();
 	count++;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100 + count);
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
@@ -242,9 +273,31 @@ void GameScene::TransitionUpdata(Input* input)
 		count = 0;
 	}
 }
+void GameScene::PauseUpdata(Input* input) 
+{
+	GameMain& gm = GameMain::Instance();
+	//_cam->Update();
+	Position2& offset = _cam->ReturnOffset();
+	DrawBack(offset);
+	_map->Draw(offset);
+	Draw(offset);
+	DrawUI();
+#ifdef _DEBUG
+	DrawBox(300,100,500,300,0xabcdef,true);
+	DrawString(320,150,"PAUSE",0xffffff);
+#endif
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
+		_updater = &GameScene::NormalUpdata;
+	}
+}
+//リトライ時の初期化呼び出しをまとめたもの
 void GameScene::RetryProcess()
 {
-	if (_rtData.midFlag == true) {
+	if (_mid->ReturnCheckFlag() || _mid->ReturnGetFlag()/*_rtData.midFlag == true*/) {
 		_player->SetRetryPos(_mid->GetInitPos());
 	}
 	else
@@ -271,6 +324,27 @@ void GameScene::Draw(Position2& offset)
 	_player->Draw(offset);
 	_server->Draw(offset);
 	_mid->Draw(offset);
+}
+void GameScene::DrawUI()
+{
+	ImageMgr& im = ImageMgr::Instance();
+	GameMain& gm = GameMain::Instance();
+
+	for (int f = 0; f < gm.GetResultData().life; f++) {
+		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("仮image/UI/UI_life.png", SCENE_RESULT),true);
+	}
+	_timer->Draw();
+}
+//背景描画
+void GameScene::DrawBack(Position2 offset)
+{
+	//まだ多重スクロールはしないです
+	ImageMgr& im = ImageMgr::Instance();
+	DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("仮image/Game/backOmage.png",SCENE_RESULT),true);
+	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back3.png", SCENE_RESULT), true);
+	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back2.png", SCENE_RESULT), true);
+	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back1.png", SCENE_RESULT), true);
+
 }
 //シーン遷移のために用意
 SCENE_TYPE GameScene::GetScene()

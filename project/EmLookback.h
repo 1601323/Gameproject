@@ -51,6 +51,7 @@ private:
 	void ReturnPoint();					//Œ³‚ÌˆÊ’u‚É–ß‚Á‚Ä‚¢‚­
 	void returnDir(Position2 offset);	//Œü‚¢‚Ä‚¢‚é•ûŒü‚ð•Ô‚·
 	void Gravity();
+	void SetRange();
 public:
 	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();

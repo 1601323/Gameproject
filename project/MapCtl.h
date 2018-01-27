@@ -23,9 +23,10 @@ struct MapFileHeader {
 #pragma pack()
 
 struct MapData {
-	vector<unsigned char>data;
+	vector<unsigned char>data[LAYER_MAX];
 	unsigned int x;
 	unsigned int y;
+	unsigned int layer;
 };
 
 //ｷﾞﾐｯｸで利用するデータ
@@ -34,7 +35,12 @@ struct ChipPosData {
 	float posX;
 	float posY;
 };
-
+//ｴﾈﾐｰで利用するﾃﾞｰﾀ
+struct EnemyPosData {
+	char enemyType;
+	float posX;
+	float posY;
+};
 class MapCtl
 {
 public:
@@ -45,9 +51,12 @@ public:
 	Position2 GetChipPos(Position2 idPos);	// MapChipの座標返す[左上座標]
 	CHIP_TYPE GetChipType(Position2 idPos);	// ﾁｯﾌﾟﾀｲﾌﾟ取得用
 	unsigned int GetMapID(Position2 idPos);	// ﾏｯﾌﾟﾁｯﾌﾟID取得[座標]
+	unsigned int GetMapNum(Position2 getPos);	//マップチップの番号を取得
 	void Draw(void);			// 描画
 	void Draw(Position2 offset);
 	void Load(const char* fileName);		// 読み込み 
+
+	int chipImage[8];
 
 	//ギミック用に追加
 	//CHIP_TYPEとPositionをもつデータ
@@ -55,6 +64,8 @@ public:
 	//ギミックのための追加です
 	//チップタイプと場所を読み込む
 	vector<ChipPosData> getChipPosData();
+	//敵用に追加
+	vector<EnemyPosData> getEnemyData();
 private:
 	static MapCtl* ptr;					// ﾎﾟｲﾝﾀ	
 	shared_ptr<Object> obj;
