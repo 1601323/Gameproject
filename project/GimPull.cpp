@@ -18,6 +18,7 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_gmRect.w = 32*3;
 	_gmRect.h = 32;
 	count = 60;
+	_initPos = _pos;
 	_gimType = GIM_ATTRACT;
 	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ/丸底フラスコ.pmx", SCENE_RESULT);
 
@@ -134,6 +135,10 @@ void GimPull::Move()
 	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
 		_state = GM_END;
 		count = 60;
+	}
+	//一定値以上動いたら強制的に動きを止める
+	if (abs(_pos.x - _initPos.x) >= 100) {
+		_state = GM_END;
 	}
 }
 
