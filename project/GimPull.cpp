@@ -143,7 +143,7 @@ void GimPull::Draw(Position2 offset)
 	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_gmRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_gmRect.h ), 0));
 	MV1SetScale(modelhandle, VGet(5.f, 5.f, 5.f));
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 	if (_state != GM_END&& _state != GM_PAUSE) {			//ENDÇ∆PAUSEà»äOÇ≈Ç†ÇÍÇŒêFÇÕìØÇ∂Ç‹Ç‹
 	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
 		//DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);

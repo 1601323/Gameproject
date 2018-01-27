@@ -1101,7 +1101,7 @@ void Player::Draw(Position2& offset)
 	DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y-32, (int)_pos.x + 32 - offset.x, (int)_pos.y + 32 - offset.y, 0xffffff, false);
 	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
 	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
-	outlineNum = 0.1f;
+	outlineNum = 0.0f;
 	switch (_state)
 	{
 		//╫цы╫▐С▒т
