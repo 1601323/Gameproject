@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "DxLib.h"
 #include "GameScene.h"
 #include "GimDrop.h"
@@ -9,8 +11,7 @@
 #include "Rope.h"
 #include "ModelMgr.h"
 
-#include <iostream>
-#include <cmath>
+
 using namespace std;
 
 
@@ -492,8 +493,6 @@ bool Player::moveWall(void)
 		else {
 			vy = 0.0f;
 		}
-
-
 		//‰º‚ª’n–Ê‚¾‚Á‚½Žž‚ÍŽ~‚Ü‚é
 		Position2 nextPosDown;
 		nextPosDown.x = _pos.x + (_plRect.w / 2);
@@ -522,7 +521,8 @@ bool Player::moveWall(void)
 		WallPosDownL.x = _pos.x;
 		WallPosDownL.y = _pos.y + (_plRect.h - 1);
 
-		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+		//tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+		tmpPos.y = (_pos.y - _plRect.h/2 -3);
 		//moveFlag‚ªfalse‚Ì‚Æ‚«‚ÍˆÊ’u•â³‚ðs‚¤
 		if (!moveFlag) {
 			if (_rope->GetRopeState() != ST_ROPE_READY) {
@@ -550,7 +550,7 @@ bool Player::moveWall(void)
 					//‰E‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this)&& _hit->GimmickHitType(*this) ==GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-					//	_pos.x += 3;
+					//	_pos.x += 5;
 						WallFlag = false;
 					}
 				}
@@ -558,7 +558,7 @@ bool Player::moveWall(void)
 					//¶‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL  ||_hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						//_pos.x -= 3;
+						//_pos.x -= 5;
 						WallFlag = false;
 					}
 				}
