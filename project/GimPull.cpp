@@ -18,6 +18,7 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_gmRect.w = 32*3;
 	_gmRect.h = 32;
 	count = 60;
+	_initPos = _pos;
 	_gimType = GIM_ATTRACT;
 	modelhandle = _modelmgr->ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
 
@@ -134,6 +135,10 @@ void GimPull::Move()
 	else {		//Ý’è‚µ‚½ˆÚ“®—Ê‚¾‚¯ˆÚ“®‚µI‚í‚Á‚½‚çó‘Ô‚ðEND‚É•Ï‚¦‚é
 		_state = GM_END;
 		count = 60;
+	}
+	//ˆê’è’lˆÈã“®‚¢‚½‚ç‹­§“I‚É“®‚«‚ðŽ~‚ß‚é
+	if (abs(_pos.x - _initPos.x) >= 100) {
+		_state = GM_END;
 	}
 }
 
