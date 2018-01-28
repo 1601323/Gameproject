@@ -28,9 +28,9 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	_state = GM_NONE;
 	enterFlag = false;
 	_gimType = GIM_DOOR;
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/エレベーター/センサードア.pmx", SCENE_RESULT);
-	AttachIndex = MV1AttachAnim(modelhandle, 1, -1, false);
-	totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/出入口/door.pmx", SCENE_RESULT);
+	//AttachIndex = MV1AttachAnim(modelhandle, 1, -1, false);
+	//totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
 }
 
 SensorDoor::~SensorDoor()
@@ -109,19 +109,23 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 
 void SensorDoor::Draw(Position2 offset)
 {
-
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+200, SCREEN_SIZE_X - _pos.y + offset.y, 0));
-	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	//SetUseZBufferFlag(TRUE);
+	//SetWriteZBufferFlag(TRUE);
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(88.f), 0.0f));
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + 10.f, _pos.y + offset.y-322.f ,0.0f)));
+	MV1SetScale(modelhandle, VGet(6.f, 6.f, 6.f));
 	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
-	//MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
+	MV1DrawModel(modelhandle);
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.f);
+	//SetUseZBufferFlag(FALSE);
+	//SetWriteZBufferFlag(FALSE);
 
 	//外枠の表示
-	DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0xffffffff,false);
+	//DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0x000000,true);
 	//右扉
-	DxLib::DrawBox((int)(_pos.x - offset.x+count),(int)(_pos.y - offset.y - HEIGHT),(int)(_pos.x - offset.x + (WIDTH / 2)),(int)_pos.y - offset.y,0xffffffff,true);
+	//DxLib::DrawBox((int)(_pos.x - offset.x+count),(int)(_pos.y - offset.y - HEIGHT),(int)(_pos.x - offset.x + (WIDTH / 2)),(int)_pos.y - offset.y,0xffffffff,true);
 	//左扉
-	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)),(int)( _pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x - count ), (int)_pos.y - offset.y, 0xffffffff, true);
+	//DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)),(int)( _pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x - count ), (int)_pos.y - offset.y, 0xffffffff, true);
 
 	_gmRect.SetCenter(_pos.x , _pos.y - (HEIGHT / 2));
 #ifdef _DEBUG

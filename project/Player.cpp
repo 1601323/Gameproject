@@ -1137,7 +1137,7 @@ void Player::Draw(Position2& offset)
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
-	MV1SetPosition(modelhandle, VGet(modelPlayerPos.x, modelPlayerPos.y, _pos.z));
+	MV1SetPosition(modelhandle,VGet(modelPlayerPos.x, modelPlayerPos.y, _pos.z));
 	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 

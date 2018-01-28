@@ -342,8 +342,8 @@ void GameScene::DrawBack(Position2 offset)
 	ImageMgr& im = ImageMgr::Instance();
 	DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("âºimage/Game/backOmage.png",SCENE_RESULT),true);
 	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back3.png", SCENE_RESULT), true);
-	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back2.png", SCENE_RESULT), true);
-	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back1.png", SCENE_RESULT), true);
+	DrawGraph(0 - offset.x*1.5f, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back2.png", SCENE_RESULT), true);
+	DrawGraph(0 - offset.x*2.f, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back1.png", SCENE_RESULT), true);
 
 }
 //ÉVÅ[ÉìëJà⁄ÇÃÇΩÇﬂÇ…ópà”
