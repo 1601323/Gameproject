@@ -117,7 +117,7 @@ void SensorDoor::Draw(Position2 offset)
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.2f);
 
 	//äOògÇÃï\é¶
-	DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0xffffffff,false);
+	DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0x000000,true);
 	//âEî‡
 	DxLib::DrawBox((int)(_pos.x - offset.x+count),(int)(_pos.y - offset.y - HEIGHT),(int)(_pos.x - offset.x + (WIDTH / 2)),(int)_pos.y - offset.y,0xffffffff,true);
 	//ç∂î‡
