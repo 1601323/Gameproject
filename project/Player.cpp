@@ -1106,13 +1106,11 @@ void Player::Draw(Position2& offset)
 	//時機
 	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
 	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
-	outlineNum = 0.0f;
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
 	case ST_VANISH:
 		alfa = max(alfa - 1, tranceMax);
-		outlineNum = 0.0f;
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//ﾛｰﾌﾟ状態
@@ -1143,7 +1141,7 @@ void Player::Draw(Position2& offset)
 
 	AnimationSwitching();
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, outlineNum);
+	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
