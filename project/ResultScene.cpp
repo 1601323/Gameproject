@@ -23,12 +23,15 @@ ResultScene::ResultScene()
 	selectFlag = false;
 	nowNum = 0;
 	_modelmgr = ModelMgr::Instance();
+	//モデル読み込み
 	playerModelHandle = MV1LoadModel("player_model/player.pmx");
-	smileTexture = LoadGraph("player_model/face2.png");
 	medicineHandle = MV1LoadModel("gimmick_model/フラスコ/丸底フラスコ.pmx");
-
+	//喜びのテクスチャの読み込み
+	smileTexture = LoadGraph("player_model/face2.png");
+	//アニメーションをアタッチ+総時間の設定
 	AnimIndex = MV1AttachAnim(playerModelHandle, ACTION_HAPPY, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(playerModelHandle, AnimIndex);
+	//顔のテクスチャのindexを取得
 	textureIndex = MV1GetMaterialDifMapTexture(playerModelHandle, 1);
 }
 
@@ -200,27 +203,41 @@ void ResultScene::Draw()
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
+
 		//プレイヤー
+		//アニメーションのフレームを進める
 		AnimNowTime += 0.5f;
+		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime >= AnimTotalTime)
 		{
 			AnimNowTime = 0;
 		}
+		//モデルの回転角度の設定(ラジアン)
 		MV1SetRotationXYZ(playerModelHandle, VGet(0.f, AngleRad(45.f), 0.f));
+		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(playerModelHandle, AnimIndex, AnimNowTime);
+		//モデルのposを設定+ワールド座標からスクリーンへ変換
 		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(600.f, 600, 0.f)));
+		//モデルの拡大縮小値の設定
 		MV1SetScale(playerModelHandle, VGet(4.0f, 4.0f, 4.0f));
+		//顔のテクスチャを笑顔の方に変更
 		MV1SetTextureGraphHandle(playerModelHandle, textureIndex, smileTexture, FALSE);
+		//モデルを描画
 		MV1DrawModel(playerModelHandle);
+		//モデルの輪郭線を設定 0.0fで透過します
 		_modelmgr->SetMaterialDotLine(playerModelHandle, 0.0f);
 
 		//薬
+		//モデルのposを設定+ワールド座標からスクリーンへ変換
 		MV1SetPosition(medicineHandle, ConvWorldPosToScreenPos(VGet(500.f, 600, 0.f)));
+		//モデルの拡大縮小値の設定
 		MV1SetScale(medicineHandle, VGet(15.0f, 15.0f, 15.0f));
+		//モデルを描画
 		MV1DrawModel(medicineHandle);
+		//モデルの輪郭線を設定 0.0fで透過します
 		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
 
-
+		//スコアタイムの画像読み込みと表示
 		numberImage = im.ImageIdReturn("仮image/UI/NewNum.png", SCENE_RESULT);
 		second = _rtData.goalTime % 10;
 		tenex = (_rtData.goalTime / 10) % 10;

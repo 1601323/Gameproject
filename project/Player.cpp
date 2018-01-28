@@ -44,18 +44,16 @@ Player::Player()
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
 
-	//とりあえず同じように
 	_modelmgr = ModelMgr::Instance();
+	//モデル読み込み
 	modelhandle = MV1LoadModel("player_model/player.pmx");
+	//それぞれのアニメーションをアタッチ+総時間の設定
 	for (int i = 0; i <= ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
 	}
 	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
-
-	modelPlayerPos.x = 0;
-	modelPlayerPos.y = 0;
 }
 Player::~Player()
 {
@@ -1103,13 +1101,14 @@ void Player::FeverJump()
 }
 void Player::Draw(Position2& offset)
 {
+	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
+	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
 	//時機
-	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
-	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
 	case ST_VANISH:
+		//透過率をだんだん上げていく
 		alfa = max(alfa - 1, tranceMax);
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
@@ -1134,13 +1133,19 @@ void Player::Draw(Position2& offset)
 	}
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 
+	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
-	MV1SetPosition(modelhandle,VGet(modelPlayerPos.x, modelPlayerPos.y, _pos.z));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, WorldToScreenPos);
+	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
+	//モデルの透過率の設定
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
-
+	//アニメーション切り替え
 	AnimationSwitching();
+	//モデルを描画
 	MV1DrawModel(modelhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
@@ -1355,9 +1360,9 @@ void Player::SetRetryPos(Position2 midPos)
 	feverTime = 60 * FEVER_CNT;
 }
 
-Position2& Player::GetModelPos(void)
+Position2 Player::ReturnWoToScPos2ver()
 {
-	return modelPlayerPos;
+	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
 }
 
 void Player::AnimationSwitching(void)
@@ -1373,17 +1378,22 @@ void Player::AnimationSwitching(void)
 			{
 				continue;
 			}
+			//不要なアニメーションのブレンド率を0にする
 			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i],0.0f);
 		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
+		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
+		//指定アニメーションのフレームを進める
 		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_SLOW;
-
+		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
 		{
 			AnimNowTime[ACTION_WAIT] = 0.0f;
 		}
 		break;
+		//移動状態
 	case ST_MOVE:
 		for (int i = 0; i <= ACTION_MAX; i++)
 		{
@@ -1391,12 +1401,16 @@ void Player::AnimationSwitching(void)
 			{
 				continue;
 			}
+			//不要なアニメーションのブレンド率を0にする
 			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
 		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WALK], 1.0f);
+		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
+		//指定アニメーションのフレームを進める
 		AnimNowTime[ACTION_WALK] += ANIMATION_SPEED_HIGH;
-
+		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
 		{
 			AnimNowTime[ACTION_WALK] = 0.0f;
@@ -1414,18 +1428,23 @@ void Player::AnimationSwitching(void)
 			{
 				continue;
 			}
+			//不要なアニメーションのブレンド率を0にする
 			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
 		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_CLIMB], 1.0f);
+		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_CLIMB], AnimNowTime[ACTION_CLIMB]);
+		//指定アニメーションのフレームを進める
 		AnimNowTime[ACTION_CLIMB] += ANIMATION_SPEED_HIGH;
-
+		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
 		{
 			AnimNowTime[ACTION_CLIMB] = 0.0f;
 		}
 
 		break;
+		//ジャンプ状態
 	case ST_JUMP:
 		for (int i = 0; i <= ACTION_MAX; i++)
 		{
@@ -1433,12 +1452,16 @@ void Player::AnimationSwitching(void)
 			{
 				continue;
 			}
+			//不要なアニメーションのブレンド率を0にする
 			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
 		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_JUMP], 1.0f);
+		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
-		AnimNowTime[ACTION_JUMP] += ANIMATION_SPEED_DEF;
-
+		//指定アニメーションのフレームを進める
+		AnimNowTime[ACTION_JUMP] += 0.5f;
+		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
 		{
 			AnimNowTime[ACTION_JUMP] =0.0f;

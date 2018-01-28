@@ -50,8 +50,9 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData.plFoundFlag = false;
 	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
-
+	//ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	//‰ŠúŠp“x
 	modelDirAngle = AngleRad(-90.0f);
 }
 
@@ -270,7 +271,7 @@ void EmAround::EnemyFalter()
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
 #ifdef _DEBUG
-			DrawString(100, 100, "“G‚É“–‚½‚Á‚½‚æI", 0xffffff);
+			//DrawString(100, 100, "“G‚É“–‚½‚Á‚½‚æI", 0xffffff);
 #endif
 			_state = EM_ST_FEAR;
 		}
@@ -316,11 +317,17 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
+	//ƒ‚ƒfƒ‹‚Ì‰ñ“]Šp“x‚ÌÝ’è(ƒ‰ƒWƒAƒ“)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//ƒ‚ƒfƒ‹‚Ìpos‚ðÝ’è+ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“‚Ö•ÏŠ·
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2),_pos.y - offset.y + (_emRect.h),0)));
+	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚ÌÝ’è
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
+	//ƒ‚ƒfƒ‹‚ð•`‰æ
 	MV1DrawModel(modelhandle);
+	//ƒ‚ƒfƒ‹‚Ì—ÖŠsü‚ðÝ’è 0.0f‚Å“§‰ß‚µ‚Ü‚·
 	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}

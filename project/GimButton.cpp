@@ -100,7 +100,7 @@ void GimButton::Draw(Position2 offset)
 		_gmRect.SetCenter(_pos.x + (_gmRect.w / 2), _pos.y  + (_gmRect.h / 2));
 	}
 #ifdef _DEBUG
-	_gmRect.Draw(offset);
+	//_gmRect.Draw(offset);
 #endif
 }
 //‚ ‚½‚è”»’è—p
