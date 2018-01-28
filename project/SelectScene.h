@@ -23,6 +23,7 @@ private:
 
 	int w;
 	int h;
+	char* stageNum[3];
 public:
 	SelectScene();
 	~SelectScene();
