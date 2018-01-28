@@ -20,7 +20,7 @@ TitleScene::TitleScene()
 	_skyPos[1].x = 320;
 	_skyPos[1].y = 0;
 	skyImage = ImageMgr::Instance().ImageIdReturn("‰¼image/sky.png", SCENE_SELECT);
-	uiMovie = "movie/titi.avi";
+	uiMovie = "movie/titleMovie.avi";
 	SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
 	movieFlag = false;
 	titleFlag = false;
