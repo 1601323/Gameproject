@@ -268,7 +268,7 @@ void GimDrop::Draw(Position2 offset)
 		//Š„‚ê‚½‚è‚µ‚Ä‚é•`‰æ
 		count--;
 		if (count >= 0) {
-			DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "_ƒKƒVƒƒ[ƒ“^", 0xffff00);
+			//DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "_ƒKƒVƒƒ[ƒ“^", 0xffff00);
 		}
 		DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
 	}
@@ -277,7 +277,7 @@ void GimDrop::Draw(Position2 offset)
 	}
 	_gmRect.SetCenter(_pos.x , _pos.y);
 #ifdef _DEBUG
-	_gmRect.Draw(offset);
+	//_gmRect.Draw(offset);
 #endif
 }
 //‚ ‚½‚è”»’è—p

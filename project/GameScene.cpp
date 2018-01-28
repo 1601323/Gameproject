@@ -128,7 +128,7 @@ void GameScene::GameInit()
 		mapName = "map/ch.map";
 		break;
 	case 1:
-		mapName = "map/map2.map";
+		mapName = "map/douga.map";
 		break;
 	case 2:
 		mapName = "map/na.map";
@@ -188,7 +188,7 @@ void GameScene::NormalUpdata(Input* input)
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON)
 	{
 		//Enterキー or Aボタン 処理
-		DrawString(200, 200, "idek", 0xfffff);
+		//DrawString(200, 200, "idek", 0xfffff);
 	}
 #endif
 

@@ -79,7 +79,7 @@ void TitleScene::NormalUpdata(Input* input)
 	scroll();
 	Draw();
 #ifdef _DEBUG
-	DrawString(10, 0, "タイトル", GetColor(255, 255, 255));
+	//DrawString(10, 0, "タイトル", GetColor(255, 255, 255));
 #endif
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (selectFlag == true) {

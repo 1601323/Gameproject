@@ -76,16 +76,16 @@ void ResultScene::GameClear()
 	GameMain& gm = GameMain::Instance();
 	gm.NewDataSet();
 	gm.BestDataSet();
-	DrawFormatString(100, 150, 0xffffff, "%d", _rtData.goalTime);
+	//DrawFormatString(100, 150, 0xffffff, "%d", _rtData.goalTime);
 
 #ifdef _DEBUG
-	DrawString(100, 100, "Clear", 0xff00ff);
+	//DrawString(100, 100, "Clear", 0xff00ff);
 #endif
 }
 void ResultScene::GameOver()
 {
 #ifdef _DEBUG
-	DrawString(100, 100, "GameOver", 0xff00ff);
+	//DrawString(100, 100, "GameOver", 0xff00ff);
 #endif
 }
 void ResultScene::Select(Input*  input)

@@ -33,7 +33,7 @@ void SelectScene::NormalUpdata(Input* input)
 	_inpInfo = input->GetInput(1);
 	Select(input);
 #ifdef _DEBUG
-	DrawString(10, 0, "セレクト", GetColor(255, 255, 255));
+	//DrawString(10, 0, "セレクト", GetColor(255, 255, 255));
 #endif
 	Draw();
 
