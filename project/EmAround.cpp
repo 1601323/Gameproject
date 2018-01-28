@@ -151,7 +151,7 @@ void EmAround::InterMove()
 void EmAround::FoundMove()
 {
 	//Œ»’iŠK‚Å‚ÍŽ‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯’Ç‚¢‚©‚¯‚é
-
+	speed = 2;
 	//ÌßÚ²Ô°‚Ì‚Ù‚¤‚ª‰E‚É‚¢‚½‚ç
 	if (_pl.GetPos().x >= _pos.x) {
 		_pos.x += speed;

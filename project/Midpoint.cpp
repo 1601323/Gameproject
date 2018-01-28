@@ -157,7 +157,7 @@ void Midpoint::Draw(Position2 offset)
 		MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
-		_hitRect.Draw(offset);
+		//_hitRect.Draw(offset);
 #endif
 	}
 	else if (checkpointFlag == true && GetFlag == false) {
