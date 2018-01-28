@@ -27,6 +27,7 @@ private:
 	void MenuSelect(Input* input);
 	void scroll();
 	void Draw();
+	void InitMovie();
 	SENSING_VALUE _minSensingValueL;
 
 	bool titleFlag;		//タイトル画面（Aを押してね）
@@ -36,6 +37,8 @@ private:
 	Position2 _skyPos[2];		//背景スクロール用
 	char* uiMovie;
 	bool movieFlag;
+
+	bool initFlag;
 
 	int lightCnt;
 	int flameCnt;

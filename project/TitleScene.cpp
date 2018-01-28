@@ -27,6 +27,8 @@ TitleScene::TitleScene()
 	selectFlag = false;
 	lightCnt = 0;
 	flameCnt = 0;
+	initFlag = false;
+	///InitMovie();
 }
 
 
@@ -34,14 +36,22 @@ TitleScene::~TitleScene()
 {
 	SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
 }
-
-void TitleScene::FadeinTitle(Input* input)
+void TitleScene::InitMovie()
 {
-	ImageMgr& im = ImageMgr::Instance();
+	ImageMgr&im = ImageMgr::Instance();
+
 	if (GetMovieStateToGraph(im.ImageIdReturn(uiMovie, SCENE_SELECT)) == 0) {
 		PlayMovieToGraph(im.ImageIdReturn(uiMovie, SCENE_SELECT));
 		PauseMovieToGraph(im.ImageIdReturn(uiMovie, SCENE_SELECT));
 	}
+}
+void TitleScene::FadeinTitle(Input* input)
+{
+	if (initFlag == false) {
+		InitMovie();
+		initFlag = true;
+	}
+
 	lightCnt++;
 	Draw();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200 - (lightCnt * 2));
@@ -75,6 +85,7 @@ void TitleScene::NormalUpdata(Input* input)
 		if (selectFlag == true) {
 			if (_menu == GAME_START) {
 				gm.Instance().ChangeScene(new SelectScene());
+				initFlag = false;
 			}
 			else if (_menu == GAME_EXPLAIN) {
 				operateFlag = !operateFlag;
@@ -119,14 +130,14 @@ void TitleScene::scroll()
 void TitleScene::MenuSelect(Input* input)
 {
 	if (inpInfo.num >= 1) {
-		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_RIGHT) &&
+		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_menu = GAME_EXPLAIN;
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
 		}
-		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_LEFT) &&
+		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_menu = GAME_START;
 			//if (_menu == GAME_EXPLAIN) {
@@ -138,13 +149,13 @@ void TitleScene::MenuSelect(Input* input)
 		}
 	}
 	else {	//キーボードの場合
-		if (inpInfo.key.keybit.R_RIGHT_BUTTON && !lastKey.keybit.R_RIGHT_BUTTON) {
+		if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
 			_menu = GAME_EXPLAIN;
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
 		}
-		else if (inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
+		else if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 			_menu = GAME_START;
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
@@ -174,23 +185,32 @@ void TitleScene::Draw()
 
 
 	if (selectFlag == true) {
-		DrawBox(200, 500, 300, 600, 0xffaaff, true);
-		if (_menu == GAME_START) {
-			DrawBox(200, 500, 300, 600, 0xffffff, true);
-		}
-		DrawString(250, 550, "Game", 0xffff99);
+		//DrawBox(200, 500, 300, 600, 0xffaaff, true);
+		//if (_menu == GAME_START) {
+		//	DrawBox(200, 500, 300, 600, 0xffffff, true);
+		//}
+		//DrawString(250, 550, "Game", 0xffff99);
+		DrawGraph(150, 350, im.ImageIdReturn("仮image/title/select_Game.png", SCENE_SELECT), true);
 
-		DrawBox(400, 500, 500, 600, 0xffaaff, true);
-		if (_menu == GAME_EXPLAIN) {
-			DrawBox(400, 500, 500, 600, 0xffffff, true);
+		//DrawBox(400, 500, 500, 600, 0xffaaff, true);
+		//if (_menu == GAME_EXPLAIN) {
+		//	DrawBox(400, 500, 500, 600, 0xffffff, true);
+		//}
+		//DrawString(450, 550, "explain", 0xffff99);
+		DrawGraph(150, 500, im.ImageIdReturn("仮image/title/Pause_ope.png", SCENE_SELECT), true);
+		if (_menu == GAME_START) {
+			DrawGraph(70, 350, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_SELECT), true);
 		}
-		DrawString(450, 550, "explain", 0xffff99);
+		else if (_menu == GAME_EXPLAIN) {
+			DrawGraph(70, 500, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_SELECT), true);
+		}
 	}
 	if (operateFlag == true) {
 		DrawBox(200, 400, 500, 500, 0xffffff, true);
 		DrawString(220, 410, "未実装", 0x000000);
 		DrawString(250, 450, "もう一度エンターで選択を解除", 0x000000);
 	}
+
 	DrawGraph(400, -105, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
 	DrawGraph(40, 50, im.ImageIdReturn("仮image/title.png", SCENE_SELECT), true);
 
