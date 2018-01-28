@@ -46,7 +46,7 @@ Player::Player()
 
 	//‚Æ‚è‚ ‚¦‚¸“¯‚¶‚æ‚¤‚É
 	_modelmgr = ModelMgr::Instance();
-	modelhandle = _modelmgr->ModelIdReturn("player_model/player.pmx", SCENE_RESULT);
+	modelhandle = MV1LoadModel("player_model/player.pmx");
 	for (int i = 0; i <= ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
