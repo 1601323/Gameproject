@@ -22,7 +22,10 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_gimType = GIM_ATTRACT;
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
-
+	//色違いテクスチャの読み込み
+	colorTexture = LoadGraph("floor_model/floor2.png");
+	//テクスチャのindexを取得
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 }
 
 
@@ -151,6 +154,8 @@ void GimPull::Draw(Position2 offset)
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_gmRect.w / 2),_pos.y - offset.y + (_gmRect.h ), 0)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(5.f, 5.f, 5.f));
+	//テクスチャを変更
+	MV1SetTextureGraphHandle(modelhandle, textureIndex, colorTexture, FALSE);
 	//モデルを描画
 	MV1DrawModel(modelhandle);
 	//モデルの輪郭線を設定 0.0fで透過します
