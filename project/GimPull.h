@@ -26,6 +26,8 @@ private:
 	INPUT_INFO _inpInfo;
 	int count;				//一定量動く範囲を設定する
 	int modelhandle;
+	int colorTexture;       //色違いのテクスチャ
+	int textureIndex;       //テクスチャのindex
 
 	void CheckDoMove();		//動作条件判定
 	void Move();			//ギミックの動作について
