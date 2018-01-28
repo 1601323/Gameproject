@@ -109,16 +109,12 @@ void SensorDoor::CheckHit()	//‚ ‚½‚è”»’è‚ÌêŠ‚É‚Â‚¢‚Ä
 
 void SensorDoor::Draw(Position2 offset)
 {
-	//SetUseZBufferFlag(TRUE);
-	//SetWriteZBufferFlag(TRUE);
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(88.f), 0.0f));
-	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + 10.f, _pos.y + offset.y-322.f ,0.0f)));
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x , _pos.y - offset.y,0.0f)));
 	MV1SetScale(modelhandle, VGet(6.f, 6.f, 6.f));
 	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.f);
-	//SetUseZBufferFlag(FALSE);
-	//SetWriteZBufferFlag(FALSE);
 
 	//ŠO˜g‚Ì•\Ž¦
 	//DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0x000000,true);

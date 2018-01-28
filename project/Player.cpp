@@ -1271,6 +1271,7 @@ void Player::FeverGravity()
 		for (int j = 0; j < 3; j++) {
 			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
 				vy = 0.0f;
+				AnimNowTime[ACTION_JUMP] = 0.0f;
 				JumpFlag = false;
 				break;
 			}
@@ -1382,7 +1383,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
 		{
-			AnimNowTime[ACTION_WAIT] = 0.f;
+			AnimNowTime[ACTION_WAIT] = 0.0f;
 		}
 		break;
 	case ST_MOVE:
@@ -1400,7 +1401,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
 		{
-			AnimNowTime[ACTION_WALK] = 0.f;
+			AnimNowTime[ACTION_WALK] = 0.0f;
 		}
 
 		break;
@@ -1423,7 +1424,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
 		{
-			AnimNowTime[ACTION_CLIMB] = 0.f;
+			AnimNowTime[ACTION_CLIMB] = 0.0f;
 		}
 
 		break;
@@ -1442,7 +1443,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
 		{
-			AnimNowTime[ACTION_JUMP] = 0.f;
+			AnimNowTime[ACTION_JUMP] =0.0f;
 		}
 		break;
 	default:

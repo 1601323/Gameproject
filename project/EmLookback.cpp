@@ -74,7 +74,7 @@ void EmLookback::Updata()
 void EmLookback::Draw(Position2 offset)
 {
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_emRect.h), 0));
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 	MV1DrawModel(modelhandle);
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
