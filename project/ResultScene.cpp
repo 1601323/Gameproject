@@ -8,6 +8,7 @@
 #include "SelectScene.h"
 #include "ResultScene.h"
 #include "ModelMgr.h"
+#include "ImageMgr.h"
 
 
 ResultScene::ResultScene()
@@ -23,8 +24,8 @@ ResultScene::ResultScene()
 	smileTexture = LoadGraph("player_model/face2.png");
 	medicineHandle = MV1LoadModel("gimmick_model/フラスコ/丸底フラスコ.pmx");
 
-	bgHandle = LoadGraph("仮image/result の仮です/Result.png");
-	ScoreSelectHandle = LoadGraph("仮image/result の仮です/Result2.png");
+	//bgHandle = LoadGraph("仮image/result の仮です/Result.png");
+	//ScoreSelectHandle = LoadGraph("仮image/result の仮です/Result2.png");
 
 	AnimIndex = MV1AttachAnim(playerModelHandle, ACTION_HAPPY, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(playerModelHandle, AnimIndex);
@@ -191,10 +192,12 @@ void ResultScene::Select(Input*  input)
 }
 void ResultScene::Draw()
 {
+	ImageMgr& im = ImageMgr::Instance();
 	if (clearFlag == true) {
 		//背景
-		DrawGraph(0, 0, bgHandle, true);
-		DrawGraph(0, 0, ScoreSelectHandle, true);
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
+		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 
 		//プレイヤー
 		AnimNowTime += 1.0f;
@@ -215,21 +218,16 @@ void ResultScene::Draw()
 		MV1SetScale(medicineHandle, VGet(15.0f, 15.0f, 15.0f));
 		MV1DrawModel(medicineHandle);
 		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
-
-		DrawString(300, 280, "リトライ", 0xffffff);
-		DrawString(300, 300, "セレクト", 0xffffff);
-		DrawString(300, 320, "タイトル", 0xffffff);
-
 
 		DrawString(300, 300, "セレクト", 0xffffff);
 		DrawString(300, 320, "タイトル", 0xffffff);
 	}
 	else if (clearFlag == false) {
-		//確認用でGAMEOVERにも書いた
+		//確認用でGAMEOVERにも書いた-----------------------------------------------------
 		//背景
-		DrawGraph(0, 0, bgHandle, true);
-		DrawGraph(0, 0, ScoreSelectHandle, true);
-
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
+		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 		//プレイヤー
 		AnimNowTime += 1.0f;
 		if (AnimNowTime >= AnimTotalTime)
@@ -249,6 +247,7 @@ void ResultScene::Draw()
 		MV1SetScale(medicineHandle, VGet(15.0f, 15.0f, 15.0f));
 		MV1DrawModel(medicineHandle);
 		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
+		//-------------------------------------------------------------------------------
 
 		DrawString(300, 280, "リトライ", 0xffffff);
 		DrawString(300, 300, "セレクト", 0xffffff);
@@ -256,13 +255,16 @@ void ResultScene::Draw()
 	}
 	switch (nowNum) {
 	case 0:
-		DrawString(280, 280, "→", 0xffffff);
+		//DrawString(280, 280, "→", 0xffffff);
+		dirNumY = clearFlag ? 250 : 200;
 		break;
 	case 1:
-		DrawString(280, 300, "→", 0xffffff);
+		//DrawString(280, 300, "→", 0xffffff);
+		dirNumY = 250;
 		break;
 	case 2:
-		DrawString(280, 320, "→", 0xffffff);
+		//DrawString(280, 320, "→", 0xffffff);
+		dirNumY = 360;
 		break;
 	default:
 		break;

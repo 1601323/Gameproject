@@ -6,8 +6,8 @@ class ModelMgr;
 
 enum NEXT_MODE {
 	JUMP_RETRY,
-	JUMP_SELECT,
 	JUMP_TITLE,
+	JUMP_SELECT,
 	JUMP_MAX
 };
 
@@ -24,8 +24,7 @@ private:
 	SENSING_VALUE _minSensingValueL;
 	NEXT_MODE mode[JUMP_MAX];
 	int nowNum;
-	int bgHandle;
-	int ScoreSelectHandle;
+	int dirNumY;
 	bool clearFlag;
 	bool selectFlag;
 
@@ -38,8 +37,6 @@ private:
 	float  AnimNowTime;
 	float outlineNum;
 	int  AnimIndex;
-
-
 
 	void NormalUpdata(Input* input);
 
