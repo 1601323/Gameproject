@@ -90,7 +90,6 @@ private:
 	float  AnimNowTime[ACTION_MAX];
 	float modelDirAngle;
 	int  AnimIndex[ACTION_MAX];
-	float outlineNum;
 	Position3 TempMoveVector;
 
 public:

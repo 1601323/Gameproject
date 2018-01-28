@@ -1106,13 +1106,11 @@ void Player::Draw(Position2& offset)
 	//時機
 	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
 	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
-	outlineNum = 0.0f;
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
 	case ST_VANISH:
 		alfa = max(alfa - 1, tranceMax);
-		outlineNum = 0.0f;
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//ﾛｰﾌﾟ状態
@@ -1143,7 +1141,7 @@ void Player::Draw(Position2& offset)
 
 	AnimationSwitching();
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, outlineNum);
+	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
@@ -1271,6 +1269,7 @@ void Player::FeverGravity()
 		for (int j = 0; j < 3; j++) {
 			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
 				vy = 0.0f;
+				AnimNowTime[ACTION_JUMP] = 0.0f;
 				JumpFlag = false;
 				break;
 			}
@@ -1382,7 +1381,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
 		{
-			AnimNowTime[ACTION_WAIT] = 0.f;
+			AnimNowTime[ACTION_WAIT] = 0.0f;
 		}
 		break;
 	case ST_MOVE:
@@ -1400,7 +1399,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
 		{
-			AnimNowTime[ACTION_WALK] = 0.f;
+			AnimNowTime[ACTION_WALK] = 0.0f;
 		}
 
 		break;
@@ -1423,7 +1422,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
 		{
-			AnimNowTime[ACTION_CLIMB] = 0.f;
+			AnimNowTime[ACTION_CLIMB] = 0.0f;
 		}
 
 		break;
@@ -1442,7 +1441,7 @@ void Player::AnimationSwitching(void)
 
 		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
 		{
-			AnimNowTime[ACTION_JUMP] = 0.f;
+			AnimNowTime[ACTION_JUMP] =0.0f;
 		}
 		break;
 	default:

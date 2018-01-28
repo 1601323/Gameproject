@@ -201,7 +201,7 @@ void ResultScene::Draw()
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 		//プレイヤー
-		AnimNowTime += 1.0f;
+		AnimNowTime += 0.5f;
 		if (AnimNowTime >= AnimTotalTime)
 		{
 			AnimNowTime = 0;
@@ -241,7 +241,7 @@ void ResultScene::Draw()
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 		//プレイヤー
-		AnimNowTime += 1.0f;
+		AnimNowTime += 0.5f;
 		if (AnimNowTime >= AnimTotalTime)
 		{
 			AnimNowTime = 0;
