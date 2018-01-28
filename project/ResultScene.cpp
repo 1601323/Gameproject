@@ -10,6 +10,9 @@
 #include "ModelMgr.h"
 #include "ImageMgr.h"
 
+#define NUM_X (74)
+#define NUM_Y (100)
+
 
 ResultScene::ResultScene()
 {
@@ -23,9 +26,6 @@ ResultScene::ResultScene()
 	playerModelHandle = MV1LoadModel("player_model/player.pmx");
 	smileTexture = LoadGraph("player_model/face2.png");
 	medicineHandle = MV1LoadModel("gimmick_model/フラスコ/丸底フラスコ.pmx");
-
-	//bgHandle = LoadGraph("仮image/result の仮です/Result.png");
-	//ScoreSelectHandle = LoadGraph("仮image/result の仮です/Result2.png");
 
 	AnimIndex = MV1AttachAnim(playerModelHandle, ACTION_HAPPY, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(playerModelHandle, AnimIndex);
@@ -54,7 +54,7 @@ void ResultScene::NormalUpdata(Input* input)
 	Select(input);
 	Draw();
 #ifdef _DEBUG
-	DrawString(10, 10, "リザルトに遷移してるよ！", 0xffffff);
+	//DrawString(10, 10, "リザルトに遷移してるよ！", 0xffffff);
 #endif
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (nowNum == JUMP_SELECT) {
@@ -77,6 +77,7 @@ void ResultScene::GameClear()
 	gm.NewDataSet();
 	gm.BestDataSet();
 	DrawFormatString(100, 150, 0xffffff, "%d", _rtData.goalTime);
+
 #ifdef _DEBUG
 	DrawString(100, 100, "Clear", 0xff00ff);
 #endif
@@ -198,7 +199,7 @@ void ResultScene::Draw()
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result.png", SCENE_TITLE), true);
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
-
+		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 		//プレイヤー
 		AnimNowTime += 1.0f;
 		if (AnimNowTime >= AnimTotalTime)
@@ -219,8 +220,18 @@ void ResultScene::Draw()
 		MV1DrawModel(medicineHandle);
 		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
 
-		DrawString(300, 300, "セレクト", 0xffffff);
-		DrawString(300, 320, "タイトル", 0xffffff);
+
+		numberImage = im.ImageIdReturn("仮image/UI/NewNum.png", SCENE_RESULT);
+		second = _rtData.goalTime % 10;
+		tenex = (_rtData.goalTime / 10) % 10;
+		hunex = _rtData.goalTime / 100;
+
+		DrawRectExtendGraph(400, 150, 400 + (NUM_X / 2), 200 + (NUM_Y / 2), NUM_X * second, 0, NUM_X, NUM_Y, numberImage, true);
+		DrawRectExtendGraph(400 - (NUM_X / 2) * 1, 150, 400 + (NUM_X / 2) - (NUM_X / 2), 200 + (NUM_Y / 2), NUM_X * tenex, 0, NUM_X, NUM_Y, numberImage, true);
+		DrawRectExtendGraph(400 - (NUM_X / 2) * 2, 150, 400 + (NUM_X / 2) - (NUM_X / 2) * 2, 200 + (NUM_Y / 2), NUM_X * hunex, 0, NUM_X, NUM_Y, numberImage, true);
+
+		//DrawString(300, 300, "セレクト", 0xffffff);
+		//DrawString(300, 320, "タイトル", 0xffffff);
 	}
 	else if (clearFlag == false) {
 		//確認用でGAMEOVERにも書いた-----------------------------------------------------
@@ -228,6 +239,7 @@ void ResultScene::Draw()
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result.png", SCENE_TITLE), true);
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
+		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 		//プレイヤー
 		AnimNowTime += 1.0f;
 		if (AnimNowTime >= AnimTotalTime)
@@ -249,9 +261,9 @@ void ResultScene::Draw()
 		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
 		//-------------------------------------------------------------------------------
 
-		DrawString(300, 280, "リトライ", 0xffffff);
-		DrawString(300, 300, "セレクト", 0xffffff);
-		DrawString(300, 320, "タイトル", 0xffffff);
+		//DrawString(300, 280, "リトライ", 0xffffff);
+		//DrawString(300, 300, "セレクト", 0xffffff);
+		//DrawString(300, 320, "タイトル", 0xffffff);
 	}
 	switch (nowNum) {
 	case 0:

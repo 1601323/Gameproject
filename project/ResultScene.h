@@ -24,6 +24,12 @@ private:
 	SENSING_VALUE _minSensingValueL;
 	NEXT_MODE mode[JUMP_MAX];
 	int nowNum;
+	//ï\é¶ópä÷êî
+	int numberImage;
+	int second;
+	int tenex;
+	int hunex;
+
 	int dirNumY;
 	bool clearFlag;
 	bool selectFlag;
