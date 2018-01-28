@@ -3,7 +3,7 @@
 #include "Object.h"
 #include "Input.h"
 
-#define ROPE_SPEED (6.0f)        //移動スピード
+#define ROPE_SPEED (5.5f)        //移動スピード
 #define ROPE_THETA (45.f)        //ロープの斜めの角度右向きver(circleのみ)
 #define ROPE_THETA2 (135.f)      //ロープの斜めの角度左向きver(circleのみ)
 #define STRAIGHT_RAD (180.f)     //直線時のRad
@@ -51,33 +51,32 @@ private:
 
 	ModelMgr* _modelmgr;
 
-	bool RopeTurnFlag;
-	bool dirFlag;
-	bool padFlag;
-	bool tongueHitTurn;
+	bool RopeTurnFlag;                      //ロープ引き返し用flag
+	bool dirFlag;                           //ロープの向きを決めるflag
+	bool padFlag;                           //ゲームパッドが刺さっているかどうかを見るflag
+	bool tongueHitTurn;                     //舌がオブジェクトに当たったかどうかを見るflag
 
-	int    modelhandle;
-	float  AnimTotalTime;
-	float  AnimNowTime;
-	int    AnimAttachIndex;
+	int    modelhandle;                     //ロープのモデルハンドル
+	float  AnimTotalTime;                   //アニメーションのトータルタイム
+	float  AnimNowTime;                     //アニメーションの現在タイム
+	int    AnimAttachIndex;                 //アニメーション数
 
-	int mentenanceNum_X;//モデルの描画のために仮で置いている調整用の値X
-	int mentenanceNum_Y;//Y
+	int mentenanceNum_X;                    //モデルの描画のために仮で置いている調整用の値X
+	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y
 	int RopeHitModelNumY;
 
-	float range;
-	float RopeAngle_Y;
-	float RopeAngle_Z;
+	float range;                            //サークル半径
+	float RopeAngle_Y;                      //表示用モデル角度Y
+	float RopeAngle_Z;                      //表示用モデル角度Z
 
-	void RopeInit(void);
-	void DrawRopeRect(void);
-	void SetRope(void);
-	void DirChange(void);
-	void CheckPad(void);
-	//void DrawLineSet(Position2 startpos,Position2 endpos,int color);
-	Position2 SetVec(void);
-	float SetRopeRad(void);
-	void SetRopeRadForDrawZ(void);
+	void RopeInit(void);                    //初期関数
+	void DrawRopeRect(void);                //描画処理
+	void SetRope(void);                     //ロープ用
+	void DirChange(void);                   //方向を変える関数
+	void CheckPad(void);                    //ゲームパッドチェック関数
+	Position2 SetVec(void);                 //スピード設定関数
+	float SetRopeRad(void);                 //ロープの発射角度を決める関数
+	void SetRopeRadForDrawZ(void);          //モデル表示のための調整関数
 
 public:
 	Rope();
@@ -101,6 +100,7 @@ public:
 	Rect _RopeRect;
 	Circle _RopeCircle;
 	Circle _RopeCircle2;
+	Circle _RopeCircle3;
 	Position2 _HitPos;
 	Position2 _vec;
 	Position2 _tmpOffset;			//描画用ｵﾌｾｯﾄ値

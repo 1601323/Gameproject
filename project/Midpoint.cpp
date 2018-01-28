@@ -34,6 +34,7 @@ Midpoint::Midpoint()
 	cnt = 0;
 	bubbleFlag = false;
 	bubble = 0;
+	//モデル読み込み
 	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/金庫/中型金庫75.pmd", SCENE_RESULT);
 	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/鍵/鍵2-10.pmx", SCENE_RESULT);
 	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ/丸底フラスコ.pmx", SCENE_RESULT);
@@ -136,35 +137,48 @@ void Midpoint::FollowDir()
 void Midpoint::Draw(Position2 offset)
 {
 	//目的物のモデル
-	MV1SetPosition(Targethandle, VGet(_midPos.x - offset.x + (_hitRect.w / 2), SCREEN_SIZE_Y - _midPos.y + offset.y - (_hitRect.h), 0));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(Targethandle, ConvWorldPosToScreenPos(VGet(_midPos.x - offset.x + (_hitRect.w / 2), _midPos.y - offset.y + (_hitRect.h), 0)));
+	//モデルの拡大縮小値の設定
 	MV1SetScale(Targethandle, VGet(10.f, 10.f, 10.f));
-	_modelmgr->SetMaterialDotLine(keyhandle, 0.0f);
+	//モデルの輪郭線を設定 0.0fで透過します
+	_modelmgr->SetMaterialDotLine(Targethandle, 0.0f);
 
 	//金庫のモデル
-	MV1SetPosition(Safehandle, VGet(_modelPos.x - offset.x + (_midRect.w / 2),SCREEN_SIZE_Y - _modelPos.y + offset.y - (_midRect.h), 0));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(Safehandle, ConvWorldPosToScreenPos(VGet(_modelPos.x - offset.x + (_midRect.w / 2), _modelPos.y - offset.y + (_midRect.h), 0)));
+	//モデルの拡大縮小値の設定
 	MV1SetScale(Safehandle, VGet(2.f, 2.f, 2.f));
+	//モデルを描画
 	MV1DrawModel(Safehandle);
+	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(Safehandle, 0.0f);
 
-	MV1SetPosition(keyhandle, VGet(_pos.x - offset.x + (_hitRect.w / 2), SCREEN_SIZE_Y - _pos.y + offset.y - (_hitRect.h), 0));
+	//鍵のモデル
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(keyhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_hitRect.w / 2),_pos.y - offset.y + (_hitRect.h), 0)));
+	//モデルの拡大縮小値の設定
 	MV1SetScale(keyhandle, VGet(0.2f, 0.2f, 0.2f));
+	//モデルを描画
 	MV1DrawModel(keyhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(keyhandle, 0.0f);
 
 	if (checkpointFlag == false && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
-		MV1DrawModel(keyhandle);
+		//MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
-		_hitRect.Draw(offset);
+		//_hitRect.Draw(offset);
 #endif
 	}
 	else if (checkpointFlag == true && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
 		//よく考えたら当たり判定取得した後いらないよね
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
-		MV1DrawModel(keyhandle);
+		//モデルを描画
+		//MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
 		//_hitRect.Draw(offset);
@@ -173,10 +187,12 @@ void Midpoint::Draw(Position2 offset)
 	if (GetFlag == false) {
 		//DrawBox(_midPos.x - offset.x, _midPos.y - offset.y, _midPos.x + _midRect.w - offset.x, _midPos.y + _midRect.h - offset.y, 0xcccccc, true);
 		_midRect.SetCenter(_midPos.x+(_midRect.w/2),_midPos.y+(_midRect.h /2));
-		MV1DrawModel(Safehandle);
+		//モデルを描画
+		//MV1DrawModel(Safehandle);
 	}
 	else if(GetFlag == true ){
 		//DrawCircle(_midPos.x - offset.x + (_midRect.w / 2) , _midPos.y - offset.y + (_midRect.h / 2), 12, GetColor(0, 240, 44), true);
+		//モデルを描画
 		MV1DrawModel(Targethandle);
 	}
 	if (uiFlag == true) {

@@ -36,6 +36,7 @@ private:
 	HitClass *_hit;
 	MapCtl *_map;
 	Rope* _rope;
+	ModelMgr* _modelmgr;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
 	Position3 _pos;						//ｷｬﾗの座標
@@ -44,6 +45,13 @@ private:
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
+	int modelhandle;                    //プレイヤーモデルハンドル
+	int alfa;                           //ステルス用アルファ
+	int tranceMax;                      //最大透過数
+	int  AnimIndex[ACTION_MAX];         //アニメーション数
+	float AnimTotalTime[ACTION_MAX];    //各アニメーションのトータルタイム
+	float AnimNowTime[ACTION_MAX];      //各アニメーションの現在タイム
+	float modelDirAngle;                //モデル表示用のY軸の回転率
 	bool feverFlag;						//フィーバーフラグ
 	int feverTime;						//フィーバーの時間
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
@@ -78,19 +86,9 @@ private:
 	void FeverWall();					//フィーバー用の壁移動処理
 
 	void AnimationSwitching(void);      //アニメーション切り替えよう関数
-	Position2 modelPlayerPos;
 
 	Position2 tmpOffset;
-	//いきなりなのでここに書いてます
-	ModelMgr* _modelmgr;
-	int modelhandle;
-	int alfa;
-	int tranceMax;
-	float  AnimTotalTime[ACTION_MAX];
-	float  AnimNowTime[ACTION_MAX];
-	float modelDirAngle;
-	int  AnimIndex[ACTION_MAX];
-	Position3 TempMoveVector;
+	VECTOR WorldToScreenPos;            //ワールド座標からスクリーン座標に変換した後のモデル表示用のpos
 
 public:
 	Player();
@@ -111,7 +109,6 @@ public:
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
-
-	Position2& GetModelPos(void);
+	Position2 ReturnWoToScPos2ver();   //ワールド座標からスクリーン座標に変換後のposを返す関数
 };
 

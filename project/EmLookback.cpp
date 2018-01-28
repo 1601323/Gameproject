@@ -73,11 +73,17 @@ void EmLookback::Updata()
 
 void EmLookback::Draw(Position2 offset)
 {
+	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
+	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	//モデルを描画
 	MV1DrawModel(modelhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
 	switch (_state)
 	{
 	case EM_ST_NONE:
@@ -260,7 +266,7 @@ void EmLookback::moveFear(void)
 		}
 	}
 #ifdef _DEBUG
-	DrawFormatString(10, 450, 0xffffff, "怯み:%d", FearCount);
+	//DrawFormatString(10, 450, 0xffffff, "怯み:%d", FearCount);
 #endif
 }
 void EmLookback::EnemyFalter()
