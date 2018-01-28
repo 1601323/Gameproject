@@ -27,7 +27,7 @@ void ClearScene::NormalUpdata(Input* input)
 	INPUT_INFO inpInfo = input->GetInput(1);
 
 #ifdef _DEBUG
-	DrawString(10,0,"クリア",GetColor(255,255,255));
+	//DrawString(10,0,"クリア",GetColor(255,255,255));
 #endif
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		gm.Instance().ChangeScene(new GameScene());

@@ -173,7 +173,7 @@ void Player::setDir(Input* input)
 		_state = ST_STOP;
 	}
 #ifdef _DEBUG
-	DrawFormatString(80, 260, 0xffffff, "%f", angle);
+//	DrawFormatString(80, 260, 0xffffff, "%f", angle);
 #endif
 }
 //移動制御
@@ -1104,7 +1104,6 @@ void Player::FeverJump()
 void Player::Draw(Position2& offset)
 {
 	//時機
-	DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x + 32 - offset.x, (int)_pos.y + 32 - offset.y, 0xffffff, false);
 	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
 	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
 	outlineNum = 0.0f;
@@ -1151,7 +1150,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-		_plRect.Draw(offset);
+//		_plRect.Draw(offset);
 	//#endif
 }
 

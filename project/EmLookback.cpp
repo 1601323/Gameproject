@@ -99,29 +99,31 @@ void EmLookback::Draw(Position2 offset)
 	}
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-	if (_dir == DIR_RIGHT) {
-		modelDirAngle = AngleRad(-90.0f);
-		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (_state != EM_ST_FEAR) {
+		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.0f);
+			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	}
-	else if (_dir == DIR_LEFT) {
-		modelDirAngle = AngleRad(90.0f);
-		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.0f);
+			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+		}
 	}
 	returnDir(offset);
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
-	_emEye.Draw(offset);
+	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
-	_emRect.Draw(offset);
-	DrawFormatString(10, 380, 0xffffff, "êUÇËï‘ÇË:%d", LookCount);
+	//_emRect.Draw(offset);
+	//DrawFormatString(10, 380, 0xffffff, "êUÇËï‘ÇË:%d", LookCount);
 #endif 
 }
 void EmLookback::SetMove()
