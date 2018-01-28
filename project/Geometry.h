@@ -112,6 +112,7 @@ enum PLAYER_ACTIONS{
 	ACTION_JUMP,   //飛ぶモーション
 	ACTION_CLIMB,  //のぼるモーション
 	ACTION_WALK,   //歩くモーション
+	ACTION_HAPPY,  //喜びのアクション
 	ACTION_MAX
 };
 

@@ -7,7 +7,7 @@
 #include "TitleScene.h"
 #include "SelectScene.h"
 #include "ResultScene.h"
-
+#include "ModelMgr.h"
 
 
 ResultScene::ResultScene()
@@ -18,6 +18,17 @@ ResultScene::ResultScene()
 	clearFlag = false;
 	selectFlag = false;
 	nowNum = 0;
+	_modelmgr = ModelMgr::Instance();
+	playerModelHandle = MV1LoadModel("player_model/player.pmx");
+	smileTexture = LoadGraph("player_model/face2.png");
+	medicineHandle = MV1LoadModel("gimmick_model/フラスコ/丸底フラスコ.pmx");
+
+	bgHandle = LoadGraph("仮image/result の仮です/Result.png");
+	ScoreSelectHandle = LoadGraph("仮image/result の仮です/Result2.png");
+
+	AnimIndex = MV1AttachAnim(playerModelHandle, ACTION_HAPPY, -1, false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(playerModelHandle, AnimIndex);
+	textureIndex = MV1GetMaterialDifMapTexture(playerModelHandle, 1);
 }
 
 ResultScene::~ResultScene()
@@ -51,7 +62,7 @@ void ResultScene::NormalUpdata(Input* input)
 		else if (nowNum == JUMP_TITLE) {
 			gm.Instance().ChangeScene(new TitleScene());
 		}
-		else if (nowNum== JUMP_RETRY) {
+		else if (nowNum == JUMP_RETRY) {
 			gm.Instance().ChangeScene(new GameScene());
 		}
 		else {
@@ -64,9 +75,9 @@ void ResultScene::GameClear()
 	GameMain& gm = GameMain::Instance();
 	gm.NewDataSet();
 	gm.BestDataSet();
-	DrawFormatString(100,150,0xffffff,"%d",_rtData.goalTime);
+	DrawFormatString(100, 150, 0xffffff, "%d", _rtData.goalTime);
 #ifdef _DEBUG
-	DrawString(100,100,"Clear",0xff00ff);
+	DrawString(100, 100, "Clear", 0xff00ff);
 #endif
 }
 void ResultScene::GameOver()
@@ -84,7 +95,7 @@ void ResultScene::Select(Input*  input)
 				selectFlag == false) {
 				nowNum--;
 				if (nowNum <= 0) {
-					nowNum = JUMP_MAX -1;
+					nowNum = JUMP_MAX - 1;
 				}
 				selectFlag = true;
 			}
@@ -142,7 +153,7 @@ void ResultScene::Select(Input*  input)
 				selectFlag == false) {
 				nowNum++;
 				if (nowNum >= JUMP_MAX) {
-					nowNum =0;
+					nowNum = 0;
 				}
 				selectFlag = true;
 			}
@@ -181,11 +192,65 @@ void ResultScene::Select(Input*  input)
 void ResultScene::Draw()
 {
 	if (clearFlag == true) {
+		//背景
+		DrawGraph(0, 0, bgHandle, true);
+		DrawGraph(0, 0, ScoreSelectHandle, true);
+
+		//プレイヤー
+		AnimNowTime += 1.0f;
+		if (AnimNowTime >= AnimTotalTime)
+		{
+			AnimNowTime = 0;
+		}
+		MV1SetRotationXYZ(playerModelHandle, VGet(0.f, AngleRad(45.f), 0.f));
+		MV1SetAttachAnimTime(playerModelHandle, AnimIndex, AnimNowTime);
+		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(600.f, 600, 0.f)));
+		MV1SetScale(playerModelHandle, VGet(4.0f, 4.0f, 4.0f));
+		MV1SetTextureGraphHandle(playerModelHandle, textureIndex, smileTexture, FALSE);
+		MV1DrawModel(playerModelHandle);
+		_modelmgr->SetMaterialDotLine(playerModelHandle, 0.0f);
+
+		//薬
+		MV1SetPosition(medicineHandle, ConvWorldPosToScreenPos(VGet(500.f, 600, 0.f)));
+		MV1SetScale(medicineHandle, VGet(15.0f, 15.0f, 15.0f));
+		MV1DrawModel(medicineHandle);
+		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
+
+		DrawString(300, 280, "リトライ", 0xffffff);
+		DrawString(300, 300, "セレクト", 0xffffff);
+		DrawString(300, 320, "タイトル", 0xffffff);
+
+
 		DrawString(300, 300, "セレクト", 0xffffff);
 		DrawString(300, 320, "タイトル", 0xffffff);
 	}
 	else if (clearFlag == false) {
-		DrawString(300,280,"リトライ",0xffffff);
+		//確認用でGAMEOVERにも書いた
+		//背景
+		DrawGraph(0, 0, bgHandle, true);
+		DrawGraph(0, 0, ScoreSelectHandle, true);
+
+		//プレイヤー
+		AnimNowTime += 1.0f;
+		if (AnimNowTime >= AnimTotalTime)
+		{
+			AnimNowTime = 0;
+		}
+		MV1SetRotationXYZ(playerModelHandle, VGet(0.f, AngleRad(45.f), 0.f));
+		MV1SetAttachAnimTime(playerModelHandle, AnimIndex, AnimNowTime);
+		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(600.f, 600, 0.f)));
+		MV1SetScale(playerModelHandle, VGet(4.0f, 4.0f, 4.0f));
+		MV1SetTextureGraphHandle(playerModelHandle, textureIndex, smileTexture, FALSE);
+		MV1DrawModel(playerModelHandle);
+		_modelmgr->SetMaterialDotLine(playerModelHandle, 0.0f);
+
+		//薬
+		MV1SetPosition(medicineHandle, ConvWorldPosToScreenPos(VGet(500.f, 600, 0.f)));
+		MV1SetScale(medicineHandle, VGet(15.0f, 15.0f, 15.0f));
+		MV1DrawModel(medicineHandle);
+		_modelmgr->SetMaterialDotLine(medicineHandle, 0.0f);
+
+		DrawString(300, 280, "リトライ", 0xffffff);
 		DrawString(300, 300, "セレクト", 0xffffff);
 		DrawString(300, 320, "タイトル", 0xffffff);
 	}
