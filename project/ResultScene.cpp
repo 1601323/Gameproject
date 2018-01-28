@@ -76,16 +76,16 @@ void ResultScene::GameClear()
 	GameMain& gm = GameMain::Instance();
 	gm.NewDataSet();
 	gm.BestDataSet();
-	DrawFormatString(100, 150, 0xffffff, "%d", _rtData.goalTime);
+	//DrawFormatString(100, 150, 0xffffff, "%d", _rtData.goalTime);
 
 #ifdef _DEBUG
-	DrawString(100, 100, "Clear", 0xff00ff);
+	//DrawString(100, 100, "Clear", 0xff00ff);
 #endif
 }
 void ResultScene::GameOver()
 {
 #ifdef _DEBUG
-	DrawString(100, 100, "GameOver", 0xff00ff);
+	//DrawString(100, 100, "GameOver", 0xff00ff);
 #endif
 }
 void ResultScene::Select(Input*  input)
@@ -201,7 +201,7 @@ void ResultScene::Draw()
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 		//プレイヤー
-		AnimNowTime += 1.0f;
+		AnimNowTime += 0.5f;
 		if (AnimNowTime >= AnimTotalTime)
 		{
 			AnimNowTime = 0;
@@ -241,7 +241,7 @@ void ResultScene::Draw()
 		DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
 		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 		//プレイヤー
-		AnimNowTime += 1.0f;
+		AnimNowTime += 0.5f;
 		if (AnimNowTime >= AnimTotalTime)
 		{
 			AnimNowTime = 0;

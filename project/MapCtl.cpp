@@ -145,7 +145,7 @@ void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 	auto color = GetColor(0, 50, 50);
 
 	//DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
-	MV1SetPosition(chipModelHandle[num], VGet(x*32 - offset.x+20, SCREEN_SIZE_Y -y*32 + offset.y-20,0));
+	MV1SetPosition(chipModelHandle[num], ConvWorldPosToScreenPos(VGet(x*32 - offset.x+20,y*32 - offset.y+20,0)));
 	MV1SetScale(chipModelHandle[num], VGet(3.18f, 3.18f, 3.18f));
 	MV1DrawModel(chipModelHandle[num]);
 	_modelmgr->SetMaterialDotLine(chipModelHandle[num],0.0f);

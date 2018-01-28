@@ -48,8 +48,8 @@ void Rope::Updata(Input* input,Position2 offset)
 	//DrawString(50, 180, "E:ã»ê¸ è„", 0xffffffff);
 	//DrawString(50, 200, "R:ã»ê¸ â∫", 0xffffffff);
 
-	DrawFormatString(350, 100, 0xffff00, "%f", _HitPos.x);
-	DrawFormatString(350, 120, 0xffff00, "%f", _HitPos.y);
+//	DrawFormatString(350, 100, 0xffff00, "%f", _HitPos.x);
+//	DrawFormatString(350, 120, 0xffff00, "%f", _HitPos.y);
 
 	//DrawString(450, 340, "ë¨ìx", 0xffffffff);
 	//DrawFormatString(450, 360, 0xffffff, "%f", _vec.x);
@@ -130,8 +130,8 @@ void Rope::DrawRopeRect(void)
 
 	//DrawFormatString(400, 280, 0xff0000,"%f", (SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY));
 
-	_RopeCircle.Draw(_tmpOffset);
-	_RopeCircle2.Draw(_tmpOffset);
+	//_RopeCircle.Draw(_tmpOffset);
+	//_RopeCircle2.Draw(_tmpOffset);
 
 }
 

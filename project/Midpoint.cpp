@@ -167,11 +167,11 @@ void Midpoint::Draw(Position2 offset)
 		MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
-		_hitRect.Draw(offset);
+		//_hitRect.Draw(offset);
 #endif
 	}
 	if (GetFlag == false) {
-		DrawBox(_midPos.x - offset.x, _midPos.y - offset.y, _midPos.x + _midRect.w - offset.x, _midPos.y + _midRect.h - offset.y, 0xcccccc, true);
+		//DrawBox(_midPos.x - offset.x, _midPos.y - offset.y, _midPos.x + _midRect.w - offset.x, _midPos.y + _midRect.h - offset.y, 0xcccccc, true);
 		_midRect.SetCenter(_midPos.x+(_midRect.w/2),_midPos.y+(_midRect.h /2));
 		MV1DrawModel(Safehandle);
 	}
@@ -180,9 +180,11 @@ void Midpoint::Draw(Position2 offset)
 		MV1DrawModel(Targethandle);
 	}
 	if (uiFlag == true) {
-		DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"Å_B!!Å^",0x00ff00);
+	//	DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"Å_B!!Å^",0x00ff00);
 	}
-	_midRect.Draw(offset);
+#ifdef _DEBUG
+	//_midRect.Draw(offset);
+#endif
 }
 bool Midpoint::ReturnGetFlag()
 {

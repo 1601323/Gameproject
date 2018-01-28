@@ -19,6 +19,9 @@ SelectScene::SelectScene()
 	selectFlag = false;
 	w = 90;
 	h = 60;
+	stageNum[0] = "仮image/stNum1.png";
+	stageNum[1] = "仮image/stNum2.png";
+	stageNum[2] = "仮image/stNum3.png";
 }
 
 
@@ -33,7 +36,7 @@ void SelectScene::NormalUpdata(Input* input)
 	_inpInfo = input->GetInput(1);
 	Select(input);
 #ifdef _DEBUG
-	DrawString(10, 0, "セレクト", GetColor(255, 255, 255));
+	//DrawString(10, 0, "セレクト", GetColor(255, 255, 255));
 #endif
 	Draw();
 
@@ -115,10 +118,12 @@ void SelectScene::Draw()
 	//}
 	for (int f = 0; f < STAGE_MAX; f++) {
 		if (f == nowNum) {	//選ばれていたら拡大表示
+			DrawExtendGraph(10 + 260 * f, 60, 10 + 260 + 260 * f, 60 + 260, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
 			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("仮image/stage.png", SCENE_GAME), true);
 		}
 		else
 		{
+			DrawExtendGraph(10 + 260 * f + redu, 60 + redu, 10 + 260 + 260 * f - redu, 60 + 260 - redu, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
 			DrawExtendGraph(10+ 260*f+redu, 60+redu ,10+260+ 260*f-redu,60+260 -redu,im.ImageIdReturn("仮image/stage.png", SCENE_GAME), true);
 		}
 	}
