@@ -315,7 +315,7 @@ bool Player::moveWall(void)
 	int count = 0;
 	//壁登り状態
 	//操作性に難あり
-	Position2 nextPos[4];
+	Position2 nextPos[6];
 	//右下
 	nextPos[0].x = _pos.x + _plRect.w;
 	nextPos[0].y = _pos.y + (_plRect.h - 1);
@@ -328,12 +328,18 @@ bool Player::moveWall(void)
 	//左上
 	nextPos[3].x = _pos.x;
 	nextPos[3].y = _pos.y;
+	//右真ん中
+	nextPos[4].x = _pos.x + _plRect.w;
+	nextPos[4].y = _pos.y + (_plRect.h/2);
+	//左真ん中
+	nextPos[5].x = _pos.x;
+	nextPos[5].y = _pos.y + (_plRect.h/2);
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
 	//壁登り状態にする条件
-	for (int j = 0; j < 4; j++) {
+	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
@@ -583,7 +589,7 @@ void Player::FeverWall()
 	int count = 0;
 	//壁登り状態
 	//操作性に難あり
-	Position2 nextPos[4];
+	Position2 nextPos[6];
 	//右下
 	nextPos[0].x = _pos.x + _plRect.w;
 	nextPos[0].y = _pos.y + (_plRect.h - 1);
@@ -596,12 +602,18 @@ void Player::FeverWall()
 	//左上
 	nextPos[3].x = _pos.x;
 	nextPos[3].y = _pos.y;
+	//右真ん中
+	nextPos[4].x = _pos.x + _plRect.w;
+	nextPos[4].y = _pos.y + (_plRect.h / 2);
+	//左真ん中
+	nextPos[5].x = _pos.x;
+	nextPos[5].y = _pos.y + (_plRect.h / 2);
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
 	//壁登り状態にする条件
-	for (int j = 0; j < 4; j++) {
+	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
@@ -1153,7 +1165,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-//		_plRect.Draw(offset);
+		_plRect.Draw(offset);
 	//#endif
 }
 
