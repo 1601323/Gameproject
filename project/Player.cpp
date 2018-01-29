@@ -1286,7 +1286,6 @@ void Player::FeverGravity()
 		for (int j = 0; j < 3; j++) {
 			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
 				vy = 0.0f;
-				AnimNowTime[ACTION_JUMP] = 0.0f;
 				JumpFlag = false;
 				break;
 			}
