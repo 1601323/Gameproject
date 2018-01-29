@@ -35,7 +35,7 @@ Midpoint::Midpoint()
 	bubbleFlag = false;
 	bubble = 0;
 	//モデル読み込み
-	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/金庫/中型金庫75.pmd", SCENE_RESULT);
+	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/食パン/bread.pmx", SCENE_RESULT);
 	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/鍵/鍵2-10.pmx", SCENE_RESULT);
 	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ/丸底フラスコ.pmx", SCENE_RESULT);
 }
@@ -148,7 +148,7 @@ void Midpoint::Draw(Position2 offset)
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(Safehandle, ConvWorldPosToScreenPos(VGet(_modelPos.x - offset.x + (_midRect.w / 2), _modelPos.y - offset.y + (_midRect.h), 0)));
 	//モデルの拡大縮小値の設定
-	MV1SetScale(Safehandle, VGet(2.f, 2.f, 2.f));
+	MV1SetScale(Safehandle, VGet(5.f, 5.f, 5.f));
 	//モデルを描画
 	MV1DrawModel(Safehandle);
 	//モデルの輪郭線を設定 0.0fで透過します
