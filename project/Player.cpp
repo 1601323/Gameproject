@@ -608,7 +608,6 @@ void Player::FeverWall()
 	//左真ん中
 	nextPos[5].x = _pos.x;
 	nextPos[5].y = _pos.y + (_plRect.h / 2);
-
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
