@@ -67,7 +67,7 @@ void  GimButton::CheckDoMove()
 void GimButton::Move() 
 {	
 #ifdef _DEBUG
-	DrawString(_pos.x + 20, 60, "Å^ÉwÉCÉwÉCÅ_", 0xffffff);
+	//DrawString(_pos.x + 20, 60, "Å^ÉwÉCÉwÉCÅ_", 0xffffff);
 #endif
 	color -= count;
 	if (count <= 0)
@@ -87,7 +87,7 @@ void GimButton::Draw(Position2 offset)
 		if (count >= 0) {
 			count--;
 	#ifdef _DEBUG
-			DrawString(340, 400, "Å_ÉjÉÉÅ[Å^", 0xffffff);
+			//DrawString(340, 400, "Å_ÉjÉÉÅ[Å^", 0xffffff);
 	#endif
 		}
 		DrawBox(_pos.x - offset.x,_pos.y - offset.y +(_gmRect.h/2),_pos.x - offset.x +_gmRect.w,_pos.y - offset.y +_gmRect.h,0xff0000,true);
@@ -100,7 +100,7 @@ void GimButton::Draw(Position2 offset)
 		_gmRect.SetCenter(_pos.x + (_gmRect.w / 2), _pos.y  + (_gmRect.h / 2));
 	}
 #ifdef _DEBUG
-	_gmRect.Draw(offset);
+	//_gmRect.Draw(offset);
 #endif
 }
 //Ç†ÇΩÇËîªíËóp

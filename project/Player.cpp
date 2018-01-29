@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "DxLib.h"
 #include "GameScene.h"
 #include "GimDrop.h"
@@ -9,8 +11,7 @@
 #include "Rope.h"
 #include "ModelMgr.h"
 
-#include <iostream>
-#include <cmath>
+
 using namespace std;
 
 
@@ -28,8 +29,8 @@ Player::Player()
 	feverTime = 60 * FEVER_CNT;
 	//_hit = new HitClass();
 	_plRect.w = 32;
-	_plRect.h = 32;
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2) , _pos.y + (_plRect.h / 2) );
+	_plRect.h = 50;
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	_map = MapCtl::GetInstance();
 	//_rope = new Rope(this);
 	WallFlag = false;
@@ -39,20 +40,26 @@ Player::Player()
 	deathFlag = true;
 	helpFever = false;
 	_minSensingValueL = SV_HIGH;
-	//とりあえず同じように
-	_modelmgr = ModelMgr::Instance();
-	modelhandle = _modelmgr->ModelIdReturn("player_model/player.pmx", SCENE_RESULT);
-	AnimAttachIndex = MV1AttachAnim(modelhandle, 0,-1,false);
-	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
-	MV1SetRotationXYZ(modelhandle, VGet(0.f, 80.f, 0.f));
 	alfa = 255;
 	tranceMax = 50;
+	modelDirAngle = 0.0f;
 
+	_modelmgr = ModelMgr::Instance();
+	//モデル読み込み
+	modelhandle = MV1LoadModel("player_model/player.pmx");
+	//それぞれのアニメーションをアタッチ+総時間の設定
+	for (int i = 0; i <= ACTION_MAX; i++)
+	{
+		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
+		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
+	}
+	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
 }
 Player::~Player()
 {
 	//delete _hit;
 	//delete _rope;
+	_modelmgr->ModelIdAllDelete();
 }
 //更新されたHitClassを受け取るための関数です
 void Player::Getclass(HitClass* h, Rope*r)
@@ -123,19 +130,12 @@ void Player::setDir(Input* input)
 
 	if (_state != ST_ROPE) {
 		//右
-		if (_inpInfo.key.keybit.R_RIGHT_BUTTON  ||
+		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
 			_state = ST_MOVE;
-			MV1SetRotationXYZ(modelhandle, VGet(0.f, 80.f, 0.f));
-			AnimNowTime += 1.0f;
-			// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
-			if (AnimNowTime >= AnimTotalTime)
-			{
-				// 新しいアニメーション再生時間は、アニメーション再生時間からアニメーション総時間を引いたもの
-				AnimNowTime = 0;
-			}
+			modelDirAngle = AngleRad(-90.f);
 		}
 		//左
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON ||
@@ -143,13 +143,7 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
 			_state = ST_MOVE;
-			MV1SetRotationXYZ(modelhandle, VGet(0.f, 20.f, 0.f));
-			AnimNowTime += 1.0f;
-			// アニメーション再生時間がアニメーションの総時間を越えていたらループさせる
-			if (AnimNowTime >= AnimTotalTime)
-			{
-				AnimNowTime = 0;
-			}
+			modelDirAngle = AngleRad(90.f);
 		}
 		//上
 		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
@@ -162,10 +156,10 @@ void Player::setDir(Input* input)
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_DOWN;
 		}
-		else if(!_inpInfo.key.keybit.R_LEFT_BUTTON || 	!_inpInfo.key.keybit.R_RIGHT_BUTTON ||
+		else if (!_inpInfo.key.keybit.R_LEFT_BUTTON || !_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			!_inpInfo.key.keybit.R_UP_BUTTON || !_inpInfo.key.keybit.R_DOWN_BUTTON ||
-			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_RIGHT||input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_LEFT||
-			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_UP   ||input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_DOWN){
+			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_RIGHT || input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_LEFT ||
+			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_UP || input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_DOWN) {
 			//押してない
 			_dir = DIR_NON;
 			_state = ST_STOP;
@@ -177,7 +171,7 @@ void Player::setDir(Input* input)
 		_state = ST_STOP;
 	}
 #ifdef _DEBUG
-	DrawFormatString(80, 260, 0xffffff, "%f", angle);
+//	DrawFormatString(80, 260, 0xffffff, "%f", angle);
 #endif
 }
 //移動制御
@@ -187,39 +181,43 @@ bool Player::accelePL(void)
 	//マップとの当たり判定
 	//2ドットほど判定を狭めている
 	//右
-	Position2 nextPosRight[2];
+	Position2 nextPosRight[3];
 	//右下	
 	nextPosRight[0].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[0].y = _pos.y + (_plRect.h - 1);
 	//右上
 	nextPosRight[1].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[1].y = _pos.y;
-
-	for (int j = 0; j < 2; j++) {
+	//右真ん中
+	nextPosRight[2].x = _pos.x + vx + (_plRect.w - 2);
+	nextPosRight[2].y = _pos.y + (_plRect.h/2);
+	for (int j = 0; j < 3; j++) {
 		//登れる壁と登れない壁、ギミックとの判定
 		if (_map->GetChipType(nextPosRight[j]) == CHIP_N_CLIMB_WALL
-		 || _map->GetChipType(nextPosRight[j]) == CHIP_CLIMB_WALL
-		 || (_hit->GimmickHit(nextPosRight[j]) && (_hit->GimmickHitType(nextPosRight[j]) != GIM_FALL)&&_hit->GimmickHitType(nextPosRight[j])!= GIM_DOOR)) {
+			|| _map->GetChipType(nextPosRight[j]) == CHIP_CLIMB_WALL
+			|| (_hit->GimmickHit(nextPosRight[j]) && (_hit->GimmickHitType(nextPosRight[j]) != GIM_FALL) && _hit->GimmickHitType(nextPosRight[j]) != GIM_DOOR)) {
 			vx = 0.0f;
 			break;
 		}
 	}
-	
+
 	//
 	//左
-	Position2 nextPosLeft[2];
+	Position2 nextPosLeft[3];
 	//左下
 	nextPosLeft[0].x = _pos.x + vx + 2;
 	nextPosLeft[0].y = _pos.y + (_plRect.h - 1);
 	//左上
 	nextPosLeft[1].x = _pos.x + vx + 2;
 	nextPosLeft[1].y = _pos.y;
-
-	for (int j = 0; j < 2; j++) {
+	//左真ん中
+	nextPosLeft[2].x = _pos.x + vx + 2;
+	nextPosLeft[2].y = _pos.y + (_plRect.h/2);
+	for (int j = 0; j < 3; j++) {
 		//登れる壁と登れない壁、ギミックとの判定
 		if (_map->GetChipType(nextPosLeft[j]) == CHIP_N_CLIMB_WALL
-		 || _map->GetChipType(nextPosLeft[j]) == CHIP_CLIMB_WALL
-		 || (_hit->GimmickHit(nextPosLeft[j]) && _hit->GimmickHitType(nextPosLeft[j]) != GIM_FALL&&_hit->GimmickHitType(nextPosLeft[j]) != GIM_DOOR)) {
+			|| _map->GetChipType(nextPosLeft[j]) == CHIP_CLIMB_WALL
+			|| (_hit->GimmickHit(nextPosLeft[j]) && _hit->GimmickHitType(nextPosLeft[j]) != GIM_FALL&&_hit->GimmickHitType(nextPosLeft[j]) != GIM_DOOR)) {
 			vx = 0.0f;
 			break;
 		}
@@ -314,15 +312,15 @@ bool Player::moveWall(void)
 	if (WallFlag == true) {
 		_state = ST_WALL;
 	}
-	int count =0;
+	int count = 0;
 	//壁登り状態
 	//操作性に難あり
 	Position2 nextPos[4];
 	//右下
-	nextPos[0].x = _pos.x  + _plRect.w;
+	nextPos[0].x = _pos.x + _plRect.w;
 	nextPos[0].y = _pos.y + (_plRect.h - 1);
 	//左下
-	nextPos[1].x = _pos.x ;
+	nextPos[1].x = _pos.x;
 	nextPos[1].y = _pos.y + (_plRect.h - 1);
 	//右上
 	nextPos[2].x = _pos.x + _plRect.w;
@@ -333,7 +331,7 @@ bool Player::moveWall(void)
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
-	downPos.y = _pos.y + _plRect.h+ MAP_CHIP_SIZE_Y;
+	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
 	//壁登り状態にする条件
 	for (int j = 0; j < 4; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
@@ -384,7 +382,7 @@ bool Player::moveWall(void)
 
 	moveFlag = false;
 	//壁の移動制限
-	Position2 WallPosMiddl[2],WallPosTop[2],WallPosBottom[2];
+	Position2 WallPosMiddl[2], WallPosTop[2], WallPosBottom[2];
 	//右（真ん中）
 	WallPosMiddl[0].x = _pos.x + _plRect.w;
 	WallPosMiddl[0].y = _pos.y + (_plRect.h / 2);
@@ -400,7 +398,7 @@ bool Player::moveWall(void)
 	//補正のために下も確認する
 	//右下
 	WallPosBottom[0].x = _pos.x + _plRect.w;
-	WallPosBottom[0].y = _pos.y + (_plRect.h-1);
+	WallPosBottom[0].y = _pos.y + (_plRect.h - 1);
 	//左下
 	WallPosBottom[1].x = _pos.x;
 	WallPosBottom[1].y = _pos.y + (_plRect.h - 1);
@@ -411,7 +409,7 @@ bool Player::moveWall(void)
 			break;
 		}
 		if (_map->GetChipType(WallPosMiddl[j]) == CHIP_CLIMB_WALL
-		   || _map->GetChipType(WallPosTop[j]) != CHIP_BLANK
+			|| _map->GetChipType(WallPosTop[j]) != CHIP_BLANK
 			|| _hit->GimmickHitType(WallPosMiddl[j]) == GIM_ATTRACT) {
 			moveFlag = true;
 			break;
@@ -439,17 +437,17 @@ bool Player::moveWall(void)
 	Position2 offsetPos[2];
 	offsetPos[0].x = WallPosMiddl[0].x;
 	offsetPos[0].y = WallPosMiddl[0].y + 3.0f;
-	offsetPos[1].x = WallPosMiddl[1].x -1.0f;
+	offsetPos[1].x = WallPosMiddl[1].x - 1.0f;
 	offsetPos[1].y = WallPosMiddl[1].y + 3.0f;
 	if (_state == ST_WALL) {
 		if (moveFlag == false) {
 
 			for (int f = 0; f < 2; f++) {
-				if(_map->GetChipType(offsetPos[f]) != CHIP_CLIMB_WALL
-					&& _map->GetChipType(WallPosBottom[f]) == CHIP_CLIMB_WALL){
+				if (_map->GetChipType(offsetPos[f]) != CHIP_CLIMB_WALL
+					&& _map->GetChipType(WallPosBottom[f]) == CHIP_CLIMB_WALL) {
 					_pos.y++;
 				}
-				else {		
+				else {
 					continue;
 				}
 			}
@@ -465,7 +463,7 @@ bool Player::moveWall(void)
 				{
 					vy = -WALL_SPEED;
 				}
-				else if (_dir == DIR_DOWN  ||_key.keybit.L_DOWN_BUTTON)
+				else if (_dir == DIR_DOWN || _key.keybit.L_DOWN_BUTTON)
 				{
 					vy = WALL_SPEED;
 				}
@@ -491,26 +489,24 @@ bool Player::moveWall(void)
 		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//キーボード
 			vy = WALL_SPEED;
 		}
-		else if (_dir == DIR_DOWN){
+		else if (_dir == DIR_DOWN) {
 			vy = WALL_SPEED;
 		}
 		else {
 			vy = 0.0f;
 		}
-
-
 		//下が地面だった時は止まる
 		Position2 nextPosDown;
 		nextPosDown.x = _pos.x + (_plRect.w / 2);
 		nextPosDown.y = _pos.y + vy + (_plRect.h - 1);
 		if (_map->GetChipType(nextPosDown) == CHIP_CLIMB_WALL
-		 || _map->GetChipType(nextPosDown) == CHIP_N_CLIMB_WALL
+			|| _map->GetChipType(nextPosDown) == CHIP_N_CLIMB_WALL
 		 || _hit->GimmickHitType(nextPosDown) == GIM_ATTRACT) {
 			vy = 0.0f;
 		}
 		//上が壁だったときは止まる
 		Position2 nextPosUp;
-		nextPosUp.x = _pos.x + (_plRect.w/2);
+		nextPosUp.x = _pos.x + (_plRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
 		if (_map->GetChipType(nextPosUp) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosUp) == CHIP_N_CLIMB_WALL
@@ -519,7 +515,7 @@ bool Player::moveWall(void)
 		}
 
 		//位置補正
-		Position2 tmpPos,WallPosDownL,WallPosDownR;
+		Position2 tmpPos, WallPosDownL, WallPosDownR;
 		//右下
 		WallPosDownR.x = _pos.x + _plRect.w;
 		WallPosDownR.y = _pos.y + (_plRect.h - 1);
@@ -527,7 +523,8 @@ bool Player::moveWall(void)
 		WallPosDownL.x = _pos.x;
 		WallPosDownL.y = _pos.y + (_plRect.h - 1);
 
-		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+		//tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+		tmpPos.y = (_pos.y - _plRect.h/2 -3);
 		//moveFlagがfalseのときは位置補正を行う
 		if (!moveFlag) {
 			if (_rope->GetRopeState() != ST_ROPE_READY) {
@@ -555,7 +552,7 @@ bool Player::moveWall(void)
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this)&& _hit->GimmickHitType(*this) ==GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						_pos.x += 3;
+					//	_pos.x += 5;
 						WallFlag = false;
 					}
 				}
@@ -563,7 +560,7 @@ bool Player::moveWall(void)
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL  ||_hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						_pos.x -= 3;
+						//_pos.x -= 5;
 						WallFlag = false;
 					}
 				}
@@ -925,7 +922,7 @@ bool Player::stVanish(void)
 	}
 	//動いていたらｶｳﾝﾄを戻す
 	//壁登り状態で動いていたらｽﾃﾙｽにならない
-	if (_state == ST_MOVE||_state==ST_JUMP||_state==ST_ROPE||vy!=0) {
+	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0) {
 		vanCnt = 60 * VANISH_CNT;
 		alfa = 255;
 		deathFlag = true;
@@ -978,7 +975,7 @@ bool Player::stFever(void)
 	}
 
 #ifdef _DEBUG
-	DrawFormatString(600,10,0xffffff,"%d",feverTime);
+	DrawFormatString(600, 10, 0xffffff, "%d", feverTime);
 #endif
 	return false;
 }
@@ -1029,7 +1026,9 @@ bool Player::moveJump(void)
 	//左上
 	nextPosUP[1].x = _pos.x + 2;
 	nextPosUP[1].y = _pos.y + (vy / 2);
-		//登れる壁、登れない壁との判定
+	Position2 nextPos[2];
+
+	//登れる壁、登れない壁との判定
 	for (int j = 0; j < 2; j++) {
 		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosUP[j]) == CHIP_CLIMB_WALL
@@ -1093,8 +1092,8 @@ void Player::FeverJump()
 	nextPosDown[1].y = _pos.y + (_plRect.h - 2) + (vy / 2);
 	for (int j = 0; j < 2; j++) {
 		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
-			||_hit->GimmickHitType(nextPosUP[j]) == GIM_ATTRACT
-			||(_map->GetChipType(nextPosUP[j]) == CHIP_CLIMB_WALL&&_map->GetChipType(nextPosDown[j]) == CHIP_BLANK)) {
+			|| _hit->GimmickHitType(nextPosUP[j]) == GIM_ATTRACT
+			|| (_map->GetChipType(nextPosUP[j]) == CHIP_CLIMB_WALL&&_map->GetChipType(nextPosDown[j]) == CHIP_BLANK)) {
 			vy = 0.0f;
 			break;
 		}
@@ -1102,18 +1101,15 @@ void Player::FeverJump()
 }
 void Player::Draw(Position2& offset)
 {
-	
-	MV1SetPosition(modelhandle, VGet(_pos.x - offset.x+(_plRect.w/2) , SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h), 0));
-	//MV1SetRotationXYZ(modelhandle,VGet(0.f,80.f,0.f));
-	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
-	
+	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
+	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
 	//時機
-	DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xffffff, false);
 	switch (_state)
 	{
 		//ｽﾃﾙｽ状態
 	case ST_VANISH:
-		alfa = max(alfa-1, tranceMax);
+		//透過率をだんだん上げていく
+		alfa = max(alfa - 1, tranceMax);
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//ﾛｰﾌﾟ状態
@@ -1129,28 +1125,36 @@ void Player::Draw(Position2& offset)
 		//ﾌｨｰﾊﾞｰ状態
 	case ST_FEVER:
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-		DrawString((int)_pos.x  - 20 -offset.x, (int)_pos.y  - 20 -offset.y, "＼FEVER／", 0x0000ff);
+		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
 		alfa = 50;
 		break;
 	default:
 		break;
 	}
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
-	tmpOffset = offset;
 
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, WorldToScreenPos);
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
+	//モデルの透過率の設定
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
-	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
+	//アニメーション切り替え
+	AnimationSwitching();
+	//モデルを描画
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.4f);
+	//モデルの輪郭線を設定 0.0fで透過します
+	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
 
-//#ifdef _DEBUG
-//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
-//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
-//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
-//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-//	_plRect.Draw(offset);
-//#endif
+	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
+	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
+	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
+	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
+//		_plRect.Draw(offset);
+	//#endif
 }
 
 //敵と当たった時の処理を行う
@@ -1190,8 +1194,8 @@ void Player::gravity(void)
 	//登れる壁、登れない壁との判定
 	for (int j = 0; j < 3; j++) {
 		if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
-		 || _map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL
-		 || (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
+			|| _map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL
+			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
 			break;
@@ -1249,7 +1253,7 @@ void Player::FeverGravity()
 	}
 	//登れない壁との判定
 	for (int j = 0; j < 3; j++) {
- if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
+		if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
@@ -1270,6 +1274,7 @@ void Player::FeverGravity()
 		for (int j = 0; j < 3; j++) {
 			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
 				vy = 0.0f;
+				AnimNowTime[ACTION_JUMP] = 0.0f;
 				JumpFlag = false;
 				break;
 			}
@@ -1286,10 +1291,10 @@ void Player::FeverGravity()
 }
 bool Player::plPlaceCheck()
 {
-	if (	_map->GetChipType(_plRect.LeftTop())		!= CHIP_BLANK 
-		||	_map->GetChipType(_plRect.LeftBottom())		!= CHIP_BLANK
-		||	_map->GetChipType(_plRect.RightTop())		!= CHIP_BLANK
-		||	_map->GetChipType(_plRect.RightBottom())	!= CHIP_BLANK) {
+	if (_map->GetChipType(_plRect.LeftTop()) != CHIP_BLANK
+		|| _map->GetChipType(_plRect.LeftBottom()) != CHIP_BLANK
+		|| _map->GetChipType(_plRect.RightTop()) != CHIP_BLANK
+		|| _map->GetChipType(_plRect.RightBottom()) != CHIP_BLANK) {
 		return false;
 	}
 	return true;
@@ -1309,7 +1314,7 @@ CHAR_ST Player::GetcharState(void)
 //_pos取得
 Position2& Player::GetPos(void)
 {
-	return _pos;
+	return Position2(_pos.x,_pos.y);
 }
 //向き取得
 DIR Player::GetDir(void)
@@ -1331,14 +1336,13 @@ void Player::SetInitPos()
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = p;
+	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);
 	initPos = _pos;
 }
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		if (_inpInfo.key.keybit.R_UP_BUTTON) {
-			DrawString(30, 360, "クリアしたよ", GetColor(255, 255, 255));
+		if (_key.keybit.B_BUTTON &&! _lastKey.keybit.B_BUTTON) {
 			return true;
 		}
 	}
@@ -1346,7 +1350,7 @@ bool Player::EnterDoor()
 }
 void Player::SetRetryPos(Position2 midPos)
 {
-	_pos = midPos;
+	_pos = Position3(midPos.x,midPos.y,0.f);
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;
@@ -1354,4 +1358,116 @@ void Player::SetRetryPos(Position2 midPos)
 	alfa = 255;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+}
+
+Position2 Player::ReturnWoToScPos2ver()
+{
+	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
+}
+
+void Player::AnimationSwitching(void)
+{
+	switch (_state)
+	{
+		//通常状態
+	case ST_DEF:
+	case ST_STOP:
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_WAIT)
+			{
+				continue;
+			}
+			//不要なアニメーションのブレンド率を0にする
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i],0.0f);
+		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
+		//指定アニメーションのフレームを進める
+		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_SLOW;
+		//現在のアニメーションが最大フレームまでいったらループする
+		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
+		{
+			AnimNowTime[ACTION_WAIT] = 0.0f;
+		}
+		break;
+		//移動状態
+	case ST_MOVE:
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_WALK)
+			{
+				continue;
+			}
+			//不要なアニメーションのブレンド率を0にする
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WALK], 1.0f);
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
+		//指定アニメーションのフレームを進める
+		AnimNowTime[ACTION_WALK] += ANIMATION_SPEED_HIGH;
+		//現在のアニメーションが最大フレームまでいったらループする
+		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
+		{
+			AnimNowTime[ACTION_WALK] = 0.0f;
+		}
+
+		break;
+		//ﾛｰﾌﾟ状態
+	case ST_ROPE:
+		break;
+		//壁登り状態
+	case ST_WALL:
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_CLIMB)
+			{
+				continue;
+			}
+			//不要なアニメーションのブレンド率を0にする
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_CLIMB], 1.0f);
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_CLIMB], AnimNowTime[ACTION_CLIMB]);
+		//指定アニメーションのフレームを進める
+		AnimNowTime[ACTION_CLIMB] += ANIMATION_SPEED_HIGH;
+		//現在のアニメーションが最大フレームまでいったらループする
+		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
+		{
+			AnimNowTime[ACTION_CLIMB] = 0.0f;
+		}
+
+		break;
+		//ジャンプ状態
+	case ST_JUMP:
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_JUMP)
+			{
+				continue;
+			}
+			//不要なアニメーションのブレンド率を0にする
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_JUMP], 1.0f);
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
+		//指定アニメーションのフレームを進める
+		AnimNowTime[ACTION_JUMP] += 0.5f;
+		//現在のアニメーションが最大フレームまでいったらループする
+		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
+		{
+			AnimNowTime[ACTION_JUMP] =0.0f;
+		}
+		break;
+	default:
+		break;
+	}
 }

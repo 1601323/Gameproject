@@ -6,7 +6,7 @@
 #include "EnemyServer.h"
 #include "Player.h"
 #include "Rope.h"
-
+#include "ModelMgr.h"
 
 
 EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& server,HitClass& hit) :_player(pl), _rope(rope), _server(server),_hit(hit)
@@ -14,12 +14,14 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	//_hit = new HitClass();
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
+	_modelmgr = ModelMgr::Instance();
+	_emRect.w = 32;
+	_emRect.h = 64;
 	_pos.x = pos.x;
-	_pos.y = pos.y;
+	_pos.y = pos.y -32;//座標がマップチップ一個分の左上で登録されているので、座標からレクトサイズ－マップチップサイズする
 	_initPos = _pos;
 	_dir = DIR_RIGHT;
-	_emRect.w = 32;
-	_emRect.h = 32;
+
 	_emEye.pos.x = _pos.x;
 	_emEye.pos.y = _pos.y + (_emRect.h / 4);
 	_emEye.r = 40;
@@ -42,6 +44,9 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+	modelDirAngle = 0.0f;
 }
 
 EmLookback::~EmLookback()
@@ -68,40 +73,63 @@ void EmLookback::Updata()
 
 void EmLookback::Draw(Position2 offset)
 {
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+	//モデルを描画
+	MV1DrawModel(modelhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
 	switch (_state)
 	{
 	case EM_ST_NONE:
 	case EM_ST_MOVE:
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0xff0000, true);
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0xff0000, true);
 		break;
 	case EM_ST_DIS:
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x0000ff, true);
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x0000ff, true);
 		break;
 	case EM_ST_RETURN:
 		break;
 	case EM_ST_RE_DIS:
 		break;
 	case EM_ST_FEAR:
-		DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x00ff00, true);
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x00ff00, true);
 		break;
 	default:
 		break;
 	}
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-	if (_dir == DIR_RIGHT) {
-		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-	}
-	else if (_dir == DIR_LEFT) {
-		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+	if (_state != EM_ST_FEAR) {
+		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.0f);
+			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		}
+		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.0f);
+			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		}
 	}
 	returnDir(offset);
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
-	_emEye.Draw(offset);
+	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
-	_emRect.Draw(offset);
-	DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
+	//_emRect.Draw(offset);
+	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
 #endif 
 }
 void EmLookback::SetMove()
@@ -148,9 +176,11 @@ void EmLookback::setDir(void)
 	}
 	else {
 		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.0f);
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.0f);
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		LookCount = 0;
@@ -158,7 +188,8 @@ void EmLookback::setDir(void)
 }
 void EmLookback::Visibility()
 {
-	////視界判定(プレイヤーを見つけたとき)
+	_emData.lookDir = _dir;
+	//視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
 		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
@@ -235,7 +266,7 @@ void EmLookback::moveFear(void)
 		}
 	}
 #ifdef _DEBUG
-	DrawFormatString(10, 450, 0xffffff, "怯み:%d", FearCount);
+	//DrawFormatString(10, 450, 0xffffff, "怯み:%d", FearCount);
 #endif
 }
 void EmLookback::EnemyFalter()

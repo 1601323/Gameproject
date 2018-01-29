@@ -3,16 +3,16 @@
 #include "Object.h"
 #include "Input.h"
 
-#define ROPE_SPEED (15)          //移動スピード
-#define ROPE_THETA (45.f)        //ロープの斜めの角度右向きver
-#define ROPE_THETA2 (135.f)      //ロープの斜めの角度左向きver
+#define ROPE_SPEED (5.5f)        //移動スピード
+#define ROPE_THETA (45.f)        //ロープの斜めの角度右向きver(circleのみ)
+#define ROPE_THETA2 (135.f)      //ロープの斜めの角度左向きver(circleのみ)
 #define STRAIGHT_RAD (180.f)     //直線時のRad
-#define ROPE_RANGE (5.f)         //circle用の半径
+#define ROPE_RANGE (2.f)         //circle用の半径
 #define ROPE_RECT_W (20)         //rect用の幅
 #define ROPE_RECT_H (20)         //rect用の高さ
-#define ROPE_OMEGA (2.f)         //ここをいじることで1回で動くrect circleのposを変えれます
-#define ROPE_LENGTH_MAX (20)     //ロープの最大長
-#define WAIT_TIME (30)           //伸びきった後の持ち時間
+#define ROPE_OMEGA (1.0f)        //ここをいじることで1回で動くrect circleのposを変えれます
+#define ROPE_LENGTH_MAX (40)     //ロープの最大長 
+#define ROPE_MODEL_NUM (450)     //ロープのモデルの座標を調整するため値
 
 class Input;
 class Player;
@@ -51,34 +51,32 @@ private:
 
 	ModelMgr* _modelmgr;
 
-	Position2 RotationPos;    //準備中にくるくる回すpos
-	bool RopeTurnFlag;
-	bool dirFlag;
-	bool padFlag;
-	int time;
+	bool RopeTurnFlag;                      //ロープ引き返し用flag
+	bool dirFlag;                           //ロープの向きを決めるflag
+	bool padFlag;                           //ゲームパッドが刺さっているかどうかを見るflag
+	bool tongueHitTurn;                     //舌がオブジェクトに当たったかどうかを見るflag
 
-	int modelhandle;
-	float  AnimTotalTime;
-	float  AnimNowTime;
-	int    AnimAttachIndex;
+	int    modelhandle;                     //ロープのモデルハンドル
+	float  AnimTotalTime;                   //アニメーションのトータルタイム
+	float  AnimNowTime;                     //アニメーションの現在タイム
+	int    AnimAttachIndex;                 //アニメーション数
 
-	float range;
-	float theta;
-	float omega;
-	float rote;
+	int mentenanceNum_X;                    //モデルの描画のために仮で置いている調整用の値X
+	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y
+	int RopeHitModelNumY;
 
-	void RopeInit(void);
-	void DrawRopeRect(void);
-	void SetRope(void);
-	void SetCurveRope(void);
-	void DirChange(void);
-	void ThetaSet(void);
-	void CheckPad(void);
-	void DrawLineSet(Position2 startpos,Position2 endpos,int color);
-	Position2 SetVec(void);
+	float range;                            //サークル半径
+	float RopeAngle_Y;                      //表示用モデル角度Y
+	float RopeAngle_Z;                      //表示用モデル角度Z
 
-	float SetRopeRad(void);
-	float SetRopeRadCurve(void);
+	void RopeInit(void);                    //初期関数
+	void DrawRopeRect(void);                //描画処理
+	void SetRope(void);                     //ロープ用
+	void DirChange(void);                   //方向を変える関数
+	void CheckPad(void);                    //ゲームパッドチェック関数
+	Position2 SetVec(void);                 //スピード設定関数
+	float SetRopeRad(void);                 //ロープの発射角度を決める関数
+	void SetRopeRadForDrawZ(void);          //モデル表示のための調整関数
 
 public:
 	Rope();
@@ -101,6 +99,8 @@ public:
 	INPUT_INFO _inputinfo;
 	Rect _RopeRect;
 	Circle _RopeCircle;
+	Circle _RopeCircle2;
+	Circle _RopeCircle3;
 	Position2 _HitPos;
 	Position2 _vec;
 	Position2 _tmpOffset;			//描画用ｵﾌｾｯﾄ値

@@ -76,7 +76,7 @@ GameScene::GameScene()
 	//ｴﾈﾐｰﾌｧｸﾄﾘｰです。ファイルができるまでは直接指定になります
 	_emFac = new EnemyFactory(*_player, *_rope, *_server, * _hit);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
-	_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
+	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
 	for (auto& data : chipData) {
 		//ﾌﾟﾚｲﾔｰの場所設定
@@ -125,10 +125,10 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/ch.map";
+		mapName = "map/douga.map";
 		break;
 	case 1:
-		mapName = "map/map2.map";
+		mapName = "map/douga.map";
 		break;
 	case 2:
 		mapName = "map/na.map";
@@ -188,7 +188,7 @@ void GameScene::NormalUpdata(Input* input)
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON)
 	{
 		//Enterキー or Aボタン 処理
-		DrawString(200, 200, "idek", 0xfffff);
+		//DrawString(200, 200, "idek", 0xfffff);
 	}
 #endif
 
@@ -294,9 +294,10 @@ void GameScene::PauseUpdata(Input* input)
 		_updater = &GameScene::NormalUpdata;
 	}
 }
+//リトライ時の初期化呼び出しをまとめたもの
 void GameScene::RetryProcess()
 {
-	if (_rtData.midFlag == true) {
+	if (_mid->ReturnCheckFlag() || _mid->ReturnGetFlag()/*_rtData.midFlag == true*/) {
 		_player->SetRetryPos(_mid->GetInitPos());
 	}
 	else

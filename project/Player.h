@@ -10,6 +10,9 @@
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
 #define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
 #define FEVER_CNT (10)					//フィーバーの時間
+#define ANIMATION_SPEED_SLOW (0.3f)     //アニメーションの速さ(超低速)
+#define ANIMATION_SPEED_DEF (0.5f)      //アニメーションの速さ(低速)
+#define ANIMATION_SPEED_HIGH (0.8f)     //アニメーションの速さ(普通)
 
 class Input;
 class HitClass;
@@ -33,14 +36,22 @@ private:
 	HitClass *_hit;
 	MapCtl *_map;
 	Rope* _rope;
+	ModelMgr* _modelmgr;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
-	Position2 _pos;						//ｷｬﾗの座標
+	Position3 _pos;						//ｷｬﾗの座標
 	DIR _dir;							//ｷｬﾗの向き
-	Position2 initPos;					//初期位置保存
+	Position3 initPos;					//初期位置保存
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
+	int modelhandle;                    //プレイヤーモデルハンドル
+	int alfa;                           //ステルス用アルファ
+	int tranceMax;                      //最大透過数
+	int  AnimIndex[ACTION_MAX];         //アニメーション数
+	float AnimTotalTime[ACTION_MAX];    //各アニメーションのトータルタイム
+	float AnimNowTime[ACTION_MAX];      //各アニメーションの現在タイム
+	float modelDirAngle;                //モデル表示用のY軸の回転率
 	bool feverFlag;						//フィーバーフラグ
 	int feverTime;						//フィーバーの時間
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
@@ -74,15 +85,11 @@ private:
 	void FeverGravity();				//フィーバー用の重力処理
 	void FeverWall();					//フィーバー用の壁移動処理
 
+	void AnimationSwitching(void);      //アニメーション切り替えよう関数
+
 	Position2 tmpOffset;
-	//いきなりなのでここに書いてます
-	ModelMgr* _modelmgr;
-	int modelhandle;
-	int alfa;
-	int tranceMax;
-	float  AnimTotalTime;
-	float  AnimNowTime;
-	int    AnimAttachIndex;
+	VECTOR WorldToScreenPos;            //ワールド座標からスクリーン座標に変換した後のモデル表示用のpos
+
 public:
 	Player();
 	~Player();
@@ -102,5 +109,6 @@ public:
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
+	Position2 ReturnWoToScPos2ver();   //ワールド座標からスクリーン座標に変換後のposを返す関数
 };
 

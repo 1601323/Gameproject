@@ -23,11 +23,12 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 
 	//_pl = new Player();
 	//_hit = new HitClass();
-	_pos.x = pos.x;
-	_pos.y = pos.y;
-	_initPos = _pos;
 	_emRect.w = 30;
-	_emRect.h = 30;	
+	_emRect.h = 60;	
+	_pos.x = pos.x;
+	_pos.y = pos.y -30;
+	_initPos = _pos;
+
 	_emEye.pos.x = _pos.x;
 	_emEye.pos.y = _pos.y + (_emRect.h / 4);
 	_emEye.r = 40;
@@ -49,8 +50,10 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData.plFoundFlag = false;
 	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
-
+	//ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	//‰ŠúŠp“x
+	modelDirAngle = AngleRad(-90.0f);
 }
 
 
@@ -132,9 +135,11 @@ void EmAround::InterMove()
 			interCnt = 0;
 			dis = 0;
 			if (_dir == DIR_RIGHT) {
+				modelDirAngle = AngleRad(90.0f);
 				_dir = DIR_LEFT;
 			}
 			else if(_dir == DIR_LEFT){
+				modelDirAngle = AngleRad(-90.0f);
 				_dir = DIR_RIGHT;
 			}
 			else {
@@ -208,7 +213,7 @@ void EmAround::CheckMove()
 void EmAround::Visibility()
 {
 	//_emData.lookAngle = 60;
-	//_emData.lookDir = _dir;
+	_emData.lookDir = _dir;
 	//_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
@@ -266,7 +271,7 @@ void EmAround::EnemyFalter()
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
 #ifdef _DEBUG
-			DrawString(100, 100, "“G‚É“–‚½‚Á‚½‚æI", 0xffffff);
+			//DrawString(100, 100, "“G‚É“–‚½‚Á‚½‚æI", 0xffffff);
 #endif
 			_state = EM_ST_FEAR;
 		}
@@ -312,10 +317,17 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
-	MV1SetPosition(modelhandle,VGet(_pos.x - offset.x + (_emRect.w / 2), SCREEN_SIZE_Y -_pos.y + offset.y - (_emRect.h),0));
+	//ƒ‚ƒfƒ‹‚Ì‰ñ“]Šp“x‚ÌÝ’è(ƒ‰ƒWƒAƒ“)
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//ƒ‚ƒfƒ‹‚Ìpos‚ðÝ’è+ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“‚Ö•ÏŠ·
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2),_pos.y - offset.y + (_emRect.h),0)));
+	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚ÌÝ’è
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
+	//ƒ‚ƒfƒ‹‚ð•`‰æ
 	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle,0.2f);
+	//ƒ‚ƒfƒ‹‚Ì—ÖŠsü‚ðÝ’è 0.0f‚Å“§‰ß‚µ‚Ü‚·
+	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}
@@ -323,24 +335,26 @@ void EmAround::Draw(Position2 offset)
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x00ff00, true);
 	}
 	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
-	if (_dir == DIR_LEFT) {
-		_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	}
-	else if (_dir == DIR_RIGHT) {
-		_emEye.SetCenter(_pos.x + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
+	if (_state != EM_ST_FEAR) {
+		if (_dir == DIR_LEFT) {
+			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+		else if (_dir == DIR_RIGHT) {
+			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-		DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
 	}
-
 #ifdef _DEBUG
-	_emRect.Draw(offset);
+	//_emRect.Draw(offset);
+	//_emEye.Draw(offset);
 #endif
-	_emEye.Draw(offset);
+
 }
 
 void EmAround::SetRange()

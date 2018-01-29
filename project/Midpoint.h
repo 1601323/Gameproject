@@ -18,6 +18,7 @@ private:
 
 	Position2 _pos;				//鍵などのチェックポイントの場所
 	Position2 _midPos;			//金庫などの場所
+	Position2 _modelPos;
 	
 	Position2 initPos;			//リトライ時のやり直し地点について（鍵)
 	Rect _hitRect;				//鍵のあたり判定について
@@ -30,7 +31,9 @@ private:
 	bool bubbleFlag;
 	int cnt;
 	int bubble;
-	int modelhandle;
+	int Safehandle;
+	int keyhandle;
+	int Targethandle;
 public:
 	Midpoint();
 	~Midpoint();	

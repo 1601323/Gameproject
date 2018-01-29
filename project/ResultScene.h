@@ -2,10 +2,12 @@
 #include "Scene.h"
 
 class Input;
+class ModelMgr;
+
 enum NEXT_MODE {
 	JUMP_RETRY,
-	JUMP_SELECT,
 	JUMP_TITLE,
+	JUMP_SELECT,
 	JUMP_MAX
 };
 
@@ -19,11 +21,29 @@ private:
 	KEY lastKey;
 	INPUT_INFO inpInfo;
 	NEXT_MODE _mode;
-	SENSING_VALUE _minSensingValueL; 
+	SENSING_VALUE _minSensingValueL;
 	NEXT_MODE mode[JUMP_MAX];
 	int nowNum;
+	//ï\é¶ópä÷êî
+	int numberImage;
+	int second;
+	int tenex;
+	int hunex;
+
+	int dirNumY;
 	bool clearFlag;
 	bool selectFlag;
+
+	ModelMgr* _modelmgr;
+	int playerModelHandle;
+	int smileTexture;
+	int textureIndex;
+	int medicineHandle;
+	float AnimTotalTime;
+	float  AnimNowTime;
+	float outlineNum;
+	int  AnimIndex;
+
 	void NormalUpdata(Input* input);
 
 	void GameClear();
@@ -36,4 +56,3 @@ public:
 	SCENE_TYPE GetScene();
 	void Updata(Input* input);
 };
-

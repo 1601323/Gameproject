@@ -12,6 +12,7 @@
 #include "Input.h"
 #include "Math.h"
 #include "ImageMgr.h"
+#include "ModelMgr.h"
 
 using namespace std;
 
@@ -38,27 +39,27 @@ void gameOverScene(SceneStruct* scene, Input* input);
 void titleScene(SceneStruct* scene,Input* input)
 {
 	scene->func = titleScene;
-	DrawString(0,10,"タイトルシーン",GetColor(255,255,255));
+//	DrawString(0,10,"タイトルシーン",GetColor(255,255,255));
 }
 void selectScene(SceneStruct* scene,Input* input)
 {
 	scene->func = selectScene;
-	DrawString(0,10,"セレクトシーン",GetColor(255,255,255));
+	//DrawString(0,10,"セレクトシーン",GetColor(255,255,255));
 }
 void stageScene(SceneStruct* scene, Input*input) 
 {
 	scene->func = stageScene;
-	DrawString(0, 10, "ゲームシーン", GetColor(255, 255, 255));
+//	DrawString(0, 10, "ゲームシーン", GetColor(255, 255, 255));
 }
 void clearScene(SceneStruct* scene,Input* input)
 {
 	scene->func = clearScene;
-	DrawString(0,10,"クリアシーン",GetColor(255,255,255));
+//	DrawString(0,10,"クリアシーン",GetColor(255,255,255));
 }
 void gameOverScene(SceneStruct* scene,Input* input)
 {
 	scene->func = gameOverScene;
-	DrawString(0,10,"ゲームオーバーシーン",GetColor(255,255,255));
+//	DrawString(0,10,"ゲームオーバーシーン",GetColor(255,255,255));
 }
 
 GameMain::GameMain()

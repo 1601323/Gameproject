@@ -8,6 +8,7 @@
 using namespace std;
 
 class Player;
+class ModelMgr;
 
 // mapの各情報入れる
 // 構造体内のパッキング[1ﾊﾞｲﾄずつに]
@@ -57,6 +58,7 @@ public:
 	void Load(const char* fileName);		// 読み込み 
 
 	int chipImage[8];
+	int chipModelHandle[3];
 
 	//ギミック用に追加
 	//CHIP_TYPEとPositionをもつデータ
@@ -68,6 +70,7 @@ public:
 	vector<EnemyPosData> getEnemyData();
 private:
 	static MapCtl* ptr;					// ﾎﾟｲﾝﾀ	
+	ModelMgr* _modelmgr;
 	shared_ptr<Object> obj;
 	map<string, MapData> mapData;		// ﾏｯﾌﾟﾃﾞｰﾀ	[mapDataを生成]	
 	MapCtl();				// ｺﾝｽﾄﾗｸﾀ
