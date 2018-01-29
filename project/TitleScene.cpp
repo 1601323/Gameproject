@@ -212,6 +212,6 @@ void TitleScene::Draw()
 	}
 
 	DrawGraph(400, -105, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
-	DrawGraph(40, 50, im.ImageIdReturn("‰¼image/title.png", SCENE_SELECT), true);
+	DrawExtendGraph(40, 50,300,250, im.ImageIdReturn("‰¼image/title.png", SCENE_SELECT), true);
 
 }
