@@ -39,6 +39,8 @@ private:
 	int fearCnt;			//‚Ğ‚é‚ñ‚Å‚¢‚é•b”
 
 	int modelhandle;
+	int ETexture;
+	int textureIndex;
 	float modelDirAngle;
 
 	void Move();			//“G‚Ì“®‚«‚É‚Â‚¢‚Ä‚ÌŠÇ—‚ğs‚¤
