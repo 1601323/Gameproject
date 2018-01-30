@@ -52,6 +52,8 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData._level = ALERT_LEVEL_1;
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	ETexture = LoadGraph("Enemy_model/teki-1.png");
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	//初期角度
 	modelDirAngle = AngleRad(-90.0f);
 }
@@ -323,6 +325,12 @@ void EmAround::Draw(Position2 offset)
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2),_pos.y - offset.y + (_emRect.h),0)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
+
+	if (_commonData.midFlag)
+	{
+		//テクスチャを変更
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
+	}
 	//モデルを描画
 	MV1DrawModel(modelhandle);
 	//モデルの輪郭線を設定 0.0fで透過します
