@@ -245,6 +245,12 @@ struct RESULT_DATA
 	int life;
 	int foundCount;
 };
+//アイテム・フィーバーの管理について
+struct FEVER_DATA {
+	FEVER_DATA() :feverCnt(0), feverTime(0) {}
+	int feverCnt;		//あと何回ﾌｨｰﾊﾞｰできるかのカウント
+	int feverTime;		//使うかわからない
+};
 inline
 Position2 operator+(const Position2 &pos, const Position2 &pos2)
 {
