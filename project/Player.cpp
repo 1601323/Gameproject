@@ -1183,7 +1183,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+		DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
 		_plRect.Draw(offset);
 	//#endif
@@ -1241,7 +1241,7 @@ void Player::gravity(void)
 				vy = MAX_GRAVITY;
 			}
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
-			JumpFlag = true;
+			//JumpFlag = true;
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
@@ -1300,7 +1300,7 @@ void Player::FeverGravity()
 				vy = MAX_GRAVITY;
 			}
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
-			JumpFlag = true;
+			//JumpFlag = true;
 		}
 	}if (JumpFlag == true && vy > 0) {
 		for (int j = 0; j < 3; j++) {
