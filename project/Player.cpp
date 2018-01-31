@@ -1471,7 +1471,7 @@ void Player::AnimationSwitching(void)
 		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
 		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_JUMP] += 0.5f;
+		AnimNowTime[ACTION_JUMP] += ANIMATION_SPEED_DEF;
 		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
 		{

@@ -293,11 +293,13 @@ void Rope::SelectDir(Input* input)
 {
 	if (_state == ST_ROPE_SELECT)
 	{
-		//MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-		//MV1DrawFrame(modelhandle,0);
-		//_modelmgr->SetMaterialDotLine(modelhandle, 0.1f);
+		MV1SetRotationXYZ(modelhandle, VGet(0.f, RopeAngle_Y, RopeAngle_Z));
+		MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y,0.0f));
+		MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
+		MV1DrawFrame(modelhandle,0);
+		_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
-		//ロープくるくる解除 Readyの状態に戻す
+		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
 			_key.keybit.X_BUTTON && !_lastkey.keybit.X_BUTTON && padFlag)
 		{
@@ -547,7 +549,7 @@ void Rope::SetRopeRadForDrawZ(void)
 	case ROPE_DIR_UPPER:
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
 		mentenanceNum_Y = dirFlag ? -100 + _RopeRect.h / 2: -110 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -40 : 60;
+		mentenanceNum_X = dirFlag ? -50 : 60;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);

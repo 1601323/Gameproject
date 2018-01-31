@@ -128,7 +128,7 @@ void GameScene::GameInit()
 		mapName = "map/douga.map";
 		break;
 	case 1:
-		mapName = "map/douga.map";
+		mapName = "map/Production.map";
 		break;
 	case 2:
 		mapName = "map/na.map";

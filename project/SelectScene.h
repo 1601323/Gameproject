@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h"
 class Input;
+class ModelMgr;
+
 enum SENSING_VALUE;
 class SelectScene :
 	public Scene
@@ -10,6 +12,7 @@ private:
 	void NormalUpdata(Input* input);
 	void Draw();
 	void Select(Input* input);
+	ModelMgr* _modelmgr;
 
 	KEY key;
 	KEY lastKey;
@@ -19,6 +22,10 @@ private:
 	int nowNum;
 	int mapNumber[STAGE_MAX];
 	int SelectMap;
+	int modelhandle;        //プレイヤーモデルハンドル
+	int  AnimIndex;         //アニメーション数
+	float AnimTotalTime;    //各アニメーションのトータルタイム
+	float AnimNowTime;      //各アニメーションの現在タイム
 	bool selectFlag;		//セレクトのキーの制御フラグ
 
 	int w;
