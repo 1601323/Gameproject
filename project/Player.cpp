@@ -29,7 +29,7 @@ Player::Player()
 	feverTime = 60 * FEVER_CNT;
 	//_hit = new HitClass();
 	_plRect.w = 32;
-	_plRect.h = 50;
+	_plRect.h = 32;
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	_map = MapCtl::GetInstance();
 	//_rope = new Rope(this);
@@ -341,6 +341,9 @@ bool Player::moveWall(void)
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	Position2 downPos2;
+	downPos2.x = _pos.x + (_plRect.w/2);
+	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2);
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
@@ -376,8 +379,11 @@ bool Player::moveWall(void)
 				}
 			}
 			//もし足元に床がなければそのまま壁に張り付く
-			if (_map->GetChipType(downPos) == CHIP_BLANK) {
+			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
+	/*			if (_map->GetChipType(downPos2) != CHIP_BLANK) {
+					WallFlag = false;
+				}*/
 				break;
 			}
 		}
@@ -1174,7 +1180,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	//	_plRect.Draw(offset);
+		_plRect.Draw(offset);
 	//#endif
 }
 
