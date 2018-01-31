@@ -549,7 +549,7 @@ void Rope::SetRopeRadForDrawZ(void)
 	case ROPE_DIR_UPPER:
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
 		mentenanceNum_Y = dirFlag ? -100 + _RopeRect.h / 2: -110 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -40 : 60;
+		mentenanceNum_X = dirFlag ? -50 : 60;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
