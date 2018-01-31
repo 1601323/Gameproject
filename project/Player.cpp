@@ -29,7 +29,7 @@ Player::Player()
 	feverTime = 60 * FEVER_CNT;
 	//_hit = new HitClass();
 	_plRect.w = 32;
-	_plRect.h = 50;
+	_plRect.h = 32;
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	_map = MapCtl::GetInstance();
 	//_rope = new Rope(this);
@@ -43,6 +43,7 @@ Player::Player()
 	alfa = 255;
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
+	_fd = FEVER_DATA();
 
 	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
@@ -88,6 +89,8 @@ void Player::Update(Input* input)
 	//ｽﾃｰﾀｽ制御
 	setState();
 	HitToEnemy();		//敵と当たったとき
+	//ﾌｨｰﾊﾞｰﾃﾞｰﾀ受け取り
+	GetFeverData();
 }
 
 //移動系の処理
@@ -338,6 +341,9 @@ bool Player::moveWall(void)
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	Position2 downPos2;
+	downPos2.x = _pos.x + (_plRect.w/2);
+	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2);
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
@@ -373,7 +379,7 @@ bool Player::moveWall(void)
 				}
 			}
 			//もし足元に床がなければそのまま壁に張り付く
-			if (_map->GetChipType(downPos) == CHIP_BLANK) {
+			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
 				break;
 			}
@@ -538,35 +544,37 @@ bool Player::moveWall(void)
 			}
 			else if (_inpInfo.num >= 1)
 			{		//パッドの場合
-				if (_dir == DIR_RIGHT) {
+				if (_dir == DIR_RIGHT || _dir==DIR_UP) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_dir == DIR_LEFT) {
+				if (_dir == DIR_LEFT || _dir == DIR_UP) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x -= 7;
 						WallFlag = false;
 					}
 				}
 			}
 			else {	//キーボードの場合
-				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON) {
+				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON ||_inpInfo.key.keybit.R_UP_BUTTON&& !_lastKey.keybit.R_UP_BUTTON) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this)&& _hit->GimmickHitType(*this) ==GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-					//	_pos.x += 5;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON) {
+				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL  ||_hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						//_pos.x -= 5;
+						_pos.x -= 7;
 						WallFlag = false;
 					}
 				}
@@ -612,6 +620,10 @@ void Player::FeverWall()
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	Position2 downPos2;
+	downPos2.x = _pos.x + (_plRect.w / 2);
+	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y / 2);
+
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
@@ -647,7 +659,7 @@ void Player::FeverWall()
 				}
 			}
 			//もし足元に床がなければそのまま壁に張り付く
-			if (_map->GetChipType(downPos) == CHIP_BLANK) {
+			if (_map->GetChipType(downPos) == CHIP_BLANK&&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				if (WallFlag == false) {
 					WallFlag = true;
 					vx = 0;
@@ -798,35 +810,37 @@ void Player::FeverWall()
 			}
 			else if (_inpInfo.num >= 1)
 			{		//パッドの場合
-				if (_dir == DIR_RIGHT) {
+				if (_dir == DIR_RIGHT || _dir == DIR_UP) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_dir == DIR_LEFT) {
+				if (_dir == DIR_LEFT || _dir == DIR_UP) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x -= 7;
 						WallFlag = false;
 					}
 				}
 			}
 			else {	//キーボードの場合
-				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON) {
+				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						_pos.x += 5;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON) {
+				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						_pos.x -=5;
+						_pos.x -=7;
 						WallFlag = false;
 					}
 				}
@@ -955,8 +969,14 @@ bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
 	if (keyData[KEY_INPUT_Z]) {
-		if (feverFlag == false) {
-			feverFlag = true;
+		cout << _fd.feverCnt << endl;
+		if (_fd.feverCnt > 0) {
+
+			if (feverFlag == false) {
+				feverFlag = true;
+				_fd.feverCnt--;
+				GameMain::Instance().SetFeverData(_fd);
+			}
 		}
 	}
 	if (feverFlag == true) {
@@ -1471,7 +1491,7 @@ void Player::AnimationSwitching(void)
 		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
 		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_JUMP] += 0.5f;
+		AnimNowTime[ACTION_JUMP] += ANIMATION_SPEED_DEF;
 		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
 		{
@@ -1481,4 +1501,8 @@ void Player::AnimationSwitching(void)
 	default:
 		break;
 	}
+}
+void Player::GetFeverData()
+{
+	_fd = GameMain::Instance().ReturnFeverData();
 }

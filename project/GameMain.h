@@ -21,6 +21,7 @@ class GameMain
 private:
 	Scene* _scene;
 	RESULT_DATA _resultData;					//リザルトデータについて
+	FEVER_DATA _feverData;
 	GameMain();
 	GameMain(const GameMain&);
 	//GameMain& operator=(const GameMain&);
@@ -48,7 +49,9 @@ public:
 
 	void SetResultData(RESULT_DATA rt);			//リザルトのデータを渡す
 	RESULT_DATA GetResultData();				//リザルトデータを返す
-
+	//あんまりきれいじゃないけどここで持たせます
+	void SetFeverData(FEVER_DATA fd);
+	FEVER_DATA  ReturnFeverData();
 	void checkBestScore();
 
 	~GameMain();

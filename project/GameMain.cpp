@@ -140,6 +140,16 @@ int GameMain::GetNowStage()
 {
 	return nowStage;
 }
+//ﾌｨｰﾊﾞｰﾃﾞｰﾀを受け取ります
+void GameMain::SetFeverData(FEVER_DATA fd)
+{
+	_feverData = fd;
+}
+//ﾌｨｰﾊﾞｰﾃﾞｰﾀを返します
+FEVER_DATA GameMain::ReturnFeverData()
+{
+	return _feverData;
+}
 //タイトルに強制遷移を行います
 void GameMain::TransTitle()
 {

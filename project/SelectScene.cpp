@@ -7,12 +7,14 @@
 #include "Input.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "ModelMgr.h"
 using namespace std;
 
 
 SelectScene::SelectScene()
 {
 	_updater = &SelectScene::NormalUpdata;
+	_modelmgr = ModelMgr::Instance();
 	SelectMap = mapNumber[0];
 	nowNum = 0;
 	_minSensingValueL = SV_HIGH;
@@ -22,6 +24,10 @@ SelectScene::SelectScene()
 	stageNum[0] = "仮image/stNum1.png";
 	stageNum[1] = "仮image/stNum2.png";
 	stageNum[2] = "仮image/stNum3.png";
+	modelhandle = MV1LoadModel("player_model/player.pmx");
+	//アニメーションをアタッチ+総時間の設定
+	AnimIndex = MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex);
 }
 
 
@@ -112,6 +118,7 @@ void SelectScene::Draw()
 	//背景
 	DrawGraph(0, 0, im.ImageIdReturn("仮image/select.png",SCENE_GAME),true);
 
+
 	//ステージ選択用の四角
 	//for (int x = 0; x < 3; x++) {
 	//	DrawBox(90 + 100 * x, 90  , 90 + 100 * x + w, 90  + h, 0x223344, true);
@@ -128,7 +135,29 @@ void SelectScene::Draw()
 		}
 	}
 
-	DrawGraph(70, 450, im.ImageIdReturn("仮image/textbox.png",SCENE_GAME), true);
+	DrawExtendGraph(180, 450,750,620, im.ImageIdReturn("仮image/textbox.png",SCENE_GAME), true);
+
+	//アニメーションのフレームを進める
+	AnimNowTime += 0.5f;
+	//現在のアニメーションが最大フレームまでいったらループする
+	if (AnimNowTime >= AnimTotalTime)
+	{
+		AnimNowTime = 0;
+	}
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(-30.f), 0.f));
+	//アニメーションをアタッチ
+	MV1SetAttachAnimTime(modelhandle, AnimIndex, AnimNowTime);
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(3.5f, 3.5f, 3.5f));
+	//モデルを描画
+	MV1DrawModel(modelhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
+
 //	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
-	DrawFormatString(90,470,0x000000,"Stage %d です",nowNum);
+	DrawFormatString(190,470,0x000000,"Stage %d です",nowNum+1);
 }

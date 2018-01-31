@@ -90,6 +90,10 @@ private:
 	Position2 tmpOffset;
 	VECTOR WorldToScreenPos;            //ワールド座標からスクリーン座標に変換した後のモデル表示用のpos
 
+	FEVER_DATA _fd;
+	void GetFeverData();
+	
+
 public:
 	Player();
 	~Player();

@@ -123,12 +123,13 @@ void GameScene::GameInit()
 	GameMain& gm = GameMain::Instance();
 	//‰Šúó‘Ô‚Ìƒf[ƒ^‚ğ“ü‚ê‚é
 	_rtData = RESULT_DATA();
+	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
 		mapName = "map/douga.map";
 		break;
 	case 1:
-		mapName = "map/douga.map";
+		mapName = "map/Production.map";
 		break;
 	case 2:
 		mapName = "map/na.map";
