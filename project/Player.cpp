@@ -43,6 +43,7 @@ Player::Player()
 	alfa = 255;
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
+	_fd = FEVER_DATA();
 
 	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
@@ -88,6 +89,8 @@ void Player::Update(Input* input)
 	//ｽﾃｰﾀｽ制御
 	setState();
 	HitToEnemy();		//敵と当たったとき
+	//ﾌｨｰﾊﾞｰﾃﾞｰﾀ受け取り
+	GetFeverData();
 }
 
 //移動系の処理
@@ -955,8 +958,14 @@ bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
 	if (keyData[KEY_INPUT_Z]) {
-		if (feverFlag == false) {
-			feverFlag = true;
+		cout << _fd.feverCnt << endl;
+		if (_fd.feverCnt > 0) {
+
+			if (feverFlag == false) {
+				feverFlag = true;
+				_fd.feverCnt--;
+				GameMain::Instance().SetFeverData(_fd);
+			}
 		}
 	}
 	if (feverFlag == true) {
@@ -1165,7 +1174,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-		_plRect.Draw(offset);
+	//	_plRect.Draw(offset);
 	//#endif
 }
 
@@ -1481,4 +1490,8 @@ void Player::AnimationSwitching(void)
 	default:
 		break;
 	}
+}
+void Player::GetFeverData()
+{
+	_fd = GameMain::Instance().ReturnFeverData();
 }

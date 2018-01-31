@@ -1,4 +1,6 @@
 #include <DxLib.h>
+#include <iostream>
+#include "GameMain.h"
 #include "GimDrop.h"
 #include "HitClass.h"
 #include "Input.h"
@@ -21,6 +23,8 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 	_pos.y = pos.y+MAP_CHIP_SIZE_Y - (_gmRect.h / 2);
 	dropFlag = false;
 	count = 60;
+	_fd.feverCnt = 0;
+	_fd.feverTime = 0;
 
 	_gimType = GIM_FALL;
 }
@@ -41,13 +45,23 @@ void GimDrop::Updata(Input& _input)
 	CheckDoMove();
 	if (_state == GM_HIT) {
 		MoveLeft();
+		_fd.feverCnt = 1;
+
+		SendFeverData();
+
 	}
 	else if (_state == GM_MOVE) {
 		MoveRight();
+		_fd.feverCnt = 1;
+		SendFeverData();
+
 	}
 	else {
 
 	}
+	GetItem();
+	_fd =GameMain::Instance().ReturnFeverData();
+	cout << _fd.feverCnt << endl;
 	//Draw();	
 }
 //_stateÇÃïœçXÇ…Ç¬Ç¢Çƒ
@@ -209,7 +223,7 @@ void GimDrop::MoveRight()
 		else {	//çsÇ≠êÊÇ…è∞Ç™Ç»Ç©Ç¡ÇΩèÍçáÅióéâ∫â^ìÆÅj
 			nextPos.y = _pos.y + (_gmRect.h * 2);
 			if (_map->GetChipType(nextPos) != CHIP_BLANK) {	//óéÇøÇΩêÊÇ…ínñ Ç™Ç†ÇÍÇŒäÑÇÍÇƒìÆçÏÇèIóπÇ∑ÇÈ
-				_state = GM_END;
+				_state = GM_PAUSE;
 			}
 			velocity += gravity;
 			_pos.y += (int)velocity / 2;
@@ -256,7 +270,16 @@ void GimDrop::MoveRight()
 	
 
 }
-
+void GimDrop::GetItem()
+{
+	if (_hit->IsHit(_gmRect, _player.GetRect())) {
+		if (_state != GM_END) {
+			_state = GM_END;
+			_fd.feverCnt++;
+			GameMain::Instance().SetFeverData(_fd);
+		}
+	}
+}
 //ï`âÊ
 void GimDrop::Draw(Position2 offset) 
 {
@@ -270,7 +293,7 @@ void GimDrop::Draw(Position2 offset)
 		if (count >= 0) {
 			//DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "Å_ÉKÉVÉÉÅ[ÉìÅ^", 0xffff00);
 		}
-		DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
+		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
 	}
 	else if (_state == GM_PAUSE) {		//à⁄ìÆÇ™àÍéûí‚é~ÇµÇƒÇ¢ÇÈÇ∆Ç´Åiï«Ç…Ç‘Ç¬Ç©Ç¡ÇΩÇ»Ç«)
 		DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(0, 0, 255), true);
@@ -289,4 +312,9 @@ Rect& GimDrop::GetRect()
 GIMMICK_TYPE& GimDrop::GetType()
 {
 	return _gimType;
+}
+
+void GimDrop::SendFeverData()
+{
+	GameMain::Instance().SetFeverData(_fd);
 }

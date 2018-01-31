@@ -48,6 +48,7 @@ private:
 	int hunex;
 
 	RESULT_DATA _rtData;
+	FEVER_DATA _feverData;
 
 	int count;			//遷移確認用（あとで削除します）
 	void GameInit();											//ゲーム開始時の初期化を行います
@@ -69,6 +70,5 @@ public:
 	~GameScene();
 	SCENE_TYPE GetScene();
 	void Updata(Input* input);
-
 };
 
