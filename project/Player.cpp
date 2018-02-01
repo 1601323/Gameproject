@@ -29,8 +29,11 @@ Player::Player()
 	feverTime = 60 * FEVER_CNT;
 	//_hit = new HitClass();
 	_plRect.w = 32;
-	_plRect.h = 32;
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
+	_plRect.h = 50;
+	_wallRect.w = 32;
+	_wallRect.h = 32;
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y  -(_plRect.h / 2));
+	_wallRect.SetCenter(_pos.x+(_wallRect.w/2),_pos.y+(_wallRect.h/2));
 	_map = MapCtl::GetInstance();
 	//_rope = new Rope(this);
 	WallFlag = false;
@@ -320,30 +323,42 @@ bool Player::moveWall(void)
 	//操作性に難あり
 	Position2 nextPos[6];
 	//右下
-	nextPos[0].x = _pos.x + _plRect.w;
-	nextPos[0].y = _pos.y + (_plRect.h - 1);
+	//nextPos[0].x = _pos.x + _plRect.w;
+	//nextPos[0].y = _pos.y + (_plRect.h - 1);
+	nextPos[0] = _wallRect.RightBottom();
 	//左下
-	nextPos[1].x = _pos.x;
-	nextPos[1].y = _pos.y + (_plRect.h - 1);
+	//nextPos[1].x = _pos.x;
+	//nextPos[1].y = _pos.y + (_plRect.h - 1);
+	nextPos[1] = _wallRect.LeftBottom();
 	//右上
-	nextPos[2].x = _pos.x + _plRect.w;
-	nextPos[2].y = _pos.y;
+	//nextPos[2].x = _pos.x + _plRect.w;
+	//nextPos[2].y = _pos.y;
+	nextPos[2] = _wallRect.RightTop();
 	//左上
-	nextPos[3].x = _pos.x;
-	nextPos[3].y = _pos.y;
+	//nextPos[3].x = _pos.x;
+	//nextPos[3].y = _pos.y;
+	nextPos[3] = _wallRect.LeftTop();
 	//右真ん中
-	nextPos[4].x = _pos.x + _plRect.w;
-	nextPos[4].y = _pos.y + (_plRect.h/2);
+	//nextPos[4].x = _pos.x + _plRect.w;
+	//nextPos[4].y = _pos.y + (_plRect.h/2);
+	nextPos[4] = _wallRect.RightTop();
+	nextPos[4].y += _wallRect.h / 2;
 	//左真ん中
-	nextPos[5].x = _pos.x;
-	nextPos[5].y = _pos.y + (_plRect.h/2);
+	//nextPos[5].x = _pos.x;
+	//nextPos[5].y = _pos.y + (_plRect.h/2);
+	nextPos[5] = _wallRect.LeftTop();
+	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	//downPos.x = _wallRect.Left() + (_wallRect.w/2);
+	//downPos.y = _wallRect.Bottom() + MAP_CHIP_SIZE_Y;
 	Position2 downPos2;
 	downPos2.x = _pos.x + (_plRect.w/2);
 	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2);
+	//downPos2.x = _wallRect.Left() + (_wallRect.w / 2);
+	//downPos2.y = _wallRect.Bottom() + (MAP_CHIP_SIZE_Y / 2);
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
@@ -398,24 +413,35 @@ bool Player::moveWall(void)
 	//右（真ん中）
 	WallPosMiddl[0].x = _pos.x + _plRect.w;
 	WallPosMiddl[0].y = _pos.y + (_plRect.h / 2);
+	//WallPosMiddl[0].x = _wallRect.Right();
+	//WallPosMiddl[0].y =_wallRect.Top()+ (_wallRect.h / 2);
 	//左（真ん中）
 	WallPosMiddl[1].x = _pos.x;
 	WallPosMiddl[1].y = _pos.y + (_plRect.h / 2);
+	//WallPosMiddl[1].x = _wallRect.Left();
+	//WallPosMiddl[1].y = _wallRect.Top() +(_wallRect.h / 2);
 	//右上
 	WallPosTop[0].x = _pos.x + _plRect.w;
 	WallPosTop[0].y = _pos.y;
+	//WallPosTop[0] = _wallRect.RightTop();
 	//左上
 	WallPosTop[1].x = _pos.x;
 	WallPosTop[1].y = _pos.y;
+	//WallPosTop[0] = _wallRect.LeftTop();
 	//補正のために下も確認する
 	//右下
 	WallPosBottom[0].x = _pos.x + _plRect.w;
 	WallPosBottom[0].y = _pos.y + (_plRect.h - 1);
+	//WallPosBottom[0].x = _wallRect.Right();
+	//WallPosBottom[0].y = _wallRect.Bottom() - 1;
 	//左下
 	WallPosBottom[1].x = _pos.x;
 	WallPosBottom[1].y = _pos.y + (_plRect.h - 1);
+	//WallPosBottom[1].x = _wallRect.Left();
+	//WallPosBottom[1].y = _wallRect.Bottom() -1;
 	for (int j = 0; j < 2; j++) {
 		//ｷｬﾗの半分以上,上はいけないようにする
+		cout << (_map->GetChipType(WallPosMiddl[j]) == CHIP_CLIMB_WALL) << endl;
 		if (_rope->GetRopeState() != ST_ROPE_READY) {
 			moveFlag = false;
 			break;
@@ -511,6 +537,9 @@ bool Player::moveWall(void)
 		Position2 nextPosDown;
 		nextPosDown.x = _pos.x + (_plRect.w / 2);
 		nextPosDown.y = _pos.y + vy + (_plRect.h - 1);
+		//nextPosDown = _wallRect.LeftBottom();
+		//nextPosDown.x += _wallRect.w / 2;
+		//nextPosDown.y += vy;
 		if (_map->GetChipType(nextPosDown) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosDown) == CHIP_N_CLIMB_WALL
 		 || _hit->GimmickHitType(nextPosDown) == GIM_ATTRACT) {
@@ -520,6 +549,9 @@ bool Player::moveWall(void)
 		Position2 nextPosUp;
 		nextPosUp.x = _pos.x + (_plRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
+		//nextPosUp = _wallRect.LeftTop();
+		//nextPosUp.x += _wallRect.h / 2;
+		//nextPosUp.y += vy;
 		if (_map->GetChipType(nextPosUp) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosUp) == CHIP_N_CLIMB_WALL
 			|| _hit->GimmickHitType(nextPosUp) == GIM_ATTRACT) {
@@ -531,12 +563,15 @@ bool Player::moveWall(void)
 		//右下
 		WallPosDownR.x = _pos.x + _plRect.w;
 		WallPosDownR.y = _pos.y + (_plRect.h - 1);
+		//WallPosDownR = _wallRect.RightBottom();
 		//左下
 		WallPosDownL.x = _pos.x;
 		WallPosDownL.y = _pos.y + (_plRect.h - 1);
+		//WallPosDownL = _wallRect.LeftBottom();
 
-		//tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
 		tmpPos.y = (_pos.y - _plRect.h/2 -3);
+		//tmpPos.y =(_wallRect.Top() -_wallRect.h );
 		//moveFlagがfalseのときは位置補正を行う
 		if (!moveFlag) {
 			if (_rope->GetRopeState() != ST_ROPE_READY) {
@@ -599,30 +634,38 @@ void Player::FeverWall()
 	//操作性に難あり
 	Position2 nextPos[6];
 	//右下
-	nextPos[0].x = _pos.x + _plRect.w;
-	nextPos[0].y = _pos.y + (_plRect.h - 1);
+	//nextPos[0].x = _pos.x + _plRect.w;
+	//nextPos[0].y = _pos.y + (_plRect.h - 1);
+	nextPos[0] = _wallRect.RightBottom();
 	//左下
-	nextPos[1].x = _pos.x;
-	nextPos[1].y = _pos.y + (_plRect.h - 1);
+	//nextPos[1].x = _pos.x;
+	//nextPos[1].y = _pos.y + (_plRect.h - 1);
+	nextPos[1] = _wallRect.LeftBottom();
 	//右上
-	nextPos[2].x = _pos.x + _plRect.w;
-	nextPos[2].y = _pos.y;
+	//nextPos[2].x = _pos.x + _plRect.w;
+	//nextPos[2].y = _pos.y;
+	nextPos[2] = _wallRect.RightTop();
 	//左上
-	nextPos[3].x = _pos.x;
-	nextPos[3].y = _pos.y;
+	//nextPos[3].x = _pos.x;
+	//nextPos[3].y = _pos.y;
+	nextPos[3] = _wallRect.LeftTop();
 	//右真ん中
-	nextPos[4].x = _pos.x + _plRect.w;
-	nextPos[4].y = _pos.y + (_plRect.h / 2);
+	//nextPos[4].x = _pos.x + _plRect.w;
+	//nextPos[4].y = _pos.y + (_plRect.h/2);
+	nextPos[4] = _wallRect.RightTop();
+	nextPos[4].y += _wallRect.h / 2;
 	//左真ん中
-	nextPos[5].x = _pos.x;
-	nextPos[5].y = _pos.y + (_plRect.h / 2);
+	//nextPos[5].x = _pos.x;
+	//nextPos[5].y = _pos.y + (_plRect.h/2);
+	nextPos[5] = _wallRect.LeftTop();
+	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
-	downPos.x = _pos.x + (_plRect.w / 2);
-	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	downPos.x = _pos.x + (_wallRect.w / 2);
+	downPos.y = _pos.y + _wallRect.h + MAP_CHIP_SIZE_Y;
 	Position2 downPos2;
-	downPos2.x = _pos.x + (_plRect.w / 2);
-	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y / 2);
+	downPos2.x = _pos.x + (_wallRect.w / 2);
+	downPos2.y = _pos.y + _wallRect.h + (MAP_CHIP_SIZE_Y / 2);
 
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
@@ -737,13 +780,13 @@ void Player::FeverWall()
 	//位置補正
 	Position2 tmpPos, WallPosDownL, WallPosDownR;
 	//右下
-	WallPosDownR.x = _pos.x + _plRect.w;
-	WallPosDownR.y = _pos.y + (_plRect.h - 1);
+	WallPosDownR.x = _pos.x + _wallRect.w;
+	WallPosDownR.y = _pos.y + (_wallRect.h - 1);
 	//左下
 	WallPosDownL.x = _pos.x;
-	WallPosDownL.y = _pos.y + (_plRect.h - 1);
+	WallPosDownL.y = _pos.y + (_wallRect.h - 1);
 
-	tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+	tmpPos.y = (_pos.y - _wallRect.h / 2) / 32 * 32;
 	if (_state == ST_WALL) {
 		//壁の中で移動可能なら
 		if (moveFlag) {
@@ -795,7 +838,7 @@ void Player::FeverWall()
 		}
 		//上が壁だったときは止まる
 		Position2 nextPosUp;
-		nextPosUp.x = _pos.x + (_plRect.w / 2);
+		nextPosUp.x = _pos.x + (_wallRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
 		if (_map->GetChipType(nextPosUp) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosUp) == CHIP_N_CLIMB_WALL
@@ -1131,63 +1174,7 @@ void Player::FeverJump()
 		}
 	}
 }
-void Player::Draw(Position2& offset)
-{
-	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
-	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
-	//時機
-	switch (_state)
-	{
-		//ｽﾃﾙｽ状態
-	case ST_VANISH:
-		//透過率をだんだん上げていく
-		alfa = max(alfa - 1, tranceMax);
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
-		break;
-		//ﾛｰﾌﾟ状態
-	case ST_ROPE:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
-		alfa = 255;
-		break;
-		//壁登り状態
-	case ST_WALL:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
-		alfa = 255;
-		break;
-		//ﾌｨｰﾊﾞｰ状態
-	case ST_FEVER:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
-		alfa = 50;
-		break;
-	default:
-		break;
-	}
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 
-	//モデルの回転角度の設定(ラジアン)
-	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
-	//モデルのposを設定+ワールド座標からスクリーンへ変換
-	MV1SetPosition(modelhandle, WorldToScreenPos);
-	//モデルの拡大縮小値の設定
-	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
-	//モデルの透過率の設定
-	MV1SetOpacityRate(modelhandle, alfa / 255.f);
-	//アニメーション切り替え
-	AnimationSwitching();
-	//モデルを描画
-	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
-
-	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
-	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
-	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
-	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	//	_plRect.Draw(offset);
-	//#endif
-}
 
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
@@ -1241,7 +1228,7 @@ void Player::gravity(void)
 				vy = MAX_GRAVITY;
 			}
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
-			JumpFlag = true;
+			//JumpFlag = true;
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
@@ -1300,7 +1287,7 @@ void Player::FeverGravity()
 				vy = MAX_GRAVITY;
 			}
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
-			JumpFlag = true;
+			//JumpFlag = true;
 		}
 	}if (JumpFlag == true && vy > 0) {
 		for (int j = 0; j < 3; j++) {
@@ -1329,6 +1316,67 @@ bool Player::plPlaceCheck()
 		return false;
 	}
 	return true;
+}
+void Player::Draw(Position2& offset)
+{
+	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
+	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
+	//時機
+	switch (_state)
+	{
+		//ｽﾃﾙｽ状態
+	case ST_VANISH:
+		//透過率をだんだん上げていく
+		alfa = max(alfa - 1, tranceMax);
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
+		break;
+		//ﾛｰﾌﾟ状態
+	case ST_ROPE:
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+		alfa = 255;
+		break;
+		//壁登り状態
+	case ST_WALL:
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+		alfa = 255;
+		break;
+		//ﾌｨｰﾊﾞｰ状態
+	case ST_FEVER:
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
+		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
+		alfa = 50;
+		break;
+	default:
+		break;
+	}
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
+	_wallRect.SetCenter(_pos.x+(_plRect.w/2),_pos.y+ ((_plRect.h/4)*3)-1);
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, WorldToScreenPos);
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
+	//モデルの透過率の設定
+	MV1SetOpacityRate(modelhandle, alfa / 255.f);
+	//アニメーション切り替え
+	AnimationSwitching();
+	//モデルを描画
+	MV1DrawModel(modelhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
+	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+
+	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
+	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
+	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
+		DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
+		_plRect.Draw(offset);
+		_wallRect.Draw(offset,0xffffff);
+		DrawPixel(_plRect.Center().x - offset.x,_plRect.Center().y -offset.y,0xff0000);
+		DrawPixel(_pos.x-offset.x,_pos.y-offset.y,0x0000ff);
+
+	//#endif
 }
 //Rect取得
 Rect& Player::GetRect()
@@ -1367,7 +1415,7 @@ void Player::SetInitPos()
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);
+	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);	//yに足しているのは最初の座標で埋まらないようにするため
 	initPos = _pos;
 }
 bool Player::EnterDoor()
