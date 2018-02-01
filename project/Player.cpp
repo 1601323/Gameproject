@@ -42,6 +42,7 @@ Player::Player()
 	fMoveLeft = true;
 	deathFlag = true;
 	helpFever = false;
+	airFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -641,6 +642,7 @@ void Player::FeverWall()
 	//nextPos[1].x = _pos.x;
 	//nextPos[1].y = _pos.y + (_plRect.h - 1);
 	nextPos[1] = _wallRect.LeftBottom();
+
 	//âEè„
 	//nextPos[2].x = _pos.x + _plRect.w;
 	//nextPos[2].y = _pos.y;
@@ -665,7 +667,7 @@ void Player::FeverWall()
 	downPos.y = _pos.y + _wallRect.h + MAP_CHIP_SIZE_Y;
 	Position2 downPos2;
 	downPos2.x = _pos.x + (_wallRect.w / 2);
-	downPos2.y = _pos.y + _wallRect.h + (MAP_CHIP_SIZE_Y / 2);
+	downPos2.y = _pos.y + _wallRect.h + (MAP_CHIP_SIZE_Y / 3);
 
 	//ï«ìoÇËèÛë‘Ç…Ç∑ÇÈèåè
 	for (int j = 0; j < 6; j++) {
@@ -786,7 +788,7 @@ void Player::FeverWall()
 	WallPosDownL.x = _pos.x;
 	WallPosDownL.y = _pos.y + (_wallRect.h - 1);
 
-	tmpPos.y = (_pos.y - _wallRect.h / 2) / 32 * 32;
+	tmpPos.y = (_pos.y - _wallRect.h / 2) / 32 * 32 +3;
 	if (_state == ST_WALL) {
 		//ï«ÇÃíÜÇ≈à⁄ìÆâ¬î\Ç»ÇÁ
 		if (moveFlag) {
@@ -838,7 +840,7 @@ void Player::FeverWall()
 		}
 		//è„Ç™ï«ÇæÇ¡ÇΩÇ∆Ç´ÇÕé~Ç‹ÇÈ
 		Position2 nextPosUp;
-		nextPosUp.x = _pos.x + (_wallRect.w / 2);
+		nextPosUp.x = _pos.x + (_plRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
 		if (_map->GetChipType(nextPosUp) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosUp) == CHIP_N_CLIMB_WALL
@@ -1059,7 +1061,7 @@ bool Player::stFever(void)
 bool Player::moveJump(void)
 {
 	//flagÇ™trueÇ»ÇÁºﬁ¨›ÃﬂèÛë‘
-	if (JumpFlag == true) {
+	if (JumpFlag == true&& airFlag ==true) {
 		_state = ST_JUMP;
 	}
 	//ºﬁ¨›Ãﬂ
@@ -1068,12 +1070,14 @@ bool Player::moveJump(void)
 			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
+				airFlag = true;
 			}
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
+				airFlag = true;
 			}
 		}
 
@@ -1217,6 +1221,7 @@ void Player::gravity(void)
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
+			airFlag = false;
 			break;
 		}
 		else {
@@ -1229,6 +1234,7 @@ void Player::gravity(void)
 			}
 			//ãÛíÜÇæÇ¡ÇΩÇÁÇ∆ÇËÇ†Ç¶Ç∏ºﬁ¨›ÃﬂèÛë‘
 			//JumpFlag = true;
+			airFlag = true;
 		}
 	}
 	//€∞ÃﬂèÛë‘Ç»ÇÁÇ§Ç≤ÇØÇ»Ç¢
@@ -1276,6 +1282,7 @@ void Player::FeverGravity()
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
+			airFlag = false;
 			break;
 		}
 		else {
@@ -1287,7 +1294,8 @@ void Player::FeverGravity()
 				vy = MAX_GRAVITY;
 			}
 			//ãÛíÜÇæÇ¡ÇΩÇÁÇ∆ÇËÇ†Ç¶Ç∏ºﬁ¨›ÃﬂèÛë‘
-			//JumpFlag = true;
+			JumpFlag = true;			//Ç¬ÇØÇƒÇ»Ç¢Ç∆è„è∞Ç∑ÇËî≤ÇØîªíËÇ™Ç§Ç‹Ç≠Ç¢Ç©Ç»Ç¢Ç¡Ç€Ç¢Ç≈Ç∑
+			airFlag = true;
 		}
 	}if (JumpFlag == true && vy > 0) {
 		for (int j = 0; j < 3; j++) {
