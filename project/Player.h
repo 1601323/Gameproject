@@ -58,6 +58,7 @@ private:
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
 	bool moveRopeJumpFlag;				//ﾛｰﾌﾟｼﾞｬﾝﾌﾟ処理
+	bool airFlag;						//空中にいるかどうかのフラグ
 	bool fMoveRight;					//ﾌｨｰﾊﾞｰ時、壁のぼりを制御するフラグ
 	bool fMoveLeft;						//同上
 	bool deathFlag;						//まさに死亡フラグ（_stateでは管理しきれないみたいなので
