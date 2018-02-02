@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Assert.h"
 #include "Geometry.h"
 #include "EmLookback.h"
 #include "MapCtl.h"
@@ -44,6 +45,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+	_rangeLevel = RANGE_1;
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
 	ETexture = LoadGraph("Enemy_model/teki2-1.png");
@@ -73,73 +75,6 @@ void EmLookback::Updata()
 	Gravity();
 }
 
-void EmLookback::Draw(Position2 offset)
-{
-	//モデルの回転角度の設定(ラジアン)
-	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
-	//モデルのposを設定+ワールド座標からスクリーンへ変換
-	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
-	//モデルの拡大縮小値の設定
-	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-
-	if (_commonData.midFlag)
-	{
-		//テクスチャを変更
-		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
-	}
-	//モデルを描画
-	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
-
-	switch (_state)
-	{
-	case EM_ST_NONE:
-	case EM_ST_MOVE:
-		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0xff0000, true);
-		break;
-	case EM_ST_DIS:
-		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x0000ff, true);
-		break;
-	case EM_ST_RETURN:
-		break;
-	case EM_ST_RE_DIS:
-		break;
-	case EM_ST_FEAR:
-		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x00ff00, true);
-		break;
-	default:
-		break;
-	}
-	_tmpOffset = offset;
-	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-	if (_state != EM_ST_FEAR) {
-		if (_dir == DIR_RIGHT) {
-			modelDirAngle = AngleRad(-90.0f);
-			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-		}
-		else if (_dir == DIR_LEFT) {
-			modelDirAngle = AngleRad(90.0f);
-			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-		}
-	}
-	returnDir(offset);
-	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
-	//_emEye.Draw(offset);
-
-#ifdef _DEBUG
-	//_emRect.Draw(offset);
-	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
-#endif 
-}
 void EmLookback::SetMove()
 {
 	vx = 0;
@@ -382,18 +317,119 @@ void EmLookback::SetRange()
 {
 	_individualData._level = _server.AlertLevel();
 	if (_individualData._level == ALERT_LEVEL_1) {
-		_emEye.r = 60;
+		_rangeLevel = RANGE_1;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_2;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_2) {
-		_emEye.r = 80;
+		_rangeLevel = RANGE_2;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_3;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_3) {
-		_emEye.r = 100;
+		_rangeLevel = RANGE_3;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_4;
+		}
 	}
 	else {
 		_emEye.r = 60;
+		_rangeLevel = RANGE_1;
+	}
+
+	switch (_rangeLevel) {
+	case RANGE_1:
+		_emEye.r = 60;
+		break;
+	case RANGE_2:
+		_emEye.r = 80;
+		break;
+	case RANGE_3:
+		_emEye.r = 100;
+		break;
+	case RANGE_4:
+		_emEye.r = 120;
+		break;
+	case RANGE_5:
+		_emEye.r = 140;
+		break;
+	default:
+		ASSERT();
 	}
 }
+void EmLookback::Draw(Position2 offset)
+{
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
+
+	if (_commonData.midFlag)
+	{
+		//テクスチャを変更
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
+	}
+	//モデルを描画
+	MV1DrawModel(modelhandle);
+	//モデルの輪郭線を設定 0.0fで透過します
+	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
+	switch (_state)
+	{
+	case EM_ST_NONE:
+	case EM_ST_MOVE:
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0xff0000, true);
+		break;
+	case EM_ST_DIS:
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x0000ff, true);
+		break;
+	case EM_ST_RETURN:
+		break;
+	case EM_ST_RE_DIS:
+		break;
+	case EM_ST_FEAR:
+		//DrawBox((int)_pos.x - offset.x, (int)_pos.y - offset.y, (int)_pos.x - offset.x + _emRect.w, (int)_pos.y - offset.y + _emRect.h, 0x00ff00, true);
+		break;
+	default:
+		break;
+	}
+	_tmpOffset = offset;
+	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+	if (_state != EM_ST_FEAR) {
+		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.0f);
+			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		}
+		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.0f);
+			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		}
+	}
+	returnDir(offset);
+	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
+
+#ifdef _DEBUG
+	//_emEye.Draw(offset);
+	//_emRect.Draw(offset);
+	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
+#endif 
+}
+
 Rect & EmLookback::GetRect()
 {
 	return _emRect;

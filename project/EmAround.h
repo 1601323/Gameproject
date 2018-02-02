@@ -26,6 +26,7 @@ private:
 	DIR _dir;
 	EnemyServerData _individualData;		//´ÈĞ°–{•”‚É‘—‚éÃŞ°À
 	ModelMgr* _modelmgr;
+	ENEMY_RANGE_LEVEL _rangeLevel;
 
 	//d—Í‚É‚Â‚¢‚Ä
 	float vx;

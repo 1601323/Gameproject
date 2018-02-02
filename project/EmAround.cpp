@@ -38,7 +38,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	vy = 0.0f;
 
 	_dir = DIR_RIGHT;
-	speed = 1;				//初期スピード設定
+	speed = 2;				//初期スピード設定
 	moveFlag = false;
 
 	dis = 0;
@@ -50,6 +50,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData.plFoundFlag = false;
 	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+	_rangeLevel = RANGE_1;
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 	ETexture = LoadGraph("Enemy_model/teki-1.png");
@@ -367,14 +368,14 @@ void EmAround::Draw(Position2 offset)
 		if (_dir == DIR_LEFT) {
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		else if (_dir == DIR_RIGHT) {
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
@@ -390,16 +391,49 @@ void EmAround::SetRange()
 	//サイズは仮
 	_individualData._level = _server.AlertLevel();
 	if (_individualData._level == ALERT_LEVEL_1) {
-		_emEye.r = 60;
+		_rangeLevel = RANGE_1;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_2;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_2) {
-		_emEye.r = 80;
+		_rangeLevel = RANGE_2;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_3;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_3) {
-		_emEye.r = 100;
+		_rangeLevel = RANGE_3;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_4;
+		}
 	}
 	else {
 		_emEye.r = 60;
+		_rangeLevel = RANGE_1;
+	}
+	
+	switch (_rangeLevel) {
+	case RANGE_1:
+		_emEye.r = 60;
+		break;
+	case RANGE_2:
+		_emEye.r = 80;
+		break;
+	case RANGE_3:
+		_emEye.r = 100;
+		break;
+	case RANGE_4:
+		_emEye.r = 120;
+		break;
+	case RANGE_5:
+		_emEye.r = 140;
+		break;
+	default:
+		ASSERT();
 	}
 }
 void EmAround::GetClass(HitClass* hit, Player& pl)

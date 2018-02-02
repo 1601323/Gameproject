@@ -95,6 +95,15 @@ enum ENEMY_STATE {
 	EM_ST_RE_DIS,	//ÌßÚ²Ô°‚ªŒ©‚Â‚©‚Á‚½‚Æ‚«(–ß‚Á‚Ä‚­‚é‚Æ‚«)
 	EM_ST_FEAR		//‹¯‚Ýó‘Ô
 };
+//“G‚ÌŽ‹ŠE‚Ì‘å‚«‚³‚É‚Â‚¢‚Ä
+enum ENEMY_RANGE_LEVEL {
+	RANGE_1,
+	RANGE_2,
+	RANGE_3,
+	RANGE_4,
+	RANGE_5,
+	RANGE_MAX
+};
 //ƒAƒCƒeƒ€‚ÌŽí—Þ‚É‚Â‚¢‚Ä
 enum ITEM_TYPE {
 	ITEM_FEVER,
