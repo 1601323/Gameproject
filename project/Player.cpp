@@ -571,7 +571,7 @@ bool Player::moveWall(void)
 		//WallPosDownL = _wallRect.LeftBottom();
 
 		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
-		tmpPos.y = (_pos.y - _plRect.h/2 -3);
+		//tmpPos.y = (_pos.y - _plRect.h/2 -3);
 		//tmpPos.y =(_wallRect.Top() -_wallRect.h );
 		//moveFlagÇ™falseÇÃÇ∆Ç´ÇÕà íuï‚ê≥ÇçsÇ§
 		if (!moveFlag) {
@@ -1437,7 +1437,7 @@ bool Player::EnterDoor()
 }
 void Player::SetRetryPos(Position2 midPos)
 {
-	_pos = Position3(midPos.x,midPos.y,0.f);
+	_pos = Position3(midPos.x,midPos.y - (_plRect.h / 2),0.f);
 	//â¡ë¨ìxÇ‡å≥Ç…ñﬂÇ∑
 	vx = 0.0f;
 	vy = 0.0f;
