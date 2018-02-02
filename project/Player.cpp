@@ -571,7 +571,7 @@ bool Player::moveWall(void)
 		//WallPosDownL = _wallRect.LeftBottom();
 
 		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
-		tmpPos.y = (_pos.y - _plRect.h/2 -3);
+		//tmpPos.y = (_pos.y - _plRect.h/2 -3);
 		//tmpPos.y =(_wallRect.Top() -_wallRect.h );
 		//moveFlagがfalseのときは位置補正を行う
 		if (!moveFlag) {
@@ -1369,10 +1369,10 @@ void Player::Draw(Position2& offset)
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 	//アニメーション切り替え
 	AnimationSwitching();
-	//モデルを描画
-	MV1DrawModel(modelhandle);
 	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+	//モデルを描画
+	MV1DrawModel(modelhandle);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
@@ -1437,7 +1437,7 @@ bool Player::EnterDoor()
 }
 void Player::SetRetryPos(Position2 midPos)
 {
-	_pos = Position3(midPos.x,midPos.y,0.f);
+	_pos = Position3(midPos.x,midPos.y - (_plRect.h / 2),0.f);
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;

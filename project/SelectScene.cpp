@@ -152,10 +152,10 @@ void SelectScene::Draw()
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
 	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚ÌÝ’è
 	MV1SetScale(modelhandle, VGet(3.5f, 3.5f, 3.5f));
-	//ƒ‚ƒfƒ‹‚ð•`‰æ
-	MV1DrawModel(modelhandle);
 	//ƒ‚ƒfƒ‹‚Ì—ÖŠsü‚ðÝ’è 0.0f‚Å“§‰ß‚µ‚Ü‚·
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+	//ƒ‚ƒfƒ‹‚ð•`‰æ
+	MV1DrawModel(modelhandle);
 
 
 //	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);

@@ -74,11 +74,12 @@ void EmAround::Updata()
 	Gravity();
 	Visibility();
 	Move();
+	//_pos.x += vx;
 }
 //いい処理が浮かばなかったのでここでmoveの管理させています
 void EmAround::Move()
 {	
-	CheckMove();
+	vx = 0;
 	//通常状態の場合
 	if (_state != EM_ST_FEAR&&_individualData._level == ALERT_LEVEL_1) {
 		//_state = EM_ST_MOVE;
@@ -108,6 +109,8 @@ void EmAround::Move()
 	if (_state == EM_ST_FEAR) {
 		moveFear();
 	}
+	CheckMove();
+	_pos.x += vx;
 }
 void EmAround::BasicMove()
 {
@@ -157,10 +160,10 @@ void EmAround::FoundMove()
 
 	//ﾌﾟﾚｲﾔｰのほうが右にいたら
 	if (_pl.GetPos().x >= _pos.x) {
-		_pos.x += speed;
+		vx += speed;
 	}
 	else {
-		_pos.x -= speed;
+		vx -= speed;
 	}
 }
 //マップとのあたり判定にぶつかっていないか
@@ -209,6 +212,23 @@ void EmAround::CheckMove()
 			else {	//条件をすり抜けてしまったとき
 			}
 		}
+	}
+	//壁とのあたり判定
+	if (_state == EM_ST_RE_DIS || _state == EM_ST_DIS) {
+		Position2 nextMove[2];
+		//左側
+		nextMove[0].x = _pos.x + vx;
+		nextMove[0].y = _pos.y + (_emRect.h / 2);
+		//右側
+		nextMove[1].x = _pos.x + _emRect.w + vx;
+		nextMove[1].y = _pos.y + (_emRect.h / 2);
+		for (int f = 0; f < 2; f++) {
+			if (_map->GetChipType(nextMove[f]) == CHIP_CLIMB_WALL || _map->GetChipType(nextMove[f]) == CHIP_N_CLIMB_WALL) {
+				vx = 0;
+				break;
+			}
+		}
+
 	}
 }
 //視界について
@@ -364,7 +384,6 @@ void EmAround::Draw(Position2 offset)
 #endif
 
 }
-
 void EmAround::SetRange()
 {
 	//サイズは仮
