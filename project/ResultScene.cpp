@@ -201,7 +201,6 @@ void ResultScene::Draw()
 		//îwåi
 		DrawGraph(0, 0, im.ImageIdReturn("âºimage/result ÇÃâºÇ≈Ç∑/Result.png", SCENE_TITLE), true);
 		DrawGraph(0, 0, im.ImageIdReturn("âºimage/result ÇÃâºÇ≈Ç∑/Result2.png", SCENE_TITLE), true);
-		DrawGraph(20, dirNumY, im.ImageIdReturn("âºimage/UI/dirset1.png", SCENE_TITLE), true);
 		DrawGraph(150, 10, im.ImageIdReturn("âºimage/UI/clear.png", SCENE_TITLE), true);
 
 		//ÉvÉåÉCÉÑÅ[
@@ -285,14 +284,19 @@ void ResultScene::Draw()
 	switch (nowNum) {
 	case 0:
 		//DrawString(280, 280, "Å®", 0xffffff);
-		dirNumY = clearFlag ? 250 : 200;
+		DrawGraph(20, clearFlag ? 250 : 200, im.ImageIdReturn("âºimage/UI/dirset1.png", SCENE_TITLE), true);
+
+		//dirNumY = clearFlag ? 250 : 200;
 		break;
 	case 1:
 		//DrawString(280, 300, "Å®", 0xffffff);
-		dirNumY = 250;
+		DrawGraph(20, 250, im.ImageIdReturn("âºimage/UI/dirset1.png", SCENE_TITLE), true);
+
+		//dirNumY = 250;
 		break;
 	case 2:
 		//DrawString(280, 320, "Å®", 0xffffff);
+
 		dirNumY = 360;
 		break;
 	default:

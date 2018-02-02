@@ -48,7 +48,7 @@ Player::Player()
 	//モデル読み込み
 	modelhandle = MV1LoadModel("player_model/player.pmx");
 	//それぞれのアニメーションをアタッチ+総時間の設定
-	for (int i = 0; i <= ACTION_MAX; i++)
+	for (int i = 0; i < ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
@@ -1165,7 +1165,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-		_plRect.Draw(offset);
+	//	_plRect.Draw(offset);
 	//#endif
 }
 
@@ -1397,7 +1397,7 @@ void Player::AnimationSwitching(void)
 		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
 		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_SLOW;
+		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_DEF;
 		//現在のアニメーションが最大フレームまでいったらループする
 		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
 		{
@@ -1479,6 +1479,27 @@ void Player::AnimationSwitching(void)
 		}
 		break;
 	default:
+		//とりあえず待機状態にしとく
+		for (int i = 0; i <= ACTION_MAX; i++)
+		{
+			if (AnimIndex[i] == ACTION_WAIT)
+			{
+				continue;
+			}
+			//不要なアニメーションのブレンド率を0にする
+			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+		}
+		//適用するアニメーションの設定 ブレンド率を1.0fに
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
+		//指定アニメーションのフレームを進める
+		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_DEF;
+		//現在のアニメーションが最大フレームまでいったらループする
+		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
+		{
+			AnimNowTime[ACTION_WAIT] = 0.0f;
+		}
 		break;
 	}
 }

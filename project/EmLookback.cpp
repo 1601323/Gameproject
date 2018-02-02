@@ -82,11 +82,11 @@ void EmLookback::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 
-	if (_commonData.midFlag)
-	{
+	//if (_commonData.midFlag)
+	//{
 		//テクスチャを変更
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
-	}
+	//}
 	//モデルを描画
 	MV1DrawModel(modelhandle);
 	//モデルの輪郭線を設定 0.0fで透過します

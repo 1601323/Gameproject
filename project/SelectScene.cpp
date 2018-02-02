@@ -149,7 +149,7 @@ void SelectScene::Draw()
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimIndex, AnimNowTime);
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
-	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.0f)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.5f, 3.5f, 3.5f));
 	//モデルを描画

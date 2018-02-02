@@ -83,8 +83,10 @@ void Rope::RopeInit(void)
 	mentenanceNum_X = 0;
 	mentenanceNum_Y = 0;
 	RopeHitModelNumY = 60;
+	timerWait = WAIT_TIMER;
+
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sitamodelver.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita.mv1", SCENE_RESULT);
 	//それぞれのアニメーションをアタッチ+総時間の設定
 	AnimAttachIndex = MV1AttachAnim(modelhandle,0,-1,false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
@@ -100,21 +102,16 @@ void Rope::DrawRopeRect(void)
 {
 	//circle
 	_RopeCircle.SetCenter(_rope[*itr].x + _tmpOffset.x,SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY, range);
-	_RopeCircle2.SetCenter(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY-25, range);
-	_RopeCircle3.SetCenter(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY -50, range);
+	_RopeCircle2.SetCenter(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10, range);
 
-	//if (RopeTurnFlag)
-	//{
-	//	DrawLineSet(_rope[0], _rope[*itr - 1], 0xff0000);
-	//}
-	//else 
-	//{
-	//	if (*itr != ROPE_LENGTH_MAX - 1)//軌道線を描画
-	//	{
-	//		DrawLineSet(_rope[*itr], _rope[*itr + 1], 0xff0000);
-	//	}
-	//}
+	ModelManager();
 
+	_RopeCircle.Draw(_tmpOffset);
+	_RopeCircle2.Draw(_tmpOffset);
+
+}
+void Rope::ModelManager(void)
+{
 	//当たったかどうかでアニメーションを進めるか戻す
 	AnimNowTime = tongueHitTurn ? AnimNowTime -= 0.5f : AnimNowTime += 0.5f;
 	//現在のアニメーションが最大フレームまでいったらループする
@@ -127,20 +124,13 @@ void Rope::DrawRopeRect(void)
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimAttachIndex, AnimNowTime);
 	//モデルのposを設定
-	MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X , _player->ReturnWoToScPos2ver().y - mentenanceNum_Y, 0));
+	MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y, 0));
 	//モデルの拡大縮小値の設定
-	MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
+	MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
 	//モデルを描画
 	MV1DrawModel(modelhandle);
 	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
-
-	//DrawFormatString(400, 280, 0xff0000,"%f", (SCREEN_SIZE_Y - _rope[*itr].y - _tmpOffset.y + RopeHitModelNumY));
-
-	//_RopeCircle.Draw(_tmpOffset);
-	//_RopeCircle2.Draw(_tmpOffset);
-	//_RopeCircle3.Draw(_tmpOffset);
-
 }
 
 //DrawLineをまとめた関数 offset値の設定が分かりにくかったから
@@ -236,12 +226,12 @@ void Rope::DirChange(void)
 	if (_player->GetDir() == DIR_RIGHT)
 	{
 		dirFlag = true;
-		RopeAngle_Y = AngleRad(-90.f);
+		RopeAngle_Y = AngleRad(90.f);
 	}
 	else if (_player->GetDir() == DIR_LEFT)
 	{
 		dirFlag = false;
-		RopeAngle_Y = AngleRad(90.f);
+		RopeAngle_Y = AngleRad(-90.f);
 	}
 	else {
 	}
@@ -293,11 +283,11 @@ void Rope::SelectDir(Input* input)
 {
 	if (_state == ST_ROPE_SELECT)
 	{
-		MV1SetRotationXYZ(modelhandle, VGet(0.f, RopeAngle_Y, RopeAngle_Z));
-		MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y,0.0f));
-		MV1SetScale(modelhandle, VGet(4.f, 4.f, 4.f));
-		MV1DrawFrame(modelhandle,0);
-		_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+		//MV1SetRotationXYZ(modelhandle, VGet(0.f, RopeAngle_Y, RopeAngle_Z));
+		//MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y,0.0f));
+		//MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
+		//MV1DrawFrame(modelhandle,0);
+		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
@@ -347,10 +337,8 @@ void Rope::Extending(Input* input)
 			if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle())||
 				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
 				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 25)) == CHIP_N_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 25)) == CHIP_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 50)) == CHIP_N_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 50)) == CHIP_CLIMB_WALL)
+				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
+				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_CLIMB_WALL)
 			{
 				_HitPos = _rope[*itr];
 				itr = last;
@@ -381,10 +369,18 @@ void Rope::Extended(Input* input)
 {
 	if (_state == ST_ROPE_EXTENDED)
 	{
-		itr = last;
-		_state = ST_ROPE_SHRINKING;
-		RopeTurnFlag = true;
-		_states = &Rope::Shrinking;
+		timerWait--;
+		_RopeCircle.Draw(_tmpOffset);
+		//当たったかどうかでアニメーションを進めるか戻す
+		ModelManager();
+
+		if (timerWait < 0)
+		{
+			itr = last;
+			_state = ST_ROPE_SHRINKING;
+			RopeTurnFlag = true;
+			_states = &Rope::Shrinking;
+		}
 
 #ifdef _DEBUG
 		//DrawString(200, 300, "到着", 0xfffffff);
@@ -415,6 +411,7 @@ void Rope::Shrinking(Input* input)
 			itr = ropeinfo.begin();
 			_vec = { 0,0 };
 			AnimNowTime = 0;
+			timerWait = WAIT_TIMER;
 			tongueHitTurn = false;
 			_state = ST_ROPE_READY;
 			_states = &Rope::Ready;
@@ -499,7 +496,7 @@ float Rope::SetRopeRad(void)
 		break;
 
 	case ROPE_DIR_STRAIGHT:
-		return  dirFlag ? AngleRad(0.f) : AngleRad(180.f);
+		return  dirFlag ? AngleRad(0.0f) : AngleRad(-180.0f);
 		break;
 
 	case ROPE_DIR_LOWER:
@@ -548,19 +545,19 @@ void Rope::SetRopeRadForDrawZ(void)
 	{
 	case ROPE_DIR_UPPER:
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
-		mentenanceNum_Y = dirFlag ? -100 + _RopeRect.h / 2: -110 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -50 : 60;
+		mentenanceNum_Y = dirFlag ? -220 + _RopeRect.h / 2: -220 + _RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -160 : 160;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
-		mentenanceNum_Y = dirFlag ? -20 + _RopeRect.h / 2: -25 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -60 : 50;
+		mentenanceNum_Y = dirFlag ? 85 + _RopeRect.h / 2: 85 + _RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -160 : 160;
 		break;
 	case ROPE_DIR_NON:
 	case ROPE_DIR_STRAIGHT:
 		RopeAngle_Z = AngleRad(0.f);
-		mentenanceNum_Y = -70 +_RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -60: 70;
+		mentenanceNum_Y = -67 +_RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -235: 230;
 		break;
 	default:
 		break;
