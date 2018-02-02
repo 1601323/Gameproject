@@ -143,7 +143,6 @@ void Midpoint::Draw(Position2 offset)
 	MV1SetPosition(Targethandle, ConvWorldPosToScreenPos(VGet(_midPos.x - offset.x + (_hitRect.w / 2), _midPos.y - offset.y + (_hitRect.h), 0)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(Targethandle, VGet(10.f, 10.f, 10.f));
-	
 
 	//金庫のモデル
 	//モデルのposを設定+ワールド座標からスクリーンへ変換

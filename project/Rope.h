@@ -62,7 +62,6 @@ private:
 	float  AnimNowTime;                     //アニメーションの現在タイム
 	int    AnimAttachIndex;                 //アニメーション数
 	int timerWait;                          //待ち時間
-	int dirhandle;                          //舌の方向先を表す矢印の画像ハンドル
 
 	int mentenanceNum_X;                    //モデルの描画のために仮で置いている調整用の値X
 	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y
@@ -71,6 +70,9 @@ private:
 	float range;                            //サークル半径
 	float RopeAngle_Y;                      //表示用モデル角度Y
 	float RopeAngle_Z;                      //表示用モデル角度Z
+
+	float dirdraw_X;                        //矢印描画のためのX
+	float dirdraw_Y;                        //矢印描画のためのY
 
 	void RopeInit(void);                    //初期関数
 	void DrawRopeRect(void);                //描画処理
