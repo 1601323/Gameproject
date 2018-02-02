@@ -153,7 +153,7 @@ void GimPull::Draw(Position2 offset)
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_gmRect.w / 2),_pos.y - offset.y + (_gmRect.h ), 0)));
 	//モデルの拡大縮小値の設定
-	MV1SetScale(modelhandle, VGet(5.f, 5.f, 5.f));
+	MV1SetScale(modelhandle, VGet(5.5f, 7.0f, 5.5f));
 	//テクスチャを変更
 	MV1SetTextureGraphHandle(modelhandle, textureIndex, colorTexture, FALSE);
 	//モデルを輪郭線0.0fで描画 
