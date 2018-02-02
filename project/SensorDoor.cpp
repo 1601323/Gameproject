@@ -110,17 +110,16 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 void SensorDoor::Draw(Position2 offset)
 {
 	//モデルの回転角度の設定(ラジアン)
-	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(88.f), 0.0f));
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(87.f), 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x , _pos.y - offset.y,0.0f)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(6.f, 6.f, 6.f));
 	//アニメーションをアタッチ(ないです)
 	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
-	//モデルを描画
-	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.f);
+	
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle, 0.0f);
 
 	//外枠の表示
 	//DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0x000000,true);

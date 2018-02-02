@@ -148,14 +148,14 @@ void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 
 	//DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
 	MV1SetPosition(chipModelHandle[num], ConvWorldPosToScreenPos(VGet(x*32 - offset.x+20,y*32 - offset.y+20,0)));
-	MV1SetScale(chipModelHandle[num], VGet(3.18f, 3.18f, 3.18f));
+	MV1SetScale(chipModelHandle[num], VGet(3.18f, 3.18f,3.18f));
 	//テクスチャを変更
 	if (num == 2)
 	{
 		MV1SetTextureGraphHandle(chipModelHandle[num], textureIndex, ChangeTexture, FALSE);
 	}
-	MV1DrawModel(chipModelHandle[num]);
-	_modelmgr->SetMaterialDotLine(chipModelHandle[num],0.0f);
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(chipModelHandle[num],0.0f);
 }
 
 //ギミックにデータをもらうために追加してます
