@@ -234,9 +234,9 @@ void EmAround::CheckMove()
 //Ž‹ŠE‚É‚Â‚¢‚Ä
 void EmAround::Visibility()
 {
-	//_emData.lookAngle = 60;
+	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
-	//_emData.lookRange = _emEye;
+	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
@@ -378,6 +378,7 @@ void EmAround::Draw(Position2 offset)
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
+	tmpPos = offset;
 #ifdef _DEBUG
 	//_emRect.Draw(offset);
 	//_emEye.Draw(offset);
