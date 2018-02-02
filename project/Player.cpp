@@ -1369,10 +1369,10 @@ void Player::Draw(Position2& offset)
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 	//アニメーション切り替え
 	AnimationSwitching();
-	//モデルを描画
-	MV1DrawModel(modelhandle);
 	//モデルの輪郭線を設定 0.0fで透過します
 	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+	//モデルを描画
+	MV1DrawModel(modelhandle);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
