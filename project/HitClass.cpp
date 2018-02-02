@@ -229,8 +229,18 @@ bool HitClass::EnemyViewing(ENEMY_DATA& em, Rect&rc)
 			Vector2 ab = {intersection[0].x - em.lookRange.pos.x, intersection[0].y - em.lookRange.pos.y};
 			float cross = ap.x* ab.y - ab.x*ap.y;
 			float result = cross / (sqrt(ab.x*ab.x + ab.y*ab.y)*sqrt(ap.x*ap.x + ap.y*ap.y));
-			if (result <= 0) {
-				return true;
+			if (em.lookDir == DIR_RIGHT) {
+				if (result <= 0) {
+					return true;
+				}
+			}
+			else if (em.lookDir == DIR_LEFT) {
+				if (result >= 0) {
+					return true;
+				}
+			}
+			else {
+				ASSERT();
 			}
 		}
 		//‰ºŠp“x‚É‚Â‚¢‚Ä
@@ -253,8 +263,18 @@ bool HitClass::EnemyViewing(ENEMY_DATA& em, Rect&rc)
 			Vector2 ab = { intersection[1].x - em.lookRange.pos.x, intersection[1].y - em.lookRange.pos.y };
 			float cross = ap.x* ab.y - ab.x*ap.y;
 			float result = cross / (sqrt(ab.x*ab.x + ab.y*ab.y)*sqrt(ap.x*ap.x + ap.y*ap.y));
-			if (result >= 0) {
-				return true;
+			if (em.lookDir == DIR_RIGHT) {
+				if (result >= 0) {
+					return true;
+				}
+			}
+			else if (em.lookDir == DIR_LEFT) {
+				if (result <= 0) {
+					return true;
+				}
+			}
+			else {
+				ASSERT();
 			}
 		}
 		//‚à‚µŽ‹ŠE‚æ‚è‚à‘å‚«‚¢‚à‚Ì‚ð”»’è‚·‚é‚Æ‚«

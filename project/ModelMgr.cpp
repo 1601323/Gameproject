@@ -61,7 +61,7 @@ void ModelMgr::ModelIdAllDelete(void)
 	deleteTiming.erase(deleteTiming.begin(), deleteTiming.end());
 }
 
-void ModelMgr::SetMaterialDotLine(int modelhandle, float DotLineNum)
+void ModelMgr::Draw(int modelhandle, float DotLineNum)
 {
 	materialNum = MV1GetMaterialNum(modelhandle);
 
@@ -70,4 +70,5 @@ void ModelMgr::SetMaterialDotLine(int modelhandle, float DotLineNum)
 		MV1SetMaterialOutLineWidth(modelhandle,i, DotLineNum);
 		MV1SetMaterialOutLineDotWidth(modelhandle, i, DotLineNum);
 	}
+	MV1DrawModel(modelhandle);
 }

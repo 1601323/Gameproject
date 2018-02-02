@@ -34,6 +34,8 @@ Midpoint::Midpoint()
 	cnt = 0;
 	bubbleFlag = false;
 	bubble = 0;
+	alfa = 255;
+	tranceMax = 50;
 	//ÉÇÉfÉãì«Ç›çûÇ›
 	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/ã‡å…/íÜå^ã‡å…75.pmd", SCENE_RESULT);
 	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/åÆ/åÆ2-10.pmx", SCENE_RESULT);
@@ -141,28 +143,24 @@ void Midpoint::Draw(Position2 offset)
 	MV1SetPosition(Targethandle, ConvWorldPosToScreenPos(VGet(_midPos.x - offset.x + (_hitRect.w / 2), _midPos.y - offset.y + (_hitRect.h), 0)));
 	//ÉÇÉfÉãÇÃägëÂèkè¨ílÇÃê›íË
 	MV1SetScale(Targethandle, VGet(10.f, 10.f, 10.f));
-	//ÉÇÉfÉãÇÃó÷äsê¸Çê›íË 0.0fÇ≈ìßâﬂÇµÇ‹Ç∑
-	_modelmgr->SetMaterialDotLine(Targethandle, 0.0f);
 
 	//ã‡å…ÇÃÉÇÉfÉã
 	//ÉÇÉfÉãÇÃposÇê›íË+ÉèÅ[ÉãÉhç¿ïWÇ©ÇÁÉXÉNÉäÅ[ÉìÇ÷ïœä∑
 	MV1SetPosition(Safehandle, ConvWorldPosToScreenPos(VGet(_modelPos.x - offset.x + (_midRect.w / 2), _modelPos.y - offset.y + (_midRect.h), 0)));
 	//ÉÇÉfÉãÇÃägëÂèkè¨ílÇÃê›íË
 	MV1SetScale(Safehandle, VGet(2.f, 2.f, 2.f));
-	//ÉÇÉfÉãÇï`âÊ
-	MV1DrawModel(Safehandle);
-	//ÉÇÉfÉãÇÃó÷äsê¸Çê›íË 0.0fÇ≈ìßâﬂÇµÇ‹Ç∑
-	_modelmgr->SetMaterialDotLine(Safehandle, 0.0f);
+	//ÉÇÉfÉãÇó÷äsê¸0.0fÇ≈ï`âÊ 
+	_modelmgr->Draw(Safehandle, 0.0f);
 
 	//åÆÇÃÉÇÉfÉã
 	//ÉÇÉfÉãÇÃposÇê›íË+ÉèÅ[ÉãÉhç¿ïWÇ©ÇÁÉXÉNÉäÅ[ÉìÇ÷ïœä∑
 	MV1SetPosition(keyhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_hitRect.w / 2),_pos.y - offset.y + (_hitRect.h), 0)));
 	//ÉÇÉfÉãÇÃägëÂèkè¨ílÇÃê›íË
 	MV1SetScale(keyhandle, VGet(0.2f, 0.2f, 0.2f));
-	//ÉÇÉfÉãÇï`âÊ
-	MV1DrawModel(keyhandle);
-	//ÉÇÉfÉãÇÃó÷äsê¸Çê›íË 0.0fÇ≈ìßâﬂÇµÇ‹Ç∑
-	_modelmgr->SetMaterialDotLine(keyhandle, 0.0f);
+
+	MV1SetOpacityRate(keyhandle, alfa / 255.f);
+	//ÉÇÉfÉãÇó÷äsê¸0.0fÇ≈ï`âÊ 
+	_modelmgr->Draw(keyhandle, 0.5f);
 
 	if (checkpointFlag == false && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2), _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(210, 140, 44), true);
@@ -177,8 +175,18 @@ void Midpoint::Draw(Position2 offset)
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
 		//ÇÊÇ≠çlÇ¶ÇΩÇÁìñÇΩÇËîªíËéÊìæÇµÇΩå„Ç¢ÇÁÇ»Ç¢ÇÊÇÀ
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
-		//ÉÇÉfÉãÇï`âÊ
-		//MV1DrawModel(keyhandle);
+
+		if (_pl->GetcharState() == ST_VANISH)
+		{
+			alfa = max(alfa - 1, tranceMax);
+		}
+		else {
+			alfa = 255;
+		}
+
+		MV1SetOpacityRate(keyhandle, alfa / 255.f);
+		//ÉÇÉfÉãÇó÷äsê¸0.0fÇ≈ï`âÊ 
+		_modelmgr->Draw(keyhandle, 0.5f);
 
 #ifdef _DEBUG
 		//_hitRect.Draw(offset);
@@ -192,8 +200,17 @@ void Midpoint::Draw(Position2 offset)
 	}
 	else if(GetFlag == true ){
 		//DrawCircle(_midPos.x - offset.x + (_midRect.w / 2) , _midPos.y - offset.y + (_midRect.h / 2), 12, GetColor(0, 240, 44), true);
+
+		if (_pl->GetcharState() == ST_VANISH)
+		{
+			alfa = max(alfa - 1, tranceMax);
+		}
+		else {
+			alfa = 255;
+		}
+		MV1SetOpacityRate(Targethandle, alfa / 255.f);
 		//ÉÇÉfÉãÇï`âÊ
-		MV1DrawModel(Targethandle);
+		_modelmgr->Draw(Targethandle, 0.1f);
 	}
 	if (uiFlag == true) {
 	//	DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"Å_B!!Å^",0x00ff00);

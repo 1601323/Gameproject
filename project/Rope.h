@@ -3,7 +3,7 @@
 #include "Object.h"
 #include "Input.h"
 
-#define ROPE_SPEED (5.5f)        //移動スピード
+#define ROPE_SPEED (6.5f)        //移動スピード
 #define ROPE_THETA (45.f)        //ロープの斜めの角度右向きver(circleのみ)
 #define ROPE_THETA2 (135.f)      //ロープの斜めの角度左向きver(circleのみ)
 #define STRAIGHT_RAD (180.f)     //直線時のRad
@@ -11,8 +11,9 @@
 #define ROPE_RECT_W (20)         //rect用の幅
 #define ROPE_RECT_H (20)         //rect用の高さ
 #define ROPE_OMEGA (1.0f)        //ここをいじることで1回で動くrect circleのposを変えれます
-#define ROPE_LENGTH_MAX (40)     //ロープの最大長 
+#define ROPE_LENGTH_MAX (45)     //ロープの最大長 
 #define ROPE_MODEL_NUM (450)     //ロープのモデルの座標を調整するため値
+#define WAIT_TIMER (30)          //ロープ到達後の待ち時間
 
 class Input;
 class Player;
@@ -60,6 +61,7 @@ private:
 	float  AnimTotalTime;                   //アニメーションのトータルタイム
 	float  AnimNowTime;                     //アニメーションの現在タイム
 	int    AnimAttachIndex;                 //アニメーション数
+	int timerWait;                          //待ち時間
 
 	int mentenanceNum_X;                    //モデルの描画のために仮で置いている調整用の値X
 	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y
@@ -69,6 +71,9 @@ private:
 	float RopeAngle_Y;                      //表示用モデル角度Y
 	float RopeAngle_Z;                      //表示用モデル角度Z
 
+	float dirdraw_X;                        //矢印描画のためのX
+	float dirdraw_Y;                        //矢印描画のためのY
+
 	void RopeInit(void);                    //初期関数
 	void DrawRopeRect(void);                //描画処理
 	void SetRope(void);                     //ロープ用
@@ -77,6 +82,7 @@ private:
 	Position2 SetVec(void);                 //スピード設定関数
 	float SetRopeRad(void);                 //ロープの発射角度を決める関数
 	void SetRopeRadForDrawZ(void);          //モデル表示のための調整関数
+	void ModelManager(void);                //モデル関係の関数
 
 public:
 	Rope();

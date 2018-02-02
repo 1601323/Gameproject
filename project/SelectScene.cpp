@@ -149,13 +149,11 @@ void SelectScene::Draw()
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimIndex, AnimNowTime);
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
-	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.0f)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.5f, 3.5f, 3.5f));
-	//モデルを描画
-	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle, 0.0f);
 
 
 //	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
