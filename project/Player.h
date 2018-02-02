@@ -87,6 +87,7 @@ private:
 	void FeverWall();					//フィーバー用の壁移動処理
 
 	void AnimationSwitching(void);      //アニメーション切り替えよう関数
+	void AnimationManager(PLAYER_ACTIONS actions,float animspeed,float looptime);        //アニメーションセット関数
 
 	Position2 tmpOffset;
 	VECTOR WorldToScreenPos;            //ワールド座標からスクリーン座標に変換した後のモデル表示用のpos

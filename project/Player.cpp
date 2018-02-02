@@ -53,7 +53,7 @@ Player::Player()
 	//モデル読み込み
 	modelhandle = MV1LoadModel("player_model/player.pmx");
 	//それぞれのアニメーションをアタッチ+総時間の設定
-	for (int i = 0; i <= ACTION_MAX; i++)
+	for (int i = 0; i < ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
@@ -925,6 +925,10 @@ bool Player::moveRope(void)
 		}
 		vx = 0.0f;
 	}
+	else {
+		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
+		AnimNowTime[ACTION_TONGUE_GO] = 0.0f;
+	}
 
 	//勢いを殺さずに着地する
 	if (_state == ST_JUMP) {
@@ -1177,15 +1181,30 @@ void Player::FeverJump()
 			break;
 		}
 	}
+
+	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
+	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
+	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
+	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
+	//	_plRect.Draw(offset);
+	//#endif
 }
 
 
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
 {
+	GameMain& gm = GameMain::Instance();
 	if (_hit->EnemyHit(*this)) {
 		if (deathFlag == true) {
 			_state = ST_DETH;
+
+			//完全敗北
+			if (gm.GetResultData().life <= 0)
+			{
+				_state = ST_OVER;
+			}
 		}
 		else if (deathFlag == false) {
 			//死なない
@@ -1359,6 +1378,7 @@ void Player::Draw(Position2& offset)
 	}
 	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 	_wallRect.SetCenter(_pos.x+(_plRect.w/2),_pos.y+ ((_plRect.h/4)*3)-1);
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -1369,10 +1389,8 @@ void Player::Draw(Position2& offset)
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 	//アニメーション切り替え
 	AnimationSwitching();
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
-	//モデルを描画
-	MV1DrawModel(modelhandle);
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
@@ -1415,6 +1433,8 @@ void Player::SetInitPos()
 	vy = 0.0f;
 	alfa = 255;
 	_state = ST_DEF;
+	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
+	AnimNowTime[ST_OVER] = 0.0f;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
 }
@@ -1457,100 +1477,38 @@ void Player::AnimationSwitching(void)
 		//通常状態
 	case ST_DEF:
 	case ST_STOP:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_WAIT)
-			{
-				continue;
-			}
-			//不要なアニメーションのブレンド率を0にする
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i],0.0f);
-		}
-		//適用するアニメーションの設定 ブレンド率を1.0fに
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
-		//アニメーションをアタッチ
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
-		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_SLOW;
-		//現在のアニメーションが最大フレームまでいったらループする
-		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
-		{
-			AnimNowTime[ACTION_WAIT] = 0.0f;
-		}
+		AnimationManager(ACTION_WAIT, ANIMATION_SPEED_DEF,0.0f);
 		break;
 		//移動状態
 	case ST_MOVE:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_WALK)
-			{
-				continue;
-			}
-			//不要なアニメーションのブレンド率を0にする
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
-		}
-		//適用するアニメーションの設定 ブレンド率を1.0fに
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WALK], 1.0f);
-		//アニメーションをアタッチ
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
-		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_WALK] += ANIMATION_SPEED_HIGH;
-		//現在のアニメーションが最大フレームまでいったらループする
-		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
-		{
-			AnimNowTime[ACTION_WALK] = 0.0f;
-		}
-
+		AnimationManager(ACTION_WALK, ANIMATION_SPEED_HIGH,0.0f);
 		break;
 		//ﾛｰﾌﾟ状態
 	case ST_ROPE:
+		//発射準備中はのけぞるアニメーション
+		if (_rope->GetRopeState() != ST_ROPE_READY && _rope->GetRopeState() == ST_ROPE_SELECT)
+		{
+			AnimationManager(ACTION_TONGUE_SET, ANIMATION_SPEED_HIGH, AnimTotalTime[ACTION_TONGUE_SET]);
+		}
+		//舌発射!!!!!!
+		else if (_rope->GetRopeState() != ST_ROPE_READY && _rope->GetRopeState() != ST_ROPE_SELECT)
+		{
+			AnimationManager(ACTION_TONGUE_GO, ANIMATION_SPEED_HIGH, AnimTotalTime[ACTION_TONGUE_GO]);
+		}
 		break;
 		//壁登り状態
 	case ST_WALL:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_CLIMB)
-			{
-				continue;
-			}
-			//不要なアニメーションのブレンド率を0にする
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
-		}
-		//適用するアニメーションの設定 ブレンド率を1.0fに
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_CLIMB], 1.0f);
-		//アニメーションをアタッチ
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_CLIMB], AnimNowTime[ACTION_CLIMB]);
-		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_CLIMB] += ANIMATION_SPEED_HIGH;
-		//現在のアニメーションが最大フレームまでいったらループする
-		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
-		{
-			AnimNowTime[ACTION_CLIMB] = 0.0f;
-		}
-
+		AnimationManager(ACTION_CLIMB, ANIMATION_SPEED_HIGH,0.0f);
 		break;
 		//ジャンプ状態
 	case ST_JUMP:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_JUMP)
-			{
-				continue;
-			}
-			//不要なアニメーションのブレンド率を0にする
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
-		}
-		//適用するアニメーションの設定 ブレンド率を1.0fに
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_JUMP], 1.0f);
-		//アニメーションをアタッチ
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
-		//指定アニメーションのフレームを進める
-		AnimNowTime[ACTION_JUMP] += ANIMATION_SPEED_DEF;
-		//現在のアニメーションが最大フレームまでいったらループする
-		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
-		{
-			AnimNowTime[ACTION_JUMP] =0.0f;
-		}
+		AnimationManager(ACTION_JUMP, ANIMATION_SPEED_DEF, 0.0f);
+		break;
+	case ST_DETH:
+		AnimationManager(ACTION_KNOCKBACK, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_KNOCKBACK]);
+		break;
+	case ST_OVER:
+		AnimationManager(ACTION_DAMAGE, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_DAMAGE]);
 		break;
 	default:
 		break;
@@ -1559,4 +1517,32 @@ void Player::AnimationSwitching(void)
 void Player::GetFeverData()
 {
 	_fd = GameMain::Instance().ReturnFeverData();
+}
+
+//第一引数 アタッチするアニメーション名
+//第二引数 アニメーションを進めるスピード
+//第三引数 アニメーションをループさせるかどうか(今のところ0.0f指定でループ,AnimTotalTime[アクション]で1回再生)
+//AnimTotalTime[アクション]で指定した場合必ずどこかしらの処理でAnimNowTime[]を0にする
+void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float looptime)
+{
+	for (int i = 0; i <= ACTION_MAX; i++)
+	{
+		if (AnimIndex[i] == actions)
+		{
+			continue;
+		}
+		//不要なアニメーションのブレンド率を0にする
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+	}
+	//適用するアニメーションの設定 ブレンド率を1.0fに
+	MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[actions], 1.0f);
+	//アニメーションをアタッチ
+	MV1SetAttachAnimTime(modelhandle, AnimIndex[actions], AnimNowTime[actions]);
+	//指定アニメーションのフレームを進める
+	AnimNowTime[actions] += animspeed;
+	//現在のアニメーションが最大フレームまでいったらループする
+	if (AnimNowTime[actions] >= AnimTotalTime[actions])
+	{
+		AnimNowTime[actions] = looptime;
+	}
 }
