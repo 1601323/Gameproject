@@ -82,15 +82,14 @@ void EmLookback::Draw(Position2 offset)
 	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚ÌÝ’è
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 
-	if (_commonData.midFlag)
-	{
+	//if (_commonData.midFlag)
+	//{
 		//ƒeƒNƒXƒ`ƒƒ‚ð•ÏX
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
-	}
-	//ƒ‚ƒfƒ‹‚ð•`‰æ
-	MV1DrawModel(modelhandle);
-	//ƒ‚ƒfƒ‹‚Ì—ÖŠsü‚ðÝ’è 0.0f‚Å“§‰ß‚µ‚Ü‚·
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+	//}
+
+	//ƒ‚ƒfƒ‹‚ð—ÖŠsü0.0f‚Å•`‰æ 
+	_modelmgr->Draw(modelhandle, 0.0f);
 
 	switch (_state)
 	{

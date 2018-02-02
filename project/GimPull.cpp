@@ -156,10 +156,9 @@ void GimPull::Draw(Position2 offset)
 	MV1SetScale(modelhandle, VGet(5.f, 5.f, 5.f));
 	//テクスチャを変更
 	MV1SetTextureGraphHandle(modelhandle, textureIndex, colorTexture, FALSE);
-	//モデルを描画
-	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle, 0.0f);
+
 
 	if (_state != GM_END&& _state != GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
 	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);

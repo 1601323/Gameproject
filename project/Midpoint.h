@@ -34,6 +34,8 @@ private:
 	int Safehandle;
 	int keyhandle;
 	int Targethandle;
+	int alfa;                           //ステルス用アルファ
+	int tranceMax;                      //最大透過数
 public:
 	Midpoint();
 	~Midpoint();	

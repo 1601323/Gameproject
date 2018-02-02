@@ -346,15 +346,14 @@ void EmAround::Draw(Position2 offset)
 	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚ÌÝ’è
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
 
-	if (_commonData.midFlag)
-	{
+	//if (_commonData.midFlag)
+	//{
 		//ƒeƒNƒXƒ`ƒƒ‚ð•ÏX
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
-	}
-	//ƒ‚ƒfƒ‹‚ð•`‰æ
-	MV1DrawModel(modelhandle);
-	//ƒ‚ƒfƒ‹‚Ì—ÖŠsü‚ðÝ’è 0.0f‚Å“§‰ß‚µ‚Ü‚·
-	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+	//}
+
+	//ƒ‚ƒfƒ‹‚ð—ÖŠsü0.0f‚Å•`‰æ 
+	_modelmgr->Draw(modelhandle,0.0f);
 
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
