@@ -225,7 +225,7 @@ void ResultScene::Draw()
 		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(playerModelHandle, AnimIndexH, AnimNowTimeH);
 		//モデルのposを設定+ワールド座標からスクリーンへ変換
-		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
+		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(600.f, 600, 0.f)));
 		//モデルの拡大縮小値の設定
 		MV1SetScale(playerModelHandle, VGet(4.0f, 4.0f, 4.0f));
 		//顔のテクスチャを笑顔の方に変更

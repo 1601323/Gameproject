@@ -120,7 +120,7 @@ void EmLookback::Draw(Position2 offset)
 			modelDirAngle = AngleRad(-90.0f);
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		}
@@ -128,7 +128,7 @@ void EmLookback::Draw(Position2 offset)
 			modelDirAngle = AngleRad(90.0f);
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		}
@@ -200,7 +200,9 @@ void EmLookback::setDir(void)
 }
 void EmLookback::Visibility()
 {
+	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
+	_emData.lookRange = _emEye;
 	//視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 

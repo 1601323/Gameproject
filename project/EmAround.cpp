@@ -38,7 +38,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	vy = 0.0f;
 
 	_dir = DIR_RIGHT;
-	speed = 2;				//初期スピード設定
+	speed = 1;				//初期スピード設定
 	moveFlag = false;
 
 	dis = 0;
@@ -122,7 +122,7 @@ void EmAround::BasicMove()
 	//	//lookBackFlag = !lookBackFlag;
 	//	moveFlag = true;
 	//}
-
+	speed = 1;
 	if (_dir == DIR_RIGHT) {		//右
 		_pos.x += speed;
 	}
@@ -158,7 +158,7 @@ void EmAround::InterMove()
 void EmAround::FoundMove()
 {
 	//現段階では視界に入っているときだけ追いかける
-
+	speed = 2;
 	//ﾌﾟﾚｲﾔｰのほうが右にいたら
 	if (_pl.GetPos().x >= _pos.x) {
 		vx += speed;
@@ -372,7 +372,6 @@ void EmAround::Draw(Position2 offset)
 		}
 		else if (_dir == DIR_RIGHT) {
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
 			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
