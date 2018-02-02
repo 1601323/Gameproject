@@ -73,7 +73,6 @@ void Rope::RopeInit(void)
 
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita.mv1", SCENE_RESULT);
-	dirhandle = im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_RESULT);
 	//それぞれのアニメーションをアタッチ+総時間の設定
 	AnimAttachIndex = MV1AttachAnim(modelhandle,0,-1,false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
@@ -114,8 +113,6 @@ void Rope::ModelManager(void)
 	MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y, 0));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
-	//モデルを描画
-	MV1DrawModel(modelhandle);
 	//モデルを描画 輪郭線0.0fで透過
 	_modelmgr->Draw(modelhandle, 0.0f);
 }
@@ -216,9 +213,9 @@ void Rope::SelectDir(Input* input)
 		//MV1DrawFrame(modelhandle,0);
 		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
-		//DrawGraph(_player->ReturnWoToScPos2ver().x,
-		//	_player->ReturnWoToScPos2ver().y - mentenanceNum_Y,
-		//	im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT),true);
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x,
+			 _player->GetPos().y - _tmpOffset.y, 1.0, AngleRad(0.0f),
+			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||

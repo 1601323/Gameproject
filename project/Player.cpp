@@ -1354,7 +1354,7 @@ void Player::Draw(Position2& offset)
 		//½ÃÙ½ó‘Ô
 	case ST_VANISH:
 		//“§‰ß—¦‚ğ‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
-		alfa = max(alfa - 1, tranceMax);
+		alfa = max(alfa - VANISH, tranceMax);
 		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		break;
 		//Û°Ìßó‘Ô
