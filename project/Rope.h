@@ -62,6 +62,7 @@ private:
 	float  AnimNowTime;                     //アニメーションの現在タイム
 	int    AnimAttachIndex;                 //アニメーション数
 	int timerWait;                          //待ち時間
+	int dirhandle;                          //舌の方向先を表す矢印の画像ハンドル
 
 	int mentenanceNum_X;                    //モデルの描画のために仮で置いている調整用の値X
 	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y

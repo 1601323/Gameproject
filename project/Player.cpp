@@ -1504,7 +1504,7 @@ void Player::AnimationSwitching(void)
 		break;
 		//ジャンプ状態
 	case ST_JUMP:
-		AnimationManager(ACTION_JUMP, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_JUMP]);
+		AnimationManager(ACTION_JUMP, ANIMATION_SPEED_DEF, 0.0f);
 		break;
 	case ST_DETH:
 		AnimationManager(ACTION_KNOCKBACK, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_KNOCKBACK]);
@@ -1524,6 +1524,7 @@ void Player::GetFeverData()
 //第一引数 アタッチするアニメーション名
 //第二引数 アニメーションを進めるスピード
 //第三引数 アニメーションをループさせるかどうか(今のところ0.0f指定でループ,AnimTotalTime[アクション]で1回再生)
+//AnimTotalTime[アクション]で指定した場合必ずどこかしらの処理でAnimNowTime[]を0にする
 void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float looptime)
 {
 	for (int i = 0; i <= ACTION_MAX; i++)

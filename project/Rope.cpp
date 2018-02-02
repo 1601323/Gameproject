@@ -10,6 +10,7 @@
 #include "MapCtl.h"
 #include "Geometry.h"
 #include "ModelMgr.h"
+#include "ImageMgr.h"
 
 Rope::Rope() 
 {
@@ -68,9 +69,11 @@ void Rope::RopeInit(void)
 	mentenanceNum_Y = 0;
 	RopeHitModelNumY = 60;
 	timerWait = WAIT_TIMER;
+	ImageMgr& im = ImageMgr::Instance();
 
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita.mv1", SCENE_RESULT);
+	dirhandle = im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_RESULT);
 	//それぞれのアニメーションをアタッチ+総時間の設定
 	AnimAttachIndex = MV1AttachAnim(modelhandle,0,-1,false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
@@ -205,11 +208,17 @@ void Rope::SelectDir(Input* input)
 {
 	if (_state == ST_ROPE_SELECT)
 	{
+		ImageMgr& im = ImageMgr::Instance();
+
 		//MV1SetRotationXYZ(modelhandle, VGet(0.f, RopeAngle_Y, RopeAngle_Z));
 		//MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y,0.0f));
 		//MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
 		//MV1DrawFrame(modelhandle,0);
 		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
+		//DrawGraph(_player->ReturnWoToScPos2ver().x,
+		//	_player->ReturnWoToScPos2ver().y - mentenanceNum_Y,
+		//	im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT),true);
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
@@ -479,7 +488,7 @@ void Rope::SetRopeRadForDrawZ(void)
 	case ROPE_DIR_STRAIGHT:
 		RopeAngle_Z = AngleRad(0.f);
 		mentenanceNum_Y = -67 +_RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -235: 230;
+		mentenanceNum_X = dirFlag ? -230: 230;
 		break;
 	default:
 		break;

@@ -257,10 +257,9 @@ void ResultScene::Draw()
 	else if (clearFlag == false) {
 		//確認用でGAMEOVERにも書いた-----------------------------------------------------
 		//背景
-		//DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result.png", SCENE_TITLE), true);
-		//DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/GameOver.png", SCENE_TITLE), true);
 		//DrawGraph(20, dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
-		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
+		//DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 
 		//プレイヤー
 		AnimNowTimeS += 0.5f;
@@ -270,19 +269,15 @@ void ResultScene::Draw()
 		}
 		MV1SetRotationXYZ(playerModelHandle, VGet(0.f,0.f, 0.f));
 		MV1SetAttachAnimTime(playerModelHandle, AnimIndexS, AnimNowTimeS);
-		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(400.f, 500, 0.f)));
-		MV1SetScale(playerModelHandle, VGet(4.0f, 4.0f, 4.0f));
+		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(400.f, 580, 0.f)));
+		MV1SetScale(playerModelHandle, VGet(5.0f, 5.0f, 5.0f));
 		//MV1SetTextureGraphHandle(playerModelHandle, textureIndex[1], smileTexture, FALSE);
 
 		//モデルを輪郭線0.0fで描画 
 		_modelmgr->Draw(playerModelHandle, 0.0f);
 
-		//薬
-		//MV1SetPosition(medicineHandle, ConvWorldPosToScreenPos(VGet(500.f, 600, 0.f)));
-		//MV1SetScale(medicineHandle, VGet(15.0f, 15.0f, 15.0f));
-		//モデルを輪郭線0.0fで描画 
-		//_modelmgr->Draw(medicineHandle, 0.0f);
-		//-------------------------------------------------------------------------------
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/Fence.png", SCENE_TITLE), true);
+
 
 		//DrawString(300, 280, "リトライ", 0xffffff);
 		//DrawString(300, 300, "セレクト", 0xffffff);
