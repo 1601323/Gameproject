@@ -18,7 +18,7 @@ public:
 
 	static ModelMgr* Instance(void);
 	int ModelIdReturn(const std::string path, const SCENE_TYPE delScene);
-	void SetMaterialDotLine(int modelhandle, float DotLineNum);
+	void Draw(int modelhandle, float DotLineNum);
 	void ModelManager(const SCENE_TYPE deleScene);
 	void ModelIdAllDelete(void);
 };

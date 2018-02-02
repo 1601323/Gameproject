@@ -123,6 +123,7 @@ void GameScene::GameInit()
 	GameMain& gm = GameMain::Instance();
 	//‰Šúó‘Ô‚Ìƒf[ƒ^‚ð“ü‚ê‚é
 	_rtData = RESULT_DATA();
+	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
 		mapName = "map/douga.map";
@@ -215,7 +216,7 @@ void GameScene::JudgeTransition()
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}
-	if (_player->GetcharState() == ST_DETH) {
+	if (_player->GetcharState() == ST_DETH || _player->GetcharState() == ST_OVER) {
 		_rtData.life--;
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
@@ -267,7 +268,7 @@ void GameScene::TransitionUpdata(Input* input)
 			RetryProcess();
 			_updater = &GameScene::FadeInUpdata;
 		}
-		else {
+		else{
 			gm.Instance().ChangeScene(new ResultScene());
 		}
 		count = 0;

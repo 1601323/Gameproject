@@ -87,10 +87,9 @@ void EmLookback::Draw(Position2 offset)
 		//テクスチャを変更
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
 	//}
-	//モデルを描画
-	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle, 0.0f);
 
 	switch (_state)
 	{
@@ -142,6 +141,7 @@ void EmLookback::Draw(Position2 offset)
 }
 void EmLookback::SetMove()
 {
+	vx = 0;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		setDir();
 	}
@@ -162,6 +162,7 @@ void EmLookback::SetMove()
 	else {
 		setDir();		//状態の例外
 	}
+	LimitMove();
 }
 void EmLookback::setDir(void)
 {
@@ -248,7 +249,7 @@ void EmLookback::LookPl(void)
 				_map->GetChipType(nextLeftPos) != CHIP_CLIMB_WALL&&
 				_map->GetChipType(nextLeftPos) != CHIP_N_CLIMB_WALL
 				&& _hit.GimmickHitType(nextLeftPos) != GIM_ATTRACT) {
-				_pos.x -= emSpeed;
+				vx -= emSpeed;
 			}
 		}
 		else if (_dir == DIR_RIGHT) {
@@ -256,7 +257,7 @@ void EmLookback::LookPl(void)
 				_map->GetChipType(nextRightPos) != CHIP_CLIMB_WALL &&
 				_map->GetChipType(nextRightPos) != CHIP_N_CLIMB_WALL&&
 				 _hit.GimmickHitType(nextRightPos) != GIM_ATTRACT) {
-				_pos.x += emSpeed;
+				vx += emSpeed;
 			}
 		}
 		else {
@@ -301,6 +302,23 @@ void EmLookback::LoseSight()
 			returnFlag = true;
 		}
 	}
+}
+void EmLookback::LimitMove()
+{
+	Position2 nextMove[2];
+	//左側
+	nextMove[0].x = _pos.x + vx;
+	nextMove[0].y = _pos.y + (_emRect.h / 2);
+	//右側
+	nextMove[1].x = _pos.x + _emRect.w + vx;
+	nextMove[1].y = _pos.y + (_emRect.h / 2);
+	for (int f = 0; f < 2; f++) {
+		if (_map->GetChipType(nextMove[f]) == CHIP_CLIMB_WALL || _map->GetChipType(nextMove[f]) == CHIP_N_CLIMB_WALL) {
+			vx = 0;
+			break;
+		}
+	}
+	_pos.x += vx;
 }
 void EmLookback::ReturnPoint()
 {

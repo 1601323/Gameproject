@@ -16,6 +16,7 @@ private:
 	MapCtl* _map;
 	GimmickState _state;
 	Position2 _pos;
+	FEVER_DATA _fd;
 
 	bool dropFlag;	//落下フラグ
 	float gravity;	//重力
@@ -30,7 +31,8 @@ private:
 	//ﾚｸﾄとの判定を見て動く方向を決める
 	void MoveLeft();	
 	void MoveRight();
-
+	//ﾌｨｰﾊﾞｰｱｲﾃﾑとしてゲットする
+	void GetItem();
 public:
 	GimDrop(Position2 pos,Rope& r,Player& p);
 	~GimDrop();
@@ -38,6 +40,7 @@ public:
 	Rect& GetRect();
 	GIMMICK_TYPE& GetType();
 	void Updata(Input& input);
+	void SendFeverData();
 	
 };
 

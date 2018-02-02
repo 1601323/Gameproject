@@ -40,22 +40,6 @@ void Rope::Updata(Input* input,Position2 offset)
 	_lastkey = input->GetLastKey();
 	_inputinfo = input->GetInput(1);
 
-#ifdef _DEBUG
-	
-	//DrawString(50, 120, "D:直線 横", 0xffffffff);
-	//DrawString(50, 140, "W:直線 上", 0xffffffff);
-	//DrawString(50, 160, "S:直線 下", 0xffffffff);
-	//DrawString(50, 180, "E:曲線 上", 0xffffffff);
-	//DrawString(50, 200, "R:曲線 下", 0xffffffff);
-
-//	DrawFormatString(350, 100, 0xffff00, "%f", _HitPos.x);
-//	DrawFormatString(350, 120, 0xffff00, "%f", _HitPos.y);
-
-	//DrawString(450, 340, "速度", 0xffffffff);
-	//DrawFormatString(450, 360, 0xffffff, "%f", _vec.x);
-	//DrawFormatString(450, 380, 0xffffff, "%f", _vec.y);
-
-#endif
 }
 
 //初期化処理
@@ -129,17 +113,9 @@ void Rope::ModelManager(void)
 	MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
 	//モデルを描画
 	MV1DrawModel(modelhandle);
-	//モデルの輪郭線を設定 0.0fで透過します
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+	//モデルを描画 輪郭線0.0fで透過
+	_modelmgr->Draw(modelhandle, 0.0f);
 }
-
-//DrawLineをまとめた関数 offset値の設定が分かりにくかったから
-//void Rope::DrawLineSet(Position2 startpos, Position2 endpos,int color)
-//{
-//	//cout<<_tmpOffset.x<<endl;
-//	DrawLine(startpos.x - _tmpOffset.x +(_RopeRect.w / 2), startpos.y - _tmpOffset.y + (_RopeRect.h / 2),
-//		endpos.x - _tmpOffset.x + (_RopeRect.w / 2),endpos.y - _tmpOffset.y + (_RopeRect.h / 2),color);
-//}
 
 //ロープの移動処理(直線ver)
 //SetRopeRad()の値によって角度が変わります
@@ -165,60 +141,6 @@ void Rope::SetRope(void)
 		}
 	}
 }
-
-//ロープの移動処理(曲線ver)
-//void  Rope::SetCurveRope(void)
-//{
-//	//ThetaSet();
-//
-//	if (RopeTurnFlag)
-//	{
-//		_vec.x = cos(AngleRad(theta)) *  SetVec().x;
-//		_vec.y = sin(AngleRad(theta)) *  SetVec().y;
-//
-//		_rope[*itr].x = _rope[*itr - 1].x + _vec.x;
-//		_rope[*itr].y = _rope[*itr - 1].y + _vec.y;
-//	}
-//	else
-//	{
-//		if (*itr != ROPE_LENGTH_MAX - 1)//範囲チェック
-//		{
-//			_vec.x = cos(AngleRad(theta)) *  SetVec().x;
-//			_vec.y = sin(AngleRad(theta)) *  SetVec().y;
-//
-//			_rope[*itr + 1].x = _rope[*itr].x + _vec.x;
-//			_rope[*itr + 1].y = _rope[*itr].y + _vec.y;
-//		}
-//	}
-//}
-//
-////曲線時のposのずらし方を決めている関数
-////汚いです
-//void Rope::ThetaSet(void)
-//{
-//	if (dirFlag)//右向き
-//	{
-//		if (_curveDir == ROPE_DIR_CURVE_UP)
-//		{
-//			theta -= omega;
-//		}
-//		else if (_curveDir == ROPE_DIR_CURVE_LOW)
-//		{
-//			theta += omega;
-//		}
-//	}
-//	else
-//	{
-//		if (_curveDir == ROPE_DIR_CURVE_UP)
-//		{
-//			theta += omega;
-//		}
-//		else if (_curveDir == ROPE_DIR_CURVE_LOW)
-//		{
-//			theta -= omega;
-//		}
-//	}
-//}
 
 //プレイヤーの向きを見ていろいろ設定
 void Rope::DirChange(void)

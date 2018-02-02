@@ -58,6 +58,7 @@ private:
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
 	bool moveRopeJumpFlag;				//ﾛｰﾌﾟｼﾞｬﾝﾌﾟ処理
+	bool airFlag;						//空中にいるかどうかのフラグ
 	bool fMoveRight;					//ﾌｨｰﾊﾞｰ時、壁のぼりを制御するフラグ
 	bool fMoveLeft;						//同上
 	bool deathFlag;						//まさに死亡フラグ（_stateでは管理しきれないみたいなので
@@ -86,9 +87,16 @@ private:
 	void FeverWall();					//フィーバー用の壁移動処理
 
 	void AnimationSwitching(void);      //アニメーション切り替えよう関数
+	void AnimationManager(PLAYER_ACTIONS actions,float animspeed,float looptime);        //アニメーションセット関数
 
 	Position2 tmpOffset;
 	VECTOR WorldToScreenPos;            //ワールド座標からスクリーン座標に変換した後のモデル表示用のpos
+
+	Rect _wallRect;						//壁用のレクト
+
+	FEVER_DATA _fd;
+	void GetFeverData();
+	
 
 public:
 	Player();
