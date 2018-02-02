@@ -67,7 +67,9 @@ void Rope::RopeInit(void)
 	RopeAngle_Z = 0.f;
 	mentenanceNum_X = 0;
 	mentenanceNum_Y = 0;
-	RopeHitModelNumY = 60;
+	ropeFiringTimer = 20;
+	RopeHitModelNumY = 0;
+	dirNum = 0;
 	timerWait = WAIT_TIMER;
 	ImageMgr& im = ImageMgr::Instance();
 
@@ -149,11 +151,13 @@ void Rope::DirChange(void)
 	{
 		dirFlag = true;
 		RopeAngle_Y = AngleRad(90.f);
+		dirNum = 45;
 	}
 	else if (_player->GetDir() == DIR_LEFT)
 	{
 		dirFlag = false;
 		RopeAngle_Y = AngleRad(-90.f);
+		dirNum = -15;
 	}
 	else {
 	}
@@ -178,7 +182,7 @@ void Rope::Ready(Input* input)
 			_rope[*itr] = _player->ReturnWoToScPos2ver();
 		}
 
-		//発射準備のボタンが変わっています key A pad X
+		//発射準備のボタンが変わっています 右shiftキー or pad X
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
 			_key.keybit.X_BUTTON && !_lastkey.keybit.X_BUTTON && padFlag)
 		{
@@ -199,7 +203,7 @@ void Rope::Ready(Input* input)
 	}
 }
 
-//ロープの移動の方向を決める処理(くるくる)
+//ロープの移動の方向を決める処理
 //この状態のときは、the world状態
 void Rope::SelectDir(Input* input)
 {
@@ -213,9 +217,18 @@ void Rope::SelectDir(Input* input)
 		//MV1DrawFrame(modelhandle,0);
 		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x,
-			 _player->GetPos().y - _tmpOffset.y, 1.0, AngleRad(0.0f),
+		//矢印表示
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
+			 _player->GetPos().y - _tmpOffset.y-5, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
+			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, false);
+
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
+			_player->GetPos().y - _tmpOffset.y-20, 1.0, AngleRad(0.0f),
 			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
+
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
+			_player->GetPos().y - _tmpOffset.y-35, 1.0, dirFlag ? AngleRad(-45.0f): AngleRad(-135.0f),
+			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
@@ -250,38 +263,41 @@ void Rope::Extending(Input* input)
 {
 	if (_state == ST_ROPE_EXTENDING)
 	{
-		if (++itr != last)
+		if (--ropeFiringTimer < 0)
 		{
-			DrawRopeRect();
-
-			if (_ropeDir != ROPE_DIR_NON)
+			if (++itr != last)
 			{
-				SetRope();
-			}
-			else {
-			}
+				DrawRopeRect();
 
-			//伸ばしている最中にギミックやステージにあたれば強制的に戻す(3つもあるよ)
-			if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle())||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
-				_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_CLIMB_WALL)
+				if (_ropeDir != ROPE_DIR_NON)
+				{
+					SetRope();
+				}
+				else {
+				}
+
+				//伸ばしている最中にギミックやステージにあたれば強制的に戻す(3つもあるよ)
+				if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle()) ||
+					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
+					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
+					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
+					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_CLIMB_WALL)
+				{
+					_HitPos = _rope[*itr];
+					itr = last;
+					_state = ST_ROPE_SHRINKING;
+					tongueHitTurn = true;
+					RopeTurnFlag = true;
+					_states = &Rope::Shrinking;
+				}
+				else {
+				}
+			}
+			else
 			{
-				_HitPos = _rope[*itr];
-				itr = last;
-				_state = ST_ROPE_SHRINKING;
-				tongueHitTurn = true;
-				RopeTurnFlag = true;
-				_states = &Rope::Shrinking;
+				_state = ST_ROPE_EXTENDED;
+				_states = &Rope::Extended;
 			}
-			else {
-			}
-		}
-		else
-		{
-			_state = ST_ROPE_EXTENDED;
-			_states = &Rope::Extended;
 		}
 #ifdef _DEBUG
 		//DrawString(200, 250, "移動中", 0xfffffff);
@@ -341,6 +357,7 @@ void Rope::Shrinking(Input* input)
 			AnimNowTime = 0;
 			timerWait = WAIT_TIMER;
 			tongueHitTurn = false;
+			ropeFiringTimer = 20;
 			_state = ST_ROPE_READY;
 			_states = &Rope::Ready;
 		}
@@ -381,15 +398,16 @@ ROPE_DIR Rope::RopeDirSetPad(Input* input)
 //押したボタンによって角度を変えています(直線)
 ROPE_DIR Rope::RopeDirSet(void)
 {
-	if (_key.keybit.L_UP_BUTTON && !_lastkey.keybit.L_UP_BUTTON)
+	if (_key.keybit.R_UP_BUTTON && !_lastkey.keybit.R_UP_BUTTON)
 	{
 		return _ropeDir = ROPE_DIR_UPPER;
 	}
-	else if (_key.keybit.L_RIGHT_BUTTON && !_lastkey.keybit.L_RIGHT_BUTTON)
+	else if ((dirFlag && _key.keybit.R_RIGHT_BUTTON && !_lastkey.keybit.R_RIGHT_BUTTON) ||
+		(!dirFlag && _key.keybit.R_LEFT_BUTTON && !_lastkey.keybit.R_LEFT_BUTTON))
 	{
 		return _ropeDir = ROPE_DIR_STRAIGHT;
 	}
-	else if (_key.keybit.L_DOWN_BUTTON && !_lastkey.keybit.L_DOWN_BUTTON)
+	else if (_key.keybit.R_DOWN_BUTTON && !_lastkey.keybit.R_DOWN_BUTTON)
 	{
 		return _ropeDir = ROPE_DIR_LOWER;
 	}
@@ -473,19 +491,22 @@ void Rope::SetRopeRadForDrawZ(void)
 	{
 	case ROPE_DIR_UPPER:
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
-		mentenanceNum_Y = dirFlag ? -220 + _RopeRect.h / 2: -220 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -160 : 160;
+		RopeHitModelNumY = dirFlag ? 35:25;
+		mentenanceNum_Y = -215 + _RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -180 : 180;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
-		mentenanceNum_Y = dirFlag ? 85 + _RopeRect.h / 2: 85 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -160 : 160;
+		RopeHitModelNumY = 70;
+		mentenanceNum_Y =  94 + _RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -180 : 180;
 		break;
 	case ROPE_DIR_NON:
 	case ROPE_DIR_STRAIGHT:
 		RopeAngle_Z = AngleRad(0.f);
-		mentenanceNum_Y = -67 +_RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -230: 230;
+		RopeHitModelNumY = 55;
+		mentenanceNum_Y = -63 +_RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -235: 235;
 		break;
 	default:
 		break;

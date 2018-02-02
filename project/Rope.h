@@ -67,6 +67,9 @@ private:
 	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y
 	int RopeHitModelNumY;
 
+	int dirNum;                             //dirのX位置
+	int ropeFiringTimer;                    //このカウントがロープ発射のアニメーションのタイミングを制御します
+
 	float range;                            //サークル半径
 	float RopeAngle_Y;                      //表示用モデル角度Y
 	float RopeAngle_Z;                      //表示用モデル角度Z
