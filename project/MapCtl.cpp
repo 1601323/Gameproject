@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "MapCtl.h"
 #include "ModelMgr.h"
+#include "ImageMgr.h"
 
 MapCtl* MapCtl::ptr = nullptr;
 
@@ -19,9 +20,7 @@ MapCtl::MapCtl()
 	//ƒŠƒgƒ‰ƒC‚µ‚½‚ç
 	chipModelHandle[1] = MV1LoadModel("wallQmodel/wall.pmx");
 	chipModelHandle[2] = MV1LoadModel("wallQmodel/wall2.pmx");
-	ChangeTexture = LoadGraph("wallQmodel/wall3.png");
 	textureIndex = MV1GetMaterialDifMapTexture(chipModelHandle[2], 3);
-
 }
 
 // ÃÞ½Ä×¸À
@@ -145,15 +144,13 @@ unsigned int MapCtl::GetMapNum(Position2 idPos)
 void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
 	auto color = GetColor(0, 50, 50);
+	ImageMgr& im = ImageMgr::Instance();
 
 	//DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
 	MV1SetPosition(chipModelHandle[num], ConvWorldPosToScreenPos(VGet(x*32 - offset.x+20,y*32 - offset.y+20,0)));
 	MV1SetScale(chipModelHandle[num], VGet(3.18f, 3.18f,3.18f));
 	//ƒeƒNƒXƒ`ƒƒ‚ð•ÏX
-	if (num == 2)
-	{
-		MV1SetTextureGraphHandle(chipModelHandle[num], textureIndex, ChangeTexture, FALSE);
-	}
+	 if (num == 2) MV1SetTextureGraphHandle(chipModelHandle[num], textureIndex, im.ImageIdReturn("wallQmodel/wall4.png", SCENE_TITLE), FALSE);
 	//ƒ‚ƒfƒ‹‚ð—ÖŠsü0.0f‚Å•`‰æ 
 	_modelmgr->Draw(chipModelHandle[num],0.0f);
 }

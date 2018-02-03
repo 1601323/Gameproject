@@ -59,7 +59,6 @@ public:
 
 	int chipImage[8];
 	int chipModelHandle[3];
-	int ChangeTexture;
 	int textureIndex;
 
 	//ギミック用に追加

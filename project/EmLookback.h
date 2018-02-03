@@ -30,7 +30,6 @@ private:
 	int loseSightCnt;	//PLが認識範囲から外れて見失うまでのカウント
 
 	int modelhandle;
-	int ETexture;
 	int textureIndex;
 	float modelDirAngle;
 	int eyeRange;

@@ -43,7 +43,6 @@ private:
 
 	//‚RDˆ—‚É‚Â‚¢‚Ä
 	int modelhandle;
-	int ETexture;
 	int textureIndex;
 	float modelDirAngle;
 
