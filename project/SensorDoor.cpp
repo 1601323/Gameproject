@@ -114,7 +114,7 @@ void SensorDoor::Draw(Position2 offset)
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x , _pos.y - offset.y,0.0f)));
 	//モデルの拡大縮小値の設定
-	MV1SetScale(modelhandle, VGet(6.f, 6.f, 6.f));
+	MV1SetScale(modelhandle, VGet(1.f, 1.4f, 1.f));
 	//アニメーションをアタッチ(ないです)
 	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
 	

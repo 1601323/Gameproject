@@ -123,6 +123,7 @@ void GameScene::GameInit()
 	GameMain& gm = GameMain::Instance();
 	//‰Šúó‘Ô‚Ìƒf[ƒ^‚ğ“ü‚ê‚é
 	_rtData = RESULT_DATA();
+	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
@@ -335,7 +336,7 @@ void GameScene::DrawUI()
 	for (int f = 0; f < gm.GetResultData().life; f++) {
 		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("‰¼image/UI/UI_life.png", SCENE_RESULT),true);
 	}
-	_timer->Draw();
+	//_timer->Draw();
 }
 //”wŒi•`‰æ
 void GameScene::DrawBack(Position2 offset)
