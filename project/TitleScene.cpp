@@ -27,6 +27,7 @@ TitleScene::TitleScene()
 	selectFlag = false;
 	lightCnt = 0;
 	flameCnt = 0;
+	dirMoveCnt = 0;
 	initFlag = false;
 	///InitMovie();
 }
@@ -199,10 +200,12 @@ void TitleScene::Draw()
 		//DrawString(450, 550, "explain", 0xffff99);
 		DrawGraph(150, 500, im.ImageIdReturn("‰¼image/title/Pause_ope.png", SCENE_SELECT), true);
 		if (_menu == GAME_START) {
-			DrawGraph(70, 350, im.ImageIdReturn("‰¼image/UI/dirset1.png", SCENE_SELECT), true);
+			dirMoveCnt += 2;
+			DrawGraph(70 - abs(30 - ( 200 + (dirMoveCnt / 2 % 60)) % 59), 350, im.ImageIdReturn("‰¼image/UI/dirset1.png", SCENE_SELECT), true);
 		}
 		else if (_menu == GAME_EXPLAIN) {
-			DrawGraph(70, 500, im.ImageIdReturn("‰¼image/UI/dirset1.png", SCENE_SELECT), true);
+			dirMoveCnt += 2;
+			DrawGraph(70 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), 500, im.ImageIdReturn("‰¼image/UI/dirset1.png", SCENE_SELECT), true);
 		}
 	}
 	if (operateFlag == true) {
@@ -212,6 +215,6 @@ void TitleScene::Draw()
 	}
 
 	DrawGraph(400, -105, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
-	DrawGraph(40, 50, im.ImageIdReturn("‰¼image/title.png", SCENE_SELECT), true);
+	DrawExtendGraph(10, 10,750,450, im.ImageIdReturn("‰¼image/title.png", SCENE_SELECT), true);
 
 }

@@ -34,6 +34,7 @@ private:
 	bool selectFlag;	//メニューを表示　
 
 	int skyImage;
+	int dirMoveCnt;
 	Position2 _skyPos[2];		//背景スクロール用
 	char* uiMovie;
 	bool movieFlag;

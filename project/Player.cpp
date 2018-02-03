@@ -30,7 +30,10 @@ Player::Player()
 	//_hit = new HitClass();
 	_plRect.w = 32;
 	_plRect.h = 50;
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
+	_wallRect.w = 32;
+	_wallRect.h = 32;
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y  -(_plRect.h / 2));
+	_wallRect.SetCenter(_pos.x+(_wallRect.w/2),_pos.y+(_wallRect.h/2));
 	_map = MapCtl::GetInstance();
 	//_rope = new Rope(this);
 	WallFlag = false;
@@ -39,23 +42,23 @@ Player::Player()
 	fMoveLeft = true;
 	deathFlag = true;
 	helpFever = false;
+	airFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
+	_fd = FEVER_DATA();
 
-	//とりあえず同じように
 	_modelmgr = ModelMgr::Instance();
+	//モデル読み込み
 	modelhandle = MV1LoadModel("player_model/player.pmx");
-	for (int i = 0; i <= ACTION_MAX; i++)
+	//それぞれのアニメーションをアタッチ+総時間の設定
+	for (int i = 0; i < ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
 	}
 	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
-
-	modelPlayerPos.x = 0;
-	modelPlayerPos.y = 0;
 }
 Player::~Player()
 {
@@ -90,6 +93,8 @@ void Player::Update(Input* input)
 	//ｽﾃｰﾀｽ制御
 	setState();
 	HitToEnemy();		//敵と当たったとき
+	//ﾌｨｰﾊﾞｰﾃﾞｰﾀ受け取り
+	GetFeverData();
 }
 
 //移動系の処理
@@ -317,25 +322,46 @@ bool Player::moveWall(void)
 	int count = 0;
 	//壁登り状態
 	//操作性に難あり
-	Position2 nextPos[4];
+	Position2 nextPos[6];
 	//右下
-	nextPos[0].x = _pos.x + _plRect.w;
-	nextPos[0].y = _pos.y + (_plRect.h - 1);
+	//nextPos[0].x = _pos.x + _plRect.w;
+	//nextPos[0].y = _pos.y + (_plRect.h - 1);
+	nextPos[0] = _wallRect.RightBottom();
 	//左下
-	nextPos[1].x = _pos.x;
-	nextPos[1].y = _pos.y + (_plRect.h - 1);
+	//nextPos[1].x = _pos.x;
+	//nextPos[1].y = _pos.y + (_plRect.h - 1);
+	nextPos[1] = _wallRect.LeftBottom();
 	//右上
-	nextPos[2].x = _pos.x + _plRect.w;
-	nextPos[2].y = _pos.y;
+	//nextPos[2].x = _pos.x + _plRect.w;
+	//nextPos[2].y = _pos.y;
+	nextPos[2] = _wallRect.RightTop();
 	//左上
-	nextPos[3].x = _pos.x;
-	nextPos[3].y = _pos.y;
+	//nextPos[3].x = _pos.x;
+	//nextPos[3].y = _pos.y;
+	nextPos[3] = _wallRect.LeftTop();
+	//右真ん中
+	//nextPos[4].x = _pos.x + _plRect.w;
+	//nextPos[4].y = _pos.y + (_plRect.h/2);
+	nextPos[4] = _wallRect.RightTop();
+	nextPos[4].y += _wallRect.h / 2;
+	//左真ん中
+	//nextPos[5].x = _pos.x;
+	//nextPos[5].y = _pos.y + (_plRect.h/2);
+	nextPos[5] = _wallRect.LeftTop();
+	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	//downPos.x = _wallRect.Left() + (_wallRect.w/2);
+	//downPos.y = _wallRect.Bottom() + MAP_CHIP_SIZE_Y;
+	Position2 downPos2;
+	downPos2.x = _pos.x + (_plRect.w/2);
+	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2);
+	//downPos2.x = _wallRect.Left() + (_wallRect.w / 2);
+	//downPos2.y = _wallRect.Bottom() + (MAP_CHIP_SIZE_Y / 2);
 	//壁登り状態にする条件
-	for (int j = 0; j < 4; j++) {
+	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
@@ -369,7 +395,7 @@ bool Player::moveWall(void)
 				}
 			}
 			//もし足元に床がなければそのまま壁に張り付く
-			if (_map->GetChipType(downPos) == CHIP_BLANK) {
+			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
 				break;
 			}
@@ -388,24 +414,35 @@ bool Player::moveWall(void)
 	//右（真ん中）
 	WallPosMiddl[0].x = _pos.x + _plRect.w;
 	WallPosMiddl[0].y = _pos.y + (_plRect.h / 2);
+	//WallPosMiddl[0].x = _wallRect.Right();
+	//WallPosMiddl[0].y =_wallRect.Top()+ (_wallRect.h / 2);
 	//左（真ん中）
 	WallPosMiddl[1].x = _pos.x;
 	WallPosMiddl[1].y = _pos.y + (_plRect.h / 2);
+	//WallPosMiddl[1].x = _wallRect.Left();
+	//WallPosMiddl[1].y = _wallRect.Top() +(_wallRect.h / 2);
 	//右上
 	WallPosTop[0].x = _pos.x + _plRect.w;
 	WallPosTop[0].y = _pos.y;
+	//WallPosTop[0] = _wallRect.RightTop();
 	//左上
 	WallPosTop[1].x = _pos.x;
 	WallPosTop[1].y = _pos.y;
+	//WallPosTop[0] = _wallRect.LeftTop();
 	//補正のために下も確認する
 	//右下
 	WallPosBottom[0].x = _pos.x + _plRect.w;
 	WallPosBottom[0].y = _pos.y + (_plRect.h - 1);
+	//WallPosBottom[0].x = _wallRect.Right();
+	//WallPosBottom[0].y = _wallRect.Bottom() - 1;
 	//左下
 	WallPosBottom[1].x = _pos.x;
 	WallPosBottom[1].y = _pos.y + (_plRect.h - 1);
+	//WallPosBottom[1].x = _wallRect.Left();
+	//WallPosBottom[1].y = _wallRect.Bottom() -1;
 	for (int j = 0; j < 2; j++) {
 		//ｷｬﾗの半分以上,上はいけないようにする
+		cout << (_map->GetChipType(WallPosMiddl[j]) == CHIP_CLIMB_WALL) << endl;
 		if (_rope->GetRopeState() != ST_ROPE_READY) {
 			moveFlag = false;
 			break;
@@ -501,6 +538,9 @@ bool Player::moveWall(void)
 		Position2 nextPosDown;
 		nextPosDown.x = _pos.x + (_plRect.w / 2);
 		nextPosDown.y = _pos.y + vy + (_plRect.h - 1);
+		//nextPosDown = _wallRect.LeftBottom();
+		//nextPosDown.x += _wallRect.w / 2;
+		//nextPosDown.y += vy;
 		if (_map->GetChipType(nextPosDown) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosDown) == CHIP_N_CLIMB_WALL
 		 || _hit->GimmickHitType(nextPosDown) == GIM_ATTRACT) {
@@ -510,6 +550,9 @@ bool Player::moveWall(void)
 		Position2 nextPosUp;
 		nextPosUp.x = _pos.x + (_plRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
+		//nextPosUp = _wallRect.LeftTop();
+		//nextPosUp.x += _wallRect.h / 2;
+		//nextPosUp.y += vy;
 		if (_map->GetChipType(nextPosUp) == CHIP_CLIMB_WALL
 			|| _map->GetChipType(nextPosUp) == CHIP_N_CLIMB_WALL
 			|| _hit->GimmickHitType(nextPosUp) == GIM_ATTRACT) {
@@ -521,12 +564,15 @@ bool Player::moveWall(void)
 		//右下
 		WallPosDownR.x = _pos.x + _plRect.w;
 		WallPosDownR.y = _pos.y + (_plRect.h - 1);
+		//WallPosDownR = _wallRect.RightBottom();
 		//左下
 		WallPosDownL.x = _pos.x;
 		WallPosDownL.y = _pos.y + (_plRect.h - 1);
+		//WallPosDownL = _wallRect.LeftBottom();
 
-		//tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
-		tmpPos.y = (_pos.y - _plRect.h/2 -3);
+		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+		//tmpPos.y = (_pos.y - _plRect.h/2 -3);
+		//tmpPos.y =(_wallRect.Top() -_wallRect.h );
 		//moveFlagがfalseのときは位置補正を行う
 		if (!moveFlag) {
 			if (_rope->GetRopeState() != ST_ROPE_READY) {
@@ -534,35 +580,37 @@ bool Player::moveWall(void)
 			}
 			else if (_inpInfo.num >= 1)
 			{		//パッドの場合
-				if (_dir == DIR_RIGHT) {
+				if (_dir == DIR_RIGHT || _dir==DIR_UP) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_dir == DIR_LEFT) {
+				if (_dir == DIR_LEFT || _dir == DIR_UP) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x -= 7;
 						WallFlag = false;
 					}
 				}
 			}
 			else {	//キーボードの場合
-				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON) {
+				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON ||_inpInfo.key.keybit.R_UP_BUTTON&& !_lastKey.keybit.R_UP_BUTTON) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this)&& _hit->GimmickHitType(*this) ==GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-					//	_pos.x += 5;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON) {
+				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL  ||_hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						//_pos.x -= 5;
+						_pos.x -= 7;
 						WallFlag = false;
 					}
 				}
@@ -585,25 +633,44 @@ void Player::FeverWall()
 	int count = 0;
 	//壁登り状態
 	//操作性に難あり
-	Position2 nextPos[4];
+	Position2 nextPos[6];
 	//右下
-	nextPos[0].x = _pos.x + _plRect.w;
-	nextPos[0].y = _pos.y + (_plRect.h - 1);
+	//nextPos[0].x = _pos.x + _plRect.w;
+	//nextPos[0].y = _pos.y + (_plRect.h - 1);
+	nextPos[0] = _wallRect.RightBottom();
 	//左下
-	nextPos[1].x = _pos.x;
-	nextPos[1].y = _pos.y + (_plRect.h - 1);
+	//nextPos[1].x = _pos.x;
+	//nextPos[1].y = _pos.y + (_plRect.h - 1);
+	nextPos[1] = _wallRect.LeftBottom();
+
 	//右上
-	nextPos[2].x = _pos.x + _plRect.w;
-	nextPos[2].y = _pos.y;
+	//nextPos[2].x = _pos.x + _plRect.w;
+	//nextPos[2].y = _pos.y;
+	nextPos[2] = _wallRect.RightTop();
 	//左上
-	nextPos[3].x = _pos.x;
-	nextPos[3].y = _pos.y;
+	//nextPos[3].x = _pos.x;
+	//nextPos[3].y = _pos.y;
+	nextPos[3] = _wallRect.LeftTop();
+	//右真ん中
+	//nextPos[4].x = _pos.x + _plRect.w;
+	//nextPos[4].y = _pos.y + (_plRect.h/2);
+	nextPos[4] = _wallRect.RightTop();
+	nextPos[4].y += _wallRect.h / 2;
+	//左真ん中
+	//nextPos[5].x = _pos.x;
+	//nextPos[5].y = _pos.y + (_plRect.h/2);
+	nextPos[5] = _wallRect.LeftTop();
+	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
-	downPos.x = _pos.x + (_plRect.w / 2);
-	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	downPos.x = _pos.x + (_wallRect.w / 2);
+	downPos.y = _pos.y + _wallRect.h + MAP_CHIP_SIZE_Y;
+	Position2 downPos2;
+	downPos2.x = _pos.x + (_wallRect.w / 2);
+	downPos2.y = _pos.y + _wallRect.h + (MAP_CHIP_SIZE_Y / 3);
+
 	//壁登り状態にする条件
-	for (int j = 0; j < 4; j++) {
+	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
@@ -637,7 +704,7 @@ void Player::FeverWall()
 				}
 			}
 			//もし足元に床がなければそのまま壁に張り付く
-			if (_map->GetChipType(downPos) == CHIP_BLANK) {
+			if (_map->GetChipType(downPos) == CHIP_BLANK&&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				if (WallFlag == false) {
 					WallFlag = true;
 					vx = 0;
@@ -715,13 +782,13 @@ void Player::FeverWall()
 	//位置補正
 	Position2 tmpPos, WallPosDownL, WallPosDownR;
 	//右下
-	WallPosDownR.x = _pos.x + _plRect.w;
-	WallPosDownR.y = _pos.y + (_plRect.h - 1);
+	WallPosDownR.x = _pos.x + _wallRect.w;
+	WallPosDownR.y = _pos.y + (_wallRect.h - 1);
 	//左下
 	WallPosDownL.x = _pos.x;
-	WallPosDownL.y = _pos.y + (_plRect.h - 1);
+	WallPosDownL.y = _pos.y + (_wallRect.h - 1);
 
-	tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
+	tmpPos.y = (_pos.y - _wallRect.h / 2) / 32 * 32 +3;
 	if (_state == ST_WALL) {
 		//壁の中で移動可能なら
 		if (moveFlag) {
@@ -788,35 +855,37 @@ void Player::FeverWall()
 			}
 			else if (_inpInfo.num >= 1)
 			{		//パッドの場合
-				if (_dir == DIR_RIGHT) {
+				if (_dir == DIR_RIGHT || _dir == DIR_UP) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_dir == DIR_LEFT) {
+				if (_dir == DIR_LEFT || _dir == DIR_UP) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
+						_pos.x -= 7;
 						WallFlag = false;
 					}
 				}
 			}
 			else {	//キーボードの場合
-				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON) {
+				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 					//右下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						_pos.x += 5;
+						_pos.x += 7;
 						WallFlag = false;
 					}
 				}
-				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON) {
+				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 					//左下が登れる壁だったら補正する
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
-						_pos.x -=5;
+						_pos.x -=7;
 						WallFlag = false;
 					}
 				}
@@ -855,6 +924,10 @@ bool Player::moveRope(void)
 			moveFlag = false;
 		}
 		vx = 0.0f;
+	}
+	else {
+		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
+		AnimNowTime[ACTION_TONGUE_GO] = 0.0f;
 	}
 
 	//勢いを殺さずに着地する
@@ -945,8 +1018,14 @@ bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
 	if (keyData[KEY_INPUT_Z]) {
-		if (feverFlag == false) {
-			feverFlag = true;
+		cout << _fd.feverCnt << endl;
+		if (_fd.feverCnt > 0) {
+
+			if (feverFlag == false) {
+				feverFlag = true;
+				_fd.feverCnt--;
+				GameMain::Instance().SetFeverData(_fd);
+			}
 		}
 	}
 	if (feverFlag == true) {
@@ -986,7 +1065,7 @@ bool Player::stFever(void)
 bool Player::moveJump(void)
 {
 	//flagがtrueならｼﾞｬﾝﾌﾟ状態
-	if (JumpFlag == true) {
+	if (JumpFlag == true&& airFlag ==true) {
 		_state = ST_JUMP;
 	}
 	//ｼﾞｬﾝﾌﾟ
@@ -995,12 +1074,14 @@ bool Player::moveJump(void)
 			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
+				airFlag = true;
 			}
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
+				airFlag = true;
 			}
 		}
 
@@ -1100,64 +1181,30 @@ void Player::FeverJump()
 			break;
 		}
 	}
-}
-void Player::Draw(Position2& offset)
-{
-	//時機
-	modelPlayerPos.x = _pos.x - offset.x + (_plRect.w / 2);
-	modelPlayerPos.y = SCREEN_SIZE_Y - _pos.y + offset.y - (_plRect.h);
-	switch (_state)
-	{
-		//ｽﾃﾙｽ状態
-	case ST_VANISH:
-		alfa = max(alfa - 1, tranceMax);
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
-		break;
-		//ﾛｰﾌﾟ状態
-	case ST_ROPE:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
-		alfa = 255;
-		break;
-		//壁登り状態
-	case ST_WALL:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
-		alfa = 255;
-		break;
-		//ﾌｨｰﾊﾞｰ状態
-	case ST_FEVER:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
-		alfa = 50;
-		break;
-	default:
-		break;
-	}
-	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
-
-	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
-	MV1SetPosition(modelhandle,VGet(modelPlayerPos.x, modelPlayerPos.y, _pos.z));
-	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
-	MV1SetOpacityRate(modelhandle, alfa / 255.f);
-
-	AnimationSwitching();
-	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-//		_plRect.Draw(offset);
+	//	_plRect.Draw(offset);
 	//#endif
 }
+
 
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
 {
+	GameMain& gm = GameMain::Instance();
 	if (_hit->EnemyHit(*this)) {
 		if (deathFlag == true) {
 			_state = ST_DETH;
+
+			//完全敗北
+			if (gm.GetResultData().life <= 0)
+			{
+				_state = ST_OVER;
+			}
 		}
 		else if (deathFlag == false) {
 			//死なない
@@ -1193,6 +1240,7 @@ void Player::gravity(void)
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
+			airFlag = false;
 			break;
 		}
 		else {
@@ -1204,7 +1252,8 @@ void Player::gravity(void)
 				vy = MAX_GRAVITY;
 			}
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
-			JumpFlag = true;
+			//JumpFlag = true;
+			airFlag = true;
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
@@ -1252,6 +1301,7 @@ void Player::FeverGravity()
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
 			JumpFlag = false;
+			airFlag = false;
 			break;
 		}
 		else {
@@ -1263,13 +1313,13 @@ void Player::FeverGravity()
 				vy = MAX_GRAVITY;
 			}
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
-			JumpFlag = true;
+			JumpFlag = true;			//つけてないと上床すり抜け判定がうまくいかないっぽいです
+			airFlag = true;
 		}
 	}if (JumpFlag == true && vy > 0) {
 		for (int j = 0; j < 3; j++) {
 			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
 				vy = 0.0f;
-				AnimNowTime[ACTION_JUMP] = 0.0f;
 				JumpFlag = false;
 				break;
 			}
@@ -1293,6 +1343,64 @@ bool Player::plPlaceCheck()
 		return false;
 	}
 	return true;
+}
+void Player::Draw(Position2& offset)
+{
+	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
+	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
+	//時機
+	switch (_state)
+	{
+		//ｽﾃﾙｽ状態
+	case ST_VANISH:
+		//透過率をだんだん上げていく
+		alfa = max(alfa - VANISH, tranceMax);
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
+		break;
+		//ﾛｰﾌﾟ状態
+	case ST_ROPE:
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+		alfa = 255;
+		break;
+		//壁登り状態
+	case ST_WALL:
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+		alfa = 255;
+		break;
+		//ﾌｨｰﾊﾞｰ状態
+	case ST_FEVER:
+		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
+		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
+		alfa = 50;
+		break;
+	default:
+		break;
+	}
+	_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
+	_wallRect.SetCenter(_pos.x+(_plRect.w/2),_pos.y+ ((_plRect.h/4)*3)-1);
+
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, WorldToScreenPos);
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
+	//モデルの透過率の設定
+	MV1SetOpacityRate(modelhandle, alfa / 255.f);
+	//アニメーション切り替え
+	AnimationSwitching();
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle,0.0f);
+
+	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
+	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
+	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
+		DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
+		//_plRect.Draw(offset);
+		_wallRect.Draw(offset,0xffffff);
+
+	//#endif
 }
 //Rect取得
 Rect& Player::GetRect()
@@ -1325,13 +1433,15 @@ void Player::SetInitPos()
 	vy = 0.0f;
 	alfa = 255;
 	_state = ST_DEF;
+	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
+	AnimNowTime[ST_OVER] = 0.0f;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
 }
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);
+	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);	//yに足しているのは最初の座標で埋まらないようにするため
 	initPos = _pos;
 }
 bool Player::EnterDoor()
@@ -1345,7 +1455,7 @@ bool Player::EnterDoor()
 }
 void Player::SetRetryPos(Position2 midPos)
 {
-	_pos = Position3(midPos.x,midPos.y,0.f);
+	_pos = Position3(midPos.x,midPos.y - (_plRect.h / 2),0.f);
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;
@@ -1355,9 +1465,9 @@ void Player::SetRetryPos(Position2 midPos)
 	feverTime = 60 * FEVER_CNT;
 }
 
-Position2& Player::GetModelPos(void)
+Position2 Player::ReturnWoToScPos2ver()
 {
-	return modelPlayerPos;
+	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
 }
 
 void Player::AnimationSwitching(void)
@@ -1367,84 +1477,72 @@ void Player::AnimationSwitching(void)
 		//通常状態
 	case ST_DEF:
 	case ST_STOP:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_WAIT)
-			{
-				continue;
-			}
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i],0.0f);
-		}
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WAIT], 1.0f);
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WAIT], AnimNowTime[ACTION_WAIT]);
-		AnimNowTime[ACTION_WAIT] += ANIMATION_SPEED_SLOW;
-
-		if (AnimNowTime[ACTION_WAIT] >= AnimTotalTime[ACTION_WAIT])
-		{
-			AnimNowTime[ACTION_WAIT] = 0.0f;
-		}
+		AnimationManager(ACTION_WAIT, ANIMATION_SPEED_DEF,0.0f);
 		break;
+		//移動状態
 	case ST_MOVE:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_WALK)
-			{
-				continue;
-			}
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
-		}
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_WALK], 1.0f);
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_WALK], AnimNowTime[ACTION_WALK]);
-		AnimNowTime[ACTION_WALK] += ANIMATION_SPEED_HIGH;
-
-		if (AnimNowTime[ACTION_WALK] >= AnimTotalTime[ACTION_WALK])
-		{
-			AnimNowTime[ACTION_WALK] = 0.0f;
-		}
-
+		AnimationManager(ACTION_WALK, ANIMATION_SPEED_HIGH,0.0f);
 		break;
 		//ﾛｰﾌﾟ状態
 	case ST_ROPE:
+		//発射準備中はのけぞるアニメーション
+		if (_rope->GetRopeState() != ST_ROPE_READY && _rope->GetRopeState() == ST_ROPE_SELECT)
+		{
+			AnimationManager(ACTION_TONGUE_SET, ANIMATION_SPEED_HIGH, AnimTotalTime[ACTION_TONGUE_SET]);
+		}
+		//舌発射!!!!!!
+		else if (_rope->GetRopeState() != ST_ROPE_READY && _rope->GetRopeState() != ST_ROPE_SELECT)
+		{
+			AnimationManager(ACTION_TONGUE_GO, ANIMATION_SPEED_HIGH, AnimTotalTime[ACTION_TONGUE_GO]);
+		}
 		break;
 		//壁登り状態
 	case ST_WALL:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_CLIMB)
-			{
-				continue;
-			}
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
-		}
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_CLIMB], 1.0f);
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_CLIMB], AnimNowTime[ACTION_CLIMB]);
-		AnimNowTime[ACTION_CLIMB] += ANIMATION_SPEED_HIGH;
-
-		if (AnimNowTime[ACTION_CLIMB] >= AnimTotalTime[ACTION_CLIMB])
-		{
-			AnimNowTime[ACTION_CLIMB] = 0.0f;
-		}
-
+		AnimationManager(ACTION_CLIMB, ANIMATION_SPEED_HIGH,0.0f);
 		break;
+		//ジャンプ状態
 	case ST_JUMP:
-		for (int i = 0; i <= ACTION_MAX; i++)
-		{
-			if (AnimIndex[i] == ACTION_JUMP)
-			{
-				continue;
-			}
-			MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
-		}
-		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[ACTION_JUMP], 1.0f);
-		MV1SetAttachAnimTime(modelhandle, AnimIndex[ACTION_JUMP], AnimNowTime[ACTION_JUMP]);
-		AnimNowTime[ACTION_JUMP] += ANIMATION_SPEED_DEF;
-
-		if (AnimNowTime[ACTION_JUMP] >= AnimTotalTime[ACTION_JUMP])
-		{
-			AnimNowTime[ACTION_JUMP] =0.0f;
-		}
+		AnimationManager(ACTION_JUMP, ANIMATION_SPEED_DEF, 0.0f);
+		break;
+	case ST_DETH:
+		AnimationManager(ACTION_KNOCKBACK, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_KNOCKBACK]);
+		break;
+	case ST_OVER:
+		AnimationManager(ACTION_DAMAGE, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_DAMAGE]);
 		break;
 	default:
 		break;
+	}
+}
+void Player::GetFeverData()
+{
+	_fd = GameMain::Instance().ReturnFeverData();
+}
+
+//第一引数 アタッチするアニメーション名
+//第二引数 アニメーションを進めるスピード
+//第三引数 アニメーションをループさせるかどうか(今のところ0.0f指定でループ,AnimTotalTime[アクション]で1回再生)
+//AnimTotalTime[アクション]で指定した場合必ずどこかしらの処理でAnimNowTime[]を0にする
+void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float looptime)
+{
+	for (int i = 0; i <= ACTION_MAX; i++)
+	{
+		if (AnimIndex[i] == actions)
+		{
+			continue;
+		}
+		//不要なアニメーションのブレンド率を0にする
+		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
+	}
+	//適用するアニメーションの設定 ブレンド率を1.0fに
+	MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[actions], 1.0f);
+	//アニメーションをアタッチ
+	MV1SetAttachAnimTime(modelhandle, AnimIndex[actions], AnimNowTime[actions]);
+	//指定アニメーションのフレームを進める
+	AnimNowTime[actions] += animspeed;
+	//現在のアニメーションが最大フレームまでいったらループする
+	if (AnimNowTime[actions] >= AnimTotalTime[actions])
+	{
+		AnimNowTime[actions] = looptime;
 	}
 }

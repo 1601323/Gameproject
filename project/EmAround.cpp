@@ -50,8 +50,12 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData.plFoundFlag = false;
 	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
-
+	_rangeLevel = RANGE_1;
+	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	ETexture = LoadGraph("Enemy_model/teki-1.png");
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	//初期角度
 	modelDirAngle = AngleRad(-90.0f);
 }
 
@@ -71,11 +75,12 @@ void EmAround::Updata()
 	Gravity();
 	Visibility();
 	Move();
+	//_pos.x += vx;
 }
 //いい処理が浮かばなかったのでここでmoveの管理させています
 void EmAround::Move()
 {	
-	CheckMove();
+	vx = 0;
 	//通常状態の場合
 	if (_state != EM_ST_FEAR&&_individualData._level == ALERT_LEVEL_1) {
 		//_state = EM_ST_MOVE;
@@ -105,6 +110,8 @@ void EmAround::Move()
 	if (_state == EM_ST_FEAR) {
 		moveFear();
 	}
+	CheckMove();
+	_pos.x += vx;
 }
 void EmAround::BasicMove()
 {
@@ -115,7 +122,7 @@ void EmAround::BasicMove()
 	//	//lookBackFlag = !lookBackFlag;
 	//	moveFlag = true;
 	//}
-
+	speed = 1;
 	if (_dir == DIR_RIGHT) {		//右
 		_pos.x += speed;
 	}
@@ -151,13 +158,13 @@ void EmAround::InterMove()
 void EmAround::FoundMove()
 {
 	//現段階では視界に入っているときだけ追いかける
-
+	speed = 2;
 	//ﾌﾟﾚｲﾔｰのほうが右にいたら
 	if (_pl.GetPos().x >= _pos.x) {
-		_pos.x += speed;
+		vx += speed;
 	}
 	else {
-		_pos.x -= speed;
+		vx -= speed;
 	}
 }
 //マップとのあたり判定にぶつかっていないか
@@ -207,13 +214,30 @@ void EmAround::CheckMove()
 			}
 		}
 	}
+	//壁とのあたり判定
+	if (_state == EM_ST_RE_DIS || _state == EM_ST_DIS) {
+		Position2 nextMove[2];
+		//左側
+		nextMove[0].x = _pos.x + vx;
+		nextMove[0].y = _pos.y + (_emRect.h / 2);
+		//右側
+		nextMove[1].x = _pos.x + _emRect.w + vx;
+		nextMove[1].y = _pos.y + (_emRect.h / 2);
+		for (int f = 0; f < 2; f++) {
+			if (_map->GetChipType(nextMove[f]) == CHIP_CLIMB_WALL || _map->GetChipType(nextMove[f]) == CHIP_N_CLIMB_WALL) {
+				vx = 0;
+				break;
+			}
+		}
+
+	}
 }
 //視界について
 void EmAround::Visibility()
 {
-	//_emData.lookAngle = 60;
+	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
-	//_emData.lookRange = _emEye;
+	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
 			_state = EM_ST_DIS;
@@ -270,7 +294,7 @@ void EmAround::EnemyFalter()
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
 #ifdef _DEBUG
-			DrawString(100, 100, "敵に当たったよ！", 0xffffff);
+			//DrawString(100, 100, "敵に当たったよ！", 0xffffff);
 #endif
 			_state = EM_ST_FEAR;
 		}
@@ -316,11 +340,22 @@ void EmAround::Gravity()
 }
 void EmAround::Draw(Position2 offset)
 {
+	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2),_pos.y - offset.y + (_emRect.h),0)));
+	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
-	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle,0.0f);
+
+	//if (_commonData.midFlag)
+	//{
+		//テクスチャを変更
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
+	//}
+
+	//モデルを輪郭線0.0fで描画 
+	_modelmgr->Draw(modelhandle,0.0f);
+
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
 	}
@@ -332,39 +367,71 @@ void EmAround::Draw(Position2 offset)
 		if (_dir == DIR_LEFT) {
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		else if (_dir == DIR_RIGHT) {
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
+	tmpPos = offset;
 #ifdef _DEBUG
 	//_emRect.Draw(offset);
 	//_emEye.Draw(offset);
 #endif
 
 }
-
 void EmAround::SetRange()
 {
 	//サイズは仮
 	_individualData._level = _server.AlertLevel();
 	if (_individualData._level == ALERT_LEVEL_1) {
-		_emEye.r = 40;
+		_rangeLevel = RANGE_1;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_2;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_2) {
-		_emEye.r = 60;
+		_rangeLevel = RANGE_2;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_3;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_3) {
-		_emEye.r = 80;
+		_rangeLevel = RANGE_3;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_4;
+		}
 	}
 	else {
-		_emEye.r = 40;
+		_emEye.r = 60;
+		_rangeLevel = RANGE_1;
+	}
+	
+	switch (_rangeLevel) {
+	case RANGE_1:
+		_emEye.r = 60;
+		break;
+	case RANGE_2:
+		_emEye.r = 80;
+		break;
+	case RANGE_3:
+		_emEye.r = 100;
+		break;
+	case RANGE_4:
+		_emEye.r = 120;
+		break;
+	case RANGE_5:
+		_emEye.r = 140;
+		break;
+	default:
+		ASSERT();
 	}
 }
 void EmAround::GetClass(HitClass* hit, Player& pl)

@@ -26,7 +26,8 @@ enum CHAR_ST {
 	ST_ROPE,		//ﾛｰﾌﾟ使用
 	ST_WALL,		//壁登り
 	ST_FEVER,		//ﾌｨｰﾊﾞｰ
-	ST_DETH,		//死亡
+	ST_DETH,		//死亡(リスポーン可)
+	ST_OVER,        //死亡(リスポーン不可)
 	ST_CLEAR,		//ｸﾘｱ
 	ST_MAX
 };
@@ -95,6 +96,15 @@ enum ENEMY_STATE {
 	EM_ST_RE_DIS,	//ﾌﾟﾚｲﾔｰが見つかったとき(戻ってくるとき)
 	EM_ST_FEAR		//怯み状態
 };
+//敵の視界の大きさについて
+enum ENEMY_RANGE_LEVEL {
+	RANGE_1,
+	RANGE_2,
+	RANGE_3,
+	RANGE_4,
+	RANGE_5,
+	RANGE_MAX
+};
 //アイテムの種類について
 enum ITEM_TYPE {
 	ITEM_FEVER,
@@ -108,11 +118,17 @@ enum ENEMY_ALERT {
 };
 //プレイヤーのアクション
 enum PLAYER_ACTIONS{
-	ACTION_WAIT,   //待機モーション
-	ACTION_JUMP,   //飛ぶモーション
-	ACTION_CLIMB,  //のぼるモーション
-	ACTION_WALK,   //歩くモーション
-	ACTION_HAPPY,  //喜びのアクション
+	ACTION_WAIT,       //待機モーション
+	ACTION_JUMP,       //飛ぶモーション
+	ACTION_CLIMB,      //のぼるモーション
+	ACTION_WALK,       //歩くモーション
+	ACTION_HAPPY,      //喜びのアクション
+	ACTION_DAMAGE,     //敵に見つかった時のモーション(ゲームオーバー前)
+	ACTION_REGRET,     //悔しがっているモーション(実際に使う予定は今のところない)
+	ACTION_AOONI,      //牢屋にいれられてがたがたしているアニメーション
+	ACTION_KNOCKBACK,  //敵に見つかった時のモーション(リスポーン前)
+	ACTION_TONGUE_SET, //舌を打つ前の構えるモーション
+	ACTION_TONGUE_GO,  //舌を打った時のモーション
 	ACTION_MAX
 };
 
@@ -244,6 +260,12 @@ struct RESULT_DATA
 	int goalTime;
 	int life;
 	int foundCount;
+};
+//アイテム・フィーバーの管理について
+struct FEVER_DATA {
+	FEVER_DATA() :feverCnt(0), feverTime(0) {}
+	int feverCnt;		//あと何回ﾌｨｰﾊﾞｰできるかのカウント
+	int feverTime;		//使うかわからない
 };
 inline
 Position2 operator+(const Position2 &pos, const Position2 &pos2)

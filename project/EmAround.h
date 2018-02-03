@@ -26,6 +26,7 @@ private:
 	DIR _dir;
 	EnemyServerData _individualData;		//ｴﾈﾐｰ本部に送るﾃﾞｰﾀ
 	ModelMgr* _modelmgr;
+	ENEMY_RANGE_LEVEL _rangeLevel;
 
 	//重力について
 	float vx;
@@ -39,6 +40,8 @@ private:
 	int fearCnt;			//ひるんでいる秒数
 
 	int modelhandle;
+	int ETexture;
+	int textureIndex;
 	float modelDirAngle;
 
 	void Move();			//敵の動きについての管理を行う
@@ -52,6 +55,8 @@ private:
 	void LoseSight();		//ﾌﾟﾚｲﾔｰを見失ったとき
 	void Gravity();			//重力判定
 	void SetRange();		//視界の広さをレベル別に判定します
+
+	Position2 tmpPos;
 
 public:
 	EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit);

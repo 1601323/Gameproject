@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Assert.h"
 #include "Geometry.h"
 #include "EmLookback.h"
 #include "MapCtl.h"
@@ -18,7 +19,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_emRect.w = 32;
 	_emRect.h = 64;
 	_pos.x = pos.x;
-	_pos.y = pos.y -32;//À•W‚ªƒ}ƒbƒvƒ`ƒbƒvˆêŒÂ•ª‚Ì¶ã‚Å“o˜^‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAÀ•W‚©‚çƒŒƒNƒgƒTƒCƒY|ƒ}ƒbƒvƒ`ƒbƒvƒTƒCƒY‚·‚é
+	_pos.y = pos.y -32;//åº§æ¨™ãŒãƒãƒƒãƒ—ãƒãƒƒãƒ—ä¸€å€‹åˆ†ã®å·¦ä¸Šã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€åº§æ¨™ã‹ã‚‰ãƒ¬ã‚¯ãƒˆã‚µã‚¤ã‚ºï¼ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã‚µã‚¤ã‚ºã™ã‚‹
 	_initPos = _pos;
 	_dir = DIR_RIGHT;
 
@@ -40,12 +41,15 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
-	//ŒÂ‘Ìƒf[ƒ^‰Šú‰»
+	//å€‹ä½“ãƒ‡ãƒ¼ã‚¿åˆæœŸåŒ–
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+	_rangeLevel = RANGE_1;
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+	ETexture = LoadGraph("Enemy_model/teki2-1.png");
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	modelDirAngle = 0.0f;
 }
 
@@ -71,13 +75,25 @@ void EmLookback::Updata()
 	Gravity();
 }
 
+
 void EmLookback::Draw(Position2 offset)
 {
+	//ãƒ¢ãƒ‡ãƒ«ã®å›è»¢è§’åº¦ã®è¨­å®š(ãƒ©ã‚¸ã‚¢ãƒ³)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
+	//ãƒ¢ãƒ‡ãƒ«ã®posã‚’è¨­å®š+ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã¸å¤‰æ›
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
+	//ãƒ¢ãƒ‡ãƒ«ã®æ‹¡å¤§ç¸®å°å€¤ã®è¨­å®š
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-	MV1DrawModel(modelhandle);
-	_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
+
+	//if (_commonData.midFlag)
+	//{
+		//ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å¤‰æ›´
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
+	//}
+
+	//ãƒ¢ãƒ‡ãƒ«ã‚’è¼ªéƒ­ç·š0.0fã§æç”» 
+	_modelmgr->Draw(modelhandle, 0.0f);
+
 	switch (_state)
 	{
 	case EM_ST_NONE:
@@ -104,7 +120,7 @@ void EmLookback::Draw(Position2 offset)
 			modelDirAngle = AngleRad(-90.0f);
 			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_individualData._level], 16.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		}
@@ -112,7 +128,7 @@ void EmLookback::Draw(Position2 offset)
 			modelDirAngle = AngleRad(90.0f);
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_individualData._level], 66.6);
+			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		}
@@ -123,16 +139,17 @@ void EmLookback::Draw(Position2 offset)
 
 #ifdef _DEBUG
 	//_emRect.Draw(offset);
-	//DrawFormatString(10, 380, 0xffffff, "U‚è•Ô‚è:%d", LookCount);
+	//DrawFormatString(10, 380, 0xffffff, "æŒ¯ã‚Šè¿”ã‚Š:%d", LookCount);
 #endif 
 }
 void EmLookback::SetMove()
 {
+	vx = 0;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		setDir();
 	}
 	else if(_state == EM_ST_DIS || _state == EM_ST_RE_DIS){
-		//’Ç‚¢‚©‚¯‚Ä‚­‚é“®‚«
+		//è¿½ã„ã‹ã‘ã¦ãã‚‹å‹•ã
 		if (_individualData.plFoundFlag == true) {
 			LookPl();
 		}
@@ -142,17 +159,18 @@ void EmLookback::SetMove()
 		else{}
 	}
 	else if (_state == EM_ST_FEAR) {
-		//‹¯‚İ‚Ì“®‚«
+		//æ€¯ã¿ã®å‹•ã
 		moveFear();
 	}
 	else {
-		setDir();		//ó‘Ô‚Ì—áŠO
+		setDir();		//çŠ¶æ…‹ã®ä¾‹å¤–
 	}
+	LimitMove();
 }
 void EmLookback::setDir(void)
 {
 	if (_state == EM_ST_MOVE) {
-		//3•b‚²‚Æ‚ÉŒü‚«‚ª•Ï‚í‚é
+		//3ç§’ã”ã¨ã«å‘ããŒå¤‰ã‚ã‚‹
 		if (LookCount < EM_LOOKBACK_TIME) {
 			LookCount++;
 			if (LookCount == EM_LOOKBACK_TIME) {
@@ -182,8 +200,10 @@ void EmLookback::setDir(void)
 }
 void EmLookback::Visibility()
 {
+	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
-	//‹ŠE”»’è(ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½‚Æ‚«)
+	_emData.lookRange = _emEye;
+	//è¦–ç•Œåˆ¤å®š(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã¤ã‘ãŸã¨ã)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
 		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
@@ -226,15 +246,15 @@ void EmLookback::LookPl(void)
 	Position2 nextLeftPos;
 	nextLeftPos.x = _pos.x;
 	nextLeftPos.y = _pos.y + (_emRect.h / 2);
-	//ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½‚ç’Ç‚¢‚©‚¯‚Ä‚­‚é
-	//¡‚ÍŒü‚¢‚Ä‚¢‚é•ûŒü‚É“®‚­‚æ‚¤‚É‚µ‚Ä‚¢‚é
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã¤ã‘ãŸã‚‰è¿½ã„ã‹ã‘ã¦ãã‚‹
+	//ä»Šã¯å‘ã„ã¦ã„ã‚‹æ–¹å‘ã«å‹•ãã‚ˆã†ã«ã—ã¦ã„ã‚‹
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		if (_dir == DIR_LEFT) {
 			if (_map->GetChipType(nextLeftPos) == CHIP_BLANK||
 				_map->GetChipType(nextLeftPos) != CHIP_CLIMB_WALL&&
 				_map->GetChipType(nextLeftPos) != CHIP_N_CLIMB_WALL
 				&& _hit.GimmickHitType(nextLeftPos) != GIM_ATTRACT) {
-				_pos.x -= emSpeed;
+				vx -= emSpeed;
 			}
 		}
 		else if (_dir == DIR_RIGHT) {
@@ -242,7 +262,7 @@ void EmLookback::LookPl(void)
 				_map->GetChipType(nextRightPos) != CHIP_CLIMB_WALL &&
 				_map->GetChipType(nextRightPos) != CHIP_N_CLIMB_WALL&&
 				 _hit.GimmickHitType(nextRightPos) != GIM_ATTRACT) {
-				_pos.x += emSpeed;
+				vx += emSpeed;
 			}
 		}
 		else {
@@ -260,7 +280,7 @@ void EmLookback::moveFear(void)
 		}
 	}
 #ifdef _DEBUG
-	DrawFormatString(10, 450, 0xffffff, "‹¯‚İ:%d", FearCount);
+	//DrawFormatString(10, 450, 0xffffff, "æ€¯ã¿:%d", FearCount);
 #endif
 }
 void EmLookback::EnemyFalter()
@@ -288,6 +308,23 @@ void EmLookback::LoseSight()
 		}
 	}
 }
+void EmLookback::LimitMove()
+{
+	Position2 nextMove[2];
+	//å·¦å´
+	nextMove[0].x = _pos.x + vx;
+	nextMove[0].y = _pos.y + (_emRect.h / 2);
+	//å³å´
+	nextMove[1].x = _pos.x + _emRect.w + vx;
+	nextMove[1].y = _pos.y + (_emRect.h / 2);
+	for (int f = 0; f < 2; f++) {
+		if (_map->GetChipType(nextMove[f]) == CHIP_CLIMB_WALL || _map->GetChipType(nextMove[f]) == CHIP_N_CLIMB_WALL) {
+			vx = 0;
+			break;
+		}
+	}
+	_pos.x += vx;
+}
 void EmLookback::ReturnPoint()
 {
 	Position2 nextRightPos;
@@ -296,7 +333,7 @@ void EmLookback::ReturnPoint()
 	Position2 nextLeftPos;
 	nextLeftPos.x = _pos.x;
 	nextLeftPos.y = _pos.y + (_emRect.h / 2);
-	if (_pos.x - _initPos.x >= 20) {	//“G‚Ì‚Ù‚¤‚ªinit‚æ‚è‰E‘¤‚É‚¢‚é
+	if (_pos.x - _initPos.x >= 20) {	//æ•µã®ã»ã†ãŒinitã‚ˆã‚Šå³å´ã«ã„ã‚‹
 		if (_map->GetChipType(nextLeftPos) == CHIP_BLANK ||
 			_map->GetChipType(nextLeftPos) != CHIP_CLIMB_WALL&&
 			_map->GetChipType(nextLeftPos) != CHIP_N_CLIMB_WALL&& 
@@ -320,17 +357,17 @@ void EmLookback::ReturnPoint()
 		returnFlag = false;
 	}
 }
-//d—Í‚É‚Â‚¢‚Ä
+//é‡åŠ›ã«ã¤ã„ã¦
 void EmLookback::Gravity()
 {
 	Position2 nextPosDown[3];
-	//‰E
+	//å³
 	nextPosDown[0].x = _pos.x + (_emRect.w - 2);
 	nextPosDown[0].y = _pos.y + (vy / 2) + (_emRect.h);
-	//¶
+	//å·¦
 	nextPosDown[1].x = _pos.x + 2;
 	nextPosDown[1].y = _pos.y + (vy / 2) + (_emRect.h);
-	//’†S
+	//ä¸­å¿ƒ
 	nextPosDown[2].x = _pos.x + (_emRect.w / 2);
 	nextPosDown[2].y = _pos.y + (vy / 2) + (_emRect.h);
 	for (int f = 0; f < 3; f++) {
@@ -349,18 +386,52 @@ void EmLookback::SetRange()
 {
 	_individualData._level = _server.AlertLevel();
 	if (_individualData._level == ALERT_LEVEL_1) {
-		_emEye.r = 40;
+		_rangeLevel = RANGE_1;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_2;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_2) {
-		_emEye.r = 60;
+		_rangeLevel = RANGE_2;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_3;
+		}
 	}
 	else if (_individualData._level == ALERT_LEVEL_3) {
-		_emEye.r = 80;
+		_rangeLevel = RANGE_3;
+		if (_state == EM_ST_DIS)
+		{
+			_rangeLevel = RANGE_4;
+		}
 	}
 	else {
-		_emEye.r = 40;
+		_emEye.r = 60;
+		_rangeLevel = RANGE_1;
+	}
+
+	switch (_rangeLevel) {
+	case RANGE_1:
+		_emEye.r = 60;
+		break;
+	case RANGE_2:
+		_emEye.r = 80;
+		break;
+	case RANGE_3:
+		_emEye.r = 100;
+		break;
+	case RANGE_4:
+		_emEye.r = 120;
+		break;
+	case RANGE_5:
+		_emEye.r = 140;
+		break;
+	default:
+		ASSERT();
 	}
 }
+
 Rect & EmLookback::GetRect()
 {
 	return _emRect;
@@ -370,7 +441,7 @@ ENEMY_TYPE & EmLookback::GetType()
 {
 	return _emType;
 }
-//ó‘Ô‚ğ•Ô‚·
+//çŠ¶æ…‹ã‚’è¿”ã™
 ENEMY_STATE& EmLookback::GetState()
 {
 	return _state;
@@ -387,7 +458,7 @@ void EmLookback::SetInitPos()
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 }
-//ƒIƒtƒZƒbƒg‚Ìˆ×Œü‚¢‚Ä‚¢‚é•ûŒü‚ğŠm”F‚µ‚Ü‚·
+//ã‚ªãƒ•ã‚»ãƒƒãƒˆã®ç‚ºå‘ã„ã¦ã„ã‚‹æ–¹å‘ã‚’ç¢ºèªã—ã¾ã™
 void EmLookback::returnDir(Position2 offset)
 {
 	if (_state == EM_ST_MOVE) {

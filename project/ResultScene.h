@@ -37,12 +37,17 @@ private:
 	ModelMgr* _modelmgr;
 	int playerModelHandle;
 	int smileTexture;
-	int textureIndex;
+	int sadTexture;
+	int textureIndex[2];
 	int medicineHandle;
-	float AnimTotalTime;
-	float  AnimNowTime;
-	float outlineNum;
-	int  AnimIndex;
+
+	float AnimTotalTimeH;           //アニメーション総時間 HはhappyのH
+	float AnimNowTimeH;             //今のアニメーション時間 HはhappyのH
+	int  AnimIndexH;                //アニメーションインデックス HはhappyのH
+
+	float AnimTotalTimeS;           //アニメーション総時間 SはhappyのS
+	float AnimNowTimeS;             //今のアニメーション時間 SはhappyのS
+	int  AnimIndexS;                //アニメーションインデックス SはhappyのS
 
 	void NormalUpdata(Input* input);
 

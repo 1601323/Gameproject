@@ -30,8 +30,10 @@ private:
 	int loseSightCnt;	//PLが認識範囲から外れて見失うまでのカウント
 
 	int modelhandle;
+	int ETexture;
+	int textureIndex;
 	float modelDirAngle;
-
+	int eyeRange;
 	ENEMY_STATE _state;
 	ENEMY_DATA _emData;
 	Circle _emEye;
@@ -39,6 +41,7 @@ private:
 	Position2 _tmpOffset;
 	Position2 _initPos;
 	EnemyServerData _individualData;	//エネミー本部に送るデータ
+	ENEMY_RANGE_LEVEL _rangeLevel;
 
 	float emSpeed; 
 	float upAngle;
@@ -57,6 +60,7 @@ private:
 	void returnDir(Position2 offset);	//向いている方向を返す
 	void Gravity();
 	void SetRange();
+	void LimitMove();					//動きに制限をつける
 public:
 	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();

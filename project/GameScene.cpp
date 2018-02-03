@@ -123,12 +123,13 @@ void GameScene::GameInit()
 	GameMain& gm = GameMain::Instance();
 	//初期状態のデータを入れる
 	_rtData = RESULT_DATA();
+	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
 		mapName = "map/douga.map";
 		break;
 	case 1:
-		mapName = "map/douga.map";
+		mapName = "map/Production.map";
 		break;
 	case 2:
 		mapName = "map/na.map";
@@ -215,7 +216,7 @@ void GameScene::JudgeTransition()
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
 	}
-	if (_player->GetcharState() == ST_DETH) {
+	if (_player->GetcharState() == ST_DETH || _player->GetcharState() == ST_OVER) {
 		_rtData.life--;
 		gm.SetResultData(_rtData);
 		_updater = &GameScene::TransitionUpdata;
@@ -267,7 +268,7 @@ void GameScene::TransitionUpdata(Input* input)
 			RetryProcess();
 			_updater = &GameScene::FadeInUpdata;
 		}
-		else {
+		else{
 			gm.Instance().ChangeScene(new ResultScene());
 		}
 		count = 0;
@@ -340,10 +341,11 @@ void GameScene::DrawBack(Position2 offset)
 {
 	//まだ多重スクロールはしないです
 	ImageMgr& im = ImageMgr::Instance();
-	DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("仮image/Game/backOmage.png",SCENE_RESULT),true);
-	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back3.png", SCENE_RESULT), true);
-	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back2.png", SCENE_RESULT), true);
-	DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back1.png", SCENE_RESULT), true);
+	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("仮image/Game/title5.png",SCENE_RESULT),true);
+	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("仮image/Game/title5.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back3.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back2.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back1.png", SCENE_RESULT), true);
 
 }
 //シーン遷移のために用意
