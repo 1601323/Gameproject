@@ -38,6 +38,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	LookCount = 0;
 	FearCount = 180;
 	loseSightCnt = 180;
+	midFlag = false;
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
@@ -144,7 +145,14 @@ void EmLookback::Draw(Position2 offset)
 }
 void EmLookback::SetMove()
 {
+	GameMain& gm = GameMain::Instance();
 	vx = 0;
+	if (midFlag == false) {
+		if (gm.GetResultData().midFlag == true) {
+			midFlag = true;
+		}
+	}	
+	emSpeed = midFlag ? 2 : 1;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		setDir();
 	}

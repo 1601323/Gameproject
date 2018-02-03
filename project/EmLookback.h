@@ -49,6 +49,7 @@ private:
 	bool returnFlag;
 	float vx;
 	float vy;
+	bool midFlag;
 	void SetMove();						//“®‚«‚É‚Â‚¢‚ÄƒZƒbƒg‚·‚é
 	void setDir(void);					//Œü‚«
 	void Visibility();					//Ž‹ŠE”»’è
