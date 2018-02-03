@@ -204,6 +204,7 @@ void GameScene::JudgeTransition()
 	//ƒNƒŠƒA‚É‚æ‚é‰æ–Ê‘JˆÚ‚ð‰¼ŽÀ‘•
 	if (_mid->ReturnGetFlag() == true) {
 		_rtData.midFlag = true;
+		gm.SetResultData(_rtData);
 	}
 	else
 	{
