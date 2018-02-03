@@ -21,8 +21,6 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_map = MapCtl::GetInstance();
 	_modelmgr = ModelMgr::Instance();
 
-	//_pl = new Player();
-	//_hit = new HitClass();
 	_emRect.w = 30;
 	_emRect.h = 60;	
 	_pos.x = pos.x;
@@ -51,6 +49,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
+	midFlag = false;
 	//ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 	ETexture = LoadGraph("Enemy_model/teki-1.png");
@@ -80,7 +79,13 @@ void EmAround::Updata()
 //‚¢‚¢ˆ—‚ª•‚‚©‚Î‚È‚©‚Á‚½‚Ì‚Å‚±‚±‚Åmove‚ÌŠÇ—‚³‚¹‚Ä‚¢‚Ü‚·
 void EmAround::Move()
 {	
+	GameMain& gm = GameMain::Instance();
 	vx = 0;
+	if (midFlag == false) {
+		if (gm.GetResultData().midFlag == true) {
+			midFlag = true;
+		}
+	}
 	//’Êíó‘Ô‚Ìê‡
 	if (_state != EM_ST_FEAR&&_individualData._level == ALERT_LEVEL_1) {
 		//_state = EM_ST_MOVE;
@@ -122,7 +127,15 @@ void EmAround::BasicMove()
 	//	//lookBackFlag = !lookBackFlag;
 	//	moveFlag = true;
 	//}
-	speed = 1;
+
+	//if (_state == EM_ST_MOVE) {
+	//	speed = 1;
+	//}
+	//else if (_state == EM_ST_RETURN) {
+	//	speed = 2;
+	//}
+	//else { speed = 1; }
+	speed = midFlag ? 2 : 1;
 	if (_dir == DIR_RIGHT) {		//‰E
 		_pos.x += speed;
 	}
@@ -158,7 +171,7 @@ void EmAround::InterMove()
 void EmAround::FoundMove()
 {
 	//Œ»’iŠK‚Å‚ÍŽ‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯’Ç‚¢‚©‚¯‚é
-	speed = 2;
+	speed = midFlag ? 3 : 2;
 	//ÌßÚ²Ô°‚Ì‚Ù‚¤‚ª‰E‚É‚¢‚½‚ç
 	if (_pl.GetPos().x >= _pos.x) {
 		vx += speed;

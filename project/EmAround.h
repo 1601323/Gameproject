@@ -39,6 +39,9 @@ private:
 	int loseSightCnt;		//PLが認識範囲から外れて見失うまでのカウント
 	int fearCnt;			//ひるんでいる秒数
 
+	bool midFlag;			//中間点フラグ
+
+	//３D処理について
 	int modelhandle;
 	int ETexture;
 	int textureIndex;
