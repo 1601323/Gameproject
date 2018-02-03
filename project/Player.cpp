@@ -10,6 +10,7 @@
 #include "Geometry.h"
 #include "Rope.h"
 #include "ModelMgr.h"
+#include "ImageMgr.h"
 
 
 using namespace std;
@@ -59,6 +60,8 @@ Player::Player()
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
 	}
 	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
+	//顔のテクスチャのindexを取得
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 1);
 }
 Player::~Player()
 {
@@ -1397,8 +1400,6 @@ void Player::Draw(Position2& offset)
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
 		//_plRect.Draw(offset);
 	//	_wallRect.Draw(offset,0xffffff);
-
-	//#endif
 }
 //Rect取得
 Rect& Player::GetRect()
@@ -1468,13 +1469,17 @@ Position2 Player::ReturnWoToScPos2ver()
 	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
 }
 
+//プレイヤーの状態によってアニメーションを切り替えている関数です
+//テクスチャも変えています
 void Player::AnimationSwitching(void)
 {
+	ImageMgr& im = ImageMgr::Instance();
 	switch (_state)
 	{
 		//通常状態
 	case ST_DEF:
 	case ST_STOP:
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/face.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_WAIT, ANIMATION_SPEED_DEF,0.0f);
 		break;
 		//移動状態
@@ -1502,10 +1507,14 @@ void Player::AnimationSwitching(void)
 	case ST_JUMP:
 		AnimationManager(ACTION_JUMP, ANIMATION_SPEED_DEF, 0.0f);
 		break;
+		//リスポーンダウン状態
 	case ST_DETH:
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/cryFace.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_KNOCKBACK, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_KNOCKBACK]);
 		break;
+		//ゲームオーバー状態
 	case ST_OVER:
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/surprisFace.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_DAMAGE, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_DAMAGE]);
 		break;
 	default:

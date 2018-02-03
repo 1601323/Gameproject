@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "Rope.h"
 #include "ModelMgr.h"
-
+#include "ImageMgr.h"
 
 EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& server,HitClass& hit) :_player(pl), _rope(rope), _server(server),_hit(hit)
 {
@@ -49,7 +49,6 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_rangeLevel = RANGE_1;
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
-	ETexture = LoadGraph("Enemy_model/teki2-1.png");
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	modelDirAngle = 0.0f;
 }
@@ -79,19 +78,16 @@ void EmLookback::Updata()
 
 void EmLookback::Draw(Position2 offset)
 {
+	ImageMgr& im = ImageMgr::Instance();
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h), 0)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
-
-	//if (_commonData.midFlag)
-	//{
-		//テクスチャを変更
-		MV1SetTextureGraphHandle(modelhandle, textureIndex, ETexture, FALSE);
-	//}
-
+	//テクスチャを変更
+	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2-1.png", SCENE_RESULT), FALSE);
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
