@@ -123,6 +123,7 @@ void GameScene::GameInit()
 	GameMain& gm = GameMain::Instance();
 	//‰Šúó‘Ô‚Ìƒf[ƒ^‚ğ“ü‚ê‚é
 	_rtData = RESULT_DATA();
+	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:

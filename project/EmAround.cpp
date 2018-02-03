@@ -186,13 +186,18 @@ void EmAround::CheckMove()
 	moveFlag = false;
 	//左右の移動を判定する
 	Position2 nextLeftPos;		//自身の左側を判定する
-//	nextLeftPos.x = _pos.x - speed;
-	nextLeftPos.x = _pos.x - speed - (_emEye.r / 2);
+	nextLeftPos.x = _pos.x - speed;	
 	nextLeftPos.y = _pos.y + (_emRect.h / 2);
 	Position2 nextRightPos;
-//	nextRightPos.x = _pos.x + (_emRect.w) + speed;
-	nextRightPos.x = _pos.x + (_emRect.w) + speed + (_emEye.r/2);
+	nextRightPos.x = _pos.x + (_emRect.w) + speed;
 	nextRightPos.y = _pos.y + (_emRect.h/2);
+	//視界で判定もおこなう
+	Position2  LeftViewPos;
+	LeftViewPos.x = _pos.x - speed - (_emEye.r / 2);
+	LeftViewPos.y = _pos.y + (_emRect.h/2);
+	Position2 RightViewPos;
+	RightViewPos.x = _pos.x + (_emRect.w) + speed + (_emEye.r / 2);
+	RightViewPos.y = _pos.y + (_emRect.h/2);
 	//左右地面の判定を行う
 	Position2 nextLeftDown;
 	nextLeftDown.x = _pos.x - speed;
@@ -205,6 +210,8 @@ void EmAround::CheckMove()
 		if (_dir == DIR_LEFT) {		//左側に動いているとき
 			if (_map->GetChipType(nextLeftPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL	||
+				_map->GetChipType(LeftViewPos) == CHIP_CLIMB_WALL	||
+				_map->GetChipType(LeftViewPos) == CHIP_N_CLIMB_WALL ||
 				(_hit.GimmickHit(nextLeftPos) && _hit.GimmickHitType(nextLeftPos) == GIM_ATTRACT)) {	//左が壁であれば
 				moveFlag = true;	//向きを反転させる	
 			}
@@ -218,6 +225,8 @@ void EmAround::CheckMove()
 		else {		//右側に動いているとき
 			if (_map->GetChipType(nextRightPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL	 ||
+				_map->GetChipType(RightViewPos) == CHIP_CLIMB_WALL	 ||
+				_map->GetChipType(RightViewPos) == CHIP_N_CLIMB_WALL ||
 				(_hit.GimmickHit(nextRightPos) && _hit.GimmickHitType(nextRightPos) == GIM_ATTRACT)) {	//右が壁であれば												
 				moveFlag = true;	//向きを反転させる
 			}
