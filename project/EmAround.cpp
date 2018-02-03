@@ -127,7 +127,15 @@ void EmAround::BasicMove()
 	//	//lookBackFlag = !lookBackFlag;
 	//	moveFlag = true;
 	//}
-	speed = 1;
+
+	//if (_state == EM_ST_MOVE) {
+	//	speed = 1;
+	//}
+	//else if (_state == EM_ST_RETURN) {
+	//	speed = 2;
+	//}
+	//else { speed = 1; }
+	speed = midFlag ? 2 : 1;
 	if (_dir == DIR_RIGHT) {		//‰E
 		_pos.x += speed;
 	}
@@ -163,7 +171,7 @@ void EmAround::InterMove()
 void EmAround::FoundMove()
 {
 	//Œ»’iŠK‚Å‚ÍŽ‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯’Ç‚¢‚©‚¯‚é
-	speed = 2;
+	speed = midFlag ? 3 : 2;
 	//ÌßÚ²Ô°‚Ì‚Ù‚¤‚ª‰E‚É‚¢‚½‚ç
 	if (_pl.GetPos().x >= _pos.x) {
 		vx += speed;
