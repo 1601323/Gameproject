@@ -71,7 +71,7 @@ void EnemyServer::AlertManager()
 {
 	if (vigiCnt > 0) {
 		decreaseCnt++;
-		if (decreaseCnt > 300) {
+		if (decreaseCnt > 180) {
 			vigiCnt -= 1;
 			decreaseCnt = 0;
 		}

@@ -403,32 +403,60 @@ void EmAround::SetRange()
 {
 	//ÉTÉCÉYÇÕâº
 	_individualData._level = _server.AlertLevel();
-	if (_individualData._level == ALERT_LEVEL_1) {
-		_rangeLevel = RANGE_1;
-		if (_state == EM_ST_DIS)
-		{
+	if (midFlag == false) {
+		if (_individualData._level == ALERT_LEVEL_1) {
+			_rangeLevel = RANGE_1;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_2;
+			}
+		}
+		else if (_individualData._level == ALERT_LEVEL_2) {
 			_rangeLevel = RANGE_2;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_3;
+			}
 		}
-	}
-	else if (_individualData._level == ALERT_LEVEL_2) {
-		_rangeLevel = RANGE_2;
-		if (_state == EM_ST_DIS)
-		{
+		else if (_individualData._level == ALERT_LEVEL_3) {
 			_rangeLevel = RANGE_3;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_4;
+			}
 		}
-	}
-	else if (_individualData._level == ALERT_LEVEL_3) {
-		_rangeLevel = RANGE_3;
-		if (_state == EM_ST_DIS)
-		{
-			_rangeLevel = RANGE_4;
+		else {
+			_emEye.r = 60;
+			_rangeLevel = RANGE_1;
 		}
 	}
 	else {
-		_emEye.r = 60;
-		_rangeLevel = RANGE_1;
+		if (_individualData._level == ALERT_LEVEL_1) {
+			_rangeLevel = RANGE_2;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_3;
+			}
+		}
+		else if (_individualData._level == ALERT_LEVEL_2) {
+			_rangeLevel = RANGE_3;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_4;
+			}
+		}
+		else if (_individualData._level == ALERT_LEVEL_3) {
+			_rangeLevel = RANGE_4;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_5;
+			}
+		}
+		else {
+			_emEye.r = 80;
+			_rangeLevel = RANGE_2;
+		}
 	}
-	
 	switch (_rangeLevel) {
 	case RANGE_1:
 		_emEye.r = 60;
@@ -465,7 +493,11 @@ ENEMY_STATE& EmAround::GetState()
 void EmAround::SetInitPos()
 {
 	_pos = _initPos;
+	_state = EM_ST_MOVE;
+	loseSightCnt = 180;
+
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
+	_rangeLevel = RANGE_1;
 }
