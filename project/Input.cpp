@@ -189,7 +189,7 @@ void Input::InputSet()
 
 		inpInfo[0].key.keybit.L_DOWN_BUTTON = KeyData[KEY_INPUT_S];                       // S â∫
 		inpInfo[0].key.keybit.L_RIGHT_BUTTON = KeyData[KEY_INPUT_D];                      // D âE
-		inpInfo[0].key.keybit.L_LEFT_BUTTON = KeyData[KEY_INPUT_RSHIFT];                       // A ç∂
+		inpInfo[0].key.keybit.L_LEFT_BUTTON = KeyData[KEY_INPUT_LSHIFT];                  // A ç∂
 		inpInfo[0].key.keybit.L_UP_BUTTON = KeyData[KEY_INPUT_W];                         // W è„
 		inpInfo[0].num = joypadCnt;
 	}

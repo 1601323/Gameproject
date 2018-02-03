@@ -39,7 +39,7 @@ Midpoint::Midpoint()
 	//モデル読み込み
 	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/金庫/中型金庫75.pmd", SCENE_RESULT);
 	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/鍵/鍵2-10.pmx", SCENE_RESULT);
-	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ/丸底フラスコ.pmx", SCENE_RESULT);
+	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ（改）/フラスコ.pmx", SCENE_RESULT);
 }
 void Midpoint::GetClass(Player* p)
 {
@@ -210,7 +210,7 @@ void Midpoint::Draw(Position2 offset)
 		}
 		MV1SetOpacityRate(Targethandle, alfa / 255.f);
 		//モデルを描画
-		_modelmgr->Draw(Targethandle, 0.1f);
+		_modelmgr->Draw(Targethandle, 0.0f);
 	}
 	if (uiFlag == true) {
 	//	DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"＼B!!／",0x00ff00);

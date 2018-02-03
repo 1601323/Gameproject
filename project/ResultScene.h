@@ -36,9 +36,8 @@ private:
 
 	ModelMgr* _modelmgr;
 	int playerModelHandle;
-	int smileTexture;
-	int sadTexture;
-	int textureIndex[2];
+	int textureIndex;
+	int dirMoveCnt;
 	int medicineHandle;
 
 	float AnimTotalTimeH;           //アニメーション総時間 HはhappyのH
