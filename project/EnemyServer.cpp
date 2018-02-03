@@ -82,7 +82,7 @@ void EnemyServer::GetInfo(EnemyServerData inData)
 {
 	//ÌßÚ²Ô°”­Œ©î•ñ‚ªã‚ª‚Á‚Ä‚«‚½‚çƒŒƒxƒ‹‚ğã‚°‚é
 	if (inData.plFoundFlag == true) {
-		vigiCnt += 10;
+		vigiCnt +=20;
 		SetAlert();
 		inData.dataSendFlag = false;
 	}

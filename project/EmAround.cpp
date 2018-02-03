@@ -186,10 +186,12 @@ void EmAround::CheckMove()
 	moveFlag = false;
 	//左右の移動を判定する
 	Position2 nextLeftPos;		//自身の左側を判定する
-	nextLeftPos.x = _pos.x - speed;
+//	nextLeftPos.x = _pos.x - speed;
+	nextLeftPos.x = _pos.x - speed - (_emEye.r / 2);
 	nextLeftPos.y = _pos.y + (_emRect.h / 2);
 	Position2 nextRightPos;
-	nextRightPos.x = _pos.x + (_emRect.w) + speed;
+//	nextRightPos.x = _pos.x + (_emRect.w) + speed;
+	nextRightPos.x = _pos.x + (_emRect.w) + speed + (_emEye.r/2);
 	nextRightPos.y = _pos.y + (_emRect.h/2);
 	//左右地面の判定を行う
 	Position2 nextLeftDown;

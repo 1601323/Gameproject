@@ -34,7 +34,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	upAngle = 120;
 	downAngle = 60;
 	returnFlag = false;
-	emSpeed = 1;
+	emSpeed = 2;
 	LookCount = 0;
 	FearCount = 180;
 	loseSightCnt = 180;
@@ -152,7 +152,7 @@ void EmLookback::SetMove()
 			midFlag = true;
 		}
 	}	
-	emSpeed = midFlag ? 2 : 1;
+	emSpeed = midFlag ? 3 : 2;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		setDir();
 	}
