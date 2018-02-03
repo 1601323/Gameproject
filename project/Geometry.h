@@ -131,6 +131,13 @@ enum PLAYER_ACTIONS{
 	ACTION_TONGUE_GO,  //舌を打った時のモーション
 	ACTION_MAX
 };
+//警戒度ランプの色について
+struct SetColor {
+	SetColor() :red(0), green(0), blue(0) {}
+	int red;
+	int green;
+	int blue;
+};
 
 struct EnemyServerData {
 
