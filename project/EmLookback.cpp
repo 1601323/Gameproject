@@ -34,10 +34,11 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	upAngle = 120;
 	downAngle = 60;
 	returnFlag = false;
-	emSpeed = 1;
+	emSpeed = 2;
 	LookCount = 0;
 	FearCount = 180;
 	loseSightCnt = 180;
+	midFlag = false;
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
@@ -144,7 +145,14 @@ void EmLookback::Draw(Position2 offset)
 }
 void EmLookback::SetMove()
 {
+	GameMain& gm = GameMain::Instance();
 	vx = 0;
+	if (midFlag == false) {
+		if (gm.GetResultData().midFlag == true) {
+			midFlag = true;
+		}
+	}	
+	emSpeed = midFlag ? 3 : 2;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		setDir();
 	}
@@ -385,30 +393,59 @@ void EmLookback::Gravity()
 void EmLookback::SetRange()
 {
 	_individualData._level = _server.AlertLevel();
-	if (_individualData._level == ALERT_LEVEL_1) {
-		_rangeLevel = RANGE_1;
-		if (_state == EM_ST_DIS)
-		{
+	if (midFlag == false) {
+		if (_individualData._level == ALERT_LEVEL_1) {
+			_rangeLevel = RANGE_1;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_2;
+			}
+		}
+		else if (_individualData._level == ALERT_LEVEL_2) {
 			_rangeLevel = RANGE_2;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_3;
+			}
 		}
-	}
-	else if (_individualData._level == ALERT_LEVEL_2) {
-		_rangeLevel = RANGE_2;
-		if (_state == EM_ST_DIS)
-		{
+		else if (_individualData._level == ALERT_LEVEL_3) {
 			_rangeLevel = RANGE_3;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_4;
+			}
 		}
-	}
-	else if (_individualData._level == ALERT_LEVEL_3) {
-		_rangeLevel = RANGE_3;
-		if (_state == EM_ST_DIS)
-		{
-			_rangeLevel = RANGE_4;
+		else {
+			_emEye.r = 60;
+			_rangeLevel = RANGE_1;
 		}
 	}
 	else {
-		_emEye.r = 60;
-		_rangeLevel = RANGE_1;
+		if (_individualData._level == ALERT_LEVEL_1) {
+			_rangeLevel = RANGE_2;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_3;
+			}
+		}
+		else if (_individualData._level == ALERT_LEVEL_2) {
+			_rangeLevel = RANGE_3;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_4;
+			}
+		}
+		else if (_individualData._level == ALERT_LEVEL_3) {
+			_rangeLevel = RANGE_4;
+			if (_state == EM_ST_DIS)
+			{
+				_rangeLevel = RANGE_5;
+			}
+		}
+		else {
+			_emEye.r = 80;
+			_rangeLevel = RANGE_2;
+		}
 	}
 
 	switch (_rangeLevel) {
@@ -454,8 +491,10 @@ void EmLookback::GetClass(HitClass * hit, Player & pl)
 void EmLookback::SetInitPos()
 {
 	_pos = _initPos;
+	_state = EM_ST_MOVE;
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
+	_rangeLevel = RANGE_1;
 	_individualData._level = ALERT_LEVEL_1;
 }
 //オフセットの為向いている方向を確認します

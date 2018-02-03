@@ -442,7 +442,6 @@ bool Player::moveWall(void)
 	//WallPosBottom[1].y = _wallRect.Bottom() -1;
 	for (int j = 0; j < 2; j++) {
 		//ｷｬﾗの半分以上,上はいけないようにする
-		cout << (_map->GetChipType(WallPosMiddl[j]) == CHIP_CLIMB_WALL) << endl;
 		if (_rope->GetRopeState() != ST_ROPE_READY) {
 			moveFlag = false;
 			break;
@@ -1008,7 +1007,7 @@ bool Player::stVanish(void)
 		deathFlag = false;
 	}
 #ifdef _DEBUG
-	DrawFormatString(0, 120, 0xffffff, "%d", vanCnt);
+	//DrawFormatString(0, 120, 0xffffff, "%d", vanCnt);
 #endif
 	return false;
 }
@@ -1018,7 +1017,6 @@ bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
 	if (keyData[KEY_INPUT_Z]) {
-		cout << _fd.feverCnt << endl;
 		if (_fd.feverCnt > 0) {
 
 			if (feverFlag == false) {
@@ -1056,7 +1054,7 @@ bool Player::stFever(void)
 	}
 
 #ifdef _DEBUG
-	DrawFormatString(600, 10, 0xffffff, "%d", feverTime);
+	//DrawFormatString(600, 10, 0xffffff, "%d", feverTime);
 #endif
 	return false;
 }
@@ -1395,10 +1393,10 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-		DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
+	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
 		//_plRect.Draw(offset);
-		_wallRect.Draw(offset,0xffffff);
+	//	_wallRect.Draw(offset,0xffffff);
 
 	//#endif
 }
@@ -1447,7 +1445,7 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		if (_key.keybit.B_BUTTON &&! _lastKey.keybit.B_BUTTON) {
+		if (GameMain::Instance().GetResultData().midFlag == true) {
 			return true;
 		}
 	}

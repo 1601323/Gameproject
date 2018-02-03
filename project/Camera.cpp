@@ -10,9 +10,9 @@
 #define CAMERA_RIGHT_POS	  ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - SCREEN_SIZE_X)
 #define CAMERA_UP_POS (0)
 #define CAMERA_DOWN_POS		  ((MAP_CHIP_SIZE_Y * MAP_SIZE_Y) - SCREEN_SIZE_Y)
-#define CAMERA_MOVE_POS_X		   (MAP_CHIP_SIZE_X * 6)
+#define CAMERA_MOVE_POS_X		   (MAP_CHIP_SIZE_X * 10)
 #define CAMERA_MOVE_POS_Y		(MAP_CHIP_SIZE_Y *6)
-#define CAMERA_MOVE_LIMIT_POS_X ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - (SCREEN_SIZE_X - (MAP_CHIP_SIZE_X * 6)))
+#define CAMERA_MOVE_LIMIT_POS_X ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - (SCREEN_SIZE_X - (MAP_CHIP_SIZE_X * 10)))
 #define CAMERA_MOVE_LIMIT_POS_Y ((MAP_CHIP_SIZE_Y * MAP_SIZE_Y) - (SCREEN_SIZE_Y - (MAP_CHIP_SIZE_Y * 6)))
 
 Camera* Camera::cam_ptr = nullptr;
@@ -23,7 +23,7 @@ Camera::Camera()
 	_player = nullptr;
 	_mapCtl = nullptr;
 	this->SetGameScrSize({ SCREEN_SIZE_X,SCREEN_SIZE_Y });
-	this->SetCamAreaOffset({ MAP_CHIP_SIZE_X * 6,MAP_CHIP_SIZE_Y * 6 });
+	this->SetCamAreaOffset({ MAP_CHIP_SIZE_X * 10,MAP_CHIP_SIZE_Y * 6 });
 }
 
 // ÃÞ½Ä×¸À
