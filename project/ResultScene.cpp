@@ -24,6 +24,7 @@ ResultScene::ResultScene()
 	selectFlag = false;
 	nowNum = 0;
 	dirMoveCnt = 0;
+	AnnouncCnt = 0;
 	LogoDownCounter = -100;
 	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
@@ -218,13 +219,20 @@ void ResultScene::Select(Input*  input)
 }
 void ResultScene::Draw()
 {
-	dirMoveCnt++;
 	ImageMgr& im = ImageMgr::Instance();
+	dirMoveCnt++;
+	LogoDownCounter += 3;
+
+	//AnnouncCnt++;
+	//if (AnnouncCnt > 60 * 3)//3秒で結果を出す
+	//{
+	//	AnnouncCnt = 0;
+	//}
+
+	//クリアしたら
 	if (clearFlag == true) {
 		//背景
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/Clear/Clear.png", SCENE_TITLE), true);
-
-		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 
 		//プレイヤー happy
 		//アニメーションのフレームを進める
@@ -235,11 +243,11 @@ void ResultScene::Draw()
 			AnimNowTimeH = 0;
 		}
 		//モデルの回転角度の設定(ラジアン)
-		MV1SetRotationXYZ(playerModelWithFlask, VGet(0.f, AngleRad(45.f), 0.f));
+		MV1SetRotationXYZ(playerModelWithFlask, VGet(0.f,0.f, 0.f));
 		//アニメーションをアタッチ
 		MV1SetAttachAnimTime(playerModelWithFlask, AnimIndexH, AnimNowTimeH);
 		//モデルのposを設定+ワールド座標からスクリーンへ変換
-		MV1SetPosition(playerModelWithFlask, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
+		MV1SetPosition(playerModelWithFlask, ConvWorldPosToScreenPos(VGet(200.f, 600, 0.f)));
 		//モデルの拡大縮小値の設定
 		MV1SetScale(playerModelWithFlask, VGet(4.0f, 4.0f, 4.0f));
 		//顔のテクスチャを笑顔の方に変更
@@ -247,15 +255,11 @@ void ResultScene::Draw()
 		//モデルを輪郭線0.0fで描画 
 		_modelmgr->Draw(playerModelWithFlask, 0.0f);
 
+		//clear文字
+		DrawGameClearLogo();
 		//スコアタイムの画像読み込みと表示
-		numberImage = im.ImageIdReturn("仮image/UI/NewNum.png", SCENE_RESULT);
-		second = _rtData.goalTime % 10;
-		tenex = (_rtData.goalTime / 10) % 10;
-		hunex = _rtData.goalTime / 100;
-
-		DrawRectExtendGraph(400, 150, 400 + (NUM_X / 2), 200 + (NUM_Y / 2), NUM_X * second, 0, NUM_X, NUM_Y, numberImage, true);
-		DrawRectExtendGraph(400 - (NUM_X / 2) * 1, 150, 400 + (NUM_X / 2) - (NUM_X / 2), 200 + (NUM_Y / 2), NUM_X * tenex, 0, NUM_X, NUM_Y, numberImage, true);
-		DrawRectExtendGraph(400 - (NUM_X / 2) * 2, 150, 400 + (NUM_X / 2) - (NUM_X / 2) * 2, 200 + (NUM_Y / 2), NUM_X * hunex, 0, NUM_X, NUM_Y, numberImage, true);
+		DrawGoalTimer();
+		
 	}
 	else if (clearFlag == false) {
 		//背景
@@ -275,7 +279,7 @@ void ResultScene::Draw()
 		_modelmgr->Draw(playerModelHandle, 0.0f);
 
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/Fence.png", SCENE_TITLE), true);
-
+		//gameover文字
 		DrawGameOverLogo();
 	}
 
@@ -315,8 +319,6 @@ void ResultScene::DrawGameOverLogo(void)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
-	LogoDownCounter+= 3;
-
 	//Gの文字
 	DrawGraph(10, min(LogoDownCounter,100), im.ImageIdReturn("仮image/Over/OVER/G.png", SCENE_TITLE), true);
 	//Aの文字
@@ -333,4 +335,38 @@ void ResultScene::DrawGameOverLogo(void)
 	DrawGraph(610, min(LogoDownCounter - (DELAY_TIMER * 6), 100), im.ImageIdReturn("仮image/Over/OVER/E.png", SCENE_TITLE), true);
 	//Rの文字
 	DrawGraph(710, min(LogoDownCounter - (DELAY_TIMER * 7), 100), im.ImageIdReturn("仮image/Over/OVER/R.png", SCENE_TITLE), true);
+}
+
+void ResultScene::DrawGameClearLogo(void)
+{
+	ImageMgr& im = ImageMgr::Instance();
+
+	//Cの文字
+	DrawGraph(100, min(LogoDownCounter, 120), im.ImageIdReturn("仮image/Clear/CLEAR/C.png", SCENE_TITLE), true);
+	//Lの文字
+	DrawGraph(240, min(LogoDownCounter - (DELAY_TIMER * 2), 100), im.ImageIdReturn("仮image/Clear/CLEAR/L.png", SCENE_TITLE), true);
+	//Eの文字
+	DrawGraph(380, min(LogoDownCounter - (DELAY_TIMER * 3), 80), im.ImageIdReturn("仮image/Clear/CLEAR/E.png", SCENE_TITLE), true);
+	//Aの文字
+	DrawGraph(520, min(LogoDownCounter - (DELAY_TIMER * 4), 100), im.ImageIdReturn("仮image/Clear/CLEAR/A.png", SCENE_TITLE), true);
+	//Rの文字
+	DrawGraph(660, min(LogoDownCounter - (DELAY_TIMER * 5), 120), im.ImageIdReturn("仮image/Clear/CLEAR/R.png", SCENE_TITLE), true);
+}
+
+void ResultScene::DrawGoalTimer(void)
+{
+	ImageMgr& im = ImageMgr::Instance();
+	numberImage = im.ImageIdReturn("仮image/UI/NewNum.png", SCENE_TITLE);
+	//色変更
+	SetDrawBright(255, 212, 0);
+
+	second = _rtData.goalTime % 10;
+	tenex = (_rtData.goalTime / 10) % 10;
+	hunex = _rtData.goalTime / 100;
+	DrawRectExtendGraph(400, 250, 450 + (NUM_X / 2), 350 + (NUM_Y / 2), NUM_X * second, 0, NUM_X, NUM_Y, numberImage, true);
+	DrawRectExtendGraph(400 - (NUM_X / 2) * 2 - 20, 250, 450 + (NUM_X / 2) - (NUM_X / 2) * 2 - 20, 350 + (NUM_Y / 2), NUM_X * tenex, 0, NUM_X, NUM_Y, numberImage, true);
+	DrawRectExtendGraph(400 - (NUM_X / 2) * 4 - 40, 250, 450 + (NUM_X / 2) - (NUM_X / 2) * 4 - 40, 350 + (NUM_Y / 2), NUM_X * hunex, 0, NUM_X, NUM_Y, numberImage, true);
+
+	SetDrawBright(255, 255, 255);
+
 }

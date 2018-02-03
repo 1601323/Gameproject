@@ -39,7 +39,8 @@ private:
 	int playerModelWithFlask;
 	int textureIndex;
 	int textureIndexFlask;
-	int dirMoveCnt;
+	int dirMoveCnt;                 //矢印の移動カウント 
+	int AnnouncCnt;                 //タイム表示用のアナウンスカウント
 	int medicineHandle;
 	int LogoDownCounter;            //ゲームオーバーの文字が落ちてくるようのカウンター
 
@@ -58,6 +59,8 @@ private:
 	void Select(Input* input);
 	void Draw();
 	void DrawGameOverLogo(void);
+	void DrawGameClearLogo(void);
+	void DrawGoalTimer(void);
 public:
 	ResultScene();
 	~ResultScene();
