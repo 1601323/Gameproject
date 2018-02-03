@@ -12,6 +12,7 @@
 
 #define NUM_X (74)
 #define NUM_Y (100)
+#define DELAY_TIMER (50)//GAMEOVER文字が落ちてくる時間の感覚
 
 
 ResultScene::ResultScene()
@@ -23,6 +24,7 @@ ResultScene::ResultScene()
 	selectFlag = false;
 	nowNum = 0;
 	dirMoveCnt = 0;
+	LogoDownCounter = -100;
 	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
 	playerModelHandle = MV1LoadModel("player_model/player.pmx");
@@ -54,9 +56,15 @@ void ResultScene::NormalUpdata(Input* input)
 	}
 	else {
 		GameOver();
-		clearFlag = true;
+		clearFlag = false;
 	}
-	Select(input);
+
+	//ロゴがすべて落ちるまで処理しない
+	if (LogoDownCounter > 500)
+	{
+		Select(input);
+	}
+
 	Draw();
 #ifdef _DEBUG
 	//DrawString(10, 10, "リザルトに遷移してるよ！", 0xffffff);
@@ -64,14 +72,17 @@ void ResultScene::NormalUpdata(Input* input)
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (nowNum == JUMP_SELECT) {
 			dirMoveCnt = 0;
+			LogoDownCounter = -100;
 			gm.Instance().ChangeScene(new SelectScene());
 		}
 		else if (nowNum == JUMP_TITLE) {
 			dirMoveCnt = 0;
+			LogoDownCounter = -100;
 			gm.Instance().ChangeScene(new TitleScene());
 		}
 		else if (nowNum == JUMP_RETRY) {
 			dirMoveCnt = 0;
+			LogoDownCounter = -100;
 			gm.Instance().ChangeScene(new GameScene());
 		}
 		else {
@@ -241,16 +252,10 @@ void ResultScene::Draw()
 		DrawRectExtendGraph(400, 150, 400 + (NUM_X / 2), 200 + (NUM_Y / 2), NUM_X * second, 0, NUM_X, NUM_Y, numberImage, true);
 		DrawRectExtendGraph(400 - (NUM_X / 2) * 1, 150, 400 + (NUM_X / 2) - (NUM_X / 2), 200 + (NUM_Y / 2), NUM_X * tenex, 0, NUM_X, NUM_Y, numberImage, true);
 		DrawRectExtendGraph(400 - (NUM_X / 2) * 2, 150, 400 + (NUM_X / 2) - (NUM_X / 2) * 2, 200 + (NUM_Y / 2), NUM_X * hunex, 0, NUM_X, NUM_Y, numberImage, true);
-
-		//セレクト画像
-		DrawGraph(500, 510, im.ImageIdReturn("仮image/Bar_Menu/Select.png", SCENE_TITLE), true);
-		DrawGraph(500, 430, im.ImageIdReturn("仮image/Bar_Menu/Title.png", SCENE_TITLE), true);
-
 	}
 	else if (clearFlag == false) {
 		//背景
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/GameOver.png", SCENE_TITLE), true);
-
 		//プレイヤー
 		AnimNowTimeS += 0.5f;
 		if (AnimNowTimeS >= AnimTotalTimeS)
@@ -267,15 +272,18 @@ void ResultScene::Draw()
 
 		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/Fence.png", SCENE_TITLE), true);
 
-		//セレクト画像
-		DrawGraph(500, 510, im.ImageIdReturn("仮image/Bar_Menu/Select.png", SCENE_TITLE), true);
-		DrawGraph(500, 430, im.ImageIdReturn("仮image/Bar_Menu/Title.png", SCENE_TITLE), true);
-		DrawGraph(510, 350, im.ImageIdReturn("仮image/Bar_Menu/Retry.png", SCENE_TITLE), true);
-
+		DrawGameOverLogo();
 	}
 
-	//矢印をnowNumの値に応じて描画
-	DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
+	//ロゴがすべて落ちるまで処理しない
+	if (LogoDownCounter > 500)
+	{
+		//セレクト画像と矢印をnowNumの値に応じて描画
+		DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
+		DrawGraph(500, 510, im.ImageIdReturn("仮image/Bar_Menu/Select.png", SCENE_TITLE), true);
+		DrawGraph(500, 430, im.ImageIdReturn("仮image/Bar_Menu/Title.png", SCENE_TITLE), true);
+		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("仮image/Bar_Menu/Retry.png", SCENE_TITLE), true);
+	}
 	switch (nowNum) {
 	case 0:
 		dirNumY = clearFlag ? 430 : 350;
@@ -297,4 +305,28 @@ SCENE_TYPE ResultScene::GetScene()
 void ResultScene::Updata(Input* input)
 {
 	(this->*_updater)(input);
+}
+
+void ResultScene::DrawGameOverLogo(void)
+{
+	ImageMgr& im = ImageMgr::Instance();
+
+	LogoDownCounter+= 3;
+
+	//Gの文字
+	DrawGraph(10, min(LogoDownCounter,100), im.ImageIdReturn("仮image/Over/OVER/G.png", SCENE_TITLE), true);
+	//Aの文字
+	DrawGraph(110, min(LogoDownCounter - (DELAY_TIMER), 100), im.ImageIdReturn("仮image/Over/OVER/A.png", SCENE_TITLE), true);
+	//Mの文字
+	DrawGraph(210, min(LogoDownCounter - (DELAY_TIMER * 2), 100), im.ImageIdReturn("仮image/Over/OVER/M.png", SCENE_TITLE), true);
+	//Eの文字
+	DrawGraph(310, min(LogoDownCounter - (DELAY_TIMER * 3), 100), im.ImageIdReturn("仮image/Over/OVER/E.png", SCENE_TITLE), true);
+	//Oの文字
+	DrawGraph(410, min(LogoDownCounter - (DELAY_TIMER * 4), 100), im.ImageIdReturn("仮image/Over/OVER/O.png", SCENE_TITLE), true);
+	//Vの文字
+	DrawGraph(510, min(LogoDownCounter - (DELAY_TIMER * 5), 100), im.ImageIdReturn("仮image/Over/OVER/V.png", SCENE_TITLE), true);
+	//Eの文字
+	DrawGraph(610, min(LogoDownCounter - (DELAY_TIMER * 6), 100), im.ImageIdReturn("仮image/Over/OVER/E.png", SCENE_TITLE), true);
+	//Rの文字
+	DrawGraph(710, min(LogoDownCounter - (DELAY_TIMER * 7), 100), im.ImageIdReturn("仮image/Over/OVER/R.png", SCENE_TITLE), true);
 }

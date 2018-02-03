@@ -39,6 +39,7 @@ private:
 	int textureIndex;
 	int dirMoveCnt;
 	int medicineHandle;
+	int LogoDownCounter;            //ゲームオーバーの文字が落ちてくるようのカウンター
 
 	float AnimTotalTimeH;           //アニメーション総時間 HはhappyのH
 	float AnimNowTimeH;             //今のアニメーション時間 HはhappyのH
@@ -54,6 +55,7 @@ private:
 	void GameOver();
 	void Select(Input* input);
 	void Draw();
+	void DrawGameOverLogo(void);
 public:
 	ResultScene();
 	~ResultScene();
