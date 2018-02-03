@@ -1446,6 +1446,7 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
+		//if(CheckHitKey(KEY_INPUT_A))
 		if (GameMain::Instance().GetResultData().midFlag == true) {
 			return true;
 		}
