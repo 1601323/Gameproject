@@ -23,7 +23,7 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
 	//色違いテクスチャの読み込み
-	colorTexture = LoadGraph("floor_model/floor2.png");
+	colorTexture = LoadGraph("floor_model/floor5.png");
 	//テクスチャのindexを取得
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 }

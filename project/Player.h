@@ -49,6 +49,7 @@ private:
 	int modelhandle;                    //プレイヤーモデルハンドル
 	int alfa;                           //ステルス用アルファ
 	int tranceMax;                      //最大透過数
+	int textureIndex;                   //顔のテクスチャインデックス
 	int  AnimIndex[ACTION_MAX];         //アニメーション数
 	float AnimTotalTime[ACTION_MAX];    //各アニメーションのトータルタイム
 	float AnimNowTime[ACTION_MAX];      //各アニメーションの現在タイム
