@@ -28,15 +28,19 @@ ResultScene::ResultScene()
 	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
 	playerModelHandle = MV1LoadModel("player_model/player.pmx");
-	medicineHandle = MV1LoadModel("gimmick_model/フラスコ/丸底フラスコ.pmx");
-	//アニメーションをアタッチ+総時間の設定
-	AnimIndexH = MV1AttachAnim(playerModelHandle, ACTION_HAPPY, -1, false);
-	AnimTotalTimeH = MV1GetAttachAnimTotalTime(playerModelHandle, AnimIndexH);
+	//playerModelWithFlask = _modelmgr->ModelIdReturn("player clear _model/player clear.pmx", SCENE_TITLE);
+	playerModelWithFlask = MV1LoadModel("player clear _model/player clear.pmx");
 
+	//アニメーションをアタッチ+総時間の設定
+	//クリア時
+	AnimIndexH = MV1AttachAnim(playerModelWithFlask,0, -1, false);
+	AnimTotalTimeH = MV1GetAttachAnimTotalTime(playerModelWithFlask, AnimIndexH);
+	//ゲームオーバー時
 	AnimIndexS = MV1AttachAnim(playerModelHandle, ACTION_AOONI, -1, false);
 	AnimTotalTimeS = MV1GetAttachAnimTotalTime(playerModelHandle, AnimIndexS);
 	//顔のテクスチャのindexを取得
 	textureIndex = MV1GetMaterialDifMapTexture(playerModelHandle, 1);
+	textureIndexFlask = MV1GetMaterialDifMapTexture(playerModelWithFlask, 1);
 }
 
 ResultScene::~ResultScene()
@@ -218,8 +222,8 @@ void ResultScene::Draw()
 	ImageMgr& im = ImageMgr::Instance();
 	if (clearFlag == true) {
 		//背景
-		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result.png", SCENE_TITLE), true);
-		DrawGraph(0, 0, im.ImageIdReturn("仮image/result の仮です/Result2.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("仮image/Clear/Clear.png", SCENE_TITLE), true);
+
 		DrawGraph(150, 10, im.ImageIdReturn("仮image/UI/clear.png", SCENE_TITLE), true);
 
 		//プレイヤー happy
@@ -231,17 +235,17 @@ void ResultScene::Draw()
 			AnimNowTimeH = 0;
 		}
 		//モデルの回転角度の設定(ラジアン)
-		MV1SetRotationXYZ(playerModelHandle, VGet(0.f, AngleRad(45.f), 0.f));
+		MV1SetRotationXYZ(playerModelWithFlask, VGet(0.f, AngleRad(45.f), 0.f));
 		//アニメーションをアタッチ
-		MV1SetAttachAnimTime(playerModelHandle, AnimIndexH, AnimNowTimeH);
+		MV1SetAttachAnimTime(playerModelWithFlask, AnimIndexH, AnimNowTimeH);
 		//モデルのposを設定+ワールド座標からスクリーンへ変換
-		MV1SetPosition(playerModelHandle, ConvWorldPosToScreenPos(VGet(600.f, 600, 0.f)));
+		MV1SetPosition(playerModelWithFlask, ConvWorldPosToScreenPos(VGet(100.f, 600, 0.f)));
 		//モデルの拡大縮小値の設定
-		MV1SetScale(playerModelHandle, VGet(4.0f, 4.0f, 4.0f));
+		MV1SetScale(playerModelWithFlask, VGet(4.0f, 4.0f, 4.0f));
 		//顔のテクスチャを笑顔の方に変更
-		MV1SetTextureGraphHandle(playerModelHandle, textureIndex, im.ImageIdReturn("player_model/face2.png", SCENE_TITLE), FALSE);
+		MV1SetTextureGraphHandle(playerModelWithFlask, textureIndexFlask, im.ImageIdReturn("player_model/face2.png", SCENE_TITLE), FALSE);
 		//モデルを輪郭線0.0fで描画 
-		_modelmgr->Draw(playerModelHandle, 0.0f);
+		_modelmgr->Draw(playerModelWithFlask, 0.0f);
 
 		//スコアタイムの画像読み込みと表示
 		numberImage = im.ImageIdReturn("仮image/UI/NewNum.png", SCENE_RESULT);

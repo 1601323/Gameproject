@@ -36,7 +36,9 @@ private:
 
 	ModelMgr* _modelmgr;
 	int playerModelHandle;
+	int playerModelWithFlask;
 	int textureIndex;
+	int textureIndexFlask;
 	int dirMoveCnt;
 	int medicineHandle;
 	int LogoDownCounter;            //ゲームオーバーの文字が落ちてくるようのカウンター
