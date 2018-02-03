@@ -22,7 +22,7 @@ EnemyServer::EnemyServer()
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
-	lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png",SCENE_RESULT);
+	//lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png",SCENE_RESULT);
 	lampColor.red = 0;
 	lampColor.green = 0;
 	lampColor.blue = 255;
@@ -38,7 +38,7 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
-	lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png",SCENE_RESULT);
+	//lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png",SCENE_RESULT);
 	cnt = 0;
 }
 
@@ -127,6 +127,10 @@ void EnemyServer::SetLampColor()
 		lampColor.blue = 255;
 	}
 }
+SetColor EnemyServer::ReturnColor()
+{
+	return lampColor;
+}
 void EnemyServer::Draw(Position2 offset) 
 {
 	ImageMgr& im = ImageMgr::Instance();
@@ -137,14 +141,14 @@ void EnemyServer::Draw(Position2 offset)
 //#endif
 	//場所は完全には決定していない
 
-	//色変化を実装
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
-	SetDrawBright(lampColor.red,lampColor.green,lampColor.blue);
-	DrawExtendGraph(700, 0,770,85, lightImage, true);
-	SetDrawBright(255,255,255);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	////色変化を実装
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
+	//SetDrawBright(lampColor.red,lampColor.green,lampColor.blue);
+	//DrawExtendGraph(700, 0,770,85, lightImage, true);
+	//SetDrawBright(255,255,255);
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	DrawExtendGraph(700,0,770,85,im.ImageIdReturn("仮image/UI/Patrite1.png",SCENE_RESULT),true);
+	//DrawExtendGraph(700,0,770,85,im.ImageIdReturn("仮image/UI/Patrite1.png",SCENE_RESULT),true);
 
 }
 //現在の警戒レベルを返す
