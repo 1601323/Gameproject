@@ -77,14 +77,12 @@ void Midpoint::GetPoint()
 	}
 	//–Ú“I•¨Žæ“¾ðŒ
 	if (checkpointFlag == true && _hit->IsHit(GetRect2(), _pl->GetRect())) {
-		if (GetFlag == false && checkpointFlag == true) {
-			uiFlag = true;
-		}
-		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			GetFlag = true;
-			uiFlag = false;
-			initPos = _midPos;
-		}
+		//if (GetFlag == false && checkpointFlag == true) {
+		//	uiFlag = true;
+		//}
+		GetFlag = true;
+		uiFlag = false;
+		initPos = _midPos;
 	}
 }
 void Midpoint::FollowDir()
