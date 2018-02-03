@@ -2,13 +2,7 @@
 #include "Geometry.h"
 class EnemyFactory;
 
-struct SetColor {
-	SetColor() :red(0), green(0), blue(0) {}
-	int red;
-	int green;
-	int blue;
-};
-
+//
 class EnemyServer
 {
 private:
@@ -16,7 +10,7 @@ private:
 	EnemyServerData _commonData;
 	int decreaseCnt;
 	void AlertManager();
-	int lightImage;
+	//int lightImage;
 	int cnt;			//‰¼
 	SetColor lampColor;
 
@@ -34,6 +28,7 @@ public:
 	void SetMidFlag(bool mid);
 	bool SendMidFlag();
 
+	SetColor ReturnColor();
 	void Draw(Position2 offset);
 };
 

@@ -150,6 +150,7 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Midpoint.cpp" />
     <ClCompile Include="ModelMgr.cpp" />
+    <ClCompile Include="MovieScene.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Midpoint.h" />
     <ClInclude Include="ModelMgr.h" />
+    <ClInclude Include="MovieScene.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResultScene.h" />

@@ -46,6 +46,7 @@ private:
 	int second;
 	int tenex;
 	int hunex;
+	int lightImage;
 
 	RESULT_DATA _rtData;
 	FEVER_DATA _feverData;
