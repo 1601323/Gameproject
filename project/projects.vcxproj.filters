@@ -147,6 +147,9 @@
     <ClCompile Include="ItFever.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="MovieScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assert.h">
@@ -255,6 +258,9 @@
       <Filter>ヘッダー ファイル\Item</Filter>
     </ClInclude>
     <ClInclude Include="ItFever.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MovieScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

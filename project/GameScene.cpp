@@ -105,7 +105,7 @@ GameScene::GameScene()
 	//GameInit();
 	count = 0;
 	//numberImage = im.ImageIdReturn("‰¼image/UI/NewNum.png",SCENE_RESULT);
-
+	lightImage = im.ImageIdReturn("‰¼image/UI/Patrite2.png", SCENE_RESULT);
 }
 GameScene::~GameScene()
 {
@@ -336,6 +336,16 @@ void GameScene::DrawUI()
 	for (int f = 0; f < gm.GetResultData().life; f++) {
 		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("‰¼image/UI/UI_life.png", SCENE_RESULT),true);
 	}
+	//êŠ‚ÍŠ®‘S‚É‚ÍŒˆ’è‚µ‚Ä‚¢‚È‚¢
+	//F•Ï‰»‚ðŽÀ‘•
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+	SetDrawBright(_server->ReturnColor().red, _server->ReturnColor().green, _server->ReturnColor().blue);
+	DrawExtendGraph(700, 0, 770, 85, lightImage, true);
+	SetDrawBright(255, 255, 255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	DrawExtendGraph(700, 0, 770, 85, im.ImageIdReturn("‰¼image/UI/Patrite1.png", SCENE_RESULT), true);
+
 	//_timer->Draw();
 }
 //”wŒi•`‰æ
