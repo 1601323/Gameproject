@@ -127,7 +127,7 @@ void GameScene::GameInit()
 	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/douga.map";
+		mapName = "map/Beginner.map";
 		break;
 	case 1:
 		mapName = "map/Production.map";
