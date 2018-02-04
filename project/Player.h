@@ -79,6 +79,7 @@ private:
 	bool moveWall(void);				//壁移動処理
 	bool moveRope(void);				//ﾛｰﾌﾟ状態
 	void moveFever();
+	void moveCrouch(Input* input);					//しゃがみ
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
 	bool plPlaceCheck();				//ﾌｨｰﾊﾞｰ終了時、ﾌﾟﾚｲﾔｰが壁の中にいないかチェックします
