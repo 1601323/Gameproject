@@ -56,6 +56,7 @@ public:
 	void Draw(void);			// 描画
 	void Draw(Position2 offset);
 	void Load(const char* fileName);		// 読み込み 
+	void ChangeStageTexture(unsigned int chipNum);//ステージによってチップのテクスチャを変える
 
 	int chipImage[8];
 	int chipModelHandle[3];

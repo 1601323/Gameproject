@@ -7,6 +7,8 @@
 #include "HitClass.h"
 #include "MapCtl.h"
 #include "ModelMgr.h"
+#include "ImageMgr.h"
+#include "Assert.h"
 
 GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 {
@@ -22,8 +24,6 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_gimType = GIM_ATTRACT;
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
-	//色違いテクスチャの読み込み
-	colorTexture = LoadGraph("floor_model/floor5.png");
 	//テクスチャのindexを取得
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 }
@@ -154,8 +154,8 @@ void GimPull::Draw(Position2 offset)
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_gmRect.w / 2),_pos.y - offset.y + (_gmRect.h ), 0)));
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(5.5f, 7.0f, 5.5f));
-	//テクスチャを変更
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, colorTexture, FALSE);
+	//ステージごとにテクスチャを変更
+	ChangeStageTexture();
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
@@ -189,4 +189,29 @@ Rect& GimPull::GetRect()
 GIMMICK_TYPE& GimPull::GetType()
 {
 	return _gimType;
+}
+
+void GimPull::ChangeStageTexture()
+{
+	ImageMgr& im = ImageMgr::Instance();
+	GameMain& gm = GameMain::Instance();
+
+	switch (gm.GetNowStage())
+	{
+		//初級
+	case 0:
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("floor_model/floor5.png", SCENE_TITLE), FALSE);
+		break;
+		//中級
+	case 1:
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("floor_model/floor6.png", SCENE_TITLE), FALSE);
+		break;
+		//上級
+	case 2:
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("floor_model/floor7.png", SCENE_TITLE), FALSE);
+		break;
+	default:
+		ASSERT();
+		break;
+	}
 }

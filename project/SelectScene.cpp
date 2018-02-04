@@ -23,7 +23,7 @@ SelectScene::SelectScene()
 	h = 60;
 	stageNum[0] = "仮image/ステージサムネイル/stage1.png";
 	stageNum[1] = "仮image/ステージサムネイル/stage2.png";
-	stageNum[2] = "仮image/stNum3.png";
+	stageNum[2] = "仮image/ステージサムネイル/stage3.png";
 	modelhandle = MV1LoadModel("player_model/player.pmx");
 	//アニメーションをアタッチ+総時間の設定
 	AnimIndex = MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
