@@ -14,7 +14,6 @@
 #define NUM_Y (100)
 #define DELAY_TIMER (50)//GAMEOVER文字が落ちてくる時間の感覚
 
-
 ResultScene::ResultScene()
 {
 	_updater = &ResultScene::NormalUpdata;
@@ -287,7 +286,7 @@ void ResultScene::Draw()
 	if (LogoDownCounter > 500)
 	{
 		//セレクト画像と矢印をnowNumの値に応じて描画
-		DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("仮image/UI/dirset1.png", SCENE_TITLE), true);
+		DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("仮image/yazirushi.png", SCENE_TITLE), true);
 		DrawGraph(500, 510, im.ImageIdReturn("仮image/Bar_Menu/Select.png", SCENE_TITLE), true);
 		DrawGraph(500, 430, im.ImageIdReturn("仮image/Bar_Menu/Title.png", SCENE_TITLE), true);
 		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("仮image/Bar_Menu/Retry.png", SCENE_TITLE), true);
