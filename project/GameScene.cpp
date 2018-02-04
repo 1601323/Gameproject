@@ -6,9 +6,9 @@
 #include <map>
 #include <vector>
 #include "Geometry.h"
+#include "Object.h"
 #include "Assert.h"
 #include "ImageMgr.h"
-#include "GameScene.h"
 #include "GameMain.h"
 #include "Input.h"
 #include "Gimmick.h"
@@ -16,7 +16,6 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Object.h"
 #include "Rope.h"
 
 #include "ResultScene.h"
@@ -32,6 +31,7 @@
 
 #include "TimeManager.h"
 
+#include "GameScene.h"
 
 GameScene::GameScene()
 {
@@ -56,8 +56,8 @@ GameScene::GameScene()
 	//_fac = new GimmickFactory(player,rope);
 	_fac = new GimmickFactory(*_player, *_rope);
 	//// ﾀｰｹﾞｯﾄ指定
-	_cam->SetTarget(_player);	// player基準
-	_cam->SetMapCtl(_map);		//Obj継承するならAddで
+	//_cam->SetTarget(_player);	// player基準
+	//_cam->SetMapCtl(_map);		//Obj継承するならAddで
 	//ギミック呼び出し用の関数です。
 	//このように宣言するとどこでも設置できるので確認等につかってください
 	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ロープで移動するもの（落ちたりするやつ）
@@ -103,6 +103,9 @@ GameScene::GameScene()
 	_mid->GetClass(_player);
 	_timer->StartTimer();
 	//GameInit();
+	_cam->SetTarget(_player);	// player基準
+	_cam->SetMapCtl(_map);		//Obj継承するならAddで
+
 	count = 0;
 	//numberImage = im.ImageIdReturn("仮image/UI/NewNum.png",SCENE_RESULT);
 	lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png", SCENE_RESULT);
@@ -127,13 +130,13 @@ void GameScene::GameInit()
 	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/Beginner.map";
+		mapName = "map/easy.map";
 		break;
 	case 1:
 		mapName = "map/Intermediate.map";
 		break;
 	case 2:
-		mapName = "map/na.map";
+		mapName = "map/hard.map";
 		break;
 	default:
 		ASSERT();
@@ -279,7 +282,7 @@ void GameScene::TransitionUpdata(Input* input)
 void GameScene::PauseUpdata(Input* input) 
 {
 	GameMain& gm = GameMain::Instance();
-	//_cam->Update();
+	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	DrawBack(offset);
 	_map->Draw(offset);
