@@ -7,13 +7,14 @@
 #include "Rope.h"
 #include "Player.h"
 #include "MapCtl.h"
-
+#include "ModelMgr.h"
 
 
 GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 {
 	_hit = new HitClass();
 	_map = MapCtl::GetInstance();
+	_modelmgr = ModelMgr::Instance();
 	_state = GM_NONE;
 	gravity = 0.9;
 	velocity = 0;
@@ -27,6 +28,8 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 	_fd.feverTime = 0;
 
 	_gimType = GIM_FALL;
+	//モデル読み込み
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/食パン/パン一枚.pmd", SCENE_RESULT);
 }
 
 
@@ -283,9 +286,17 @@ void GimDrop::GetItem()
 //描画
 void GimDrop::Draw(Position2 offset) 
 {
+	//モデルの回転角度の設定(ラジアン)
+	MV1SetRotationXYZ(modelhandle, VGet(AngleRad(90.0f), 0.0f, 0.0f));
+	//モデルのposを設定+ワールド座標からスクリーンへ変換
+	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x, _pos.y - offset.y, 0)));
+	//モデルの拡大縮小値の設定
+	MV1SetScale(modelhandle, VGet(15.0f, 15.0f, 15.0f));
+	//モデルを輪郭線0.0fで描画 
 	if (_state != GM_END && _state != GM_PAUSE) {
 		//そのものの描画
-		DrawCircle(_pos.x - offset.x,_pos.y -offset.y,10,GetColor(255,0,255),true);
+		//DrawCircle(_pos.x - offset.x,_pos.y -offset.y,10,GetColor(255,0,255),true);
+		_modelmgr->Draw(modelhandle, 0.0f);
 	}
 	else if (_state == GM_END) {
 		//割れたりしてる描画
@@ -293,6 +304,7 @@ void GimDrop::Draw(Position2 offset)
 		if (count >= 0) {
 			//DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "＼ガシャーン／", 0xffff00);
 		}
+		_modelmgr->Draw(modelhandle, 0.0f);
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
 	}
 	else if (_state == GM_PAUSE) {		//移動が一時停止しているとき（壁にぶつかったなど)

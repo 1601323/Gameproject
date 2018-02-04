@@ -1421,7 +1421,7 @@ void Player::Draw(Position2& offset)
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, WorldToScreenPos);
 	//モデルの拡大縮小値の設定
-	MV1SetScale(modelhandle, VGet(1.5f, 1.5f, 1.5f));
+	MV1SetScale(modelhandle, VGet(1.4f, 1.4f, 1.4f));
 	//モデルの透過率の設定
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 	//アニメーション切り替え
