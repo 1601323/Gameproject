@@ -118,7 +118,6 @@ void SelectScene::Draw()
 	//背景
 	DrawGraph(0, 0, im.ImageIdReturn("仮image/select.png",SCENE_GAME),true);
 
-
 	//ステージ選択用の四角
 	//for (int x = 0; x < 3; x++) {
 	//	DrawBox(90 + 100 * x, 90  , 90 + 100 * x + w, 90  + h, 0x223344, true);
