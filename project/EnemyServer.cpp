@@ -135,7 +135,7 @@ void EnemyServer::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 //#ifdef _DEBUG
-	DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
+	//DrawFormatString(300,100,0xffffff,"%d",vigiCnt);
 //	DrawBox(600, 30, 600 + vigiCnt, 60, 0xffff25, true);
 //	DrawBox(600,30,700,60,0xff00ff,false);
 //#endif

@@ -7,6 +7,7 @@
 #include "MapCtl.h"
 #include "ModelMgr.h"
 #include "ImageMgr.h"
+#include "Assert.h"
 
 MapCtl* MapCtl::ptr = nullptr;
 
@@ -144,13 +145,13 @@ unsigned int MapCtl::GetMapNum(Position2 idPos)
 void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
 	auto color = GetColor(0, 50, 50);
-	ImageMgr& im = ImageMgr::Instance();
-
 	//DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
 	MV1SetPosition(chipModelHandle[num], ConvWorldPosToScreenPos(VGet(x*32 - offset.x+15,y*32 - offset.y+15,0)));
 	MV1SetScale(chipModelHandle[num], VGet(3.18f, 3.18f,3.18f));
-	//テクスチャを変更
-	 if (num == 2) MV1SetTextureGraphHandle(chipModelHandle[num], textureIndex, im.ImageIdReturn("wall＿model/wall4.png", SCENE_TITLE), FALSE);
+
+	//ステージによってテクスチャを変更
+	ChangeStageTexture(num);
+
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(chipModelHandle[num],0.0f);
 }
@@ -197,4 +198,29 @@ std::vector<EnemyPosData> MapCtl::getEnemyData()
 		}
 	}
 	return enemyPosData;
+}
+
+void MapCtl::ChangeStageTexture(unsigned int chipNum)
+{
+	ImageMgr& im = ImageMgr::Instance();
+	GameMain& gm = GameMain::Instance();
+
+	switch (gm.GetNowStage()) 
+	{
+		//初級
+	case 0:
+		if (chipNum == 2) MV1SetTextureGraphHandle(chipModelHandle[chipNum], textureIndex, im.ImageIdReturn("wall＿model/wall4.png", SCENE_TITLE), FALSE);
+		break;
+		//中級
+	case 1:
+		if (chipNum == 2) MV1SetTextureGraphHandle(chipModelHandle[chipNum], textureIndex, im.ImageIdReturn("wall＿model/wall3.png", SCENE_TITLE), FALSE);
+		break;
+		//上級
+	case 2:
+		if (chipNum == 2) MV1SetTextureGraphHandle(chipModelHandle[chipNum], textureIndex, im.ImageIdReturn("wall＿model/wall5.png", SCENE_TITLE), FALSE);
+		break;
+	default:
+		ASSERT();
+		break;
+	}
 }

@@ -28,8 +28,8 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 	_fd.feverTime = 0;
 
 	_gimType = GIM_FALL;
-	//ƒ‚ƒfƒ‹“Ç‚İ‚İ
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/Hƒpƒ“/ƒpƒ“ˆê–‡.pmd", SCENE_RESULT);
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/é£Ÿãƒ‘ãƒ³/ãƒ‘ãƒ³ä¸€æš.pmd", SCENE_RESULT);
 }
 
 
@@ -69,23 +69,23 @@ void GimDrop::Updata(Input& _input)
 	//cout << _fd.feverCnt << endl;
 	//Draw();	
 }
-//_state‚Ì•ÏX‚É‚Â‚¢‚Ä
+//_stateã®å¤‰æ›´ã«ã¤ã„ã¦
 void GimDrop::CheckDoMove()
 {
-	//if (_state == GM_NONE ||_state== GM_PAUSE) {	//ó‘Ô‚ªˆê“x‚µ‚©Ø‚è‘Ö‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚é
-	if(_state != GM_HIT && _state != GM_MOVE){							//“®‚¢‚Ä‚¢‚é“r’†‚Å‚à“–‚Ä‚½‚ç•ûŒü“]Š·‚ª‚Å‚«‚é‚æ‚¤‚É‚È‚Á‚Ä‚Ü‚·
-		////ƒ[ƒv‚Æ‚Ì‚ ‚½‚è”»’è‚ğæ‚é
+	//if (_state == GM_NONE ||_state== GM_PAUSE) {	//çŠ¶æ…‹ãŒä¸€åº¦ã—ã‹åˆ‡ã‚Šæ›¿ã‚ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
+	if(_state != GM_HIT && _state != GM_MOVE){							//å‹•ã„ã¦ã„ã‚‹é€”ä¸­ã§ã‚‚å½“ã¦ãŸã‚‰æ–¹å‘è»¢æ›ãŒã§ãã‚‹ã‚ˆã†ã«ãªã£ã¦ã¾ã™
+		////ãƒ­ãƒ¼ãƒ—ã¨ã®ã‚ãŸã‚Šåˆ¤å®šã‚’å–ã‚‹
 		if (_rope.GetRopeState()== ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
-			//if (_rope.GetCircle().pos.x < _pos.x) {	//rope‚ÌÚ¸Ä‚ÌX‚ª•¨‘Ì‚ÌX‚æ‚è‘å‚«‚¢
-				_state = GM_HIT;		//¶‘¤‚É“®‚­
+			//if (_rope.GetCircle().pos.x < _pos.x) {	//ropeã®ï¾šï½¸ï¾„ã®XãŒç‰©ä½“ã®Xã‚ˆã‚Šå¤§ãã„
+				_state = GM_HIT;		//å·¦å´ã«å‹•ã
 			//}
 			//else {
-			//	_state = GM_MOVE;		//‰E‘¤‚É“®‚­
+			//	_state = GM_MOVE;		//å³å´ã«å‹•ã
 			//}
 		}	
-		//ƒfƒoƒbƒN—p@´İÀ°‚Åì“®iˆÚ“®—Ê‚ğİ’è‚µ‚È‚¢‚Æ“ª‚¨‚©‚µ‚¢‹““®‚ğ‚µ‚Ü‚·j
+		//ãƒ‡ãƒãƒƒã‚¯ç”¨ã€€ï½´ï¾ï¾€ï½°ã§ä½œå‹•ï¼ˆç§»å‹•é‡ã‚’è¨­å®šã—ãªã„ã¨é ­ãŠã‹ã—ã„æŒ™å‹•ã‚’ã—ã¾ã™ï¼‰
 		//if (_inpInfo.key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-		//	//“®‚«n‚ß‚é
+		//	//å‹•ãå§‹ã‚ã‚‹
 		//	_state = GM_HIT;
 		//}
 	}
@@ -94,7 +94,7 @@ void GimDrop::CheckDoMove()
 void GimDrop::MoveLeft()
 {
 
-	//Û°Ìß‚ÌˆÚ“®—Ê‚ğó‚¯æ‚é
+	//ï¾›ï½°ï¾Œï¾Ÿã®ç§»å‹•é‡ã‚’å—ã‘å–ã‚‹
 	_pos.x += _rope.GetRopeVec().x;
 	_pos.y -= _rope.GetRopeVec().y;
 
@@ -105,7 +105,7 @@ void GimDrop::MoveLeft()
 
 void GimDrop::MoveRight()
 {
-	//Û°Ìß‚ÌˆÚ“®—Ê‚ğó‚¯æ‚é
+	//ï¾›ï½°ï¾Œï¾Ÿã®ç§»å‹•é‡ã‚’å—ã‘å–ã‚‹
 	_pos.x += _rope.GetRopeVec().x;
 	_pos.y -= _rope.GetRopeVec().y;
 	if (_rope.GetRopeVec().x == 0) {
@@ -122,31 +122,32 @@ void GimDrop::GetItem()
 		}
 	}
 }
-//•`‰æ
+//æç”»
 void GimDrop::Draw(Position2 offset) 
 {
-	//ƒ‚ƒfƒ‹‚Ì‰ñ“]Šp“x‚Ìİ’è(ƒ‰ƒWƒAƒ“)
+	//ãƒ¢ãƒ‡ãƒ«ã®å›è»¢è§’åº¦ã®è¨­å®š(ãƒ©ã‚¸ã‚¢ãƒ³)
 	MV1SetRotationXYZ(modelhandle, VGet(AngleRad(90.0f), 0.0f, 0.0f));
-	//ƒ‚ƒfƒ‹‚Ìpos‚ğİ’è+ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“‚Ö•ÏŠ·
+	//ãƒ¢ãƒ‡ãƒ«ã®posã‚’è¨­å®š+ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã¸å¤‰æ›
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x, _pos.y - offset.y, 0)));
-	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚Ìİ’è
+	//ãƒ¢ãƒ‡ãƒ«ã®æ‹¡å¤§ç¸®å°å€¤ã®è¨­å®š
 	MV1SetScale(modelhandle, VGet(15.0f, 15.0f, 15.0f));
-	//ƒ‚ƒfƒ‹‚ğ—ÖŠsü0.0f‚Å•`‰æ 
 	if (_state != GM_END && _state != GM_PAUSE) {
-		//‚»‚Ì‚à‚Ì‚Ì•`‰æ
+		//ãã®ã‚‚ã®ã®æç”»
 		//DrawCircle(_pos.x - offset.x,_pos.y -offset.y,10,GetColor(255,0,255),true);
+
+		//ãƒ¢ãƒ‡ãƒ«ã‚’è¼ªéƒ­ç·š0.0fã§æç”» 
 		_modelmgr->Draw(modelhandle, 0.0f);
 	}
 	else if (_state == GM_END) {
-		//Š„‚ê‚½‚è‚µ‚Ä‚é•`‰æ
+		//å‰²ã‚ŒãŸã‚Šã—ã¦ã‚‹æç”»
 		count--;
 		if (count >= 0) {
-			//DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "_ƒKƒVƒƒ[ƒ“^", 0xffff00);
+			//DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "ï¼¼ã‚¬ã‚·ãƒ£ãƒ¼ãƒ³ï¼", 0xffff00);
 		}
 		//_modelmgr->Draw(modelhandle, 0.0f);
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
 	}
-	else if (_state == GM_PAUSE) {		//ˆÚ“®‚ªˆê’â~‚µ‚Ä‚¢‚é‚Æ‚«i•Ç‚É‚Ô‚Â‚©‚Á‚½‚È‚Ç)
+	else if (_state == GM_PAUSE) {		//ç§»å‹•ãŒä¸€æ™‚åœæ­¢ã—ã¦ã„ã‚‹ã¨ãï¼ˆå£ã«ã¶ã¤ã‹ã£ãŸãªã©)
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(0, 0, 255), true);
 		_modelmgr->Draw(modelhandle, 0.0f);
 	}
@@ -155,12 +156,12 @@ void GimDrop::Draw(Position2 offset)
 	_gmRect.Draw(offset);
 #endif
 }
-//‚ ‚½‚è”»’è—p
+//ã‚ãŸã‚Šåˆ¤å®šç”¨
 Rect& GimDrop::GetRect()
 {
 	return _gmRect;
 }
-//gimmick‚Ìí—Ş‚ğ•Ô‚·‚½‚ß‚ÌŠÖ”
+//gimmickã®ç¨®é¡ã‚’è¿”ã™ãŸã‚ã®é–¢æ•°
 GIMMICK_TYPE& GimDrop::GetType()
 {
 	return _gimType;
