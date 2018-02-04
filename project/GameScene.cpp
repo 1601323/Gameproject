@@ -127,13 +127,13 @@ void GameScene::GameInit()
 	_feverData = FEVER_DATA();
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/Beginner.map";
+		mapName = "map/easy.map";
 		break;
 	case 1:
 		mapName = "map/Intermediate.map";
 		break;
 	case 2:
-		mapName = "map/na.map";
+		mapName = "map/hard.map";
 		break;
 	default:
 		ASSERT();

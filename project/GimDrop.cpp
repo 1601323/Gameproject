@@ -292,10 +292,11 @@ void GimDrop::Draw(Position2 offset)
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x, _pos.y - offset.y, 0)));
 	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚Ìİ’è
 	MV1SetScale(modelhandle, VGet(15.0f, 15.0f, 15.0f));
-	//ƒ‚ƒfƒ‹‚ğ—ÖŠsü0.0f‚Å•`‰æ 
 	if (_state != GM_END && _state != GM_PAUSE) {
 		//‚»‚Ì‚à‚Ì‚Ì•`‰æ
 		//DrawCircle(_pos.x - offset.x,_pos.y -offset.y,10,GetColor(255,0,255),true);
+
+		//ƒ‚ƒfƒ‹‚ğ—ÖŠsü0.0f‚Å•`‰æ 
 		_modelmgr->Draw(modelhandle, 0.0f);
 	}
 	else if (_state == GM_END) {
@@ -304,7 +305,6 @@ void GimDrop::Draw(Position2 offset)
 		if (count >= 0) {
 			//DrawString(_pos.x - offset.x -70, _pos.y - offset.y -30, "_ƒKƒVƒƒ[ƒ“^", 0xffff00);
 		}
-		_modelmgr->Draw(modelhandle, 0.0f);
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
 	}
 	else if (_state == GM_PAUSE) {		//ˆÚ“®‚ªˆê’â~‚µ‚Ä‚¢‚é‚Æ‚«i•Ç‚É‚Ô‚Â‚©‚Á‚½‚È‚Ç)
