@@ -74,9 +74,9 @@ void Rope::RopeInit(void)
 	ImageMgr& im = ImageMgr::Instance();
 
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita.mv1", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita5.mv1", SCENE_RESULT);
 	//それぞれのアニメーションをアタッチ+総時間の設定
-	AnimAttachIndex = MV1AttachAnim(modelhandle,0,-1,false);
+	AnimAttachIndex = MV1AttachAnim(modelhandle,1,-1,false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
 	//0～19 の20
 	for (int j = 0; j < ROPE_LENGTH_MAX; j++)
@@ -84,7 +84,6 @@ void Rope::RopeInit(void)
 		ropeinfo.push_back(j);//先頭から入れる
 	}
 }
-
 //ロープ描画処理
 void Rope::DrawRopeRect(void)
 {
@@ -278,12 +277,13 @@ void Rope::Extending(Input* input)
 
 				//伸ばしている最中にギミックやステージにあたれば強制的に戻す(3つもあるよ)
 				if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle()) ||
-					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
-					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
-					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
-					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_CLIMB_WALL)
+					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
+					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
+					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
+					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_CLIMB_WALL)
 				{
 					_HitPos = _rope[*itr];
+					timerWait = 0;
 					itr = last;
 					_state = ST_ROPE_SHRINKING;
 					tongueHitTurn = true;
@@ -314,7 +314,7 @@ void Rope::Extended(Input* input)
 	if (_state == ST_ROPE_EXTENDED)
 	{
 		timerWait--;
-		_RopeCircle.Draw(_tmpOffset);
+		//_RopeCircle.Draw(_tmpOffset);
 		//当たったかどうかでアニメーションを進めるか戻す
 		ModelManager();
 
@@ -492,21 +492,21 @@ void Rope::SetRopeRadForDrawZ(void)
 	case ROPE_DIR_UPPER:
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
 		RopeHitModelNumY = dirFlag ? 35:25;
-		mentenanceNum_Y = -215 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -180 : 180;
+		mentenanceNum_Y = -58 + _RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -20 : 20;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
 		RopeHitModelNumY = 70;
-		mentenanceNum_Y =  94 + _RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -180 : 180;
+		mentenanceNum_Y =  -58 + _RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -20 : 20;
 		break;
 	case ROPE_DIR_NON:
 	case ROPE_DIR_STRAIGHT:
 		RopeAngle_Z = AngleRad(0.f);
 		RopeHitModelNumY = 55;
-		mentenanceNum_Y = -63 +_RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -235: 235;
+		mentenanceNum_Y = -60 +_RopeRect.h / 2;
+		mentenanceNum_X = dirFlag ? -10 : 10;
 		break;
 	default:
 		break;

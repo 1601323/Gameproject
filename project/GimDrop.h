@@ -6,6 +6,8 @@ class Input;
 class Rope;
 class player;
 class MapCtl;
+class ModelMgr;
+
 class GimDrop :
 	public Gimmick
 {
@@ -14,6 +16,7 @@ private:
 	Rope& _rope;
 	Player& _player;
 	MapCtl* _map;
+	ModelMgr* _modelmgr;
 	GimmickState _state;
 	Position2 _pos;
 	FEVER_DATA _fd;
@@ -26,6 +29,7 @@ private:
 	KEY _lastKey;
 	INPUT_INFO _inpInfo;
 	int count;		//•\¦•b”‚ğİ’è
+	int modelhandle;//ƒ‚ƒfƒ‹
 	void CheckDoMove();
 	void Draw(Position2 offset);
 	//Ú¸Ä‚Æ‚Ì”»’è‚ğŒ©‚Ä“®‚­•ûŒü‚ğŒˆ‚ß‚é
