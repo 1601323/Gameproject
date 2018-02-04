@@ -3,17 +3,15 @@
 #include "Object.h"
 #include "Input.h"
 
-#define ROPE_SPEED (6.5f)        //移動スピード
+#define ROPE_SPEED (5.5f)        //移動スピード
 #define ROPE_THETA (45.f)        //ロープの斜めの角度右向きver(circleのみ)
 #define ROPE_THETA2 (135.f)      //ロープの斜めの角度左向きver(circleのみ)
 #define STRAIGHT_RAD (180.f)     //直線時のRad
 #define ROPE_RANGE (2.f)         //circle用の半径
 #define ROPE_RECT_W (20)         //rect用の幅
 #define ROPE_RECT_H (20)         //rect用の高さ
-#define ROPE_OMEGA (1.0f)        //ここをいじることで1回で動くrect circleのposを変えれます
-#define ROPE_LENGTH_MAX (45)     //ロープの最大長 
-#define ROPE_MODEL_NUM (450)     //ロープのモデルの座標を調整するため値
-#define WAIT_TIMER (30)          //ロープ到達後の待ち時間
+#define ROPE_LENGTH_MAX (58)     //ロープの最大長 
+#define WAIT_TIMER (40)          //ロープ到達後の待ち時間
 
 class Input;
 class Player;
