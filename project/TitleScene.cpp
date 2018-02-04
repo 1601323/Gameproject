@@ -16,9 +16,9 @@ TitleScene::TitleScene()
 	_menu = GAME_START;
 	_minSensingValueL = SV_HIGH;
 	operateFlag = false;
-	_skyPos[0].x = -320;
+	_skyPos[0].x = -512;
 	_skyPos[0].y = 0;
-	_skyPos[1].x = 320;
+	_skyPos[1].x = 512;
 	_skyPos[1].y = 0;
 	skyImage = ImageMgr::Instance().ImageIdReturn("‰¼image/sky.png", SCENE_SELECT);
 	uiMovie = "movie/titleMovie.avi";
@@ -149,8 +149,8 @@ void  TitleScene::TitleMovie(Input* input)
 void TitleScene::scroll()
 {
 	for (int f = 0; f < 2; f++) {
-		if (_skyPos[f].x <= -640) {
-			_skyPos[f].x = 640;
+		if (_skyPos[f].x <= -1024) {
+			_skyPos[f].x = 1024;
 		}
 		_skyPos[f].x--;
 	}
