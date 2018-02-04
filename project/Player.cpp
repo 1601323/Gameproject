@@ -44,6 +44,7 @@ Player::Player()
 	deathFlag = true;
 	helpFever = false;
 	airFlag = false;
+	crouthFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -1018,22 +1019,14 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
-	if (_inpInfo.key.keybit.R_DOWN_BUTTON ||
-		(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN) &&
-		_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
+	if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
 		if (WallFlag == false && JumpFlag == false ) {
-			_state = ST_CROUCH;
+			crouthFlag =!crouthFlag;
+			_pos.y -= 18;
 		}
 	}
-	else if(!(_inpInfo.key.keybit.R_DOWN_BUTTON ||
-		(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN) &&
-		_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) &&
-		(_lastKey.keybit.R_DOWN_BUTTON ||
-		(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_DOWN) &&
-			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)){
-		_pos.y -= 18;
-	}
-	if (_state == ST_CROUCH) {
+
+	if (crouthFlag ==true) {
 		DrawString(100,100,"uwaaaaaaaaa",0xffffff);
 		//_pos.y = _pos.y + tmpPos;
 	}
@@ -1403,7 +1396,7 @@ void Player::Draw(Position2& offset)
 	default:
 		break;
 	}
-	if (_state != ST_CROUCH) {
+	if (crouthFlag == false) {
 		_plRect.w = 32;
 		_plRect.h = 50;
 

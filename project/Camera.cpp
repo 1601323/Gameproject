@@ -1,11 +1,13 @@
+#include "DxLib.h"
+#include <stdio.h>
 #include "Object.h"
 #include "Player.h"
 #include "Geometry.h"
 #include "Camera.h"
 #include "Rope.h"
-#include "DxLib.h"
 #include "MapCtl.h"
 
+using namespace std;
 #define CAMERA_LEFT_POS (0)
 #define CAMERA_RIGHT_POS	  ((MAP_CHIP_SIZE_X * MAP_SIZE_X) - SCREEN_SIZE_X)
 #define CAMERA_UP_POS (0)
