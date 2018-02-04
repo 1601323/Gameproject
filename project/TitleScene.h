@@ -32,6 +32,7 @@ private:
 
 	bool titleFlag;		//タイトル画面（Aを押してね）
 	bool selectFlag;	//メニューを表示　
+	int noInputTime;
 
 	int skyImage;
 	int dirMoveCnt;

@@ -7,6 +7,7 @@
 #include "TitleScene.h"
 #include "SelectScene.h"
 #include "GameScene.h"
+#include "MovieScene.h"
 #include "Geometry.h"
 #include "MapCtl.h"
 #include "Input.h"
