@@ -21,9 +21,9 @@ SelectScene::SelectScene()
 	selectFlag = false;
 	w = 90;
 	h = 60;
-	stageNum[0] = "仮image/ステージサムネイル/stage1.png";
-	stageNum[1] = "仮image/ステージサムネイル/stage2.png";
-	stageNum[2] = "仮image/ステージサムネイル/stage3.png";
+	stageNum[0] = "image/ステージサムネイル/stage1.png";
+	stageNum[1] = "image/ステージサムネイル/stage2.png";
+	stageNum[2] = "image/ステージサムネイル/stage3.png";
 	modelhandle = MV1LoadModel("player_model/player.pmx");
 	//アニメーションをアタッチ+総時間の設定
 	AnimIndex = MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
@@ -116,7 +116,7 @@ void SelectScene::Draw()
 
 	int redu = 40;
 	//背景
-	DrawGraph(0, 0, im.ImageIdReturn("仮image/select.png",SCENE_GAME),true);
+	DrawGraph(0, 0, im.ImageIdReturn("image/select.png",SCENE_GAME),true);
 
 	//ステージ選択用の四角
 	//for (int x = 0; x < 3; x++) {
@@ -125,16 +125,16 @@ void SelectScene::Draw()
 	for (int f = 0; f < STAGE_MAX; f++) {
 		if (f == nowNum) {	//選ばれていたら拡大表示
 			DrawExtendGraph(25 + 260 * f, 80, 250 + 260 * f, 40 + 260, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
-			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("仮image/stage.png", SCENE_GAME), true);
+			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
 		}
 		else
 		{
 			DrawExtendGraph(23 + 260 * f + redu, 72 + redu, 255 + 260 * f - redu, 45 + 260 - redu, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
-			DrawExtendGraph(10+ 260*f+redu, 60+redu ,10+260+ 260*f-redu,60+260 -redu,im.ImageIdReturn("仮image/stage.png", SCENE_GAME), true);
+			DrawExtendGraph(10+ 260*f+redu, 60+redu ,10+260+ 260*f-redu,60+260 -redu,im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
 		}
 	}
 
-	DrawExtendGraph(180, 450,750,620, im.ImageIdReturn("仮image/textbox.png",SCENE_GAME), true);
+	DrawExtendGraph(180, 450,750,620, im.ImageIdReturn("image/textbox.png",SCENE_GAME), true);
 
 	//アニメーションのフレームを進める
 	AnimNowTime += 0.5f;
@@ -158,13 +158,13 @@ void SelectScene::Draw()
 	switch (nowNum)
 	{
 	case 0:
-		DrawGraph(200, 480, im.ImageIdReturn("仮image/Select/Stage1.png", SCENE_GAME), true);
+		DrawGraph(200, 480, im.ImageIdReturn("image/Select/Stage1.png", SCENE_GAME), true);
 		break;
 	case 1:
-		DrawGraph(200, 480, im.ImageIdReturn("仮image/Select/Stage2.png", SCENE_GAME), true);
+		DrawGraph(200, 480, im.ImageIdReturn("image/Select/Stage2.png", SCENE_GAME), true);
 		break;
 	case 2:
-		DrawGraph(200, 480, im.ImageIdReturn("仮image/Select/Stage3.png", SCENE_GAME), true);
+		DrawGraph(200, 480, im.ImageIdReturn("image/Select/Stage3.png", SCENE_GAME), true);
 		break;
 	default:
 		break;

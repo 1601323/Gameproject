@@ -107,8 +107,8 @@ GameScene::GameScene()
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
 
 	count = 0;
-	//numberImage = im.ImageIdReturn("仮image/UI/NewNum.png",SCENE_RESULT);
-	lightImage = im.ImageIdReturn("仮image/UI/Patrite2.png", SCENE_RESULT);
+	//numberImage = im.ImageIdReturn("image/UI/NewNum.png",SCENE_RESULT);
+	lightImage = im.ImageIdReturn("image/UI/Patrite2.png", SCENE_RESULT);
 }
 GameScene::~GameScene()
 {
@@ -337,7 +337,7 @@ void GameScene::DrawUI()
 	GameMain& gm = GameMain::Instance();
 
 	for (int f = 0; f < gm.GetResultData().life; f++) {
-		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("仮image/UI/UI_life.png", SCENE_RESULT),true);
+		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("image/UI/UI_life.png", SCENE_RESULT),true);
 	}
 	//場所は完全には決定していない
 	//色変化を実装
@@ -347,7 +347,7 @@ void GameScene::DrawUI()
 	SetDrawBright(255, 255, 255);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	DrawExtendGraph(700, 0, 770, 85, im.ImageIdReturn("仮image/UI/Patrite1.png", SCENE_RESULT), true);
+	DrawExtendGraph(700, 0, 770, 85, im.ImageIdReturn("image/UI/Patrite1.png", SCENE_RESULT), true);
 
 	//_timer->Draw();
 }
@@ -356,13 +356,13 @@ void GameScene::DrawBack(Position2 offset)
 {
 	//まだ多重スクロールはしないです
 	ImageMgr& im = ImageMgr::Instance();
-	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("仮image/Game/title5.png",SCENE_RESULT),true);
-	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("仮image/Game/title5.png", SCENE_RESULT), true);
-	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("仮image/Game/j.bmp", SCENE_RESULT), true);
+	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("image/Game/title5.png",SCENE_RESULT),true);
+	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/title5.png", SCENE_RESULT), true);
+	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/j.bmp", SCENE_RESULT), true);
 
-	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back3.png", SCENE_RESULT), true);
-	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back2.png", SCENE_RESULT), true);
-	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back1.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back3.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back2.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back1.png", SCENE_RESULT), true);
 
 }
 //シーン遷移のために用意

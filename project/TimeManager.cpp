@@ -16,7 +16,7 @@ TimeManager::TimeManager()
 	timerFlag = false;
 	timerCnt = 0;
 	flameCnt = 0;
-	numberImage = im.ImageIdReturn("‰¼image/UI/NewNum.png", SCENE_RESULT);
+	numberImage = im.ImageIdReturn("image/UI/NewNum.png", SCENE_RESULT);
 	second = 0;
 	tenex = 0;
 	hunex = 0;

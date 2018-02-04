@@ -219,15 +219,15 @@ void Rope::SelectDir(Input* input)
 		//矢印表示
 		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
 			 _player->GetPos().y - _tmpOffset.y-5, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
-			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, false);
+			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
 		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
 			_player->GetPos().y - _tmpOffset.y-20, 1.0, AngleRad(0.0f),
-			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
+			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
 
 		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
 			_player->GetPos().y - _tmpOffset.y-35, 1.0, dirFlag ? AngleRad(-45.0f): AngleRad(-135.0f),
-			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, false);
+			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||

@@ -14,7 +14,7 @@ MapCtl* MapCtl::ptr = nullptr;
 // ｺﾝｽﾄﾗｸﾀ
 MapCtl::MapCtl()
 {
-	LoadDivGraph("仮image/マップチップ.png",8,8,1,32,32,chipImage);
+	LoadDivGraph("image/マップチップ.png",8,8,1,32,32,chipImage);
 	_modelmgr = ModelMgr::Instance();
 	//chipModelHandle[1] = _modelmgr->ModelIdReturn("wall＿model/wall.pmx", SCENE_RESULT);
 	//chipModelHandle[2] = _modelmgr->ModelIdReturn("wall＿model/wall2.pmx", SCENE_RESULT);
