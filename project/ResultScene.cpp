@@ -231,7 +231,7 @@ void ResultScene::Draw()
 	//クリアしたら
 	if (clearFlag == true) {
 		//背景
-		DrawGraph(0, 0, im.ImageIdReturn("仮image/Clear/Clear.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("image/Clear/Clear.png", SCENE_TITLE), true);
 
 		//プレイヤー happy
 		//アニメーションのフレームを進める
@@ -262,7 +262,7 @@ void ResultScene::Draw()
 	}
 	else if (clearFlag == false) {
 		//背景
-		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/GameOver.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("image/Over/GameOver.png", SCENE_TITLE), true);
 		//プレイヤー
 		AnimNowTimeS += 0.5f;
 		if (AnimNowTimeS >= AnimTotalTimeS)
@@ -277,7 +277,7 @@ void ResultScene::Draw()
 		//モデルを輪郭線0.0fで描画 
 		_modelmgr->Draw(playerModelHandle, 0.0f);
 
-		DrawGraph(0, 0, im.ImageIdReturn("仮image/Over/Fence.png", SCENE_TITLE), true);
+		DrawGraph(0, 0, im.ImageIdReturn("image/Over/Fence.png", SCENE_TITLE), true);
 		//gameover文字
 		DrawGameOverLogo();
 	}
@@ -286,10 +286,10 @@ void ResultScene::Draw()
 	if (LogoDownCounter > 500)
 	{
 		//セレクト画像と矢印をnowNumの値に応じて描画
-		DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("仮image/yazirushi.png", SCENE_TITLE), true);
-		DrawGraph(500, 510, im.ImageIdReturn("仮image/Bar_Menu/Select.png", SCENE_TITLE), true);
-		DrawGraph(500, 430, im.ImageIdReturn("仮image/Bar_Menu/Title.png", SCENE_TITLE), true);
-		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("仮image/Bar_Menu/Retry.png", SCENE_TITLE), true);
+		DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("image/yazirushi.png", SCENE_TITLE), true);
+		DrawGraph(500, 510, im.ImageIdReturn("image/Bar_Menu/Select.png", SCENE_TITLE), true);
+		DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
+		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
 	}
 	switch (nowNum) {
 	case 0:
@@ -319,21 +319,21 @@ void ResultScene::DrawGameOverLogo(void)
 	ImageMgr& im = ImageMgr::Instance();
 
 	//Gの文字
-	DrawGraph(10, min(LogoDownCounter,100), im.ImageIdReturn("仮image/Over/OVER/G.png", SCENE_TITLE), true);
+	DrawGraph(10, min(LogoDownCounter,100), im.ImageIdReturn("image/Over/OVER/G.png", SCENE_TITLE), true);
 	//Aの文字
-	DrawGraph(110, min(LogoDownCounter - (DELAY_TIMER), 100), im.ImageIdReturn("仮image/Over/OVER/A.png", SCENE_TITLE), true);
+	DrawGraph(110, min(LogoDownCounter - (DELAY_TIMER), 100), im.ImageIdReturn("image/Over/OVER/A.png", SCENE_TITLE), true);
 	//Mの文字
-	DrawGraph(210, min(LogoDownCounter - (DELAY_TIMER * 2), 100), im.ImageIdReturn("仮image/Over/OVER/M.png", SCENE_TITLE), true);
+	DrawGraph(210, min(LogoDownCounter - (DELAY_TIMER * 2), 100), im.ImageIdReturn("image/Over/OVER/M.png", SCENE_TITLE), true);
 	//Eの文字
-	DrawGraph(310, min(LogoDownCounter - (DELAY_TIMER * 3), 100), im.ImageIdReturn("仮image/Over/OVER/E.png", SCENE_TITLE), true);
+	DrawGraph(310, min(LogoDownCounter - (DELAY_TIMER * 3), 100), im.ImageIdReturn("image/Over/OVER/E.png", SCENE_TITLE), true);
 	//Oの文字
-	DrawGraph(410, min(LogoDownCounter - (DELAY_TIMER * 4), 100), im.ImageIdReturn("仮image/Over/OVER/O.png", SCENE_TITLE), true);
+	DrawGraph(410, min(LogoDownCounter - (DELAY_TIMER * 4), 100), im.ImageIdReturn("image/Over/OVER/O.png", SCENE_TITLE), true);
 	//Vの文字
-	DrawGraph(510, min(LogoDownCounter - (DELAY_TIMER * 5), 100), im.ImageIdReturn("仮image/Over/OVER/V.png", SCENE_TITLE), true);
+	DrawGraph(510, min(LogoDownCounter - (DELAY_TIMER * 5), 100), im.ImageIdReturn("image/Over/OVER/V.png", SCENE_TITLE), true);
 	//Eの文字
-	DrawGraph(610, min(LogoDownCounter - (DELAY_TIMER * 6), 100), im.ImageIdReturn("仮image/Over/OVER/E.png", SCENE_TITLE), true);
+	DrawGraph(610, min(LogoDownCounter - (DELAY_TIMER * 6), 100), im.ImageIdReturn("image/Over/OVER/E.png", SCENE_TITLE), true);
 	//Rの文字
-	DrawGraph(710, min(LogoDownCounter - (DELAY_TIMER * 7), 100), im.ImageIdReturn("仮image/Over/OVER/R.png", SCENE_TITLE), true);
+	DrawGraph(710, min(LogoDownCounter - (DELAY_TIMER * 7), 100), im.ImageIdReturn("image/Over/OVER/R.png", SCENE_TITLE), true);
 }
 
 void ResultScene::DrawGameClearLogo(void)
@@ -341,21 +341,21 @@ void ResultScene::DrawGameClearLogo(void)
 	ImageMgr& im = ImageMgr::Instance();
 
 	//Cの文字
-	DrawGraph(100, min(LogoDownCounter, 120), im.ImageIdReturn("仮image/Clear/CLEAR/C.png", SCENE_TITLE), true);
+	DrawGraph(100, min(LogoDownCounter, 120), im.ImageIdReturn("image/Clear/CLEAR/C.png", SCENE_TITLE), true);
 	//Lの文字
-	DrawGraph(240, min(LogoDownCounter - (DELAY_TIMER * 2), 100), im.ImageIdReturn("仮image/Clear/CLEAR/L.png", SCENE_TITLE), true);
+	DrawGraph(240, min(LogoDownCounter - (DELAY_TIMER * 2), 100), im.ImageIdReturn("image/Clear/CLEAR/L.png", SCENE_TITLE), true);
 	//Eの文字
-	DrawGraph(380, min(LogoDownCounter - (DELAY_TIMER * 3), 80), im.ImageIdReturn("仮image/Clear/CLEAR/E.png", SCENE_TITLE), true);
+	DrawGraph(380, min(LogoDownCounter - (DELAY_TIMER * 3), 80), im.ImageIdReturn("image/Clear/CLEAR/E.png", SCENE_TITLE), true);
 	//Aの文字
-	DrawGraph(520, min(LogoDownCounter - (DELAY_TIMER * 4), 100), im.ImageIdReturn("仮image/Clear/CLEAR/A.png", SCENE_TITLE), true);
+	DrawGraph(520, min(LogoDownCounter - (DELAY_TIMER * 4), 100), im.ImageIdReturn("image/Clear/CLEAR/A.png", SCENE_TITLE), true);
 	//Rの文字
-	DrawGraph(660, min(LogoDownCounter - (DELAY_TIMER * 5), 120), im.ImageIdReturn("仮image/Clear/CLEAR/R.png", SCENE_TITLE), true);
+	DrawGraph(660, min(LogoDownCounter - (DELAY_TIMER * 5), 120), im.ImageIdReturn("image/Clear/CLEAR/R.png", SCENE_TITLE), true);
 }
 
 void ResultScene::DrawGoalTimer(void)
 {
 	ImageMgr& im = ImageMgr::Instance();
-	numberImage = im.ImageIdReturn("仮image/UI/NewNum.png", SCENE_TITLE);
+	numberImage = im.ImageIdReturn("image/UI/NewNum.png", SCENE_TITLE);
 	//色変更
 	SetDrawBright(255, 212, 0);
 

@@ -1019,23 +1019,23 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
-	//if (crouthFlag == true) {
-	//	_state == ST_CROUCH;
-	//}
-	//if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-	//	if (WallFlag == false && JumpFlag == false ) {
-	//		crouthFlag =!crouthFlag;
-	//		_pos.y -= 18;
-	//	}
-	//}
+	if (crouthFlag == true) {
+		_state == ST_CROUCH;
+	}
+	if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
+		if (WallFlag == false && JumpFlag == false ) {
+			crouthFlag =!crouthFlag;
+			_pos.y -= 18;
+		}
+	}
 
-	//if (_state == ST_CROUCH) {
-	//	DrawString(100,100,"uwaaaaaaaaa",0xffffff);
-	//	//_pos.y = _pos.y + tmpPos;
-	//}
-	//else {
-	//	_pos.y = _pos.y;
-	//}
+	if (_state == ST_CROUCH) {
+		DrawString(100,100,"uwaaaaaaaaa",0xffffff);
+		//_pos.y = _pos.y + tmpPos;
+	}
+	else {
+		_pos.y = _pos.y;
+	}
 }
 //ﾌｨｰﾊﾞｰ処理
 bool Player::stFever(void)
@@ -1429,7 +1429,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-		_plRect.Draw(offset);
+		//_plRect.Draw(offset);
 	//	_wallRect.Draw(offset,0xffffff);
 }
 //Rect取得

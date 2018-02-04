@@ -37,9 +37,9 @@ Midpoint::Midpoint()
 	alfa = 255;
 	tranceMax = 50;
 	//モデル読み込み
-	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/金庫/中型金庫75.pmx", SCENE_RESULT);
-	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/鍵/鍵2-10.pmx", SCENE_RESULT);
-	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/フラスコ（改）/フラスコ.pmx", SCENE_RESULT);
+	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/safe/safe75.pmx", SCENE_RESULT);
+	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/key/key.pmx", SCENE_RESULT);
+	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/flask/flask.pmx", SCENE_RESULT);
 }
 void Midpoint::GetClass(Player* p)
 {

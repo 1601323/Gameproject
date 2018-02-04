@@ -22,7 +22,7 @@ EnemyServer::EnemyServer()
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
-	//lightImage = im.ImageIdReturn("âºimage/UI/Patrite2.png",SCENE_RESULT);
+	//lightImage = im.ImageIdReturn("image/UI/Patrite2.png",SCENE_RESULT);
 	lampColor.red = 0;
 	lampColor.green = 0;
 	lampColor.blue = 255;
@@ -38,7 +38,7 @@ EnemyServer::EnemyServer(EnemyFactory* f)
 	vigiCnt = 0;
 	decreaseCnt = 0;
 	ImageMgr& im = ImageMgr::Instance();
-	//lightImage = im.ImageIdReturn("âºimage/UI/Patrite2.png",SCENE_RESULT);
+	//lightImage = im.ImageIdReturn("image/UI/Patrite2.png",SCENE_RESULT);
 	cnt = 0;
 }
 
@@ -148,7 +148,7 @@ void EnemyServer::Draw(Position2 offset)
 	//SetDrawBright(255,255,255);
 	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	//DrawExtendGraph(700,0,770,85,im.ImageIdReturn("âºimage/UI/Patrite1.png",SCENE_RESULT),true);
+	//DrawExtendGraph(700,0,770,85,im.ImageIdReturn("image/UI/Patrite1.png",SCENE_RESULT),true);
 
 }
 //åªç›ÇÃåxâ˙ÉåÉxÉãÇï‘Ç∑
