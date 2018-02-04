@@ -65,11 +65,13 @@ private:
 	bool fMoveLeft;						//同上
 	bool deathFlag;						//まさに死亡フラグ（_stateでは管理しきれないみたいなので
 	bool helpFever;						//ﾌｨｰﾊﾞｰ終了時の補正のために用意
-	bool crouthFlag;					//しゃがみフラグ
-	void HitToEnemy();					//敵と当たった時
+	bool crouchFlag;					//しゃがみフラグ
+	bool ropeFlag;						//ロープ状態かどうかを返すフラグ
+	bool vanFlag;						//ステルス状態かどうかのフラグ
 	char keyData[256];
 	char oldkeyData[256];
 
+	void HitToEnemy();					//敵と当たった時
 	void setMove(Input* input);			//移動関数
 	void setState(void);				//ｽﾃｰﾀｽ制御
 	void setDir(Input* input);			//向き制御
@@ -119,6 +121,7 @@ public:
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
 
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
+	bool GetStateCrouch();				//しゃがんでいるかどうかを返します
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
 	Position2 ReturnWoToScPos2ver();   //ワールド座標からスクリーン座標に変換後のposを返す関数

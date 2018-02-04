@@ -130,6 +130,7 @@ enum PLAYER_ACTIONS{
 	ACTION_KNOCKBACK,  //敵に見つかった時のモーション(リスポーン前)
 	ACTION_TONGUE_SET, //舌を打つ前の構えるモーション
 	ACTION_TONGUE_GO,  //舌を打った時のモーション
+	ACTION_CROUCH,     //しゃがみモーション
 	ACTION_MAX
 };
 //警戒度ランプの色について
