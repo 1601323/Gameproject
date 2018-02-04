@@ -74,9 +74,9 @@ void Rope::RopeInit(void)
 	ImageMgr& im = ImageMgr::Instance();
 
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita.mv1", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita5.mv1", SCENE_RESULT);
 	//それぞれのアニメーションをアタッチ+総時間の設定
-	AnimAttachIndex = MV1AttachAnim(modelhandle,0,-1,false);
+	AnimAttachIndex = MV1AttachAnim(modelhandle,1,-1,false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
 	//0～19 の20
 	for (int j = 0; j < ROPE_LENGTH_MAX; j++)
@@ -284,6 +284,7 @@ void Rope::Extending(Input* input)
 					_mapctl->GetChipType(Position2(_rope[*itr + 1].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr+1].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_CLIMB_WALL)
 				{
 					_HitPos = _rope[*itr];
+					timerWait = 0;
 					itr = last;
 					_state = ST_ROPE_SHRINKING;
 					tongueHitTurn = true;
@@ -506,7 +507,7 @@ void Rope::SetRopeRadForDrawZ(void)
 		RopeAngle_Z = AngleRad(0.f);
 		RopeHitModelNumY = 55;
 		mentenanceNum_Y = -63 +_RopeRect.h / 2;
-		mentenanceNum_X = dirFlag ? -235: 235;
+		mentenanceNum_X = dirFlag ? -10 : 10;
 		break;
 	default:
 		break;
