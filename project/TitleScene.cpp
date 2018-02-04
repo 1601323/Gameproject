@@ -5,8 +5,9 @@
 #include "TitleScene.h"
 #include "Input.h"
 #include "SelectScene.h"
+#include "MovieScene.h"
 
-
+using namespace std;
 TitleScene::TitleScene()
 {
 	_updater = &TitleScene::FadeinTitle;
@@ -21,7 +22,7 @@ TitleScene::TitleScene()
 	_skyPos[1].y = 0;
 	skyImage = ImageMgr::Instance().ImageIdReturn("仮image/sky.png", SCENE_SELECT);
 	uiMovie = "movie/titleMovie.avi";
-	SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
+	//SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
 	movieFlag = false;
 	titleFlag = false;
 	selectFlag = false;
@@ -29,6 +30,7 @@ TitleScene::TitleScene()
 	flameCnt = 0;
 	dirMoveCnt = 0;
 	initFlag = false;
+	noInputTime = 0;
 	///InitMovie();
 }
 
@@ -79,6 +81,7 @@ void TitleScene::NormalUpdata(Input* input)
 	}
 	scroll();
 	Draw();
+	noInputTime++;
 #ifdef _DEBUG
 	//DrawString(10, 0, "タイトル", GetColor(255, 255, 255));
 #endif
@@ -86,6 +89,7 @@ void TitleScene::NormalUpdata(Input* input)
 		if (selectFlag == true) {
 			if (_menu == GAME_START) {
 				gm.Instance().ChangeScene(new SelectScene());
+				noInputTime = 0;
 				initFlag = false;
 			}
 			else if (_menu == GAME_EXPLAIN) {
@@ -95,7 +99,14 @@ void TitleScene::NormalUpdata(Input* input)
 		else if (selectFlag == false) {
 			selectFlag = true;
 		}
-
+	}
+	if (GetJoypadInputState(DX_INPUT_KEY_PAD1) || CheckHitKeyAll()) {
+		noInputTime = 0;
+	}
+	//とりあえず五分放置で遷移
+	if (noInputTime >= 3600*5) {
+		gm.Instance().ChangeScene(new MovieScene());
+		noInputTime = 0;
 	}
 }
 void  TitleScene::TitleMovie(Input* input)
