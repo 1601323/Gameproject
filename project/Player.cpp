@@ -1019,20 +1019,23 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
-	if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-		if (WallFlag == false && JumpFlag == false ) {
-			crouthFlag =!crouthFlag;
-			_pos.y -= 18;
-		}
-	}
+	//if (crouthFlag == true) {
+	//	_state == ST_CROUCH;
+	//}
+	//if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
+	//	if (WallFlag == false && JumpFlag == false ) {
+	//		crouthFlag =!crouthFlag;
+	//		_pos.y -= 18;
+	//	}
+	//}
 
-	if (crouthFlag ==true) {
-		DrawString(100,100,"uwaaaaaaaaa",0xffffff);
-		//_pos.y = _pos.y + tmpPos;
-	}
-	else {
-		_pos.y = _pos.y;
-	}
+	//if (_state == ST_CROUCH) {
+	//	DrawString(100,100,"uwaaaaaaaaa",0xffffff);
+	//	//_pos.y = _pos.y + tmpPos;
+	//}
+	//else {
+	//	_pos.y = _pos.y;
+	//}
 }
 //Ã®∞ ﬁ∞èàóù
 bool Player::stFever(void)
@@ -1395,7 +1398,7 @@ void Player::Draw(Position2& offset)
 	default:
 		break;
 	}
-	if (crouthFlag == false) {
+	if (_state != ST_CROUCH) {
 		_plRect.w = 32;
 		_plRect.h = 50;
 
