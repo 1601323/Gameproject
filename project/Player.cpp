@@ -140,7 +140,7 @@ void Player::setDir(Input* input)
 	//ﾛｰﾌﾟ状態なら向きは変えられない
 	float angle = static_cast<int>((RadAngle(_inpInfo.L_Stick.lstick) * 100.f));
 
-	if (_state != ST_ROPE) {
+	if (_state != ST_ROPE ) {
 		//右
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
@@ -1019,6 +1019,9 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
+	//if (crouthFlag == true) {
+	//	_state == ST_CROUCH;
+	//}
 	//if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
 	//	if (WallFlag == false && JumpFlag == false ) {
 	//		crouthFlag =!crouthFlag;
@@ -1026,7 +1029,7 @@ void Player::moveCrouch(Input* input)
 	//	}
 	//}
 
-	//if (crouthFlag ==true) {
+	//if (_state == ST_CROUCH) {
 	//	DrawString(100,100,"uwaaaaaaaaa",0xffffff);
 	//	//_pos.y = _pos.y + tmpPos;
 	//}
@@ -1207,7 +1210,6 @@ void Player::FeverJump()
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	//	_plRect.Draw(offset);
 	//#endif
 }
 
@@ -1396,7 +1398,7 @@ void Player::Draw(Position2& offset)
 	default:
 		break;
 	}
-	if (crouthFlag == false) {
+	if (_state != ST_CROUCH) {
 		_plRect.w = 32;
 		_plRect.h = 50;
 
@@ -1427,7 +1429,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	//	_plRect.Draw(offset);
+		_plRect.Draw(offset);
 	//	_wallRect.Draw(offset,0xffffff);
 }
 //Rect取得
