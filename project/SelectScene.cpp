@@ -118,7 +118,6 @@ void SelectScene::Draw()
 	//îwåi
 	DrawGraph(0, 0, im.ImageIdReturn("âºimage/select.png",SCENE_GAME),true);
 
-
 	//ÉXÉeÅ[ÉWëIëópÇÃéläp
 	//for (int x = 0; x < 3; x++) {
 	//	DrawBox(90 + 100 * x, 90  , 90 + 100 * x + w, 90  + h, 0x223344, true);
@@ -155,6 +154,21 @@ void SelectScene::Draw()
 	//ÉÇÉfÉãÇó÷äsê¸0.0fÇ≈ï`âÊ 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
+
+	switch (nowNum)
+	{
+	case 0:
+		DrawGraph(200, 480, im.ImageIdReturn("âºimage/Select/Stage1.png", SCENE_GAME), true);
+		break;
+	case 1:
+		DrawGraph(200, 480, im.ImageIdReturn("âºimage/Select/Stage2.png", SCENE_GAME), true);
+		break;
+	case 2:
+		DrawGraph(200, 480, im.ImageIdReturn("âºimage/Select/Stage3.png", SCENE_GAME), true);
+		break;
+	default:
+		break;
+	}
 
 //	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
 //	DrawFormatString(190,470,0x000000,"Stage %d Ç≈Ç∑",nowNum+1);
