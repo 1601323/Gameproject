@@ -22,6 +22,7 @@ enum CHAR_ST {
 	ST_MOVE,		//ˆÚ“®’†
 	ST_STOP,		//’âŽ~’†
 	ST_JUMP,		//¼Þ¬ÝÌß
+	ST_CROUCH,		//‚µ‚á‚ª‚Ý
 	ST_VANISH,		//½ÃÙ½ó‘Ô
 	ST_ROPE,		//Û°ÌßŽg—p
 	ST_WALL,		//•Ç“o‚è
