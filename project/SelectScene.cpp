@@ -155,6 +155,21 @@ void SelectScene::Draw()
 	_modelmgr->Draw(modelhandle, 0.0f);
 
 
+	switch (nowNum)
+	{
+	case 0:
+		DrawGraph(200, 480, im.ImageIdReturn("‰¼image/Select/Stage1.png", SCENE_GAME), true);
+		break;
+	case 1:
+		DrawGraph(200, 480, im.ImageIdReturn("‰¼image/Select/Stage2.png", SCENE_GAME), true);
+		break;
+	case 2:
+		DrawGraph(200, 480, im.ImageIdReturn("‰¼image/Select/Stage3.png", SCENE_GAME), true);
+		break;
+	default:
+		break;
+	}
+
 //	DrawBox(90 + 100 * (nowNum % 3), 90 , 90 + 100 * (nowNum % 3) + w, 90 + h, 0x999999, true);
 //	DrawFormatString(190,470,0x000000,"Stage %d ‚Å‚·",nowNum+1);
 }

@@ -29,7 +29,7 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 
 	_gimType = GIM_FALL;
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/食パン/パン一枚.pmd", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/bread/breadone.pmd", SCENE_RESULT);
 }
 
 
