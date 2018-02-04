@@ -65,6 +65,7 @@ private:
 	bool fMoveLeft;						//同上
 	bool deathFlag;						//まさに死亡フラグ（_stateでは管理しきれないみたいなので
 	bool helpFever;						//ﾌｨｰﾊﾞｰ終了時の補正のために用意
+	bool crouthFlag;					//しゃがみフラグ
 	void HitToEnemy();					//敵と当たった時
 	char keyData[256];
 	char oldkeyData[256];
