@@ -354,7 +354,9 @@ void GameScene::DrawBack(Position2 offset)
 	//まだ多重スクロールはしないです
 	ImageMgr& im = ImageMgr::Instance();
 	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("仮image/Game/title5.png",SCENE_RESULT),true);
-	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("仮image/Game/title5.png", SCENE_RESULT), true);
+	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("仮image/Game/title5.png", SCENE_RESULT), true);
+	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("仮image/Game/j.bmp", SCENE_RESULT), true);
+
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back3.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back2.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("仮image/Game/back1.png", SCENE_RESULT), true);

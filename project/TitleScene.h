@@ -24,6 +24,7 @@ private:
 	void FadeinTitle(Input* input);
 	void TitleMovie(Input* input);
 	void NormalUpdata(Input* input);
+	void FadeoutTitle(Input* input);
 	void MenuSelect(Input* input);
 	void scroll();
 	void Draw();

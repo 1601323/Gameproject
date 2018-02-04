@@ -88,7 +88,8 @@ void TitleScene::NormalUpdata(Input* input)
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (selectFlag == true) {
 			if (_menu == GAME_START) {
-				gm.Instance().ChangeScene(new SelectScene());
+				//gm.Instance().ChangeScene(new SelectScene());
+				_updater = &TitleScene::FadeoutTitle;
 				noInputTime = 0;
 				initFlag = false;
 			}
@@ -107,6 +108,21 @@ void TitleScene::NormalUpdata(Input* input)
 	if (noInputTime >= 3600*5) {
 		gm.Instance().ChangeScene(new MovieScene());
 		noInputTime = 0;
+	}
+}
+void TitleScene::FadeoutTitle(Input* input)
+{
+	GameMain& gm = GameMain::Instance();
+	key = input->GetInput(1).key;
+	lastKey = input->GetLastKey();
+	inpInfo = input->GetInput(1);
+	Draw();
+	lightCnt++;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100 + lightCnt);
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (lightCnt >= 120) {
+		gm.Instance().ChangeScene(new SelectScene());
 	}
 }
 void  TitleScene::TitleMovie(Input* input)
