@@ -44,7 +44,9 @@ Player::Player()
 	deathFlag = true;
 	helpFever = false;
 	airFlag = false;
-	crouthFlag = false;
+	crouchFlag = false;
+	vanFlag = false;
+	ropeFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -106,10 +108,10 @@ void Player::setMove(Input* input)
 {
 	setDir(input);
 	moveJump();
-	moveCrouch(input);
 	//setState();
 	moveWall();
 	moveRope();
+	moveCrouch(input);
 	accelePL();
 	EnterDoor();
 }
@@ -140,7 +142,7 @@ void Player::setDir(Input* input)
 	//ﾛｰﾌﾟ状態なら向きは変えられない
 	float angle = static_cast<int>((RadAngle(_inpInfo.L_Stick.lstick) * 100.f));
 
-	if (_state != ST_ROPE ) {
+	if (_state != ST_ROPE  ) {
 		//右
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
@@ -920,7 +922,7 @@ bool Player::moveRope(void)
 	//ﾛｰﾌﾟ状態なら動けない
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;
-
+		ropeFlag = true;
 		if (vx != 0 && JumpFlag) {
 			moveRopeJumpFlag = true;
 		}
@@ -932,6 +934,7 @@ bool Player::moveRope(void)
 	else {
 		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
 		AnimNowTime[ACTION_TONGUE_GO] = 0.0f;
+		ropeFlag = false;
 	}
 
 	//勢いを殺さずに着地する
@@ -1001,14 +1004,16 @@ bool Player::stVanish(void)
 	}
 	//動いていたらｶｳﾝﾄを戻す
 	//壁登り状態で動いていたらｽﾃﾙｽにならない
-	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0) {
+	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 ||ropeFlag == true) {
 		vanCnt = 60 * VANISH_CNT;
+		vanFlag = false;
 		alfa = 255;
 		deathFlag = true;
 	}
 
 	if (vanCnt <= 0) {
-		_state = ST_VANISH;
+	//	_state = ST_VANISH;
+		vanFlag = true;
 		deathFlag = false;
 	}
 #ifdef _DEBUG
@@ -1019,22 +1024,46 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
-	if (crouthFlag == true) {
-		_state == ST_CROUCH;
+	if (crouchFlag == true) {
+		_state = ST_CROUCH;
 	}
 	if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-		if (WallFlag == false && JumpFlag == false ) {
-			crouthFlag =!crouthFlag;
-			_pos.y -= 18;
+		if (WallFlag == false && JumpFlag == false && ropeFlag ==false) {
+			if (crouchFlag == true) {
+				crouchFlag = false;
+				_pos.y -= 25;
+			}
+			else if (crouchFlag == false) {
+				crouchFlag = true;
+			}else{}
 		}
+	}
+	if (_inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
+		//上キーでしゃがみを解除
+		if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+			if (crouchFlag == true) {
+				crouchFlag = false;
+				_pos.y -= 25;
+			}
+		}
+
 	}
 
 	if (_state == ST_CROUCH) {
-		DrawString(100,100,"uwaaaaaaaaa",0xffffff);
 		//_pos.y = _pos.y + tmpPos;
+
+		if (moveFlag == true) {
+			moveFlag = false;
+		}
+		vx = 0.0f;
+		//ジャンプしたらしゃがみを解除
+		if (JumpFlag == true) {
+			_pos.y -= 18;
+			crouchFlag = false;
+		}
 	}
 	else {
-		_pos.y = _pos.y;
+		AnimNowTime[ACTION_CROUCH] = 0.0f;
 	}
 }
 //ﾌｨｰﾊﾞｰ処理
@@ -1279,7 +1308,7 @@ void Player::gravity(void)
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE) {
+	if (_state == ST_ROPE ) {
 		vy = 0.0f;
 	}
 	//加速度を足す
@@ -1349,7 +1378,7 @@ void Player::FeverGravity()
 	}
 
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE) {
+	if (_state == ST_ROPE ) {
 		vy = 0.0f;
 	}
 	//加速度を足す
@@ -1371,32 +1400,38 @@ void Player::Draw(Position2& offset)
 	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
 	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
 	//時機
-	switch (_state)
-	{
-		//ｽﾃﾙｽ状態
-	case ST_VANISH:
+	if (vanFlag == true) {
 		//透過率をだんだん上げていく
 		alfa = max(alfa - VANISH, tranceMax);
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
-		break;
-		//ﾛｰﾌﾟ状態
-	case ST_ROPE:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
-		alfa = 255;
-		break;
-		//壁登り状態
-	case ST_WALL:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
-		alfa = 255;
-		break;
-		//ﾌｨｰﾊﾞｰ状態
-	case ST_FEVER:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
-		alfa = 50;
-		break;
-	default:
-		break;
+	}
+	else {
+		switch (_state)
+		{
+			//ｽﾃﾙｽ状態
+		//case ST_VANISH:
+		//	//透過率をだんだん上げていく
+		//	alfa = max(alfa - VANISH, tranceMax);
+		//	//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
+		//	break;
+			//ﾛｰﾌﾟ状態
+		case ST_ROPE:
+			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+			alfa = 255;
+			break;
+			//壁登り状態
+		case ST_WALL:
+			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+			alfa = 255;
+			break;
+			//ﾌｨｰﾊﾞｰ状態
+		case ST_FEVER:
+			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
+			//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
+			alfa = 50;
+			break;
+		default:
+			break;
+		}
 	}
 	if (_state != ST_CROUCH) {
 		_plRect.w = 32;
@@ -1429,7 +1464,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-		//_plRect.Draw(offset);
+	//	_plRect.Draw(offset);
 	//	_wallRect.Draw(offset,0xffffff);
 }
 //Rect取得
@@ -1500,7 +1535,10 @@ Position2 Player::ReturnWoToScPos2ver()
 {
 	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
 }
-
+bool Player::GetStateCrouch()
+{
+	return crouchFlag;
+}
 //プレイヤーの状態によってアニメーションを切り替えている関数です
 //テクスチャも変えています
 void Player::AnimationSwitching(void)
@@ -1549,6 +1587,11 @@ void Player::AnimationSwitching(void)
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/surprisFace.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_DAMAGE, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_DAMAGE]);
 		break;
+	case ST_CROUCH:
+		//しゃがみ状態
+		AnimationManager(ACTION_CROUCH, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_CROUCH]);
+		break;
+
 	default:
 		break;
 	}
