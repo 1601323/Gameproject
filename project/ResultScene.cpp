@@ -67,31 +67,31 @@ void ResultScene::NormalUpdata(Input* input)
 	if (LogoDownCounter > 500)
 	{
 		Select(input);
-	}
-
-	Draw();
 #ifdef _DEBUG
-	//DrawString(10, 10, "リザルトに遷移してるよ！", 0xffffff);
+		//DrawString(10, 10, "リザルトに遷移してるよ！", 0xffffff);
 #endif
-	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
-		if (nowNum == JUMP_SELECT) {
-			dirMoveCnt = 0;
-			LogoDownCounter = -100;
-			gm.Instance().ChangeScene(new SelectScene());
-		}
-		else if (nowNum == JUMP_TITLE) {
-			dirMoveCnt = 0;
-			LogoDownCounter = -100;
-			gm.Instance().ChangeScene(new TitleScene());
-		}
-		else if (nowNum == JUMP_RETRY) {
-			dirMoveCnt = 0;
-			LogoDownCounter = -100;
-			gm.Instance().ChangeScene(new GameScene());
-		}
-		else {
+		if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+			if (nowNum == JUMP_SELECT) {
+				dirMoveCnt = 0;
+				LogoDownCounter = -100;
+				gm.Instance().ChangeScene(new SelectScene());
+			}
+			else if (nowNum == JUMP_TITLE) {
+				dirMoveCnt = 0;
+				LogoDownCounter = -100;
+				gm.Instance().ChangeScene(new TitleScene());
+			}
+			else if (nowNum == JUMP_RETRY) {
+				dirMoveCnt = 0;
+				LogoDownCounter = -100;
+				gm.Instance().ChangeScene(new GameScene());
+			}
+			else {
+			}
+
 		}
 	}
+	Draw();
 }
 //クリアとゲームオーバーに分けておく
 void ResultScene::GameClear()
