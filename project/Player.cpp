@@ -1019,20 +1019,20 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
-	if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-		if (WallFlag == false && JumpFlag == false ) {
-			crouthFlag =!crouthFlag;
-			_pos.y -= 18;
-		}
-	}
+	//if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
+	//	if (WallFlag == false && JumpFlag == false ) {
+	//		crouthFlag =!crouthFlag;
+	//		_pos.y -= 18;
+	//	}
+	//}
 
-	if (crouthFlag ==true) {
-		DrawString(100,100,"uwaaaaaaaaa",0xffffff);
-		//_pos.y = _pos.y + tmpPos;
-	}
-	else {
-		_pos.y = _pos.y;
-	}
+	//if (crouthFlag ==true) {
+	//	DrawString(100,100,"uwaaaaaaaaa",0xffffff);
+	//	//_pos.y = _pos.y + tmpPos;
+	//}
+	//else {
+	//	_pos.y = _pos.y;
+	//}
 }
 //Ã®∞ ﬁ∞èàóù
 bool Player::stFever(void)
