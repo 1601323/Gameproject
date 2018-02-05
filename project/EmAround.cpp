@@ -148,11 +148,22 @@ void EmAround::InterMove()
 {
 	if (_state == EM_ST_MOVE) {	//ÌßÚ²Ô°‚ª”­Œ©‚³‚ê‚Ä‚¢‚È‚¢A‚©‚ÂƒNƒŠƒAðŒ‚ª–ž‚½‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«
 		interCnt++;
-		//‚Æ‚è‚ ‚¦‚¸‚P•bŠÔ’âŽ~‚³‚¹‚Ä”½‘Î‘¤‚ÉˆÚ“®‚³‚¹‚é
-		if (interCnt > 60) {
+		//‚Æ‚è‚ ‚¦‚¸‚P.5•bŠÔ’âŽ~‚³‚¹‚Ä”½‘Î‘¤‚ÉˆÚ“®‚³‚¹‚é
+
+		//‚®‚¢[‚ñ‚ÆU‚èŒü‚¢‚Ä‚Ü‚·
+		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.f + interCnt*-2);
+		}
+		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.f - interCnt*2);
+		}
+
+		if (interCnt > 90) {
 			moveFlag = false;
 			interCnt = 0;
 			dis = 0;
+
+
 			if (_dir == DIR_RIGHT) {
 				modelDirAngle = AngleRad(90.0f);
 				_dir = DIR_LEFT;

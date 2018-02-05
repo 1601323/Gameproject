@@ -1,7 +1,8 @@
 #pragma once
 #include "Enemy.h"
 
-#define EM_LOOKBACK_TIME 180
+#define EM_LOOKBACK_TIME 240
+#define EM_LOOKBACK_MODEL_TIME 3
 
 class HitClass;
 class EnemyServer;
@@ -24,6 +25,7 @@ private:
 	Rope& _rope;
 	int LookCount;		//振り返りのｶｳﾝﾄ
 	int FearCount;		//怯みのｶｳﾝﾄ
+	int LookModelDirCnt;//モデルが振り返るカウント
 
 	//void Draw();
 	int circle;
