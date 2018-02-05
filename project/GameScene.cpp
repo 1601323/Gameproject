@@ -269,7 +269,7 @@ void GameScene::TransitionUpdata(Input* input)
 		if (_rtData.goalFlag == true) {
 			gm.Instance().ChangeScene(new ResultScene());
 		}
-		else if (gm.GetResultData().life >= 0) {
+		else if (gm.GetResultData().life > 0) {
 			RetryProcess();
 			_updater = &GameScene::FadeInUpdata;
 		}

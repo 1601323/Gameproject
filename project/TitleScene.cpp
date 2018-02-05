@@ -31,6 +31,7 @@ TitleScene::TitleScene()
 	dirMoveCnt = 0;
 	menuCnt = 640;
 	initFlag = false;
+	padFlag = false;
 	noInputTime = 0;
 	///InitMovie();
 }
@@ -58,6 +59,7 @@ void TitleScene::FadeinTitle(Input* input)
 
 	lightCnt++;
 	Draw();
+	CheckPad();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200 - (lightCnt * 2));
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -206,6 +208,10 @@ void TitleScene::MenuSelect(Input* input)
 		}
 	}
 }
+void TitleScene::CheckPad()
+{
+	padFlag = inpInfo.num >0 ? true : false;
+}
 SCENE_TYPE TitleScene::GetScene()
 {
 	return SCENE_TITLE;
@@ -252,7 +258,13 @@ void TitleScene::Draw()
 
 	DrawGraph(400, -105, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
 	DrawExtendGraph(10, 10,750,450, im.ImageIdReturn("image/title.png", SCENE_SELECT), true);
-
-	DrawGraph(0,max(0,menuCnt),im.ImageIdReturn("image/Operation/Operation_key.png",SCENE_SELECT),true);
+	//if (padFlag == false) {
+	//	DrawGraph(0, max(0, menuCnt), im.ImageIdReturn("image/Operation/Operation_key.png", SCENE_SELECT), true);
+	//}
+	 if (inpInfo.num >=1) {
+		DrawGraph(0, max(0, menuCnt), im.ImageIdReturn("image/Operation/Operation_pad.png", SCENE_SELECT), true);
+	}else{
+		 DrawGraph(0, max(0, menuCnt), im.ImageIdReturn("image/Operation/Operation_key.png", SCENE_SELECT), true);
+	 }
 
 }

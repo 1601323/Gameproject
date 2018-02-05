@@ -141,6 +141,7 @@ void Player::FeverUpdata(Input* input)
 	FeverWall();
 
 	moveRope();
+	moveCrouch(input);               
 	moveFever();
 
 	EnterDoor();
@@ -1035,28 +1036,40 @@ void Player::moveCrouch(Input* input)
 	if (crouchFlag == true) {
 		_state = ST_CROUCH;
 	}
-	if (_key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-		if (WallFlag == false && JumpFlag == false && ropeFlag ==false) {
-			if (crouchFlag == true) {
-				crouchFlag = false;
-				//_pos.y -= 30;
-			}
-			else if (crouchFlag == false) {
-				crouchFlag = true;
-			}else{}
+	if (_inpInfo.num >= 1) {
+		if (_dir == DIR_DOWN) {
+			crouchFlag = true;
+		}
+		if( input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
+			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL){
+			crouchFlag = false;
 		}
 	}
-	if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
-		//上キーでしゃがみを解除
-		if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
-			if (crouchFlag == true) {
-				crouchFlag = false;
-				//_pos.y -= 30;
+	else {
+
+		if (_key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON) {
+			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+				if (crouchFlag == true) {
+					crouchFlag = false;
+					//_pos.y -= 30;
+				}
+				else if (crouchFlag == false) {
+					crouchFlag = true;
+				}
+				else {}
 			}
 		}
+		if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
+			//上キーでしゃがみを解除
+			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+				if (crouchFlag == true) {
+					crouchFlag = false;
+					//_pos.y -= 30;
+				}
+			}
 
+		}
 	}
-
 	if (_state == ST_CROUCH) {
 		//_pos.y = _pos.y + tmpPos;
 
