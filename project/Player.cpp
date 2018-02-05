@@ -1582,6 +1582,26 @@ void Player::SetRetryPos(Position2 midPos)
 	inviCnt = INVINCIBLETIMER * 60;
 }
 
+//ポースから用
+void Player::SetInitPausePos()
+{
+	GameMain& gm = GameMain::Instance();
+	_rtData = RESULT_DATA();
+	_rtData.life = 3;
+	gm.SetResultData(_rtData);
+
+	_pos = initPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	alfa = 255;
+	_state = ST_DEF;
+	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
+	AnimNowTime[ST_OVER] = 0.0f;
+	feverFlag = false;
+	feverTime = 60 * FEVER_CNT;
+}
+
 Position2 Player::ReturnWoToScPos2ver()
 {
 	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);

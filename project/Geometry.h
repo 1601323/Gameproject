@@ -142,6 +142,14 @@ struct SetColor {
 	int blue;
 };
 
+//ポーズ時のモード
+enum PAUSE_NEXT_MODE {
+	MODE_BACK,
+	MODE_RETRY,
+	MODE_SELECT,
+	MODE_MAX
+};
+
 struct EnemyServerData {
 
 	EnemyServerData():plFoundFlag(false),dataSendFlag(false),midFlag(false),_level(ALERT_LEVEL_1){}
