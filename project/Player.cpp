@@ -1585,11 +1585,6 @@ void Player::SetRetryPos(Position2 midPos)
 //ポースから用
 void Player::SetInitPausePos()
 {
-	GameMain& gm = GameMain::Instance();
-	_rtData = RESULT_DATA();
-	_rtData.life = 3;
-	gm.SetResultData(_rtData);
-
 	_pos = initPos;
 	//加速度も元に戻す
 	vx = 0.0f;
