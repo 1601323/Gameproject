@@ -133,7 +133,7 @@ void GameScene::GameInit()
 		mapName = "map/easy.map";
 		break;
 	case 1:
-		mapName = "map/Intermediate.map";
+		mapName = "map/normal.map";
 		break;
 	case 2:
 		mapName = "map/hard.map";
@@ -355,6 +355,7 @@ void GameScene::DrawUI()
 void GameScene::DrawBack(Position2 offset)
 {
 	//まだ多重スクロールはしないです
+
 	ImageMgr& im = ImageMgr::Instance();
 	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("image/Game/title5.png",SCENE_RESULT),true);
 	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/title5.png", SCENE_RESULT), true);

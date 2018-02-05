@@ -60,7 +60,8 @@ void GimPull::CheckDoMove()
 		//		_state = GM_MOVE;
 		//	}
 		//}
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING&&_hit->IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
+			(_hit->IsHit(GetRect(), _rope.GetCircle() )|| (_hit->IsHit(GetRect(), _rope.GetCircle2())))) {
 			if (_rope.GetCircle().pos.x < _pos.x+ (_gmRect.w /2)) {		//¶‘¤
 				_state = GM_HIT;
 			}
