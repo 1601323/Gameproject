@@ -52,7 +52,6 @@ private:
 	int PauseDirNumY;
 	int dirMoveCnt;
 	bool selectPauseFlag;
-	bool setPoseFlag;
 
 	RESULT_DATA _rtData;
 	FEVER_DATA _feverData;
@@ -69,6 +68,7 @@ private:
 	void PauseSelect(Input* input);
 
 	void RetryProcess();
+	void GameScene::RetryPauseProcess();
 	void UpdateManager();											//updata‚Ì‚½‚Ñ‚ÉŒÄ‚Ño‚·ŠÖ”‚ğ‚Ü‚Æ‚ß‚Ä‚¨‚­
 	void Draw(Position2& offset);
 	void DrawPauseUi(void);
