@@ -27,6 +27,7 @@ enum CHAR_ST {
 	ST_ROPE,		//ﾛｰﾌﾟ使用
 	ST_WALL,		//壁登り
 	ST_FEVER,		//ﾌｨｰﾊﾞｰ
+	ST_INVINCIBLE,  //むーてーき
 	ST_DETH,		//死亡(リスポーン可)
 	ST_OVER,        //死亡(リスポーン不可)
 	ST_CLEAR,		//ｸﾘｱ
