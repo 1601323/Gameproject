@@ -28,6 +28,7 @@ Player::Player()
 	vanCnt = 60 * VANISH_CNT;	//‚Æ‚è‚ ‚¦‚¸‚R•b
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+	inviCnt = INVINCIBLETIMER * 60;
 	//_hit = new HitClass();
 	_plRect.w = 32;
 	_plRect.h = 50;
@@ -47,6 +48,7 @@ Player::Player()
 	crouchFlag = false;
 	vanFlag = false;
 	ropeFlag = false;
+	inviFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -120,6 +122,13 @@ void Player::setMove(Input* input)
 void Player::setState(void)
 {
 	stFever();
+
+	if (inviFlag)
+	{
+		_state = ST_INVINCIBLE;
+	}
+	stInvincible();
+
 	if (_state != ST_FEVER) {
 		stVanish();
 	}
@@ -918,7 +927,6 @@ void Player::FeverWall()
 //Û°Ìßó‘Ô‚Ìˆ—
 bool Player::moveRope(void)
 {
-
 	//Û°Ìßó‘Ô‚È‚ç“®‚¯‚È‚¢
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;
@@ -1113,6 +1121,23 @@ bool Player::stFever(void)
 	return false;
 }
 
+//–³“Gó‘Ô‚Ìˆ—
+void Player::stInvincible(void)
+{
+	if (inviFlag)
+	{
+		if (_state == ST_INVINCIBLE)
+		{
+			if (--inviCnt < 0)
+			{
+				_state = ST_DEF;
+				inviCnt = INVINCIBLETIMER * 60;
+				inviFlag = false;
+			}
+		}
+	}
+}
+
 //¼Ş¬İÌßˆ—
 bool Player::moveJump(void)
 {
@@ -1247,23 +1272,30 @@ void Player::FeverJump()
 void Player::HitToEnemy()
 {
 	GameMain& gm = GameMain::Instance();
+	
 	if (_hit->EnemyHit(*this)) {
-		if (deathFlag == true) {
-			_state = ST_DETH;
+		if (_state != ST_INVINCIBLE)
+		{
+			if (deathFlag == true) {
+				_state = ST_DETH;
 
-			//Š®‘S”s–k
-			if (gm.GetResultData().life <= 0)
-			{
-				_state = ST_OVER;
+				//Š®‘S”s–k
+				if (gm.GetResultData().life <= 0)
+				{
+					_state = ST_OVER;
+				}
+			}
+			else if (deathFlag == false) {
+				//€‚È‚È‚¢
 			}
 		}
-		else if (deathFlag == false) {
-			//€‚È‚È‚¢
+		else {
 		}
 	}
 	else
 	{
 	}
+	
 }
 //d—Í
 void Player::gravity(void)
@@ -1429,6 +1461,14 @@ void Player::Draw(Position2& offset)
 			//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "_FEVER^", 0x0000ff);
 			alfa = 50;
 			break;
+		case ST_INVINCIBLE:
+			if (inviCnt % 10/2 == 0){
+				alfa = 255;
+			}
+			else {
+				alfa = 0;
+			}
+			break;
 		default:
 			break;
 		}
@@ -1488,11 +1528,13 @@ void Player::SetInitPos()
 	vx = 0.0f;
 	vy = 0.0f;
 	alfa = 255;
-	_state = ST_DEF;
+	_state = ST_INVINCIBLE;//–³“G‚É‚·‚é
 	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
 	AnimNowTime[ST_OVER] = 0.0f;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+	inviFlag = true;
+	inviCnt = INVINCIBLETIMER * 60;
 }
 //‰ŠúˆÊ’u‚ğƒZƒbƒg‚·‚é
 void Player::SetInitPos(Position2 p)
@@ -1548,6 +1590,7 @@ void Player::AnimationSwitching(void)
 		//’Êíó‘Ô
 	case ST_DEF:
 	case ST_STOP:
+	case ST_INVINCIBLE:
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/face.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_WAIT, ANIMATION_SPEED_DEF,0.0f);
 		break;

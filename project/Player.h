@@ -8,12 +8,14 @@
 #define MAX_GRAVITY (15.0f)				//重力のMAX値
 #define WALL_SPEED (1.0f)				//壁登りのｽﾋﾟｰﾄﾞ
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
-#define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
+#define VANISH_CNT (2)					//消えるまでのｶｳﾝﾄ
 #define VANISH    (2)                   //消えるまでのｶｳﾝﾄ
 #define FEVER_CNT (10)					//フィーバーの時間
 #define ANIMATION_SPEED_SLOW (0.3f)     //アニメーションの速さ(超低速)
 #define ANIMATION_SPEED_DEF (0.5f)      //アニメーションの速さ(低速)
 #define ANIMATION_SPEED_HIGH (0.8f)     //アニメーションの速さ(普通)
+#define INVINCIBLETIMER (2)             //無敵時間
+
 
 class Input;
 class HitClass;
@@ -56,6 +58,8 @@ private:
 	float modelDirAngle;                //モデル表示用のY軸の回転率
 	bool feverFlag;						//フィーバーフラグ
 	int feverTime;						//フィーバーの時間
+	bool inviFlag;                      //無敵時間フラグ
+	int inviCnt;                        //無敵時間カウンター
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
@@ -86,6 +90,7 @@ private:
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
 	bool plPlaceCheck();				//ﾌｨｰﾊﾞｰ終了時、ﾌﾟﾚｲﾔｰが壁の中にいないかチェックします
+	void stInvincible(void);            //無敵状態を制御する関数
 
 	void FeverUpdata(Input* input);		//フィーバー時に呼び出す全体の処理
 	void FeverJump();					//フィーバー用のジャンプ処理

@@ -75,7 +75,8 @@ void GimDrop::CheckDoMove()
 	//if (_state == GM_NONE ||_state== GM_PAUSE) {	//状態が一度しか切り替わらないようにする
 	if(_state != GM_HIT && _state != GM_MOVE){							//動いている途中でも当てたら方向転換ができるようになってます
 		////ロープとのあたり判定を取る
-		if (_rope.GetRopeState()== ST_ROPE_SHRINKING &&_hit->IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState()== ST_ROPE_SHRINKING &&
+			((_hit->IsHit(GetRect(), _rope.GetCircle())) || (_hit->IsHit(GetRect(), _rope.GetCircle2())))) {
 			//if (_rope.GetCircle().pos.x < _pos.x) {	//ropeのﾚｸﾄのXが物体のXより大きい
 				_state = GM_HIT;		//左側に動く
 			//}

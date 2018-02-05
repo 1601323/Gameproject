@@ -130,7 +130,8 @@ public:
 	ROPE_DIR RopeDirSetPad(Input* input);
 	ROPE_CURVE_DIR CurveRopeDirSet(void);
 	Rect& GetRect(void);
-	Circle& GetCircle(void);
+	Circle& GetCircle(void);       //ロープのサークル1
+	Circle& GetCircle2(void);      //ロープのサークル2
 	ROPE_STATE GetRopeState(void);
 	Position2 GetReturnPos(void);
 	Position2 GetRopeVec(void);
