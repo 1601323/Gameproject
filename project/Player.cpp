@@ -1534,6 +1534,10 @@ bool Player::GetStateVanish()
 {
 	return vanFlag;
 }
+bool Player::GetStateRope()
+{
+	return ropeFlag;
+}
 //プレイヤーの状態によってアニメーションを切り替えている関数です
 //テクスチャも変えています
 void Player::AnimationSwitching(void)

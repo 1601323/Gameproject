@@ -29,6 +29,7 @@ TitleScene::TitleScene()
 	lightCnt = 0;
 	flameCnt = 0;
 	dirMoveCnt = 0;
+	menuCnt = 640;
 	initFlag = false;
 	noInputTime = 0;
 	///InitMovie();
@@ -104,10 +105,21 @@ void TitleScene::NormalUpdata(Input* input)
 	if (GetJoypadInputState(DX_INPUT_KEY_PAD1) || CheckHitKeyAll()) {
 		noInputTime = 0;
 	}
-	//とりあえず五分放置で遷移
-	if (noInputTime >= 3600*5) {
+	//とりあえず一分放置で遷移
+	if (noInputTime >= 3600) {
 		gm.Instance().ChangeScene(new MovieScene());
 		noInputTime = 0;
+	}
+	//操作説明をしたから出したい
+	if (operateFlag == false) {
+		if (menuCnt < 640) {
+			menuCnt += 10;
+		}
+	}
+	else if (operateFlag == true) {
+		if (menuCnt > 0) {
+			menuCnt -= 10;
+		}
 	}
 }
 void TitleScene::FadeoutTitle(Input* input)
@@ -237,13 +249,10 @@ void TitleScene::Draw()
 			DrawGraph(170 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), 525, im.ImageIdReturn("image/yazirushi.png", SCENE_SELECT), true);
 		}
 	}
-	if (operateFlag == true) {
-		DrawBox(200, 400, 500, 500, 0xffffff, true);
-		DrawString(220, 410, "未実装", 0x000000);
-		DrawString(250, 450, "もう一度エンターで選択を解除", 0x000000);
-	}
 
 	DrawGraph(400, -105, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
 	DrawExtendGraph(10, 10,750,450, im.ImageIdReturn("image/title.png", SCENE_SELECT), true);
+
+	DrawGraph(0,max(0,menuCnt),im.ImageIdReturn("image/Operation/Operation_key.png",SCENE_SELECT),true);
 
 }

@@ -174,7 +174,7 @@ void GameScene::NormalUpdata(Input* input)
 
 	_map->Draw(offset);
 	//Û°ÌßŽg—p’†‚Í“G‚È‚Ç‚ªŽ~‚Ü‚é
-	if (_player->GetcharState() == ST_ROPE) {
+	if (_player->GetStateRope() == true) {
 		UsingRopeUpdata(input, offset);
 	}
 	else {
