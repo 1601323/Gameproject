@@ -122,6 +122,8 @@ public:
 
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
 	bool GetStateCrouch();				//しゃがんでいるかどうかを返します
+	bool GetStateVanish();				//ステルスしているかどうかを返します
+	bool GetStateRope();				//ロープを使っているかどうかを返します
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
 	Position2 ReturnWoToScPos2ver();   //ワールド座標からスクリーン座標に変換後のposを返す関数

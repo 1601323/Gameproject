@@ -142,7 +142,7 @@ void Player::setDir(Input* input)
 	//ﾛｰﾌﾟ状態なら向きは変えられない
 	float angle = static_cast<int>((RadAngle(_inpInfo.L_Stick.lstick) * 100.f));
 
-	if (_state != ST_ROPE  ) {
+	if (_state != ST_ROPE  && _state != ST_CROUCH) {
 		//右
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
@@ -1027,23 +1027,23 @@ void Player::moveCrouch(Input* input)
 	if (crouchFlag == true) {
 		_state = ST_CROUCH;
 	}
-	if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
+	if (_key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
 		if (WallFlag == false && JumpFlag == false && ropeFlag ==false) {
 			if (crouchFlag == true) {
 				crouchFlag = false;
-				_pos.y -= 25;
+				//_pos.y -= 30;
 			}
 			else if (crouchFlag == false) {
 				crouchFlag = true;
 			}else{}
 		}
 	}
-	if (_inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
+	if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
 		//上キーでしゃがみを解除
 		if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
 			if (crouchFlag == true) {
 				crouchFlag = false;
-				_pos.y -= 25;
+				//_pos.y -= 30;
 			}
 		}
 
@@ -1058,7 +1058,7 @@ void Player::moveCrouch(Input* input)
 		vx = 0.0f;
 		//ジャンプしたらしゃがみを解除
 		if (JumpFlag == true) {
-			_pos.y -= 18;
+			//_pos.y -= 18;
 			crouchFlag = false;
 		}
 	}
@@ -1433,19 +1433,10 @@ void Player::Draw(Position2& offset)
 			break;
 		}
 	}
-	if (_state != ST_CROUCH) {
-		_plRect.w = 32;
-		_plRect.h = 50;
 
 		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
-	}
-	else {
-		_plRect.w = 32;
-		_plRect.h = 32;
-		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
-		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
-	}
+	
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -1538,6 +1529,14 @@ Position2 Player::ReturnWoToScPos2ver()
 bool Player::GetStateCrouch()
 {
 	return crouchFlag;
+}
+bool Player::GetStateVanish()
+{
+	return vanFlag;
+}
+bool Player::GetStateRope()
+{
+	return ropeFlag;
 }
 //プレイヤーの状態によってアニメーションを切り替えている関数です
 //テクスチャも変えています

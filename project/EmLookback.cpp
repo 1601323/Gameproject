@@ -210,7 +210,7 @@ void EmLookback::Visibility()
 	//視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
-		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) &&( _player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -221,7 +221,7 @@ void EmLookback::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && (_player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -232,7 +232,7 @@ void EmLookback::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && (_player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
