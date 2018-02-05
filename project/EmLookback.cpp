@@ -135,7 +135,7 @@ void EmLookback::Draw(Position2 offset)
 	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
-	//_emRect.Draw(offset);
+	_emRect.Draw(offset);
 	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
 #endif 
 }
@@ -290,7 +290,9 @@ void EmLookback::moveFear(void)
 void EmLookback::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
+			((_hit.IsHit(GetRect(), _rope.GetCircle())) || (_hit.IsHit(GetRect(), _rope.GetCircle2())))) {
+			DrawString(100, 450, "hit",0xff0000,true);
 			_state = EM_ST_FEAR;
 		}
 		else {

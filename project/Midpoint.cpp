@@ -174,7 +174,7 @@ void Midpoint::Draw(Position2 offset)
 		//‚æ‚­l‚¦‚½‚ç“–‚½‚è”»’èŽæ“¾‚µ‚½Œã‚¢‚ç‚È‚¢‚æ‚Ë
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
 
-		if (_pl->GetcharState() == ST_VANISH)
+		if (_pl->GetStateCrouch())
 		{
 			alfa = max(alfa - 2, tranceMax);
 		}
@@ -197,7 +197,7 @@ void Midpoint::Draw(Position2 offset)
 	else if(GetFlag == true ){
 		//DrawCircle(_midPos.x - offset.x + (_midRect.w / 2) , _midPos.y - offset.y + (_midRect.h / 2), 12, GetColor(0, 240, 44), true);
 
-		if (_pl->GetcharState() == ST_VANISH)
+		if (_pl->GetStateCrouch())
 		{
 			alfa = max(alfa - 2, tranceMax);
 		}

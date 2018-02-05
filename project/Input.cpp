@@ -189,8 +189,8 @@ void Input::InputSet()
 
 		inpInfo[0].key.keybit.L_DOWN_BUTTON = KeyData[KEY_INPUT_S];                       // S 下
 		inpInfo[0].key.keybit.L_RIGHT_BUTTON = KeyData[KEY_INPUT_D];                      // D 右
-		inpInfo[0].key.keybit.L_LEFT_BUTTON = KeyData[KEY_INPUT_LSHIFT];                  // A 左
-		inpInfo[0].key.keybit.L_UP_BUTTON = KeyData[KEY_INPUT_W];                         // W 上
+		inpInfo[0].key.keybit.L_LEFT_BUTTON = KeyData[KEY_INPUT_LSHIFT];                  // LSHIFTロープ使っている
+		inpInfo[0].key.keybit.L_UP_BUTTON = KeyData[KEY_INPUT_RSHIFT];                    // RSHIFTロープ使っている
 		inpInfo[0].num = joypadCnt;
 	}
 
