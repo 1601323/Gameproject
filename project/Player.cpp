@@ -141,6 +141,7 @@ void Player::FeverUpdata(Input* input)
 	FeverWall();
 
 	moveRope();
+	moveCrouch(input);               
 	moveFever();
 
 	EnterDoor();
@@ -1035,28 +1036,40 @@ void Player::moveCrouch(Input* input)
 	if (crouchFlag == true) {
 		_state = ST_CROUCH;
 	}
-	if (_key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-		if (WallFlag == false && JumpFlag == false && ropeFlag ==false) {
-			if (crouchFlag == true) {
-				crouchFlag = false;
-				//_pos.y -= 30;
-			}
-			else if (crouchFlag == false) {
-				crouchFlag = true;
-			}else{}
+	if (_inpInfo.num >= 1) {
+		if (_dir == DIR_DOWN) {
+			crouchFlag = true;
+		}
+		if( input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
+			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL){
+			crouchFlag = false;
 		}
 	}
-	if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
-		//上キーでしゃがみを解除
-		if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
-			if (crouchFlag == true) {
-				crouchFlag = false;
-				//_pos.y -= 30;
+	else {
+
+		if (_key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON) {
+			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+				if (crouchFlag == true) {
+					crouchFlag = false;
+					//_pos.y -= 30;
+				}
+				else if (crouchFlag == false) {
+					crouchFlag = true;
+				}
+				else {}
 			}
 		}
+		if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
+			//上キーでしゃがみを解除
+			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+				if (crouchFlag == true) {
+					crouchFlag = false;
+					//_pos.y -= 30;
+				}
+			}
 
+		}
 	}
-
 	if (_state == ST_CROUCH) {
 		//_pos.y = _pos.y + tmpPos;
 
@@ -1567,6 +1580,26 @@ void Player::SetRetryPos(Position2 midPos)
 	feverTime = 60 * FEVER_CNT;
 	inviFlag = true;
 	inviCnt = INVINCIBLETIMER * 60;
+}
+
+//ポースから用
+void Player::SetInitPausePos()
+{
+	GameMain& gm = GameMain::Instance();
+	_rtData = RESULT_DATA();
+	_rtData.life = 3;
+	gm.SetResultData(_rtData);
+
+	_pos = initPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	alfa = 255;
+	_state = ST_DEF;
+	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
+	AnimNowTime[ST_OVER] = 0.0f;
+	feverFlag = false;
+	feverTime = 60 * FEVER_CNT;
 }
 
 Position2 Player::ReturnWoToScPos2ver()
