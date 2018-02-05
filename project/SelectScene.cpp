@@ -144,7 +144,7 @@ void SelectScene::Draw()
 		AnimNowTime = 0;
 	}
 	//モデルの回転角度の設定(ラジアン)
-	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(-30.f), 0.f));
+	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(-5.f), 0.f));
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimIndex, AnimNowTime);
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -153,7 +153,6 @@ void SelectScene::Draw()
 	MV1SetScale(modelhandle, VGet(3.5f, 3.5f, 3.5f));
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
-
 
 	switch (nowNum)
 	{
