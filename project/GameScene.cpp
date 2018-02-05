@@ -133,7 +133,7 @@ void GameScene::GameInit()
 		mapName = "map/easy.map";
 		break;
 	case 1:
-		mapName = "map/Intermediate.map";
+		mapName = "map/normal.map";
 		break;
 	case 2:
 		mapName = "map/hard.map";
