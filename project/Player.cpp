@@ -918,7 +918,6 @@ void Player::FeverWall()
 //Û°Ìßó‘Ô‚Ìˆ—
 bool Player::moveRope(void)
 {
-
 	//Û°Ìßó‘Ô‚È‚ç“®‚¯‚È‚¢
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;

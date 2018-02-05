@@ -112,12 +112,12 @@ void Midpoint::FollowDir()
 		_midPos.x = _pl->GetPos().x;
 		_midPos.y = _pl->GetPos().y;
 		if (tmpDir == DIR_RIGHT) {
-			_midPos.x = _pl->GetPos().x - 45;
-			_midPos.y = _pl->GetPos().y - bubble;
+			_midPos.x = _pl->GetPos().x - 10;
+			_midPos.y = _pl->GetPos().y - bubble-30;
 		}
 		else if (tmpDir == DIR_LEFT) {
-			_midPos.x = _pl->GetPos().x + 45;
-			_midPos.y = _pl->GetPos().y - bubble;
+			_midPos.x = _pl->GetPos().x + 10;
+			_midPos.y = _pl->GetPos().y - bubble-30;
 		}
 	}
 	else if (checkpointFlag == true) {
@@ -125,12 +125,12 @@ void Midpoint::FollowDir()
 		_pos.x = _pl->GetPos().x;
 		_pos.y = _pl->GetPos().y;
 		if (tmpDir == DIR_RIGHT) {
-			_pos.x = _pl->GetPos().x - 45;
-			_pos.y = _pl->GetPos().y - bubble;
+			_pos.x = _pl->GetPos().x - 10;
+			_pos.y = _pl->GetPos().y - bubble-30;
 		}
 		else if (tmpDir == DIR_LEFT) {
-			_pos.x = _pl->GetPos().x + 45;
-			_pos.y = _pl->GetPos().y - bubble;
+			_pos.x = _pl->GetPos().x + 10;
+			_pos.y = _pl->GetPos().y - bubble-30;
 		}
 	}
 }
@@ -172,9 +172,11 @@ void Midpoint::Draw(Position2 offset)
 	else if (checkpointFlag == true && GetFlag == false) {
 		//DrawCircle(_pos.x - offset.x + (_hitRect.w / 2) , _pos.y - offset.y + (_hitRect.h / 2), 12, GetColor(0, 240, 44), true);
 		//‚æ‚­l‚¦‚½‚ç“–‚½‚è”»’èŽæ“¾‚µ‚½Œã‚¢‚ç‚È‚¢‚æ‚Ë
+		//Œ®‚Æ‚Á‚Ä‚¢‚é
 		_hitRect.SetCenter(_pos.x + (_hitRect.w / 2), _pos.y + (_hitRect.h / 2));
+		MV1SetScale(keyhandle, VGet(0.1f, 0.1f, 0.1f));
 
-		if (_pl->GetStateCrouch())
+		if (_pl->GetStateVanish())
 		{
 			alfa = max(alfa - 2, tranceMax);
 		}
@@ -197,7 +199,7 @@ void Midpoint::Draw(Position2 offset)
 	else if(GetFlag == true ){
 		//DrawCircle(_midPos.x - offset.x + (_midRect.w / 2) , _midPos.y - offset.y + (_midRect.h / 2), 12, GetColor(0, 240, 44), true);
 
-		if (_pl->GetStateCrouch())
+		if (_pl->GetStateVanish())
 		{
 			alfa = max(alfa - 2, tranceMax);
 		}
