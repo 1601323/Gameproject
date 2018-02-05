@@ -368,4 +368,6 @@ void ResultScene::DrawGoalTimer(void)
 
 	SetDrawBright(255, 255, 255);
 
+	DrawGraph(400, 400, im.ImageIdReturn("image/Clear/•b.png", SCENE_TITLE), true);
+
 }
