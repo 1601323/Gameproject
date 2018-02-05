@@ -27,6 +27,7 @@ enum CHAR_ST {
 	ST_ROPE,		//ﾛｰﾌﾟ使用
 	ST_WALL,		//壁登り
 	ST_FEVER,		//ﾌｨｰﾊﾞｰ
+	ST_INVINCIBLE,  //むーてーき
 	ST_DETH,		//死亡(リスポーン可)
 	ST_OVER,        //死亡(リスポーン不可)
 	ST_CLEAR,		//ｸﾘｱ
@@ -130,6 +131,7 @@ enum PLAYER_ACTIONS{
 	ACTION_KNOCKBACK,  //敵に見つかった時のモーション(リスポーン前)
 	ACTION_TONGUE_SET, //舌を打つ前の構えるモーション
 	ACTION_TONGUE_GO,  //舌を打った時のモーション
+	ACTION_CROUCH,     //しゃがみモーション
 	ACTION_MAX
 };
 //警戒度ランプの色について
@@ -138,6 +140,14 @@ struct SetColor {
 	int red;
 	int green;
 	int blue;
+};
+
+//ポーズ時のモード
+enum PAUSE_NEXT_MODE {
+	MODE_BACK,
+	MODE_RETRY,
+	MODE_SELECT,
+	MODE_MAX
 };
 
 struct EnemyServerData {

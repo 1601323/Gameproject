@@ -19,6 +19,7 @@
 #include "Rope.h"
 
 #include "ResultScene.h"
+#include "SelectScene.h"
 
 #include "GimmickFactory.h"
 #include "EnemyFactory.h"
@@ -44,9 +45,9 @@ GameScene::GameScene()
 	_mid = new Midpoint();
 	_timer = new TimeManager();
 	_cam = Camera::GetInstance();
-	// œØÃﬂ≤›Ω¿›Ω
+	// ÔæèÔΩØÔæåÔæüÔΩ≤ÔæùÔΩΩÔæÄÔæùÔΩΩ
 	_map = MapCtl::GetInstance();
-	// œØÃﬂ√ﬁ∞¿ÇÃì«Ç›çûÇ›
+	// ÔæèÔΩØÔæåÔæüÔæÉÔæûÔΩ∞ÔæÄ„ÅÆË™≠„ÅøËæº„Åø
 	//_map->Load("map/1218_001.map");
 	_map->Load(mapName);
 	auto chipData = _map->getChipPosData();
@@ -55,15 +56,15 @@ GameScene::GameScene()
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
 	_fac = new GimmickFactory(*_player, *_rope);
-	//// ¿∞πﬁØƒéwíË
-	//_cam->SetTarget(_player);	// playeräÓèÄ
-	//_cam->SetMapCtl(_map);		//Objåpè≥Ç∑ÇÈÇ»ÇÁAddÇ≈
-	//ÉMÉ~ÉbÉNåƒÇ—èoÇµópÇÃä÷êîÇ≈Ç∑ÅB
-	//Ç±ÇÃÇÊÇ§Ç…êÈåæÇ∑ÇÈÇ∆Ç«Ç±Ç≈Ç‡ê›íuÇ≈Ç´ÇÈÇÃÇ≈ämîFìôÇ…Ç¬Ç©Ç¡ÇƒÇ≠ÇæÇ≥Ç¢
-	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//ÉçÅ[ÉvÇ≈à⁄ìÆÇ∑ÇÈÇ‡ÇÃÅióéÇøÇΩÇËÇ∑ÇÈÇ‚Ç¬Åj
-	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ÉçÅ[ÉvÇ≈à⁄ìÆÇ∑ÇÈë´èÍ
-	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//ÉçÅ[ÉvÇ≈à⁄ìÆÇ∑ÇÈë´èÍ
-	//É}ÉbÉvÇì«Ç›éÊÇËÅAÉäÉXÉgÇ…ÉMÉ~ÉbÉNÇéùÇΩÇπÇ‹Ç∑ÅB
+	//// ÔæÄÔΩ∞ÔΩπÔæûÔΩØÔæÑÊåáÂÆö
+	//_cam->SetTarget(_player);	// playerÂü∫Ê∫ñ
+	//_cam->SetMapCtl(_map);		//ObjÁ∂ôÊâø„Åô„Çã„Å™„ÇâAdd„Åß
+	//„ÇÆ„Éü„ÉÉ„ÇØÂëº„Å≥Âá∫„ÅóÁî®„ÅÆÈñ¢Êï∞„Åß„Åô„ÄÇ
+	//„Åì„ÅÆ„Çà„ÅÜ„Å´ÂÆ£Ë®Ä„Åô„Çã„Å®„Å©„Åì„Åß„ÇÇË®≠ÁΩÆ„Åß„Åç„Çã„ÅÆ„ÅßÁ¢∫Ë™çÁ≠â„Å´„Å§„Åã„Å£„Å¶„Åè„Å†„Åï„ÅÑ
+	//_fac->Create(CHIP_TYPE::CHIP_ROPE_FALL,Position2(340, 300));			//„É≠„Éº„Éó„ÅßÁßªÂãï„Åô„Çã„ÇÇ„ÅÆÔºàËêΩ„Å°„Åü„Çä„Åô„Çã„ÇÑ„Å§Ôºâ
+	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//„É≠„Éº„Éó„ÅßÁßªÂãï„Åô„ÇãË∂≥Â†¥
+	//_fac->Create(CHIP_TYPE::CHIP_ROPE_ATTRACT, Position2(32 * 15, 32 * 5));	//„É≠„Éº„Éó„ÅßÁßªÂãï„Åô„ÇãË∂≥Â†¥
+	//„Éû„ÉÉ„Éó„ÇíË™≠„ÅøÂèñ„Çä„ÄÅ„É™„Çπ„Éà„Å´„ÇÆ„Éü„ÉÉ„ÇØ„ÇíÊåÅ„Åü„Åõ„Åæ„Åô„ÄÇ
 	//auto gimData = _map->getChipPosData();
 	for (auto& data : chipData) {
 		if (CHIP_DOOR <= data.chipType && data.chipType < CHIP_PLAYER_POS)
@@ -73,18 +74,18 @@ GameScene::GameScene()
 		//}
 	}
 	_hit->GetClass(_fac);
-	//¥»–∞Ãß∏ƒÿ∞Ç≈Ç∑ÅBÉtÉ@ÉCÉãÇ™Ç≈Ç´ÇÈÇ‹Ç≈ÇÕíºê⁄éwíËÇ…Ç»ÇËÇ‹Ç∑
+	//ÔΩ¥ÔæàÔæêÔΩ∞ÔæåÔΩßÔΩ∏ÔæÑÔæòÔΩ∞„Åß„Åô„ÄÇ„Éï„Ç°„Ç§„É´„Åå„Åß„Åç„Çã„Åæ„Åß„ÅØÁõ¥Êé•ÊåáÂÆö„Å´„Å™„Çä„Åæ„Åô
 	_emFac = new EnemyFactory(*_player, *_rope, *_server, * _hit);
 	//_emFac->Create(ENEMY_TYPE::ENEMY_TURN, Position2(300, 450));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 230));
 	//_emFac->Create(ENEMY_TYPE::ENEMY_WARKING, Position2(350, 450));
 	for (auto& data : chipData) {
-		//Ãﬂ⁄≤‘∞ÇÃèÍèäê›íË
+		//ÔæåÔæüÔæöÔΩ≤ÔæîÔΩ∞„ÅÆÂ†¥ÊâÄË®≠ÂÆö
 		if (data.chipType == CHIP_ENEMY_AROUND || data.chipType == CHIP_ENEMY_LOOK) {
 			_emFac->Create(static_cast<ENEMY_TYPE>(data.chipType),Position2(data.posX,data.posY));
 		}
 	}
-	//ÇªÇÃëºÉ`ÉbÉvÇ©ÇÁïKóvÇ»ÉfÅ[É^Çì«Ç›çûÇ›Ç‹Ç∑
+	//„Åù„ÅÆ‰ªñ„ÉÅ„ÉÉ„Éó„Åã„ÇâÂøÖË¶Å„Å™„Éá„Éº„Çø„ÇíË™≠„ÅøËæº„Åø„Åæ„Åô
 	for (auto& other : chipData) {
 		if (other.chipType == CHIP_PLAYER_POS) {
 			_player->SetInitPos(Position2(other.posX,other.posY));
@@ -97,18 +98,24 @@ GameScene::GameScene()
 	//_hit = new HitClass(_fac, _emFac);
 
 	//_server = new EnemyServer();
-	//ÉtÉ@ÉNÉgÉäÅ[ÇÃÉäÉXÉgÇóòópÇµÇΩhitÇï‘ÇµÇ‹Ç∑
+	//„Éï„Ç°„ÇØ„Éà„É™„Éº„ÅÆ„É™„Çπ„Éà„ÇíÂà©Áî®„Åó„Åühit„ÇíËøî„Åó„Åæ„Åô
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit, _rope);
 	_mid->GetClass(_player);
 	_timer->StartTimer();
 	//GameInit();
-	_cam->SetTarget(_player);	// playeräÓèÄ
-	_cam->SetMapCtl(_map);		//Objåpè≥Ç∑ÇÈÇ»ÇÁAddÇ≈
+	_cam->SetTarget(_player);	// playerÂü∫Ê∫ñ
+	_cam->SetMapCtl(_map);		//ObjÁ∂ôÊâø„Åô„Çã„Å™„ÇâAdd„Åß
 
 	count = 0;
-	//numberImage = im.ImageIdReturn("âºimage/UI/NewNum.png",SCENE_RESULT);
-	lightImage = im.ImageIdReturn("âºimage/UI/Patrite2.png", SCENE_RESULT);
+	pauseNowNum = 0;
+	PauseDirNumY = 0;
+	dirMoveCnt = 0;
+	selectPauseFlag = false;
+
+	_minSensingValueL = SV_HIGH;
+	//numberImage = im.ImageIdReturn("image/UI/NewNum.png",SCENE_RESULT);
+	lightImage = im.ImageIdReturn("image/UI/Patrite2.png", SCENE_RESULT);
 }
 GameScene::~GameScene()
 {
@@ -124,7 +131,7 @@ GameScene::~GameScene()
 void GameScene::GameInit()
 {
 	GameMain& gm = GameMain::Instance();
-	//èâä˙èÛë‘ÇÃÉfÅ[É^Çì¸ÇÍÇÈ
+	//ÂàùÊúüÁä∂ÊÖã„ÅÆ„Éá„Éº„Çø„ÇíÂÖ•„Çå„Çã
 	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
@@ -133,7 +140,7 @@ void GameScene::GameInit()
 		mapName = "map/easy.map";
 		break;
 	case 1:
-		mapName = "map/Intermediate.map";
+		mapName = "map/normal.map";
 		break;
 	case 2:
 		mapName = "map/hard.map";
@@ -173,8 +180,8 @@ void GameScene::NormalUpdata(Input* input)
 	DrawBack(offset);
 
 	_map->Draw(offset);
-	//€∞ÃﬂégópíÜÇÕìGÇ»Ç«Ç™é~Ç‹ÇÈ
-	if (_player->GetcharState() == ST_ROPE) {
+	//ÔæõÔΩ∞ÔæåÔæü‰ΩøÁî®‰∏≠„ÅØÊïµ„Å™„Å©„ÅåÊ≠¢„Åæ„Çã
+	if (_player->GetStateRope() == true) {
 		UsingRopeUpdata(input, offset);
 	}
 	else {
@@ -189,10 +196,11 @@ void GameScene::NormalUpdata(Input* input)
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
+
 #ifdef _DEBUG
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON)
 	{
-		//EnterÉLÅ[ or AÉ{É^Éì èàóù
+		//Enter„Ç≠„Éº or A„Éú„Çø„É≥ Âá¶ÁêÜ
 		//DrawString(200, 200, "idek", 0xfffff);
 	}
 #endif
@@ -205,7 +213,7 @@ void GameScene::NormalUpdata(Input* input)
 void GameScene::JudgeTransition()
 {
 	GameMain& gm = GameMain::Instance();
-	//ÉNÉäÉAÇ…ÇÊÇÈâÊñ ëJà⁄Çâºé¿ëï
+	//„ÇØ„É™„Ç¢„Å´„Çà„ÇãÁîªÈù¢ÈÅ∑Áßª„Çí‰ªÆÂÆüË£Ö
 	if (_mid->ReturnGetFlag() == true) {
 		_rtData.midFlag = true;
 		gm.SetResultData(_rtData);
@@ -237,21 +245,21 @@ void GameScene::ObjectUpdata(Input* input, Position2& offset)
 	_emFac->Updata();
 	_mid->Updata(input);
 }
-//ÉçÅ[ÉvÇégÇ¡ÇƒÇ¢ÇÈÇ∆Ç´Ç…åƒÇ—èoÇ≥ÇÍÇÈ
+//„É≠„Éº„Éó„Çí‰Ωø„Å£„Å¶„ÅÑ„Çã„Å®„Åç„Å´Âëº„Å≥Âá∫„Åï„Çå„Çã
 void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 {
 	//_cam->Update();
-	for (auto& gim : _fac->GimmickList()) {		//ropeÇ…ç∂âEÇ≥ÇÍÇÈÉMÉ~ÉbÉNÇæÇØUpdataÇåƒÇ—èoÇ∑
+	for (auto& gim : _fac->GimmickList()) {		//rope„Å´Â∑¶Âè≥„Åï„Çå„Çã„ÇÆ„Éü„ÉÉ„ÇØ„Å†„ÅëUpdata„ÇíÂëº„Å≥Âá∫„Åô
 		if (gim->GetType() == GIM_FALL || gim->GetType() == GIM_ATTRACT) {
 			gim->Updata(*input);
-			gim->Updata();					//ëSëÃìIÇ…äÆê¨ÇµéüëÊÇ±ÇøÇÁÇ…à⁄çs
+			gim->Updata();					//ÂÖ®‰ΩìÁöÑ„Å´ÂÆåÊàê„ÅóÊ¨°Á¨¨„Åì„Å°„Çâ„Å´ÁßªË°å
 		}
 	}
 	_emFac->EnemyFalter();
 	_rope->Updata(input, offset);
 	_player->Update(input);
 }
-//ÉNÉäÉAÇµÇΩå„ÅAÉäÉUÉãÉgÇ…ëJà⁄Ç∑ÇÈÇΩÇﬂÇÃupdataÇ≈Ç∑
+//„ÇØ„É™„Ç¢„Åó„ÅüÂæå„ÄÅ„É™„Ç∂„É´„Éà„Å´ÈÅ∑Áßª„Åô„Çã„Åü„ÇÅ„ÅÆupdata„Åß„Åô
 void GameScene::TransitionUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
@@ -269,7 +277,9 @@ void GameScene::TransitionUpdata(Input* input)
 		if (_rtData.goalFlag == true) {
 			gm.Instance().ChangeScene(new ResultScene());
 		}
-		else if (gm.GetResultData().life >= 0) {
+		else if (gm.GetResultData().life > 0) {
+			//„É™„Éà„É©„Ç§
+
 			RetryProcess();
 			_updater = &GameScene::FadeInUpdata;
 		}
@@ -279,8 +289,11 @@ void GameScene::TransitionUpdata(Input* input)
 		count = 0;
 	}
 }
+//„Éù„Éº„Ç∫Áî®updata
 void GameScene::PauseUpdata(Input* input) 
 {
+	dirMoveCnt++;
+
 	GameMain& gm = GameMain::Instance();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
@@ -288,27 +301,118 @@ void GameScene::PauseUpdata(Input* input)
 	_map->Draw(offset);
 	Draw(offset);
 	DrawUI();
+	DrawPauseUi();
 #ifdef _DEBUG
-	DrawBox(300,100,500,300,0xabcdef,true);
-	DrawString(320,150,"PAUSE",0xffffff);
+	//DrawBox(300,100,500,300,0xabcdef,true);
+	//DrawString(320,150,"PAUSE",0xffffff);
 #endif
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
 
-	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
+	PauseSelect(input);
+
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON)
+	{
+		dirMoveCnt = 0;
 		_updater = &GameScene::NormalUpdata;
 	}
+
+	if(	key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		switch (pauseNowNum)
+		{
+			//„Ç≤„Éº„É†„Å´Êàª„Çã
+		case MODE_BACK:
+			dirMoveCnt = 0;
+			_updater = &GameScene::NormalUpdata;
+			break;
+			//ÊúÄÂàù„Åã„Çâ„ÇÑ„ÇäÁõ¥„Åô
+		case MODE_RETRY:
+			dirMoveCnt = 0;
+			RetryPauseProcess();
+			_updater = &GameScene::FadeInUpdata;
+			break;
+			//„Çπ„ÉÜ„Éº„Ç∏„Çª„É¨„ÇØ„Éà„Å´Êàª„Çã
+		case MODE_SELECT:
+			dirMoveCnt = 0;
+			gm.Instance().ChangeScene(new SelectScene());
+			break;
+		default:
+			break;
+		}
+		//_updater = &GameScene::NormalUpdata;
+	}
 }
-//ÉäÉgÉâÉCéûÇÃèâä˙âªåƒÇ—èoÇµÇÇ‹Ç∆ÇﬂÇΩÇ‡ÇÃ
+
+//pause„ÅÆÈÅ∏„Å∞„Çå„Å¶„ÅÑ„ÇãÂá¶ÁêÜ
+void GameScene::PauseSelect(Input* input)
+{
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+
+	if (inpInfo.num >= 1) {
+		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL &&
+			selectPauseFlag == false)
+		{
+			pauseNowNum--;
+			if (pauseNowNum <= 0) {
+				pauseNowNum = MODE_MAX - 1;
+			}
+			selectPauseFlag = true;
+		}
+		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL &&
+			selectPauseFlag == false)
+		{
+			pauseNowNum++;
+			if (pauseNowNum >= MODE_MAX) {
+				pauseNowNum = 0;
+			}
+			selectPauseFlag = true;
+		}
+		else if (!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) &&
+			!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
+				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)) {
+			selectPauseFlag = false;
+		}
+		else {
+			pauseNowNum = pauseNowNum;
+		}
+	}
+	else {
+
+		//„Çπ„ÉÜ„Éº„Ç∏ÈÅ∏Êäû
+		if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
+			pauseNowNum--;
+			if (pauseNowNum < 0) {
+				pauseNowNum = MODE_MAX - 1;
+			}
+		}
+		else if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
+			pauseNowNum++;
+			if (pauseNowNum >= MODE_MAX) {
+				pauseNowNum = 0;
+			}
+		}
+		else {
+		}
+	}
+}
+
+//„É™„Éà„É©„Ç§ÊôÇ„ÅÆÂàùÊúüÂåñÂëº„Å≥Âá∫„Åó„Çí„Åæ„Å®„ÇÅ„Åü„ÇÇ„ÅÆ
 void GameScene::RetryProcess()
 {
 	if (_mid->ReturnCheckFlag() || _mid->ReturnGetFlag()/*_rtData.midFlag == true*/) {
+		//„Éù„Éº„Çπ„Åã„Çâ„ÅÆÂ†¥ÂêàÂøÖ„ÅöÂàùÊúüÈñ¢Êï∞„Å´ÂÖ•„Çã
 		_player->SetRetryPos(_mid->GetInitPos());
 	}
 	else
 	{
-		_player->SetInitPos();
+		//„Éù„Éº„Çπ„Åã„Çâ„ÅÆÂ†¥ÂêàÂøÖ„ÅöÂàùÊúüÈñ¢Êï∞„Å´ÂÖ•„Çã
+		 _player->SetInitPos();
 	}
 	_mid->Updata();
 	for (auto& em : _emFac->EnemyList()) {
@@ -316,14 +420,14 @@ void GameScene::RetryProcess()
 	}
 	_server->ServerInit();
 }
-//Ç±ÇÃêÊÇ‹Ç∆ÇﬂÇÈÇ©Ç‡ÇµÇÍÇ»Ç¢ÇÃÇ≈âºê›íu
+//„Åì„ÅÆÂÖà„Åæ„Å®„ÇÅ„Çã„Åã„ÇÇ„Åó„Çå„Å™„ÅÑ„ÅÆ„Åß‰ªÆË®≠ÁΩÆ
 void GameScene::UpdateManager()
 {
 
 }
 void GameScene::Draw(Position2& offset)
 {
-	//ç°ÇÃÇ∆Ç±ÇÎÉ}ÉbÉvÇÕupdataÇ≈ï\é¶Ç≥ÇπÇƒÇ®Ç≠
+	//‰ªä„ÅÆ„Å®„Åì„Çç„Éû„ÉÉ„Éó„ÅØupdata„ÅßË°®Á§∫„Åï„Åõ„Å¶„Åä„Åè
 	//_map->Draw();
 	_fac->Draw(offset);
 	_emFac->Draw(offset);
@@ -337,35 +441,84 @@ void GameScene::DrawUI()
 	GameMain& gm = GameMain::Instance();
 
 	for (int f = 0; f < gm.GetResultData().life; f++) {
-		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("âºimage/UI/UI_life.png", SCENE_RESULT),true);
+		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("image/UI/UI_life.png", SCENE_RESULT),true);
 	}
-	//èÍèäÇÕäÆëSÇ…ÇÕåàíËÇµÇƒÇ¢Ç»Ç¢
-	//êFïœâªÇé¿ëï
+	//Â†¥ÊâÄ„ÅØÂÆåÂÖ®„Å´„ÅØÊ±∫ÂÆö„Åó„Å¶„ÅÑ„Å™„ÅÑ
+	//Ëâ≤Â§âÂåñ„ÇíÂÆüË£Ö
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
 	SetDrawBright(_server->ReturnColor().red, _server->ReturnColor().green, _server->ReturnColor().blue);
 	DrawExtendGraph(700, 0, 770, 85, lightImage, true);
 	SetDrawBright(255, 255, 255);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	DrawExtendGraph(700, 0, 770, 85, im.ImageIdReturn("âºimage/UI/Patrite1.png", SCENE_RESULT), true);
+	DrawExtendGraph(700, 0, 770, 85, im.ImageIdReturn("image/UI/Patrite1.png", SCENE_RESULT), true);
 
 	//_timer->Draw();
 }
-//îwåiï`âÊ
-void GameScene::DrawBack(Position2 offset)
-{
-	//Ç‹ÇæëΩèdÉXÉNÉçÅ[ÉãÇÕÇµÇ»Ç¢Ç≈Ç∑
-	ImageMgr& im = ImageMgr::Instance();
-	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("âºimage/Game/title5.png",SCENE_RESULT),true);
-	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("âºimage/Game/title5.png", SCENE_RESULT), true);
-	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("âºimage/Game/j.bmp", SCENE_RESULT), true);
 
-	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back3.png", SCENE_RESULT), true);
-	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back2.png", SCENE_RESULT), true);
-	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("âºimage/Game/back1.png", SCENE_RESULT), true);
+//„Éù„Éº„ÇπÁî®„ÅÆui„ÇíË°®Á§∫
+void GameScene::DrawPauseUi(void)
+{
+	ImageMgr& im = ImageMgr::Instance();
+	//„Éú„Éº„Éâ
+	DrawExtendGraph(220, 30, 610,400,im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
+	//„Éù„Éº„Ç∫ÊñáÂ≠ó
+	DrawGraph(310, 70, im.ImageIdReturn("image/Pause/Pause.png", SCENE_RESULT), true);
+	//„É¢„Éº„ÉâÈÅî
+	DrawGraph(340, 170, im.ImageIdReturn("image/Pause/return.png", SCENE_RESULT), true);
+	DrawGraph(340, 230, im.ImageIdReturn("image/Pause/Retry.png", SCENE_RESULT), true);
+	DrawGraph(340, 280, im.ImageIdReturn("image/Pause/Select.png", SCENE_RESULT), true);
+
+	DrawGraph(260 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), PauseDirNumY, im.ImageIdReturn("image/yazirushi.png", SCENE_RESULT), true);
+
+	switch (pauseNowNum) {
+	case 0:
+		PauseDirNumY = 160;
+		break;
+	case 1:
+		PauseDirNumY = 220;
+		break;
+	case 2:
+		PauseDirNumY = 270;
+		break;
+	default:
+		break;
+	}
 
 }
-//ÉVÅ[ÉìëJà⁄ÇÃÇΩÇﬂÇ…ópà”
+
+//ËÉåÊôØÊèèÁîª
+void GameScene::DrawBack(Position2 offset)
+{
+	//„Åæ„Å†Â§öÈáç„Çπ„ÇØ„É≠„Éº„É´„ÅØ„Åó„Å™„ÅÑ„Åß„Åô
+
+	ImageMgr& im = ImageMgr::Instance();
+	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("image/Game/title5.png",SCENE_RESULT),true);
+	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/title5.png", SCENE_RESULT), true);
+	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/j.bmp", SCENE_RESULT), true);
+
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back3.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back2.png", SCENE_RESULT), true);
+	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back1.png", SCENE_RESULT), true);
+
+}
+
+void GameScene::GameScene::RetryPauseProcess()
+{
+	GameMain& gm = GameMain::Instance();
+	_rtData.life = 3;
+	gm.SetResultData(_rtData);
+
+	_player->SetInitPausePos();
+
+	_mid->Updata();
+	for (auto& em : _emFac->EnemyList()) {
+		em->SetInitPos();
+	}
+	_server->ServerInit();
+}
+
+//„Ç∑„Éº„É≥ÈÅ∑Áßª„ÅÆ„Åü„ÇÅ„Å´Áî®ÊÑè
 SCENE_TYPE GameScene::GetScene()
 {
 	return SCENE_GAME;

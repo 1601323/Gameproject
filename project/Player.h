@@ -8,12 +8,14 @@
 #define MAX_GRAVITY (15.0f)				//重力のMAX値
 #define WALL_SPEED (1.0f)				//壁登りのｽﾋﾟｰﾄﾞ
 #define JUMP_POWER (15.0f)				//ｼﾞｬﾝﾌﾟ力
-#define VANISH_CNT (3)					//消えるまでのｶｳﾝﾄ
+#define VANISH_CNT (2)					//消えるまでのｶｳﾝﾄ
 #define VANISH    (2)                   //消えるまでのｶｳﾝﾄ
 #define FEVER_CNT (10)					//フィーバーの時間
 #define ANIMATION_SPEED_SLOW (0.3f)     //アニメーションの速さ(超低速)
 #define ANIMATION_SPEED_DEF (0.5f)      //アニメーションの速さ(低速)
 #define ANIMATION_SPEED_HIGH (0.8f)     //アニメーションの速さ(普通)
+#define INVINCIBLETIMER (2)             //無敵時間
+
 
 class Input;
 class HitClass;
@@ -56,6 +58,8 @@ private:
 	float modelDirAngle;                //モデル表示用のY軸の回転率
 	bool feverFlag;						//フィーバーフラグ
 	int feverTime;						//フィーバーの時間
+	bool inviFlag;                      //無敵時間フラグ
+	int inviCnt;                        //無敵時間カウンター
 	bool JumpFlag;						//ｼﾞｬﾝﾌﾟのﾌﾗｸﾞ
 	bool WallFlag;						//壁に張り付くフラグ
 	bool moveFlag;						//壁に張り付いているとき動けるかのフラグ
@@ -65,11 +69,13 @@ private:
 	bool fMoveLeft;						//同上
 	bool deathFlag;						//まさに死亡フラグ（_stateでは管理しきれないみたいなので
 	bool helpFever;						//ﾌｨｰﾊﾞｰ終了時の補正のために用意
-	bool crouthFlag;					//しゃがみフラグ
-	void HitToEnemy();					//敵と当たった時
+	bool crouchFlag;					//しゃがみフラグ
+	bool ropeFlag;						//ロープ状態かどうかを返すフラグ
+	bool vanFlag;						//ステルス状態かどうかのフラグ
 	char keyData[256];
 	char oldkeyData[256];
 
+	void HitToEnemy();					//敵と当たった時
 	void setMove(Input* input);			//移動関数
 	void setState(void);				//ｽﾃｰﾀｽ制御
 	void setDir(Input* input);			//向き制御
@@ -84,6 +90,7 @@ private:
 	bool stVanish(void);				//ｽﾃﾙｽ処理
 	bool stFever(void);					//ﾌｨｰﾊﾞｰ処理
 	bool plPlaceCheck();				//ﾌｨｰﾊﾞｰ終了時、ﾌﾟﾚｲﾔｰが壁の中にいないかチェックします
+	void stInvincible(void);            //無敵状態を制御する関数
 
 	void FeverUpdata(Input* input);		//フィーバー時に呼び出す全体の処理
 	void FeverJump();					//フィーバー用のジャンプ処理
@@ -99,6 +106,7 @@ private:
 	Rect _wallRect;						//壁用のレクト
 
 	FEVER_DATA _fd;
+	RESULT_DATA _rtData;
 	void GetFeverData();
 	
 
@@ -116,9 +124,13 @@ public:
 	void SetInitPos(Position2 p);		//初期位置をセットする
 	DIR GetDir(void);					//dir取得	
 	void SetRetryPos(Position2 midPos);
+	void SetInitPausePos();             //ポース画面からリトライする場合こっちに入る
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
 
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
+	bool GetStateCrouch();				//しゃがんでいるかどうかを返します
+	bool GetStateVanish();				//ステルスしているかどうかを返します
+	bool GetStateRope();				//ロープを使っているかどうかを返します
 	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//スティックの傾き応じたplayerのspeedの上限テーブル
 	SENSING_VALUE _minSensingValueL;  // ｽﾃｨｯｸの入力を感知する最低の値 L
 	Position2 ReturnWoToScPos2ver();   //ワールド座標からスクリーン座標に変換後のposを返す関数

@@ -28,7 +28,7 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	_state = GM_NONE;
 	enterFlag = false;
 	_gimType = GIM_DOOR;
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/o“üŒû/door.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/Gateway/door.pmx", SCENE_RESULT);
 	//AttachIndex = MV1AttachAnim(modelhandle, 1, -1, false);
 	//totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
 }

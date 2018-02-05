@@ -148,11 +148,22 @@ void EmAround::InterMove()
 {
 	if (_state == EM_ST_MOVE) {	//Ãﬂ⁄≤‘∞Ç™î≠å©Ç≥ÇÍÇƒÇ¢Ç»Ç¢ÅAÇ©Ç¬ÉNÉäÉAèåèÇ™ñûÇΩÇ≥ÇÍÇƒÇ¢Ç»Ç¢Ç∆Ç´
 		interCnt++;
-		//Ç∆ÇËÇ†Ç¶Ç∏ÇPïbä‘í‚é~Ç≥ÇπÇƒîΩëŒë§Ç…à⁄ìÆÇ≥ÇπÇÈ
-		if (interCnt > 60) {
+		//Ç∆ÇËÇ†Ç¶Ç∏ÇP.5ïbä‘í‚é~Ç≥ÇπÇƒîΩëŒë§Ç…à⁄ìÆÇ≥ÇπÇÈ
+
+		//ÇÆÇ¢Å[ÇÒÇ∆êUÇËå¸Ç¢ÇƒÇ‹Ç∑
+		if (_dir == DIR_RIGHT) {
+			modelDirAngle = AngleRad(-90.f + interCnt*-2);
+		}
+		else if (_dir == DIR_LEFT) {
+			modelDirAngle = AngleRad(90.f - interCnt*2);
+		}
+
+		if (interCnt > 90) {
 			moveFlag = false;
 			interCnt = 0;
 			dis = 0;
+
+
 			if (_dir == DIR_RIGHT) {
 				modelDirAngle = AngleRad(90.0f);
 				_dir = DIR_LEFT;
@@ -263,7 +274,7 @@ void EmAround::Visibility()
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
-		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -274,7 +285,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -285,7 +296,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -316,7 +327,8 @@ void EmAround::LoseSight()
 void EmAround::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
+			(_hit.IsHit(GetRect(), _rope.GetCircle()) || (_hit.IsHit(GetRect(), _rope.GetCircle2())))) {
 #ifdef _DEBUG
 			//DrawString(100, 100, "ìGÇ…ìñÇΩÇ¡ÇΩÇÊÅI", 0xffffff);
 #endif

@@ -29,11 +29,14 @@ private:
 	void scroll();
 	void Draw();
 	void InitMovie();
+	void CheckPad();
 	SENSING_VALUE _minSensingValueL;
 
 	bool titleFlag;		//タイトル画面（Aを押してね）
 	bool selectFlag;	//メニューを表示　
 	int noInputTime;
+	int menuCnt;
+	bool padFlag;
 
 	int skyImage;
 	int dirMoveCnt;

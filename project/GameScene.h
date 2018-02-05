@@ -17,6 +17,7 @@ class Camera;
 class EnemyServer;
 class Midpoint;
 class TimeManager;
+class Input;
 
 class ModelManager;
 
@@ -47,9 +48,14 @@ private:
 	int tenex;
 	int hunex;
 	int lightImage;
+	int pauseNowNum;                                            //現在選択しているポーズのモード
+	int PauseDirNumY;
+	int dirMoveCnt;
+	bool selectPauseFlag;
 
 	RESULT_DATA _rtData;
 	FEVER_DATA _feverData;
+	SENSING_VALUE _minSensingValueL;
 
 	int count;			//遷移確認用（あとで削除します）
 	void GameInit();											//ゲーム開始時の初期化を行います
@@ -59,10 +65,13 @@ private:
 	void FadeInUpdata(Input* intput);							//フェードインを行います
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
 	void PauseUpdata(Input* input);
+	void PauseSelect(Input* input);
 
 	void RetryProcess();
+	void GameScene::RetryPauseProcess();
 	void UpdateManager();											//updataのたびに呼び出す関数をまとめておく
 	void Draw(Position2& offset);
+	void DrawPauseUi(void);
 	void DrawUI();	
 	void DrawBack(Position2 offset);
 	void JudgeTransition();

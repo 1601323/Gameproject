@@ -93,8 +93,8 @@ void Rope::DrawRopeRect(void)
 
 	ModelManager();
 
-	//_RopeCircle.Draw(_tmpOffset);
-	//_RopeCircle2.Draw(_tmpOffset);
+	_RopeCircle.Draw(_tmpOffset);
+	_RopeCircle2.Draw(_tmpOffset);
 
 }
 void Rope::ModelManager(void)
@@ -182,7 +182,7 @@ void Rope::Ready(Input* input)
 		}
 
 		//発射準備のボタンが変わっています 右shiftキー or pad X
-		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
+		if ((_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON || _key.keybit.L_UP_BUTTON && !_lastkey.keybit.L_UP_BUTTON )&& !padFlag ||
 			_key.keybit.X_BUTTON && !_lastkey.keybit.X_BUTTON && padFlag)
 		{
 			RopeTurnFlag = false;
@@ -219,15 +219,17 @@ void Rope::SelectDir(Input* input)
 		//矢印表示
 		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
 			 _player->GetPos().y - _tmpOffset.y-5, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
-			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, false);
+			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
 		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
 			_player->GetPos().y - _tmpOffset.y-20, 1.0, AngleRad(0.0f),
-			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
+			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
 
 		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
 			_player->GetPos().y - _tmpOffset.y-35, 1.0, dirFlag ? AngleRad(-45.0f): AngleRad(-135.0f),
-			im.ImageIdReturn("仮image/UI/dirSmall.png", SCENE_RESULT), true, false);
+			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
+
+
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
@@ -275,8 +277,8 @@ void Rope::Extending(Input* input)
 				else {
 				}
 
-				//伸ばしている最中にギミックやステージにあたれば強制的に戻す(3つもあるよ)
-				if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle()) ||
+				//伸ばしている最中にギミックやステージにあたれば強制的に戻す
+				if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle()) || _hit->EnemyHit(GetCircle2())||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
@@ -314,7 +316,6 @@ void Rope::Extended(Input* input)
 	if (_state == ST_ROPE_EXTENDED)
 	{
 		timerWait--;
-		//_RopeCircle.Draw(_tmpOffset);
 		//当たったかどうかでアニメーションを進めるか戻す
 		ModelManager();
 
@@ -491,21 +492,21 @@ void Rope::SetRopeRadForDrawZ(void)
 	{
 	case ROPE_DIR_UPPER:
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
-		RopeHitModelNumY = dirFlag ? 35:25;
-		mentenanceNum_Y = -58 + _RopeRect.h / 2;
+		RopeHitModelNumY = _player->GetStateCrouch() ? 10 :dirFlag ? 35:25;//あたり判定用
+		mentenanceNum_Y = _player->GetStateCrouch() ? -28 + _RopeRect.h / 2 :-58 + _RopeRect.h / 2;//モデル描画
 		mentenanceNum_X = dirFlag ? -20 : 20;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
-		RopeHitModelNumY = 70;
-		mentenanceNum_Y =  -58 + _RopeRect.h / 2;
+		RopeHitModelNumY = _player->GetStateCrouch() ? 45:70;//あたり判定用
+		mentenanceNum_Y = _player->GetStateCrouch() ? -28 + _RopeRect.h / 2 : -58 + _RopeRect.h / 2;//モデル描画
 		mentenanceNum_X = dirFlag ? -20 : 20;
 		break;
 	case ROPE_DIR_NON:
 	case ROPE_DIR_STRAIGHT:
 		RopeAngle_Z = AngleRad(0.f);
-		RopeHitModelNumY = 55;
-		mentenanceNum_Y = -60 +_RopeRect.h / 2;
+		RopeHitModelNumY = _player->GetStateCrouch() ?20:55;//あたり判定用
+		mentenanceNum_Y = _player->GetStateCrouch() ? -30 + _RopeRect.h / 2: -60 +_RopeRect.h / 2;//モデル描画
 		mentenanceNum_X = dirFlag ? -10 : 10;
 		break;
 	default:
@@ -560,6 +561,11 @@ Rect& Rope::GetRect(void)
 Circle& Rope::GetCircle(void)
 {
 	return _RopeCircle;
+}
+
+Circle& Rope::GetCircle2(void)
+{
+	return _RopeCircle2;
 }
 
 //更新されたHitClassを受け取るための関数です

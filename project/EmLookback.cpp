@@ -135,7 +135,7 @@ void EmLookback::Draw(Position2 offset)
 	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
-	//_emRect.Draw(offset);
+	_emRect.Draw(offset);
 	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
 #endif 
 }
@@ -174,12 +174,31 @@ void EmLookback::SetMove()
 void EmLookback::setDir(void)
 {
 	if (_state == EM_ST_MOVE) {
-		//3秒ごとに向きが変わる
-		if (LookCount < EM_LOOKBACK_TIME) {
+		LookCount++;
+
+		//3秒ごとに向きが変わる(+振り向き1秒)
+		if (LookCount < EM_LOOKBACK_TIME) 
+		{
 			LookCount++;
+			//ぐいん振り向きます(とりあえず3秒正面1秒で方向転換)
+			if (LookCount > 60 * EM_LOOKBACK_MODEL_TIME)
+			{
+				LookModelDirCnt++;
+
+				if (_dir == DIR_RIGHT) {
+					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -3);
+				}
+				else if (_dir == DIR_LEFT) {
+					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 3);
+				}
+			}
+
+
 			if (LookCount == EM_LOOKBACK_TIME) {
 				LookCount *= -1;
+				LookModelDirCnt = 0;
 			}
+
 		}
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
@@ -210,7 +229,7 @@ void EmLookback::Visibility()
 	//視界判定(プレイヤーを見つけたとき)
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 
-		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) &&( _player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -221,7 +240,7 @@ void EmLookback::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && (_player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -232,7 +251,7 @@ void EmLookback::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit.EnemyViewing(_emData, _player.GetRect()) && _player.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _player.GetRect()) && (_player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -290,7 +309,8 @@ void EmLookback::moveFear(void)
 void EmLookback::EnemyFalter()
 {
 	if (_state != EM_ST_FEAR) {
-		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&_hit.IsHit(GetRect(), _rope.GetCircle())) {
+		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
+			((_hit.IsHit(GetRect(), _rope.GetCircle())) || (_hit.IsHit(GetRect(), _rope.GetCircle2())))) {
 			_state = EM_ST_FEAR;
 		}
 		else {

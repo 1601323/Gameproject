@@ -28,6 +28,7 @@ Player::Player()
 	vanCnt = 60 * VANISH_CNT;	//とりあえず３秒
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+	inviCnt = INVINCIBLETIMER * 60;
 	//_hit = new HitClass();
 	_plRect.w = 32;
 	_plRect.h = 50;
@@ -44,7 +45,10 @@ Player::Player()
 	deathFlag = true;
 	helpFever = false;
 	airFlag = false;
-	crouthFlag = false;
+	crouchFlag = false;
+	vanFlag = false;
+	ropeFlag = false;
+	inviFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -106,10 +110,10 @@ void Player::setMove(Input* input)
 {
 	setDir(input);
 	moveJump();
-	moveCrouch(input);
 	//setState();
 	moveWall();
 	moveRope();
+	moveCrouch(input);
 	accelePL();
 	EnterDoor();
 }
@@ -118,6 +122,13 @@ void Player::setMove(Input* input)
 void Player::setState(void)
 {
 	stFever();
+
+	if (inviFlag)
+	{
+		_state = ST_INVINCIBLE;
+	}
+	stInvincible();
+
 	if (_state != ST_FEVER) {
 		stVanish();
 	}
@@ -130,6 +141,7 @@ void Player::FeverUpdata(Input* input)
 	FeverWall();
 
 	moveRope();
+	moveCrouch(input);               
 	moveFever();
 
 	EnterDoor();
@@ -140,7 +152,7 @@ void Player::setDir(Input* input)
 	//ﾛｰﾌﾟ状態なら向きは変えられない
 	float angle = static_cast<int>((RadAngle(_inpInfo.L_Stick.lstick) * 100.f));
 
-	if (_state != ST_ROPE ) {
+	if (_state != ST_ROPE  && _state != ST_CROUCH) {
 		//右
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
@@ -916,11 +928,10 @@ void Player::FeverWall()
 //ﾛｰﾌﾟ状態の処理
 bool Player::moveRope(void)
 {
-
 	//ﾛｰﾌﾟ状態なら動けない
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;
-
+		ropeFlag = true;
 		if (vx != 0 && JumpFlag) {
 			moveRopeJumpFlag = true;
 		}
@@ -932,6 +943,7 @@ bool Player::moveRope(void)
 	else {
 		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
 		AnimNowTime[ACTION_TONGUE_GO] = 0.0f;
+		ropeFlag = false;
 	}
 
 	//勢いを殺さずに着地する
@@ -1001,14 +1013,16 @@ bool Player::stVanish(void)
 	}
 	//動いていたらｶｳﾝﾄを戻す
 	//壁登り状態で動いていたらｽﾃﾙｽにならない
-	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0) {
+	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 ||ropeFlag == true) {
 		vanCnt = 60 * VANISH_CNT;
+		vanFlag = false;
 		alfa = 255;
 		deathFlag = true;
 	}
 
 	if (vanCnt <= 0) {
-		_state = ST_VANISH;
+	//	_state = ST_VANISH;
+		vanFlag = true;
 		deathFlag = false;
 	}
 #ifdef _DEBUG
@@ -1019,23 +1033,59 @@ bool Player::stVanish(void)
 void Player::moveCrouch(Input* input)
 {
 	int tmpPos = 10;
-	//if (crouthFlag == true) {
-	//	_state == ST_CROUCH;
-	//}
-	//if (_inpInfo.key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON ) {
-	//	if (WallFlag == false && JumpFlag == false ) {
-	//		crouthFlag =!crouthFlag;
-	//		_pos.y -= 18;
-	//	}
-	//}
+	if (crouchFlag == true) {
+		_state = ST_CROUCH;
+	}
+	if (_inpInfo.num >= 1) {
+		if (_dir == DIR_DOWN) {
+			crouchFlag = true;
+		}
+		if( input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
+			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL){
+			crouchFlag = false;
+		}
+	}
+	else {
 
-	//if (_state == ST_CROUCH) {
-	//	DrawString(100,100,"uwaaaaaaaaa",0xffffff);
-	//	//_pos.y = _pos.y + tmpPos;
-	//}
-	//else {
-	//	_pos.y = _pos.y;
-	//}
+		if (_key.keybit.R_DOWN_BUTTON && !_lastKey.keybit.R_DOWN_BUTTON) {
+			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+				if (crouchFlag == true) {
+					crouchFlag = false;
+					//_pos.y -= 30;
+				}
+				else if (crouchFlag == false) {
+					crouchFlag = true;
+				}
+				else {}
+			}
+		}
+		if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
+			//上キーでしゃがみを解除
+			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
+				if (crouchFlag == true) {
+					crouchFlag = false;
+					//_pos.y -= 30;
+				}
+			}
+
+		}
+	}
+	if (_state == ST_CROUCH) {
+		//_pos.y = _pos.y + tmpPos;
+
+		if (moveFlag == true) {
+			moveFlag = false;
+		}
+		vx = 0.0f;
+		//ジャンプしたらしゃがみを解除
+		if (JumpFlag == true) {
+			//_pos.y -= 18;
+			crouchFlag = false;
+		}
+	}
+	else {
+		AnimNowTime[ACTION_CROUCH] = 0.0f;
+	}
 }
 //ﾌｨｰﾊﾞｰ処理
 bool Player::stFever(void)
@@ -1082,6 +1132,23 @@ bool Player::stFever(void)
 	//DrawFormatString(600, 10, 0xffffff, "%d", feverTime);
 #endif
 	return false;
+}
+
+//無敵状態の処理
+void Player::stInvincible(void)
+{
+	if (inviFlag)
+	{
+		if (_state == ST_INVINCIBLE)
+		{
+			if (--inviCnt < 0)
+			{
+				_state = ST_DEF;
+				inviCnt = INVINCIBLETIMER * 60;
+				inviFlag = false;
+			}
+		}
+	}
 }
 
 //ｼﾞｬﾝﾌﾟ処理
@@ -1218,23 +1285,30 @@ void Player::FeverJump()
 void Player::HitToEnemy()
 {
 	GameMain& gm = GameMain::Instance();
+	
 	if (_hit->EnemyHit(*this)) {
-		if (deathFlag == true) {
-			_state = ST_DETH;
+		if (_state != ST_INVINCIBLE)
+		{
+			if (deathFlag == true) {
+				_state = ST_DETH;
 
-			//完全敗北
-			if (gm.GetResultData().life <= 0)
-			{
-				_state = ST_OVER;
+				//完全敗北
+				if (gm.GetResultData().life <= 0)
+				{
+					_state = ST_OVER;
+				}
+			}
+			else if (deathFlag == false) {
+				//死なない
 			}
 		}
-		else if (deathFlag == false) {
-			//死なない
+		else {
 		}
 	}
 	else
 	{
 	}
+	
 }
 //重力
 void Player::gravity(void)
@@ -1279,7 +1353,7 @@ void Player::gravity(void)
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE) {
+	if (_state == ST_ROPE ) {
 		vy = 0.0f;
 	}
 	//加速度を足す
@@ -1349,7 +1423,7 @@ void Player::FeverGravity()
 	}
 
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE) {
+	if (_state == ST_ROPE ) {
 		vy = 0.0f;
 	}
 	//加速度を足す
@@ -1371,46 +1445,52 @@ void Player::Draw(Position2& offset)
 	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
 	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
 	//時機
-	switch (_state)
-	{
-		//ｽﾃﾙｽ状態
-	case ST_VANISH:
+	if (vanFlag == true) {
 		//透過率をだんだん上げていく
 		alfa = max(alfa - VANISH, tranceMax);
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
-		break;
-		//ﾛｰﾌﾟ状態
-	case ST_ROPE:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
-		alfa = 255;
-		break;
-		//壁登り状態
-	case ST_WALL:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
-		alfa = 255;
-		break;
-		//ﾌｨｰﾊﾞｰ状態
-	case ST_FEVER:
-		//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-		//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
-		alfa = 50;
-		break;
-	default:
-		break;
 	}
-	if (_state != ST_CROUCH) {
-		_plRect.w = 32;
-		_plRect.h = 50;
+	else {
+		switch (_state)
+		{
+			//ｽﾃﾙｽ状態
+		//case ST_VANISH:
+		//	//透過率をだんだん上げていく
+		//	alfa = max(alfa - VANISH, tranceMax);
+		//	//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
+		//	break;
+			//ﾛｰﾌﾟ状態
+		case ST_ROPE:
+			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
+			alfa = 255;
+			break;
+			//壁登り状態
+		case ST_WALL:
+			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
+			alfa = 255;
+			break;
+			//ﾌｨｰﾊﾞｰ状態
+		case ST_FEVER:
+			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
+			//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
+			alfa = 50;
+			break;
+		case ST_INVINCIBLE:
+			if (inviCnt % 10/2 == 0){
+				alfa = 255;
+			}
+			else {
+				//完全に消す
+				alfa = 0;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
 		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
-	}
-	else {
-		_plRect.w = 32;
-		_plRect.h = 32;
-		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
-		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
-	}
+	
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -1419,8 +1499,10 @@ void Player::Draw(Position2& offset)
 	MV1SetScale(modelhandle, VGet(1.4f, 1.4f, 1.4f));
 	//モデルの透過率の設定
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
+
 	//アニメーション切り替え
 	AnimationSwitching();
+
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle,0.0f);
 
@@ -1429,7 +1511,7 @@ void Player::Draw(Position2& offset)
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
 	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-		_plRect.Draw(offset);
+	//	_plRect.Draw(offset);
 	//	_wallRect.Draw(offset,0xffffff);
 }
 //Rect取得
@@ -1462,11 +1544,13 @@ void Player::SetInitPos()
 	vx = 0.0f;
 	vy = 0.0f;
 	alfa = 255;
-	_state = ST_DEF;
+	_state = ST_INVINCIBLE;//無敵にする
 	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
 	AnimNowTime[ST_OVER] = 0.0f;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+	inviFlag = true;
+	inviCnt = INVINCIBLETIMER * 60;
 }
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
@@ -1490,8 +1574,25 @@ void Player::SetRetryPos(Position2 midPos)
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;
-	_state = ST_DEF;
+	_state = ST_INVINCIBLE;
 	alfa = 255;
+	feverFlag = false;
+	feverTime = 60 * FEVER_CNT;
+	inviFlag = true;
+	inviCnt = INVINCIBLETIMER * 60;
+}
+
+//ポースから用
+void Player::SetInitPausePos()
+{
+	_pos = initPos;
+	//加速度も元に戻す
+	vx = 0.0f;
+	vy = 0.0f;
+	alfa = 255;
+	_state = ST_DEF;
+	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
+	AnimNowTime[ST_OVER] = 0.0f;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
 }
@@ -1499,6 +1600,18 @@ void Player::SetRetryPos(Position2 midPos)
 Position2 Player::ReturnWoToScPos2ver()
 {
 	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
+}
+bool Player::GetStateCrouch()
+{
+	return crouchFlag;
+}
+bool Player::GetStateVanish()
+{
+	return vanFlag;
+}
+bool Player::GetStateRope()
+{
+	return ropeFlag;
 }
 
 //プレイヤーの状態によってアニメーションを切り替えている関数です
@@ -1511,6 +1624,7 @@ void Player::AnimationSwitching(void)
 		//通常状態
 	case ST_DEF:
 	case ST_STOP:
+	case ST_INVINCIBLE:
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/face.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_WAIT, ANIMATION_SPEED_DEF,0.0f);
 		break;
@@ -1549,6 +1663,11 @@ void Player::AnimationSwitching(void)
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/surprisFace.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_DAMAGE, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_DAMAGE]);
 		break;
+	case ST_CROUCH:
+		//しゃがみ状態
+		AnimationManager(ACTION_CROUCH, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_CROUCH]);
+		break;
+
 	default:
 		break;
 	}
