@@ -263,7 +263,7 @@ void EmAround::Visibility()
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
-		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -274,7 +274,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_ALERT || _state == EM_ST_RE_ALERT) {
-		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}
@@ -285,7 +285,7 @@ void EmAround::Visibility()
 		}
 	}
 	else if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
-		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetcharState() != ST_VANISH) {
+		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
 			_individualData.plFoundFlag = true;
 		}

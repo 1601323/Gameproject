@@ -142,7 +142,7 @@ void Player::setDir(Input* input)
 	//ﾛｰﾌﾟ状態なら向きは変えられない
 	float angle = static_cast<int>((RadAngle(_inpInfo.L_Stick.lstick) * 100.f));
 
-	if (_state != ST_ROPE  ) {
+	if (_state != ST_ROPE  && _state != ST_CROUCH) {
 		//右
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
@@ -1529,6 +1529,10 @@ Position2 Player::ReturnWoToScPos2ver()
 bool Player::GetStateCrouch()
 {
 	return crouchFlag;
+}
+bool Player::GetStateVanish()
+{
+	return vanFlag;
 }
 //プレイヤーの状態によってアニメーションを切り替えている関数です
 //テクスチャも変えています

@@ -153,7 +153,7 @@ void GimDrop::Draw(Position2 offset)
 	}
 	_gmRect.SetCenter(_pos.x , _pos.y);
 #ifdef _DEBUG
-	_gmRect.Draw(offset);
+	//_gmRect.Draw(offset);
 #endif
 }
 //あたり判定用
