@@ -19,6 +19,7 @@
 #include "Rope.h"
 
 #include "ResultScene.h"
+#include "SelectScene.h"
 
 #include "GimmickFactory.h"
 #include "EnemyFactory.h"
@@ -107,6 +108,12 @@ GameScene::GameScene()
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
 
 	count = 0;
+	pauseNowNum = 0;
+	PauseDirNumY = 0;
+	dirMoveCnt = 0;
+	selectPauseFlag = false;
+	setPoseFlag = false;
+	_minSensingValueL = SV_HIGH;
 	//numberImage = im.ImageIdReturn("image/UI/NewNum.png",SCENE_RESULT);
 	lightImage = im.ImageIdReturn("image/UI/Patrite2.png", SCENE_RESULT);
 }
@@ -189,6 +196,8 @@ void GameScene::NormalUpdata(Input* input)
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
+
+	setPoseFlag = false;
 #ifdef _DEBUG
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON)
 	{
@@ -270,6 +279,7 @@ void GameScene::TransitionUpdata(Input* input)
 			gm.Instance().ChangeScene(new ResultScene());
 		}
 		else if (gm.GetResultData().life >= 0) {
+			//リトライ
 			RetryProcess();
 			_updater = &GameScene::FadeInUpdata;
 		}
@@ -279,8 +289,11 @@ void GameScene::TransitionUpdata(Input* input)
 		count = 0;
 	}
 }
+//ポーズ用updata
 void GameScene::PauseUpdata(Input* input) 
 {
+	dirMoveCnt++;
+	setPoseFlag = true;
 	GameMain& gm = GameMain::Instance();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
@@ -288,27 +301,113 @@ void GameScene::PauseUpdata(Input* input)
 	_map->Draw(offset);
 	Draw(offset);
 	DrawUI();
+	DrawPauseUi();
 #ifdef _DEBUG
-	DrawBox(300,100,500,300,0xabcdef,true);
-	DrawString(320,150,"PAUSE",0xffffff);
+	//DrawBox(300,100,500,300,0xabcdef,true);
+	//DrawString(320,150,"PAUSE",0xffffff);
 #endif
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
 
-	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
-		_updater = &GameScene::NormalUpdata;
+	PauseSelect(input);
+
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON ||
+		key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		switch (pauseNowNum)
+		{
+			//ゲームに戻る
+		case MODE_BACK:
+			dirMoveCnt = 0;
+			_updater = &GameScene::NormalUpdata;
+			break;
+			//最初からやり直す
+		case MODE_RETRY:
+			dirMoveCnt = 0;
+			RetryProcess();
+			_updater = &GameScene::FadeInUpdata;
+			break;
+			//ステージセレクトに戻る
+		case MODE_SELECT:
+			dirMoveCnt = 0;
+			gm.Instance().ChangeScene(new SelectScene());
+			break;
+		default:
+			break;
+		}
+		//_updater = &GameScene::NormalUpdata;
 	}
 }
+
+//pauseの選ばれている処理
+void GameScene::PauseSelect(Input* input)
+{
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+
+	if (inpInfo.num >= 1) {
+		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL &&
+			selectPauseFlag == false)
+		{
+			pauseNowNum--;
+			if (pauseNowNum <= 0) {
+				pauseNowNum = MODE_MAX - 1;
+			}
+			selectPauseFlag = true;
+		}
+		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL &&
+			selectPauseFlag == false)
+		{
+			pauseNowNum++;
+			if (pauseNowNum >= MODE_MAX) {
+				pauseNowNum = 0;
+			}
+			selectPauseFlag = true;
+		}
+		else if (!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) &&
+			!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
+				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)) {
+			selectPauseFlag = false;
+		}
+		else {
+			pauseNowNum = pauseNowNum;
+		}
+	}
+	else {
+
+		//ステージ選択
+		if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
+			pauseNowNum--;
+			if (pauseNowNum < 0) {
+				pauseNowNum = MODE_MAX - 1;
+			}
+		}
+		else if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
+			pauseNowNum++;
+			if (pauseNowNum >= MODE_MAX) {
+				pauseNowNum = 0;
+			}
+		}
+		else {
+		}
+	}
+}
+
 //リトライ時の初期化呼び出しをまとめたもの
 void GameScene::RetryProcess()
 {
 	if (_mid->ReturnCheckFlag() || _mid->ReturnGetFlag()/*_rtData.midFlag == true*/) {
-		_player->SetRetryPos(_mid->GetInitPos());
+		//ポースからの場合必ず初期関数に入る
+		setPoseFlag ? _player->SetInitPausePos(): _player->SetRetryPos(_mid->GetInitPos());
 	}
 	else
 	{
-		_player->SetInitPos();
+		//ポースからの場合必ず初期関数に入る
+		setPoseFlag ? _player->SetInitPausePos() : _player->SetInitPos();
 	}
 	_mid->Updata();
 	for (auto& em : _emFac->EnemyList()) {
@@ -351,6 +450,38 @@ void GameScene::DrawUI()
 
 	//_timer->Draw();
 }
+
+//ポース用のuiを表示
+void GameScene::DrawPauseUi(void)
+{
+	ImageMgr& im = ImageMgr::Instance();
+	//ボード
+	DrawExtendGraph(220, 30, 610,400,im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
+	//ポーズ文字
+	DrawGraph(310, 70, im.ImageIdReturn("image/Pause/Pause.png", SCENE_RESULT), true);
+	//モード達
+	DrawGraph(340, 170, im.ImageIdReturn("image/Pause/return.png", SCENE_RESULT), true);
+	DrawGraph(340, 230, im.ImageIdReturn("image/Pause/Retry.png", SCENE_RESULT), true);
+	DrawGraph(340, 280, im.ImageIdReturn("image/Pause/Select.png", SCENE_RESULT), true);
+
+	DrawGraph(260 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), PauseDirNumY, im.ImageIdReturn("image/yazirushi.png", SCENE_RESULT), true);
+
+	switch (pauseNowNum) {
+	case 0:
+		PauseDirNumY = 160;
+		break;
+	case 1:
+		PauseDirNumY = 220;
+		break;
+	case 2:
+		PauseDirNumY = 270;
+		break;
+	default:
+		break;
+	}
+
+}
+
 //背景描画
 void GameScene::DrawBack(Position2 offset)
 {

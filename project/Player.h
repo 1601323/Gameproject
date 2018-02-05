@@ -106,6 +106,7 @@ private:
 	Rect _wallRect;						//壁用のレクト
 
 	FEVER_DATA _fd;
+	RESULT_DATA _rtData;
 	void GetFeverData();
 	
 
@@ -123,6 +124,7 @@ public:
 	void SetInitPos(Position2 p);		//初期位置をセットする
 	DIR GetDir(void);					//dir取得	
 	void SetRetryPos(Position2 midPos);
+	void SetInitPausePos();             //ポース画面からリトライする場合こっちに入る
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
 
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
