@@ -1466,6 +1466,7 @@ void Player::Draw(Position2& offset)
 				alfa = 255;
 			}
 			else {
+				//完全に消す
 				alfa = 0;
 			}
 			break;
@@ -1485,8 +1486,10 @@ void Player::Draw(Position2& offset)
 	MV1SetScale(modelhandle, VGet(1.4f, 1.4f, 1.4f));
 	//モデルの透過率の設定
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
+
 	//アニメーション切り替え
 	AnimationSwitching();
+
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle,0.0f);
 
@@ -1558,10 +1561,12 @@ void Player::SetRetryPos(Position2 midPos)
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;
-	_state = ST_DEF;
+	_state = ST_INVINCIBLE;
 	alfa = 255;
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
+	inviFlag = true;
+	inviCnt = INVINCIBLETIMER * 60;
 }
 
 Position2 Player::ReturnWoToScPos2ver()
@@ -1580,6 +1585,7 @@ bool Player::GetStateRope()
 {
 	return ropeFlag;
 }
+
 //プレイヤーの状態によってアニメーションを切り替えている関数です
 //テクスチャも変えています
 void Player::AnimationSwitching(void)
