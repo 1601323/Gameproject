@@ -74,6 +74,7 @@ private:
 	bool ropeFlag;						//ロープ状態かどうかを返すフラグ
 	bool vanFlag;						//ステルス状態かどうかのフラグ
 	bool tmpFlag;						//補正用フラグ
+	int airCnt;							//ジャンプ状態の時間をカウント
 	char keyData[256];
 	char oldkeyData[256];
 
