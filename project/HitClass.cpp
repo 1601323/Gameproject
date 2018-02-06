@@ -119,6 +119,9 @@ bool HitClass::GimmickHit(Circle& cir)
 {
 	for (auto& gimmick : _fac->GimmickList()) {
 		if (IsHit(gimmick->GetRect(), cir)) {
+			if (gimmick->GetType() == GIM_DOOR) {
+				return false;
+			}
 			return true;
 		}
 	}

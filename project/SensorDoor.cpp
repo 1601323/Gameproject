@@ -21,8 +21,8 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	_pos.x = pos.x +(MAP_CHIP_SIZE_X/2);
 	_pos.y = pos.y +MAP_CHIP_SIZE_Y;
 
-	_gmRect.w = WIDTH ;
-	_gmRect.h = HEIGHT;
+	_gmRect.w = 1 ;
+	_gmRect.h = 1;
 	count = 0;
 	doorCount = 0;
 	_state = GM_NONE;

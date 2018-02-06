@@ -282,7 +282,7 @@ void Rope::Extending(Input* input)
 				}
 
 				//伸ばしている最中にギミックやステージにあたれば強制的に戻す
-				if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle()) || _hit->EnemyHit(GetCircle2())||
+				if (_hit->GimmickHit(GetCircle()) || _hit->EnemyHit(GetCircle()) || _hit->EnemyHit(GetCircle2())||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||
