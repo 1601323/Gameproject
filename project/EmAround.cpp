@@ -153,6 +153,10 @@ void EmAround::BasicMove()
 		_pos.x -= speed;
 	}
 }
+void EmAround::TurnPlayer()
+{
+
+}
 //振り返る前の動作について
 void EmAround::InterMove()
 {

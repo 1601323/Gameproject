@@ -90,6 +90,8 @@ void EmLookback::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
+
+
 	AnimNowTime += 0.1f;
 	AnimWheelTimer += 1;
 	//現在のアニメーションが最大フレームまでいったらループする
@@ -566,7 +568,6 @@ void EmLookback::SetInitPos()
 	_state = EM_ST_MOVE;
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
-	ModelDirChangeFlag = false;
 	_rangeLevel = RANGE_1;
 	_individualData._level = ALERT_LEVEL_1;
 }
