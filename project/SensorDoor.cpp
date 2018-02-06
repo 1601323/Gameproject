@@ -116,7 +116,7 @@ void SensorDoor::Draw(Position2 offset)
 {
 
 	//外枠の表示
-	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)), (int)(_pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x + (WIDTH / 2)), (int)_pos.y - offset.y, 0x000000, true);
+	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2)), (int)(_pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x + (WIDTH / 2)), (int)_pos.y - offset.y-5, 0x000000, true);
 
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, 0.f, 0.0f));
