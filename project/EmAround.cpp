@@ -55,10 +55,12 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	//モデル読み込み
 	modelhandle = _modelmgr.ModelIdReturn("Enemy_model/teki1/teki.pmx", SCENE_RESULT);
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 1);//タイヤ用のテクスチャindexを取得
 	//初期角度
 	modelDirAngle = AngleRad(-90.0f);
 
 	AnimNowTime = 0.f;
+	AnimWheelTimer = 0;
 	//アニメーションをアタッチ+総時間の設定
 	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
@@ -386,7 +388,8 @@ void EmAround::Draw(Position2 offset)
 	ImageMgr& im = ImageMgr::Instance();
 	ModelMgr& _modelmgr = ModelMgr::Instance();
 
-	AnimNowTime += 0.5f;
+	AnimNowTime += 0.1f;
+	AnimWheelTimer += 1;
 	//現在のアニメーションが最大フレームまでいったらループする
 	if (AnimNowTime >= AnimTotalTime)
 	{
@@ -402,7 +405,16 @@ void EmAround::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
 	//テクスチャを変更
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki-2.png", SCENE_RESULT), FALSE);
+	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki1/teki-2.png", SCENE_RESULT), FALSE);
+
+	//タイヤのテクスチャを常時切り替え
+	if (AnimWheelTimer / 5 % 2 == 0)
+	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki1/tire2.png", SCENE_RESULT), FALSE);
+	}
+	else {
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki1/tire.png", SCENE_RESULT), FALSE);
+	}
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr.Draw(modelhandle,0.0f);
 

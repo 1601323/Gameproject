@@ -33,7 +33,8 @@ private:
 
 	int AnimeIndex;     //アニメーション用インデックス
 	int AnimTotalTime;  //アニメーション時間
-	float AnimNowTime;    //現在のアニメーション時間
+	float AnimNowTime;  //現在のアニメーション時間
+	int AnimWheelTimer; //タイヤ回転用のタイマー
 
 	int modelhandle;
 	int textureIndex;
