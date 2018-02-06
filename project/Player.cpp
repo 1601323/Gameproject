@@ -680,7 +680,7 @@ void Player::FeverWall()
 	//nextPos[5].x = _pos.x;
 	//nextPos[5].y = _pos.y + (_plRect.h/2);
 	nextPos[5] = _wallRect.LeftTop();
-	nextPos[4].x -= 5;
+	nextPos[5].x -= 5;
 	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
