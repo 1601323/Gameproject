@@ -54,6 +54,7 @@ Player::Player()
 	alfa = 255;
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
+	LineNum = 0.f;
 	_fd = FEVER_DATA();
 
 	_modelmgr = ModelMgr::Instance();
@@ -1451,6 +1452,7 @@ void Player::Draw(Position2& offset)
 	if (vanFlag == true) {
 		//透過率をだんだん上げていく
 		alfa = max(alfa - VANISH, tranceMax);
+		LineNum = 0.5f;
 	}
 	else {
 		switch (_state)
@@ -1463,21 +1465,25 @@ void Player::Draw(Position2& offset)
 		//	break;
 			//ﾛｰﾌﾟ状態
 		case ST_ROPE:
+			LineNum = 0.0f;
 			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
 			alfa = 255;
 			break;
 			//壁登り状態
 		case ST_WALL:
+			LineNum = 0.0f;
 			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
 			alfa = 255;
 			break;
 			//ﾌｨｰﾊﾞｰ状態
 		case ST_FEVER:
+			LineNum = 0.5f;
 			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
 			//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
 			alfa = 50;
 			break;
 		case ST_INVINCIBLE:
+			LineNum = 0.0f;
 			if (inviCnt % 10/2 == 0){
 				alfa = 255;
 			}
@@ -1507,7 +1513,7 @@ void Player::Draw(Position2& offset)
 	AnimationSwitching();
 
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(modelhandle,0.0f);
+	_modelmgr->Draw(modelhandle, LineNum);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
