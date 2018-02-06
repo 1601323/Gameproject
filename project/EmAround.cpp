@@ -57,7 +57,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 1);//タイヤ用のテクスチャindexを取得
-	//初期角度
+	//初期角度(とりあえず)
 	modelDirAngle = AngleRad(-90.0f);
 
 	AnimNowTime = 0.f;
@@ -147,9 +147,11 @@ void EmAround::BasicMove()
 	ModelDirChangeFlag = false;
 	speed = midFlag ? 2 : 1;
 	if (_dir == DIR_RIGHT) {		//右
+		modelDirAngle = AngleRad(-90.0f);
 		_pos.x += speed;
 	}
 	else if (_dir == DIR_LEFT) {	//左
+		modelDirAngle = AngleRad(90.0f);
 		_pos.x -= speed;
 	}
 }
@@ -556,6 +558,13 @@ void EmAround::SetInitPos()
 	_pos = _initPos;
 	_state = EM_ST_MOVE;
 	loseSightCnt = 180;
+	//初期角度
+	if (_dir == DIR_RIGHT) {
+		modelDirAngle = AngleRad(-90.0f);
+	}
+	else if (_dir == DIR_LEFT) {
+		modelDirAngle = AngleRad(90.0f);
+	}
 
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;

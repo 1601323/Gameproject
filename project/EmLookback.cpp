@@ -566,6 +566,7 @@ void EmLookback::SetInitPos()
 {
 	_pos = _initPos;
 	_state = EM_ST_MOVE;
+	modelDirAngle = 0.0f;//初期角度
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_rangeLevel = RANGE_1;
