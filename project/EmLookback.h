@@ -48,6 +48,7 @@ private:
 	float upAngle;
 	float downAngle;
 	bool returnFlag;
+	bool ModelDirChangeFlag;            //モデルが振り返るアニメーションflag
 	float vx;
 	float vy;
 	bool midFlag;
