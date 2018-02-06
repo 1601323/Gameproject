@@ -37,7 +37,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	emSpeed = 2;
 	LookCount = 0;
 	FearCount = 180;
-	loseSightCnt = 180;
+	loseSightCnt = 150;
 	midFlag = false;
 	ModelDirChangeFlag = false;
 
@@ -51,7 +51,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
-	//exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
+	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
@@ -426,6 +426,19 @@ void EmLookback::LoseSight()
 {
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		loseSightCnt--;
+		if (loseSightCnt <= 90) {
+			if (loseSightCnt % 30 == 0) {
+				if (_dir == DIR_LEFT) {
+					_dir = DIR_RIGHT;
+					modelDirAngle = AngleRad(-90.0f);
+				}
+				else if (_dir == DIR_RIGHT) {
+					_dir = DIR_LEFT;
+					modelDirAngle = AngleRad(90.0f);
+				}
+			}
+		}
+
 		if (loseSightCnt < 0) {
 			_state = EM_ST_MOVE;
 			loseSightCnt = 180;
