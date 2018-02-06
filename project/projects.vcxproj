@@ -158,7 +158,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SensorDoor.cpp" />
-    <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
@@ -198,7 +197,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SensorDoor.h" />
-    <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>

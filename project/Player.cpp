@@ -56,7 +56,7 @@ Player::Player()
 	modelDirAngle = 0.0f;
 	_fd = FEVER_DATA();
 
-	ModelMgr& _modelmgr = ModelMgr::Instance();
+	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
 	modelhandle = MV1LoadModel("player_model/player.pmx");
 	//それぞれのアニメーションをアタッチ+総時間の設定
@@ -71,7 +71,9 @@ Player::Player()
 }
 Player::~Player()
 {
-
+	//delete _hit;
+	//delete _rope;
+	_modelmgr->ModelIdAllDelete();
 }
 //更新されたHitClassを受け取るための関数です
 void Player::Getclass(HitClass* h, Rope*r)
@@ -1443,7 +1445,6 @@ bool Player::plPlaceCheck()
 }
 void Player::Draw(Position2& offset)
 {
-	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
 	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
 	//時機
@@ -1506,7 +1507,7 @@ void Player::Draw(Position2& offset)
 	AnimationSwitching();
 
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr.Draw(modelhandle,0.0f);
+	_modelmgr->Draw(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);

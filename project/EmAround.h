@@ -25,7 +25,7 @@ private:
 	MapCtl* _map;
 	DIR _dir;
 	EnemyServerData _individualData;		//ｴﾈﾐｰ本部に送るﾃﾞｰﾀ
-	//ModelMgr& _modelmgr;
+	ModelMgr* _modelmgr;
 	ENEMY_RANGE_LEVEL _rangeLevel;
 
 	//重力について
@@ -74,6 +74,7 @@ public:
 
 	void Updata();	
 	Rect& GetRect();
+	DIR GetDir();
 	ENEMY_STATE & GetState();
 	void EnemyFalter();		//怯み状態になる条件
 	void GetClass(HitClass* hit,Player& pl);		//クラス受け取り用

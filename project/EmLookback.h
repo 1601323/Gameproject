@@ -19,7 +19,7 @@ private:
 	EnemyServer& _server;
 	DIR _dir;			//·¬×‚ÌŒü‚«
 	MapCtl* _map;
-	//ModelMgr* _modelmgr;
+	ModelMgr* _modelmgr;
 
 	Player& _player;
 	Rope& _rope;
@@ -75,6 +75,7 @@ public:
 	~EmLookback();
 	Rect _emRect;
 	Rect& GetRect();
+	DIR GetDir();
 	ENEMY_TYPE _emType;
 	ENEMY_TYPE& GetType();
 	void SetInitPos();
