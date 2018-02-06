@@ -31,9 +31,6 @@ Midpoint::Midpoint()
 	_midRect.h = 32;
 
 	uiFlag = false;
-	cnt = 0;
-	bubbleFlag = false;
-	bubble = 0;
 	alfa = 255;
 	tranceMax = 50;
 	//モデル読み込み
@@ -87,22 +84,6 @@ void Midpoint::GetPoint()
 }
 void Midpoint::FollowDir()
 {
-	cnt++;
-	if (cnt > 5) {
-		cnt = 0;
-		if (bubbleFlag == false) {
-			bubble++;
-		}
-		else if (bubbleFlag == true) {
-			bubble--;
-		}
-	}
-	if (bubble > 10) {
-		bubbleFlag = true;
-	}
-	else if (bubble < -1) {
-		bubbleFlag = false;
-	}
 	//プレイヤーの後ろについていく処理
 	if (_pl->GetDir() == DIR_RIGHT || _pl->GetDir() == DIR_LEFT) {
 		tmpDir = _pl->GetDir();
@@ -216,6 +197,11 @@ void Midpoint::Draw(Position2 offset)
 #ifdef _DEBUG
 	//_midRect.Draw(offset);
 #endif
+}
+void Midpoint::RetryInit()
+{
+	GetFlag = false;
+	checkpointFlag = false;
 }
 bool Midpoint::ReturnGetFlag()
 {

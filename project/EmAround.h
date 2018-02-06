@@ -33,6 +33,7 @@ private:
 	float vy;
 	float speed;			
 	bool moveFlag;			//向きを切り替えるためのフラグ
+	bool ModelDirChangeFlag;//モデルが振り返るアニメーションflag
 	int dis;				//どれくらい動いたら反対を向くのか定義する
 	float interCnt;			//反対側を向くまでのカウント
 
@@ -41,9 +42,21 @@ private:
 
 	bool midFlag;			//中間点フラグ
 
+	int AnimeIndex;     //アニメーション用インデックス
+	int AnimTotalTime;  //アニメーション時間
+	float AnimNowTime;    //現在のアニメーション時間
+	int AnimWheelTimer; //タイヤ回転用のタイマー
+
+	int exModelHandle;    //びっくりマーク
+	int AnimeIndexSt;     //アニメーション用インデックス
+	int AnimTotalTimeSt;  //アニメーション時間
+	float AnimNowTimeSt;  //現在のアニメーション時間
+	int starModelHandle;  //星のモデル
+
 	//３D処理について
 	int modelhandle;
 	int textureIndex;
+	int textureIndexWheel;            //タイヤ用のテクスチャ
 	float modelDirAngle;
 
 	void Move();			//敵の動きについての管理を行う
@@ -57,7 +70,7 @@ private:
 	void LoseSight();		//ﾌﾟﾚｲﾔｰを見失ったとき
 	void Gravity();			//重力判定
 	void SetRange();		//視界の広さをレベル別に判定します
-
+	void TurnPlayer();		//ﾌﾟﾚｲﾔｰが後ろからぶつかってきたらそっちを向く
 	Position2 tmpPos;
 
 public:
@@ -66,6 +79,7 @@ public:
 
 	void Updata();	
 	Rect& GetRect();
+	DIR GetDir();
 	ENEMY_STATE & GetState();
 	void EnemyFalter();		//怯み状態になる条件
 	void GetClass(HitClass* hit,Player& pl);		//クラス受け取り用

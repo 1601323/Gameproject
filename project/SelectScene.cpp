@@ -47,6 +47,7 @@ void SelectScene::NormalUpdata(Input* input)
 	Draw();
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		colorNum = 0;
 		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
@@ -113,6 +114,8 @@ void SelectScene::Select(Input* input)
 void SelectScene::Draw()
 {
 	ImageMgr& im = ImageMgr::Instance();
+	++colorNum;
+	colorNum %= COLOR_NUM;
 
 	int redu = 40;
 	//îwåi
@@ -124,12 +127,19 @@ void SelectScene::Draw()
 	//}
 	for (int f = 0; f < STAGE_MAX; f++) {
 		if (f == nowNum) {	//ëIÇŒÇÍÇƒÇ¢ÇΩÇÁägëÂï\é¶
-			DrawExtendGraph(25 + 260 * f, 80, 250 + 260 * f, 40 + 260, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
+			DrawExtendGraph(28 + 260 * f, 82, 245 + 260 * f, 40 + 255, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
+
+			SetDrawBright(243, 152, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255 * (static_cast<float>(abs(20 - colorNum)) / static_cast<float>((COLOR_NUM / 1.5f))));
 			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+			SetDrawBright(255,255,255);
+
 		}
 		else
 		{
 			DrawExtendGraph(23 + 260 * f + redu, 72 + redu, 255 + 260 * f - redu, 45 + 260 - redu, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
+
 			DrawExtendGraph(10+ 260*f+redu, 60+redu ,10+260+ 260*f-redu,60+260 -redu,im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
 		}
 	}

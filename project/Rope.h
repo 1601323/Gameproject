@@ -59,7 +59,7 @@ private:
 	float  AnimTotalTime;                   //アニメーションのトータルタイム
 	float  AnimNowTime;                     //アニメーションの現在タイム
 	int    AnimAttachIndex;                 //アニメーション数
-	int timerWait;                          //待ち時間
+	int    timerWait;                       //待ち時間
 
 	int mentenanceNum_X;                    //モデルの描画のために仮で置いている調整用の値X
 	int mentenanceNum_Y;                    //モデルの描画のために仮で置いている調整用の値Y

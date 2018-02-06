@@ -216,17 +216,21 @@ void Rope::SelectDir(Input* input)
 		//MV1DrawFrame(modelhandle,0);
 		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
+		dirdraw_Y = _player->GetStateCrouch() ? 50 : 0;
+		dirdraw_X = _player->GetStateCrouch() ? (dirFlag ? 10 : -10) : 0;
+
+
 		//矢印表示
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
-			 _player->GetPos().y - _tmpOffset.y-5, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+			 _player->GetPos().y - _tmpOffset.y-5 + dirdraw_Y, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
 			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
-			_player->GetPos().y - _tmpOffset.y-20, 1.0, AngleRad(0.0f),
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+			_player->GetPos().y - _tmpOffset.y - 20+  dirdraw_Y, 1.0, AngleRad(0.0f),
 			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
 
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
-			_player->GetPos().y - _tmpOffset.y-35, 1.0, dirFlag ? AngleRad(-45.0f): AngleRad(-135.0f),
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+			_player->GetPos().y - _tmpOffset.y - 35 + dirdraw_Y, 1.0, dirFlag ? AngleRad(-45.0f) : AngleRad(-135.0f),
 			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
 
@@ -278,7 +282,7 @@ void Rope::Extending(Input* input)
 				}
 
 				//伸ばしている最中にギミックやステージにあたれば強制的に戻す
-				if (_hit->GimmickHitType(GetCircle()) || _hit->EnemyHit(GetCircle()) || _hit->EnemyHit(GetCircle2())||
+				if (_hit->GimmickHit(GetCircle()) || _hit->EnemyHit(GetCircle()) || _hit->EnemyHit(GetCircle2())||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_N_CLIMB_WALL ||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY)) == CHIP_CLIMB_WALL ||
 					_mapctl->GetChipType(Position2(_rope[*itr].x + _tmpOffset.x, SCREEN_SIZE_Y - _rope[*itr].y + _tmpOffset.y - RopeHitModelNumY - 10)) == CHIP_N_CLIMB_WALL ||

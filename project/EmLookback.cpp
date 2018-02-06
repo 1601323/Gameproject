@@ -39,6 +39,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	FearCount = 180;
 	loseSightCnt = 180;
 	midFlag = false;
+	ModelDirChangeFlag = false;
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
@@ -48,9 +49,25 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
 
-	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
+	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
+	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
+
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
 	modelDirAngle = 0.0f;
+	AnimNowTime = 0.0f;
+	AnimWheelTimer = 0.0f;
+	AnimNowTimeSt = 0.f;
+
+	//アニメーションをアタッチ+総時間の設定
+	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
+
+	//UIのアニメーションのアタッチ
+	AnimeIndexSt = MV1AttachAnim(starModelHandle, 0, -1, false);
+	AnimTotalTimeSt = MV1GetAttachAnimTotalTime(starModelHandle, AnimeIndexSt);
 }
 
 EmLookback::~EmLookback()
@@ -69,8 +86,10 @@ void EmLookback::Updata()
 	else {
 		SetMove();
 	}
-
-	Visibility();
+	if (!ModelDirChangeFlag) {
+		Visibility();
+	}
+	TurnPlayer();
 
 	Gravity();
 }
@@ -80,6 +99,18 @@ void EmLookback::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
+
+
+	AnimNowTime += 0.1f;
+	AnimWheelTimer += 1;
+	//現在のアニメーションが最大フレームまでいったらループする
+	if (AnimNowTime >= AnimTotalTime)
+	{
+		AnimNowTime = 0;
+	}
+	//アニメーションをアタッチ
+	MV1SetAttachAnimTime(modelhandle, AnimeIndex, AnimNowTime);
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -87,7 +118,16 @@ void EmLookback::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 	//テクスチャを変更
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2-1.png", SCENE_RESULT), FALSE);
+	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2/teki2-1.png", SCENE_RESULT), FALSE);
+
+	//タイヤのテクスチャを常時切り替え
+	if (AnimWheelTimer / 5 % 2 == 0)
+	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki2/teki2 tire.png", SCENE_RESULT), FALSE);
+	}
+	else {
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki2/teki2 tire2.png", SCENE_RESULT), FALSE);
+	}
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
@@ -112,26 +152,61 @@ void EmLookback::Draw(Position2 offset)
 	}
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+
 	if (_state != EM_ST_FEAR) {
-		if (_dir == DIR_RIGHT) {
-			modelDirAngle = AngleRad(-90.0f);
-			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		if (!ModelDirChangeFlag)
+		{
+			SetDrawBright(255,255,0);
+			if (_dir == DIR_RIGHT) {
+				modelDirAngle = AngleRad(-90.0f);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		}
-		else if (_dir == DIR_LEFT) {
-			modelDirAngle = AngleRad(90.0f);
-			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			}
+			else if (_dir == DIR_LEFT) {
+				modelDirAngle = AngleRad(90.0f);
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+			}
+			SetDrawBright(255, 255, 255);
 		}
 	}
 	returnDir(offset);
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
+
+	//星
+	MV1SetPosition(starModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
+	MV1SetScale(starModelHandle, VGet(0.1f, 0.1f, 0.1f));
+
+	//！マーク
+	MV1SetPosition(exModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
+	MV1SetScale(exModelHandle, VGet(1.5f, 1.5f, 1.5f));
+
+	//混乱のときのアニメーション
+	if (_state == EM_ST_FEAR)
+	{
+		AnimNowTimeSt += 0.5f;
+		if (AnimNowTimeSt >= AnimTotalTimeSt)
+		{
+			AnimNowTimeSt = 0;
+		}
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(starModelHandle, AnimeIndexSt, AnimNowTimeSt);
+		//モデルを輪郭線0.0fで描画 
+		_modelmgr->Draw(starModelHandle, 0.0f);
+	}
+
+	if (_state == EM_ST_DIS)
+	{
+		_modelmgr->Draw(exModelHandle, 0.0f);
+	}
+
+
 	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
@@ -181,25 +256,42 @@ void EmLookback::setDir(void)
 		{
 			LookCount++;
 			//ぐいん振り向きます(とりあえず3秒正面1秒で方向転換)
+			//左から右へ
 			if (LookCount > 60 * EM_LOOKBACK_MODEL_TIME)
 			{
+				//振り向きのカウントを増やす
 				LookModelDirCnt++;
+				ModelDirChangeFlag = true;
+				if (_dir == DIR_LEFT) {
+					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 6);
+				}
+			}
+			//右から左へ
+			else if (-60 <= LookCount &&  LookCount < 0)
+			{
 
+				LookModelDirCnt++;
+				ModelDirChangeFlag = true;
 				if (_dir == DIR_RIGHT) {
-					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -3);
-				}
-				else if (_dir == DIR_LEFT) {
-					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 3);
+					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -6);
 				}
 			}
-
-
-			if (LookCount == EM_LOOKBACK_TIME) {
-				LookCount *= -1;
-				LookModelDirCnt = 0;
-			}
-
 		}
+
+		//左を向くためにLookCountを-EM_LOOKBACK_TIME
+		if (LookCount == EM_LOOKBACK_TIME) {
+			LookCount = -EM_LOOKBACK_TIME;
+			ModelDirChangeFlag = false;
+			LookModelDirCnt = 0;
+		}
+
+		//右を向くためにLookCountを0
+		if (LookCount == 0)
+		{
+			ModelDirChangeFlag = false;
+			LookModelDirCnt = 0;
+		}
+		//+の値 左 -の値 右
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
 			//_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
@@ -219,6 +311,19 @@ void EmLookback::setDir(void)
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		LookCount = 0;
+	}
+}
+void EmLookback::TurnPlayer()
+{
+	if (_hit.IsHit(GetRect(), _player.GetRect()) == true) {
+		if (_player.GetPos().x < _pos.x) {
+			_dir = DIR_LEFT;	
+			modelDirAngle = AngleRad(90.0f);
+		}
+		else {
+			_dir = DIR_RIGHT;
+			modelDirAngle = AngleRad(-90.0f);
+		}
 	}
 }
 void EmLookback::Visibility()
@@ -499,6 +604,10 @@ ENEMY_STATE& EmLookback::GetState()
 {
 	return _state;
 }
+DIR EmLookback::GetDir()
+{
+	return _dir;
+}
 void EmLookback::GetClass(HitClass * hit, Player & pl)
 {
 	//_hit = hit;
@@ -508,6 +617,7 @@ void EmLookback::SetInitPos()
 {
 	_pos = _initPos;
 	_state = EM_ST_MOVE;
+	modelDirAngle = 0.0f;//初期角度
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_rangeLevel = RANGE_1;

@@ -49,10 +49,12 @@ Player::Player()
 	vanFlag = false;
 	ropeFlag = false;
 	inviFlag = false;
+	tmpFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
+	LineNum = 0.f;
 	_fd = FEVER_DATA();
 
 	_modelmgr = ModelMgr::Instance();
@@ -1013,7 +1015,8 @@ bool Player::stVanish(void)
 	}
 	//“®‚¢‚Ä‚¢‚½‚ç¶³İÄ‚ğ–ß‚·
 	//•Ç“o‚èó‘Ô‚Å“®‚¢‚Ä‚¢‚½‚ç½ÃÙ½‚É‚È‚ç‚È‚¢
-	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 ||ropeFlag == true) {
+	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 
+		||ropeFlag == true || tmpFlag != crouchFlag) {
 		vanCnt = 60 * VANISH_CNT;
 		vanFlag = false;
 		alfa = 255;
@@ -1028,6 +1031,7 @@ bool Player::stVanish(void)
 #ifdef _DEBUG
 	//DrawFormatString(0, 120, 0xffffff, "%d", vanCnt);
 #endif
+	tmpFlag = crouchFlag;
 	return false;
 }
 void Player::moveCrouch(Input* input)
@@ -1293,7 +1297,7 @@ void Player::HitToEnemy()
 				_state = ST_DETH;
 
 				//Š®‘S”s–k
-				if (gm.GetResultData().life <= 0)
+				if (gm.GetResultData().life < 0)
 				{
 					_state = ST_OVER;
 				}
@@ -1448,6 +1452,7 @@ void Player::Draw(Position2& offset)
 	if (vanFlag == true) {
 		//“§‰ß—¦‚ğ‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
 		alfa = max(alfa - VANISH, tranceMax);
+		LineNum = 0.5f;
 	}
 	else {
 		switch (_state)
@@ -1460,21 +1465,25 @@ void Player::Draw(Position2& offset)
 		//	break;
 			//Û°Ìßó‘Ô
 		case ST_ROPE:
+			LineNum = 0.0f;
 			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
 			alfa = 255;
 			break;
 			//•Ç“o‚èó‘Ô
 		case ST_WALL:
+			LineNum = 0.0f;
 			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
 			alfa = 255;
 			break;
 			//Ì¨°ÊŞ°ó‘Ô
 		case ST_FEVER:
+			LineNum = 0.5f;
 			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
 			//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "_FEVER^", 0x0000ff);
 			alfa = 50;
 			break;
 		case ST_INVINCIBLE:
+			LineNum = 0.0f;
 			if (inviCnt % 10/2 == 0){
 				alfa = 255;
 			}
@@ -1504,7 +1513,7 @@ void Player::Draw(Position2& offset)
 	AnimationSwitching();
 
 	//ƒ‚ƒfƒ‹‚ğ—ÖŠsü0.0f‚Å•`‰æ 
-	_modelmgr->Draw(modelhandle,0.0f);
+	_modelmgr->Draw(modelhandle, LineNum);
 
 	//	DrawString(400, 200, "ÔFƒXƒeƒ‹ƒXó‘Ô", 0xffffff);
 	//	DrawString(400, 220, "…FÛ°Ìßg—pó‘Ô", 0xffffff);

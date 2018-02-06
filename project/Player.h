@@ -51,6 +51,7 @@ private:
 	int modelhandle;                    //プレイヤーモデルハンドル
 	int alfa;                           //ステルス用アルファ
 	int tranceMax;                      //最大透過数
+	float LineNum;                      //輪郭線の値
 	int textureIndex;                   //顔のテクスチャインデックス
 	int  AnimIndex[ACTION_MAX];         //アニメーション数
 	float AnimTotalTime[ACTION_MAX];    //各アニメーションのトータルタイム
@@ -72,8 +73,10 @@ private:
 	bool crouchFlag;					//しゃがみフラグ
 	bool ropeFlag;						//ロープ状態かどうかを返すフラグ
 	bool vanFlag;						//ステルス状態かどうかのフラグ
+	bool tmpFlag;						//補正用フラグ
 	char keyData[256];
 	char oldkeyData[256];
+
 
 	void HitToEnemy();					//敵と当たった時
 	void setMove(Input* input);			//移動関数

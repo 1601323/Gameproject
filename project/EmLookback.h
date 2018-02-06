@@ -31,8 +31,20 @@ private:
 	int circle;
 	int loseSightCnt;	//PLが認識範囲から外れて見失うまでのカウント
 
+	int AnimeIndex;     //アニメーション用インデックス
+	int AnimTotalTime;  //アニメーション時間
+	float AnimNowTime;  //現在のアニメーション時間
+	int AnimWheelTimer; //タイヤ回転用のタイマー
+
+	int exModelHandle;    //びっくりマーク
+	int AnimeIndexSt;     //アニメーション用インデックス
+	int AnimTotalTimeSt;  //アニメーション時間
+	float AnimNowTimeSt;  //現在のアニメーション時間
+	int starModelHandle;  //星のモデル
+
 	int modelhandle;
 	int textureIndex;
+	int textureIndexWheel;            //タイヤ用のテクスチャ
 	float modelDirAngle;
 	int eyeRange;
 	ENEMY_STATE _state;
@@ -48,6 +60,7 @@ private:
 	float upAngle;
 	float downAngle;
 	bool returnFlag;
+	bool ModelDirChangeFlag;            //モデルが振り返るアニメーションflag
 	float vx;
 	float vy;
 	bool midFlag;
@@ -63,11 +76,13 @@ private:
 	void Gravity();
 	void SetRange();
 	void LimitMove();					//動きに制限をつける
+	void TurnPlayer();					//ﾌﾟﾚｲﾔｰが当たってきた方向を見る
 public:
 	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();
 	Rect _emRect;
 	Rect& GetRect();
+	DIR GetDir();
 	ENEMY_TYPE _emType;
 	ENEMY_TYPE& GetType();
 	void SetInitPos();

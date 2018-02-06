@@ -13,7 +13,6 @@
 #include "Input.h"
 #include "Gimmick.h"
 #include "MapCtl.h"
-#include "Camera.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Rope.h"
@@ -31,6 +30,7 @@
 #include "ImageMgr.h"
 
 #include "TimeManager.h"
+#include "Camera.h"
 
 #include "GameScene.h"
 
@@ -44,7 +44,6 @@ GameScene::GameScene()
 	_server = new EnemyServer();
 	_mid = new Midpoint();
 	_timer = new TimeManager();
-	_cam = Camera::GetInstance();
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
@@ -103,7 +102,9 @@ GameScene::GameScene()
 	_player->Getclass(_hit, _rope);
 	_mid->GetClass(_player);
 	_timer->StartTimer();
-	//GameInit();
+	//GameInit();	
+	_cam = Camera::GetInstance();
+
 	_cam->SetTarget(_player);	// player基準
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
 
@@ -135,6 +136,7 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
+	gm.SetFeverData(_feverData);
 	switch (gm.GetNowStage()) {
 	case 0:
 		mapName = "map/easy.map";
@@ -175,7 +177,7 @@ void GameScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
 	UpdateManager();
-	_cam->Update();
+ 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	DrawBack(offset);
 
@@ -443,6 +445,9 @@ void GameScene::DrawUI()
 	for (int f = 0; f < gm.GetResultData().life; f++) {
 		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("image/UI/UI_life.png", SCENE_RESULT),true);
 	}
+	for (int f = 0; f < gm.ReturnFeverData().feverCnt; f++) {
+		DrawGraph(20+25*f,70,im.ImageIdReturn("image/UI/Bread.png",SCENE_RESULT),true);
+	}
 	//場所は完全には決定していない
 	//色変化を実装
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -503,12 +508,13 @@ void GameScene::DrawBack(Position2 offset)
 
 }
 
-void GameScene::GameScene::RetryPauseProcess()
+void GameScene::RetryPauseProcess()
 {
 	GameMain& gm = GameMain::Instance();
-	_rtData.life = 3;
+	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
-
+	_feverData = FEVER_DATA();
+	gm.SetFeverData(_feverData);
 	_player->SetInitPausePos();
 
 	_mid->Updata();

@@ -14,7 +14,7 @@ Enemy::Enemy()
 	_commonData._level = ALERT_LEVEL_1;
 	_state = EM_ST_NONE;
 	//vigiImage = ImageMgr::Instance().ImageIdReturn("image/view.png",SCENE_RESULT);
-	LoadDivGraph("image/view2.png",5,5,1,300,300,vigiImage);
+	LoadDivGraph("image/view3.png",5,5,1,300,300,vigiImage);
 }
 
 
