@@ -443,6 +443,9 @@ void GameScene::DrawUI()
 	for (int f = 0; f < gm.GetResultData().life; f++) {
 		DrawGraph(20 + 25 * f, 30, im.ImageIdReturn("image/UI/UI_life.png", SCENE_RESULT),true);
 	}
+	for (int f = 0; f < gm.ReturnFeverData().feverCnt; f++) {
+		DrawGraph(20+25*f,70,im.ImageIdReturn("image/UI/Bread.png",SCENE_RESULT),true);
+	}
 	//場所は完全には決定していない
 	//色変化を実装
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
