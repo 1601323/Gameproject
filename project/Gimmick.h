@@ -29,6 +29,7 @@ public:
 	GimmickState _state;
 	virtual GIMMICK_TYPE& GetType();
 	virtual RESULT_DATA& GetClearData();
+	bool sensordoorMotionFlag;
 
 	void NextState();
 	GimmickState nowState();

@@ -16,6 +16,7 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_modelmgr = ModelMgr::Instance();
 
 	_map = MapCtl::GetInstance();
+	sensordoorMotionFlag = false;
 	_state = GM_NONE;
 	_gmRect.w = 32*3;
 	_gmRect.h = 32;
