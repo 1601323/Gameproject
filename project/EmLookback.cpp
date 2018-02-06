@@ -50,7 +50,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_rangeLevel = RANGE_1;
 
 
-	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
@@ -89,9 +89,6 @@ void EmLookback::Updata()
 void EmLookback::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
-
-	 _modelmgr = ModelMgr::Instance();
-
 
 	AnimNowTime += 0.1f;
 	AnimWheelTimer += 1;
