@@ -29,9 +29,9 @@ ResultScene::ResultScene()
 	LogoDownCounter = -100;
 	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//モデル読み込み
-	playerModelHandle = _modelmgr.ModelIdReturn("player_model/player.pmx",SCENE_SELECT ); /*MV1LoadModel("player_model/player.pmx");*/
+	playerModelHandle = _modelmgr.ModelIdReturn("player_model/player.pmx",SCENE_TITLE ); /*MV1LoadModel("player_model/player.pmx");*/
 	//playerModelWithFlask = _modelmgr->ModelIdReturn("player clear _model/player clear.pmx", SCENE_TITLE);
-	playerModelWithFlask = _modelmgr.ModelIdReturn("player clear _model/player clear.pmx",SCENE_SELECT);/*MV1LoadModel("player clear _model/player clear.pmx");*/
+	playerModelWithFlask = _modelmgr.ModelIdReturn("player clear _model/player clear.pmx",SCENE_TITLE);/*MV1LoadModel("player clear _model/player clear.pmx");*/
 
 	//アニメーションをアタッチ+総時間の設定
 	//クリア時

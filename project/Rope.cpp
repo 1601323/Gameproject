@@ -220,17 +220,21 @@ void Rope::SelectDir(Input* input)
 		//MV1DrawFrame(modelhandle,0);
 		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
+		dirdraw_Y = _player->GetStateCrouch() ? 50 : 0;
+		dirdraw_X = _player->GetStateCrouch() ? (dirFlag ? 10 : -10) : 0;
+
+
 		//–îˆó•\Ž¦
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
-			 _player->GetPos().y - _tmpOffset.y-5, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+			 _player->GetPos().y - _tmpOffset.y-5 + dirdraw_Y, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
 			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
-			_player->GetPos().y - _tmpOffset.y-20, 1.0, AngleRad(0.0f),
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+			_player->GetPos().y - _tmpOffset.y - 20+  dirdraw_Y, 1.0, AngleRad(0.0f),
 			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
 
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum,
-			_player->GetPos().y - _tmpOffset.y-35, 1.0, dirFlag ? AngleRad(-45.0f): AngleRad(-135.0f),
+		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+			_player->GetPos().y - _tmpOffset.y - 35 + dirdraw_Y, 1.0, dirFlag ? AngleRad(-45.0f) : AngleRad(-135.0f),
 			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 
 

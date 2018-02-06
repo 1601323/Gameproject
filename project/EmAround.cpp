@@ -548,6 +548,7 @@ void EmAround::SetInitPos()
 
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
+	ModelDirChangeFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
 }
