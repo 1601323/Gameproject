@@ -9,6 +9,7 @@ Gimmick::Gimmick( )
 {
 	_state = GM_NONE;
 	_clearData.midFlag = false;
+	sensordoorMotionFlag = false;
 }
 
 

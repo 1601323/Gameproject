@@ -23,15 +23,21 @@ private:
 	bool openFlag;
 
 	int count;			//ドア開閉のためのカウント
-	int doorCount;		//ドア開閉の調整カウント
+	int doorCountOpen;		//ドア開の調整カウント
+	int doorCountClose;		//ドア開の調整カウント
+
 
 	int modelhandle;
 	int AttachIndex;
 	int totalTime;
 
+	int AttachIndexClose;
+	int totalTimeClose;
+
 	void CheckDoMove();	//動作条件判定
 	void CheckHit();	//あたり判定をプレイヤーの場所によって変えるので書いておく
 	void Draw(Position2 offset);		//描画
+	void DrawStartDoor();               //ステージ開始時に呼ぶ
 public:
 	SensorDoor(Position2 pos,Player& p);
 	~SensorDoor();
