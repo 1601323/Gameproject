@@ -184,22 +184,28 @@ void EmLookback::setDir(void)
 			if (LookCount > 60 * EM_LOOKBACK_MODEL_TIME)
 			{
 				LookModelDirCnt++;
-
+				if (_dir == DIR_LEFT) {
+					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 6);
+				}
+			}
+			else if (-60 <= LookCount &&  LookCount < 0)
+			{
+				LookModelDirCnt++;
 				if (_dir == DIR_RIGHT) {
-					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -3);
-				}
-				else if (_dir == DIR_LEFT) {
-					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 3);
+					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -6);
 				}
 			}
-
-
-			if (LookCount == EM_LOOKBACK_TIME) {
-				LookCount *= -1;
-				LookModelDirCnt = 0;
-			}
-
 		}
+
+		if (LookCount == EM_LOOKBACK_TIME) {
+			LookCount = -EM_LOOKBACK_TIME;
+			LookModelDirCnt = 0;
+		}
+		if (LookCount == 0)
+		{
+			LookModelDirCnt = 0;
+		}
+
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
 			//_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);
