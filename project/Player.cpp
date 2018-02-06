@@ -1493,6 +1493,7 @@ void Player::Draw(Position2& offset)
 		LineNum = 0.5f;
 	}
 	else {
+		LineNum = 0.0f;
 		switch (_state)
 		{
 			//ｽﾃﾙｽ状態
@@ -1602,7 +1603,7 @@ void Player::SetInitPos()
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position3(p.x,p.y-(_plRect.h/2),0.f);	//yに足しているのは最初の座標で埋まらないようにするため
+	_pos = Position3(p.x,p.y-(_plRect.h/2)+6,0.f);	//yに足しているのは最初の座標で埋まらないようにするため
 	initPos = _pos;
 }
 bool Player::EnterDoor()

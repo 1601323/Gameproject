@@ -16,6 +16,7 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 	_map = MapCtl::GetInstance();
 	_modelmgr = ModelMgr::Instance();
 	_state = GM_NONE;
+	sensordoorMotionFlag = false;
 	gravity = 0.9;
 	velocity = 0;
 	_gmRect.h = 30;
