@@ -24,6 +24,8 @@ ResultScene::ResultScene()
 	nowNum = 0;
 	dirMoveCnt = 0;
 	AnnouncCnt = 0;
+	AnimNowTimeH = 0.f;
+	AnimNowTimeS = 0.f;
 	LogoDownCounter = -100;
 	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//ÉÇÉfÉãì«Ç›çûÇ›
