@@ -146,6 +146,7 @@ void EmAround::BasicMove()
 	//	speed = 2;
 	//}
 	//else { speed = 1; }
+	ModelDirChangeFlag = false;
 	speed = midFlag ? 2 : 1;
 	if (_dir == DIR_RIGHT) {		//右
 		_pos.x += speed;
@@ -560,6 +561,7 @@ void EmAround::SetInitPos()
 
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
+	ModelDirChangeFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
 }

@@ -506,8 +506,9 @@ void GameScene::DrawBack(Position2 offset)
 void GameScene::GameScene::RetryPauseProcess()
 {
 	GameMain& gm = GameMain::Instance();
-	_rtData.life = 3;
+	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
+	_feverData = FEVER_DATA();
 
 	_player->SetInitPausePos();
 
