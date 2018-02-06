@@ -674,11 +674,13 @@ void Player::FeverWall()
 	//nextPos[4].x = _pos.x + _plRect.w;
 	//nextPos[4].y = _pos.y + (_plRect.h/2);
 	nextPos[4] = _wallRect.RightTop();
+	nextPos[4].x += 5;
 	nextPos[4].y += _wallRect.h / 2;
 	//左真ん中
 	//nextPos[5].x = _pos.x;
 	//nextPos[5].y = _pos.y + (_plRect.h/2);
 	nextPos[5] = _wallRect.LeftTop();
+	nextPos[4].x -= 5;
 	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
@@ -1312,16 +1314,36 @@ void Player::FeverJump()
 			break;
 		}
 	}
+	if (_state == ST_JUMP) {
+		for (int j = 0; j < 2; j++) {
+			if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
+				|| _map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL
+				|| _hit->GimmickHitType(nextPosDown[j]) == GIM_ATTRACT) {
+				vy = 0.0f;
+				airFlag = false;
+				_state = ST_MOVE;
+				break;
+			}
+		}
+	}
+	if (JumpFlag == true) {
+		airCnt++;
+		if (airCnt >= 120) {
+			_pos.y = _pos.y + 10;
+			JumpFlag = false;
+			_state = ST_DEF;
+			airCnt = 0;
+		}
+
+	}
+	else {
+		airCnt = 0;
+	}
+
 	//flagがtrueならｼﾞｬﾝﾌﾟ状態
 	if (JumpFlag == true && airFlag == true) {
 		_state = ST_JUMP;
 	}
-	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
-	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
-	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
-	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
-	//#endif
 }
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
