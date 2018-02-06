@@ -54,6 +54,8 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	midFlag = false;
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki1/teki.pmx", SCENE_RESULT);
+	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
+	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 1);//タイヤ用のテクスチャindexを取得
@@ -62,9 +64,15 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 
 	AnimNowTime = 0.f;
 	AnimWheelTimer = 0;
+	AnimNowTimeSt = 0.f;
 	//アニメーションをアタッチ+総時間の設定
 	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
+
+	//UIのアニメーションのアタッチ
+	AnimeIndexSt = MV1AttachAnim(starModelHandle,0,-1,false);
+	AnimTotalTimeSt = MV1GetAttachAnimTotalTime(starModelHandle, AnimeIndexSt);
+
 }
 
 
@@ -81,7 +89,10 @@ void EmAround::Updata()
 	_emData.lookDir = _dir;
 	_individualData.midFlag = _server.SendMidFlag();
 	Gravity();
-	Visibility();
+	TurnPlayer();
+	if (!ModelDirChangeFlag) {
+		Visibility();
+	}
 	Move();
 	//_pos.x += vx;
 }
@@ -149,15 +160,28 @@ void EmAround::BasicMove()
 	if (_dir == DIR_RIGHT) {		//右
 		modelDirAngle = AngleRad(-90.0f);
 		_pos.x += speed;
+		ModelDirChangeFlag = false;
 	}
 	else if (_dir == DIR_LEFT) {	//左
 		modelDirAngle = AngleRad(90.0f);
 		_pos.x -= speed;
+		ModelDirChangeFlag = false;
 	}
 }
+//ﾌﾟﾚｲﾔｰが当たってきたとき
 void EmAround::TurnPlayer()
 {
+	if (_hit.IsHit(GetRect(), _pl.GetRect())) {
+		if (_pl.GetPos().x < _pos.x) {
+			modelDirAngle = AngleRad(90.0f);
+			_dir = DIR_LEFT;
+		}
+		else {
+			modelDirAngle = AngleRad(-90.0f);
 
+			_dir = DIR_RIGHT;
+		}
+	}
 }
 //振り返る前の動作について
 void EmAround::InterMove()
@@ -222,10 +246,10 @@ void EmAround::CheckMove()
 	nextRightPos.y = _pos.y + (_emRect.h/2);
 	//視界で判定もおこなう
 	Position2  LeftViewPos;
-	LeftViewPos.x = _pos.x - speed - (_emEye.r / 2);
+	LeftViewPos.x = _pos.x - speed - ((_emEye.r / 4)*3);
 	LeftViewPos.y = _pos.y + (_emRect.h/2);
 	Position2 RightViewPos;
-	RightViewPos.x = _pos.x + (_emRect.w) + speed + (_emEye.r / 2);
+	RightViewPos.x = _pos.x + (_emRect.w) + speed + ((_emEye.r / 4)*3);
 	RightViewPos.y = _pos.y + (_emRect.h/2);
 	//左右地面の判定を行う
 	Position2 nextLeftDown;
@@ -350,6 +374,8 @@ void EmAround::EnemyFalter()
 #ifdef _DEBUG
 			//DrawString(100, 100, "敵に当たったよ！", 0xffffff);
 #endif
+
+
 			_state = EM_ST_FEAR;
 		}
 		else {
@@ -437,20 +463,51 @@ void EmAround::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
+			SetDrawBright(255, 255, 0);
 			if (_dir == DIR_LEFT) {
 				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
 			else if (_dir == DIR_RIGHT) {
 				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
+			SetDrawBright(255, 255, 255);
 		}
+
 	}
+	//星
+	MV1SetPosition(starModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h)- 50, 0)));
+	MV1SetScale(starModelHandle, VGet(0.1f, 0.1f, 0.1f));
+
+	//！マーク
+	MV1SetPosition(exModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
+	MV1SetScale(exModelHandle, VGet(1.5f, 1.5f, 1.5f));
+
+	//混乱のときのアニメーション
+	if (_state == EM_ST_FEAR) 
+	{
+		AnimNowTimeSt += 0.5f;
+		if (AnimNowTimeSt >= AnimTotalTimeSt)
+		{
+			AnimNowTimeSt = 0;
+		}
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(starModelHandle, AnimeIndexSt, AnimNowTimeSt);
+		//モデルを輪郭線0.0fで描画 
+		_modelmgr->Draw(starModelHandle, 0.0f);
+	}
+
+	if (_state == EM_ST_DIS)
+	{
+		_modelmgr->Draw(exModelHandle, 0.0f);
+	}
+
+
 	tmpPos = offset;
 #ifdef _DEBUG
 	//_emRect.Draw(offset);

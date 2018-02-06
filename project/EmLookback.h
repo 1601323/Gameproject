@@ -36,6 +36,12 @@ private:
 	float AnimNowTime;  //現在のアニメーション時間
 	int AnimWheelTimer; //タイヤ回転用のタイマー
 
+	int exModelHandle;    //びっくりマーク
+	int AnimeIndexSt;     //アニメーション用インデックス
+	int AnimTotalTimeSt;  //アニメーション時間
+	float AnimNowTimeSt;  //現在のアニメーション時間
+	int starModelHandle;  //星のモデル
+
 	int modelhandle;
 	int textureIndex;
 	int textureIndexWheel;            //タイヤ用のテクスチャ
@@ -70,6 +76,7 @@ private:
 	void Gravity();
 	void SetRange();
 	void LimitMove();					//動きに制限をつける
+	void TurnPlayer();					//ﾌﾟﾚｲﾔｰが当たってきた方向を見る
 public:
 	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();

@@ -135,6 +135,7 @@ void GameScene::GameInit()
 	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
+	gm.SetFeverData(_feverData);
 	switch (gm.GetNowStage()) {
 	case 0:
 		mapName = "map/easy.map";
