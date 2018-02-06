@@ -463,7 +463,7 @@ void EmAround::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
-			SetDrawBright(255, 255, 0);
+			SetDrawBright(_server.ReturnColor().red, _server.ReturnColor().green, _server.ReturnColor().blue);
 			if (_dir == DIR_LEFT) {
 				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
