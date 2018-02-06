@@ -31,8 +31,14 @@ private:
 	int circle;
 	int loseSightCnt;	//PLが認識範囲から外れて見失うまでのカウント
 
+	int AnimeIndex;     //アニメーション用インデックス
+	int AnimTotalTime;  //アニメーション時間
+	float AnimNowTime;  //現在のアニメーション時間
+	int AnimWheelTimer; //タイヤ回転用のタイマー
+
 	int modelhandle;
 	int textureIndex;
+	int textureIndexWheel;            //タイヤ用のテクスチャ
 	float modelDirAngle;
 	int eyeRange;
 	ENEMY_STATE _state;

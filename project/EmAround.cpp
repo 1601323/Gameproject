@@ -37,7 +37,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	vy = 0.0f;
 
 	_dir = DIR_RIGHT;
-	speed = 1;				//‰ŠúƒXƒs[ƒhİ’è
+	speed = 1;				//åˆæœŸã‚¹ãƒ”ãƒ¼ãƒ‰è¨­å®š
 	moveFlag = false;
 	ModelDirChangeFlag = false;
 
@@ -45,18 +45,26 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	interCnt = 0;
 	fearCnt = 180;
 	loseSightCnt = 180;
-	//ŒÂ‘Ìƒf[ƒ^‰Šú‰»
+	//å€‹ä½“ãƒ‡ãƒ¼ã‚¿åˆæœŸåŒ–
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	_individualData.midFlag = false;
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
 	midFlag = false;
-	//ƒ‚ƒfƒ‹“Ç‚İ‚İ
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
-	//‰ŠúŠp“x
+	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 1);//ã‚¿ã‚¤ãƒ¤ç”¨ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£indexã‚’å–å¾—
+	//åˆæœŸè§’åº¦
 	modelDirAngle = AngleRad(-90.0f);
+
+	AnimNowTime = 0.f;
+	AnimWheelTimer = 0;
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¢ã‚¿ãƒƒãƒ+ç·æ™‚é–“ã®è¨­å®š
+	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
 }
 
 
@@ -77,7 +85,7 @@ void EmAround::Updata()
 	Move();
 	//_pos.x += vx;
 }
-//‚¢‚¢ˆ—‚ª•‚‚©‚Î‚È‚©‚Á‚½‚Ì‚Å‚±‚±‚Åmove‚ÌŠÇ—‚³‚¹‚Ä‚¢‚Ü‚·
+//ã„ã„å‡¦ç†ãŒæµ®ã‹ã°ãªã‹ã£ãŸã®ã§ã“ã“ã§moveã®ç®¡ç†ã•ã›ã¦ã„ã¾ã™
 void EmAround::Move()
 {	
 	GameMain& gm = GameMain::Instance();
@@ -87,21 +95,21 @@ void EmAround::Move()
 			midFlag = true;
 		}
 	}
-	//’Êíó‘Ô‚Ìê‡
+	//é€šå¸¸çŠ¶æ…‹ã®å ´åˆ
 	if (_state != EM_ST_FEAR&&_individualData._level == ALERT_LEVEL_1) {
 		//_state = EM_ST_MOVE;
 	}
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (moveFlag == false) {
-			BasicMove();		//¶‰E‚Ö“®‚«‚Ü‚·
+			BasicMove();		//å·¦å³ã¸å‹•ãã¾ã™
 		}
 		else if (moveFlag == true) {
-			InterMove();		//‚µ‚Î‚ç‚­—§‚¿~‚Ü‚é
+			InterMove();		//ã—ã°ã‚‰ãç«‹ã¡æ­¢ã¾ã‚‹
 		}
 		else {
 		}
 	}
-	//ÌßÚ²Ô°‚ğŒ©‚Â‚¯‚½
+	//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ã‚’è¦‹ã¤ã‘ãŸæ™‚
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		if (_individualData.plFoundFlag == true) {
 			FoundMove();
@@ -110,9 +118,9 @@ void EmAround::Move()
 			LoseSight();
 		}
 	}
-	//ÌßÚ²Ô°‚ğŒ©¸‚Á‚½‚Æ‚«
+	//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ã‚’è¦‹å¤±ã£ãŸã¨ã
 	//if(_state == EM_ST_DIS )
-	//‹¯‚İó‘Ô‚Ì
+	//æ€¯ã¿çŠ¶æ…‹ã®æ™‚
 	if (_state == EM_ST_FEAR) {
 		moveFear();
 	}
@@ -121,8 +129,8 @@ void EmAround::Move()
 }
 void EmAround::BasicMove()
 {
-	//Šm”F‚Ì‚½‚ß‚ÉˆêƒRƒƒ“ƒgƒAƒEƒg
-	//Å‰‚Í‚Æ‚è‚ ‚¦‚¸‚Ç‚ê‚­‚ç‚¢‚©“®‚¢‚½‚ç”½‘Î‘¤‚É“®‚­‚æ‚¤‚É‚·‚é
+	//ç¢ºèªã®ãŸã‚ã«ä¸€æ™‚ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ
+	//æœ€åˆã¯ã¨ã‚Šã‚ãˆãšã©ã‚Œãã‚‰ã„ã‹å‹•ã„ãŸã‚‰åå¯¾å´ã«å‹•ãã‚ˆã†ã«ã™ã‚‹
 	//dis++;
 	//if (dis % 70 ==0) {
 	//	//lookBackFlag = !lookBackFlag;
@@ -137,22 +145,22 @@ void EmAround::BasicMove()
 	//}
 	//else { speed = 1; }
 	speed = midFlag ? 2 : 1;
-	if (_dir == DIR_RIGHT) {		//‰E
+	if (_dir == DIR_RIGHT) {		//å³
 		_pos.x += speed;
 	}
-	else if (_dir == DIR_LEFT) {	//¶
+	else if (_dir == DIR_LEFT) {	//å·¦
 		_pos.x -= speed;
 	}
 }
-//U‚è•Ô‚é‘O‚Ì“®ì‚É‚Â‚¢‚Ä
+//æŒ¯ã‚Šè¿”ã‚‹å‰ã®å‹•ä½œã«ã¤ã„ã¦
 void EmAround::InterMove()
 {
-	if (_state == EM_ST_MOVE) {	//ÌßÚ²Ô°‚ª”­Œ©‚³‚ê‚Ä‚¢‚È‚¢A‚©‚ÂƒNƒŠƒAğŒ‚ª–‚½‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«
+	if (_state == EM_ST_MOVE) {	//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ãŒç™ºè¦‹ã•ã‚Œã¦ã„ãªã„ã€ã‹ã¤ã‚¯ãƒªã‚¢æ¡ä»¶ãŒæº€ãŸã•ã‚Œã¦ã„ãªã„ã¨ã
 		interCnt++;
 		ModelDirChangeFlag = true;
-		//‚Æ‚è‚ ‚¦‚¸‚P.5•bŠÔ’â~‚³‚¹‚Ä”½‘Î‘¤‚ÉˆÚ“®‚³‚¹‚é
+		//ã¨ã‚Šã‚ãˆãšï¼‘.5ç§’é–“åœæ­¢ã•ã›ã¦åå¯¾å´ã«ç§»å‹•ã•ã›ã‚‹
 
-		//‚®‚¢[‚ñ‚ÆU‚èŒü‚¢‚Ä‚Ü‚·
+		//ãã„ãƒ¼ã‚“ã¨æŒ¯ã‚Šå‘ã„ã¦ã¾ã™
 		if (_dir == DIR_RIGHT) {
 			modelDirAngle = AngleRad(-90.f + interCnt*-2);
 		}
@@ -181,12 +189,12 @@ void EmAround::InterMove()
 		}
 	}
 }
-//ÌßÚ²Ô°”­Œ©‚Ì“®‚«‚É‚Â‚¢‚Ä
+//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ç™ºè¦‹æ™‚ã®å‹•ãã«ã¤ã„ã¦
 void EmAround::FoundMove()
 {
-	//Œ»’iŠK‚Å‚Í‹ŠE‚É“ü‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯’Ç‚¢‚©‚¯‚é
+	//ç¾æ®µéšã§ã¯è¦–ç•Œã«å…¥ã£ã¦ã„ã‚‹ã¨ãã ã‘è¿½ã„ã‹ã‘ã‚‹
 	speed = midFlag ? 3 : 2;
-	//ÌßÚ²Ô°‚Ì‚Ù‚¤‚ª‰E‚É‚¢‚½‚ç
+	//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ã®ã»ã†ãŒå³ã«ã„ãŸã‚‰
 	if (_pl.GetPos().x >= _pos.x) {
 		vx += speed;
 	}
@@ -194,25 +202,25 @@ void EmAround::FoundMove()
 		vx -= speed;
 	}
 }
-//ƒ}ƒbƒv‚Æ‚Ì‚ ‚½‚è”»’è‚É‚Ô‚Â‚©‚Á‚Ä‚¢‚È‚¢‚©
+//ãƒãƒƒãƒ—ã¨ã®ã‚ãŸã‚Šåˆ¤å®šã«ã¶ã¤ã‹ã£ã¦ã„ãªã„ã‹
 void EmAround::CheckMove()
 {
 	moveFlag = false;
-	//¶‰E‚ÌˆÚ“®‚ğ”»’è‚·‚é
-	Position2 nextLeftPos;		//©g‚Ì¶‘¤‚ğ”»’è‚·‚é
+	//å·¦å³ã®ç§»å‹•ã‚’åˆ¤å®šã™ã‚‹
+	Position2 nextLeftPos;		//è‡ªèº«ã®å·¦å´ã‚’åˆ¤å®šã™ã‚‹
 	nextLeftPos.x = _pos.x - speed;	
 	nextLeftPos.y = _pos.y + (_emRect.h / 2);
 	Position2 nextRightPos;
 	nextRightPos.x = _pos.x + (_emRect.w) + speed;
 	nextRightPos.y = _pos.y + (_emRect.h/2);
-	//‹ŠE‚Å”»’è‚à‚¨‚±‚È‚¤
+	//è¦–ç•Œã§åˆ¤å®šã‚‚ãŠã“ãªã†
 	Position2  LeftViewPos;
 	LeftViewPos.x = _pos.x - speed - (_emEye.r / 2);
 	LeftViewPos.y = _pos.y + (_emRect.h/2);
 	Position2 RightViewPos;
 	RightViewPos.x = _pos.x + (_emRect.w) + speed + (_emEye.r / 2);
 	RightViewPos.y = _pos.y + (_emRect.h/2);
-	//¶‰E’n–Ê‚Ì”»’è‚ğs‚¤
+	//å·¦å³åœ°é¢ã®åˆ¤å®šã‚’è¡Œã†
 	Position2 nextLeftDown;
 	nextLeftDown.x = _pos.x - speed;
 	nextLeftDown.y = _pos.y + (_emRect.h);
@@ -220,45 +228,45 @@ void EmAround::CheckMove()
 	nextRightDown.x = _pos.x + (_emRect.w) + speed;
 	nextRightDown.y = _pos.y + (_emRect.h);
 
-	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN){	//–¢”­Œ©ó‘Ô‚Å‚ ‚ê‚Î
-		if (_dir == DIR_LEFT) {		//¶‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
+	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN){	//æœªç™ºè¦‹çŠ¶æ…‹ã§ã‚ã‚Œã°
+		if (_dir == DIR_LEFT) {		//å·¦å´ã«å‹•ã„ã¦ã„ã‚‹ã¨ã
 			if (_map->GetChipType(nextLeftPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextLeftPos) == CHIP_CLIMB_WALL	||
 				_map->GetChipType(LeftViewPos) == CHIP_CLIMB_WALL	||
 				_map->GetChipType(LeftViewPos) == CHIP_N_CLIMB_WALL ||
-				(_hit.GimmickHit(nextLeftPos) && _hit.GimmickHitType(nextLeftPos) == GIM_ATTRACT)) {	//¶‚ª•Ç‚Å‚ ‚ê‚Î
-				moveFlag = true;	//Œü‚«‚ğ”½“]‚³‚¹‚é	
+				(_hit.GimmickHit(nextLeftPos) && _hit.GimmickHitType(nextLeftPos) == GIM_ATTRACT)) {	//å·¦ãŒå£ã§ã‚ã‚Œã°
+				moveFlag = true;	//å‘ãã‚’åè»¢ã•ã›ã‚‹	
 			}
 			else if (_map->GetChipType(nextLeftDown) != CHIP_N_CLIMB_WALL &&
-				_map->GetChipType(nextLeftDown) != CHIP_CLIMB_WALL) {	//¶‘¤‚Ì‘«Œ³‚ğ”»’è‚·‚é
+				_map->GetChipType(nextLeftDown) != CHIP_CLIMB_WALL) {	//å·¦å´ã®è¶³å…ƒã‚’åˆ¤å®šã™ã‚‹
 				moveFlag = true;
 			}
-			else {	//ğŒ‚ğ‚·‚è”²‚¯‚Ä‚µ‚Ü‚Á‚½‚Æ‚«
+			else {	//æ¡ä»¶ã‚’ã™ã‚ŠæŠœã‘ã¦ã—ã¾ã£ãŸã¨ã
 			}
 		}
-		else {		//‰E‘¤‚É“®‚¢‚Ä‚¢‚é‚Æ‚«
+		else {		//å³å´ã«å‹•ã„ã¦ã„ã‚‹ã¨ã
 			if (_map->GetChipType(nextRightPos) == CHIP_N_CLIMB_WALL ||
 				_map->GetChipType(nextRightPos) == CHIP_CLIMB_WALL	 ||
 				_map->GetChipType(RightViewPos) == CHIP_CLIMB_WALL	 ||
 				_map->GetChipType(RightViewPos) == CHIP_N_CLIMB_WALL ||
-				(_hit.GimmickHit(nextRightPos) && _hit.GimmickHitType(nextRightPos) == GIM_ATTRACT)) {	//‰E‚ª•Ç‚Å‚ ‚ê‚Î												
-				moveFlag = true;	//Œü‚«‚ğ”½“]‚³‚¹‚é
+				(_hit.GimmickHit(nextRightPos) && _hit.GimmickHitType(nextRightPos) == GIM_ATTRACT)) {	//å³ãŒå£ã§ã‚ã‚Œã°												
+				moveFlag = true;	//å‘ãã‚’åè»¢ã•ã›ã‚‹
 			}
 			else if (_map->GetChipType(nextRightDown) != CHIP_N_CLIMB_WALL &&
 				_map->GetChipType(nextRightDown) != CHIP_CLIMB_WALL) {
 				moveFlag = true;
 			}
-			else {	//ğŒ‚ğ‚·‚è”²‚¯‚Ä‚µ‚Ü‚Á‚½‚Æ‚«
+			else {	//æ¡ä»¶ã‚’ã™ã‚ŠæŠœã‘ã¦ã—ã¾ã£ãŸã¨ã
 			}
 		}
 	}
-	//•Ç‚Æ‚Ì‚ ‚½‚è”»’è
+	//å£ã¨ã®ã‚ãŸã‚Šåˆ¤å®š
 	if (_state == EM_ST_RE_DIS || _state == EM_ST_DIS) {
 		Position2 nextMove[2];
-		//¶‘¤
+		//å·¦å´
 		nextMove[0].x = _pos.x + vx;
 		nextMove[0].y = _pos.y + (_emRect.h / 2);
-		//‰E‘¤
+		//å³å´
 		nextMove[1].x = _pos.x + _emRect.w + vx;
 		nextMove[1].y = _pos.y + (_emRect.h / 2);
 		for (int f = 0; f < 2; f++) {
@@ -270,7 +278,7 @@ void EmAround::CheckMove()
 
 	}
 }
-//‹ŠE‚É‚Â‚¢‚Ä
+//è¦–ç•Œã«ã¤ã„ã¦
 void EmAround::Visibility()
 {
 	_emData.lookAngle = 60;
@@ -309,11 +317,11 @@ void EmAround::Visibility()
 		}
 	}
 }
-//ÌßÚ²Ô°‚ğŒ©¸‚Á‚½‚Æ‚«‚Ì“®‚«
+//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ã‚’è¦‹å¤±ã£ãŸã¨ãã®å‹•ã
 void EmAround::LoseSight()
 {
-	//‚«‚å‚ë‚«‚å‚ë‚·‚é‚ÆŒ©¸‚Á‚½Š´‚¶‚ª‚·‚é‚Æv‚¤
-	//’Êíó‘Ô‚É–ß‚é‘O‚ÉEnemy‚ÉŒ©‚Â‚¯‚½ƒtƒ‰ƒO‚ğ‘—‚é
+	//ãã‚‡ã‚ãã‚‡ã‚ã™ã‚‹ã¨è¦‹å¤±ã£ãŸæ„Ÿã˜ãŒã™ã‚‹ã¨æ€ã†
+	//é€šå¸¸çŠ¶æ…‹ã«æˆ»ã‚‹å‰ã«Enemyã«è¦‹ã¤ã‘ãŸãƒ•ãƒ©ã‚°ã‚’é€ã‚‹
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		loseSightCnt--;
 		moveFlag = true;
@@ -333,7 +341,7 @@ void EmAround::EnemyFalter()
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
 			(_hit.IsHit(GetRect(), _rope.GetCircle()) || (_hit.IsHit(GetRect(), _rope.GetCircle2())))) {
 #ifdef _DEBUG
-			//DrawString(100, 100, "“G‚É“–‚½‚Á‚½‚æI", 0xffffff);
+			//DrawString(100, 100, "æ•µã«å½“ãŸã£ãŸã‚ˆï¼", 0xffffff);
 #endif
 			_state = EM_ST_FEAR;
 		}
@@ -341,7 +349,7 @@ void EmAround::EnemyFalter()
 		}
 	}
 }
-//Û°Ìß‚É“–‚½‚Á‚½‚Ìˆ—
+//ï¾›ï½°ï¾Œï¾Ÿã«å½“ãŸã£ãŸæ™‚ã®å‡¦ç†
 void EmAround::moveFear()
 {
 	if (_state == EM_ST_FEAR) {
@@ -352,17 +360,17 @@ void EmAround::moveFear()
 		}
 	}
 }
-//d—Í‚É‚Â‚¢‚Ä
+//é‡åŠ›ã«ã¤ã„ã¦
 void EmAround::Gravity()
 {
 	Position2 nextPosDown[3];
-	//‰E
+	//å³
 	nextPosDown[0].x = _pos.x + (_emRect.w - 2);
 	nextPosDown[0].y = _pos.y + (vy / 2) + (_emRect.h);
-	//¶
+	//å·¦
 	nextPosDown[1].x = _pos.x + 2;
 	nextPosDown[1].y = _pos.y + (vy / 2) + (_emRect.h);
-	//’†S
+	//ä¸­å¿ƒ
 	nextPosDown[2].x = _pos.x + (_emRect.w / 2);
 	nextPosDown[2].y = _pos.y + (vy / 2) + (_emRect.h);
 	for (int f = 0; f < 3; f++) {
@@ -380,15 +388,38 @@ void EmAround::Gravity()
 void EmAround::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
-	//ƒ‚ƒfƒ‹‚Ì‰ñ“]Šp“x‚Ìİ’è(ƒ‰ƒWƒAƒ“)
+
+	ModelMgr& _modelmgr = ModelMgr::Instance();
+
+	AnimNowTime += 0.1f;
+	AnimWheelTimer += 1;
+	//ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒæœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ã§ã„ã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã™ã‚‹
+	if (AnimNowTime >= AnimTotalTime)
+	{
+		AnimNowTime = 0;
+	}
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¢ã‚¿ãƒƒãƒ
+	MV1SetAttachAnimTime(modelhandle, AnimeIndex, AnimNowTime);
+
+
+	//ãƒ¢ãƒ‡ãƒ«ã®å›è»¢è§’åº¦ã®è¨­å®š(ãƒ©ã‚¸ã‚¢ãƒ³)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
-	//ƒ‚ƒfƒ‹‚Ìpos‚ğİ’è+ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“‚Ö•ÏŠ·
+	//ãƒ¢ãƒ‡ãƒ«ã®posã‚’è¨­å®š+ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã¸å¤‰æ›
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2),_pos.y - offset.y + (_emRect.h),0)));
-	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚Ìİ’è
+	//ãƒ¢ãƒ‡ãƒ«ã®æ‹¡å¤§ç¸®å°å€¤ã®è¨­å®š
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
-	//ƒeƒNƒXƒ`ƒƒ‚ğ•ÏX
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki-2.png", SCENE_RESULT), FALSE);
-	//ƒ‚ƒfƒ‹‚ğ—ÖŠsü0.0f‚Å•`‰æ 
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å¤‰æ›´
+	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki1/teki-2.png", SCENE_RESULT), FALSE);
+
+	//ã‚¿ã‚¤ãƒ¤ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å¸¸æ™‚åˆ‡ã‚Šæ›¿ãˆ
+	if (AnimWheelTimer / 5 % 2 == 0)
+	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki1/tire2.png", SCENE_RESULT), FALSE);
+	}
+	else {
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki1/tire.png", SCENE_RESULT), FALSE);
+	}
+	//ãƒ¢ãƒ‡ãƒ«ã‚’è¼ªéƒ­ç·š0.0fã§æç”» 
 	_modelmgr->Draw(modelhandle,0.0f);
 
 	if (_state != EM_ST_FEAR) {
@@ -424,7 +455,7 @@ void EmAround::Draw(Position2 offset)
 }
 void EmAround::SetRange()
 {
-	//ƒTƒCƒY‚Í‰¼
+	//ã‚µã‚¤ã‚ºã¯ä»®
 	_individualData._level = _server.AlertLevel();
 	if (midFlag == false) {
 		if (_individualData._level == ALERT_LEVEL_1) {
