@@ -22,13 +22,13 @@ Rope::Rope(Player* player)
 {
 	_player = player;
 	_mapctl = MapCtl::GetInstance();
-	_modelmgr = ModelMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	RopeInit();
 }
 
 Rope::~Rope()
 {
-	_modelmgr->ModelIdAllDelete();
+
 }
 
 void Rope::Updata(Input* input,Position2 offset)
@@ -46,6 +46,8 @@ void Rope::Updata(Input* input,Position2 offset)
 //初期化処理
 void Rope::RopeInit(void)
 {
+	ModelMgr& _modelmgr = ModelMgr::Instance();
+
 	_states     = &Rope::Ready;
 	_state      = ST_ROPE_READY;
 	_ropeDir    = ROPE_DIR_NON;
@@ -74,7 +76,7 @@ void Rope::RopeInit(void)
 	ImageMgr& im = ImageMgr::Instance();
 
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("Tongue_model/sita5.mv1", SCENE_RESULT);
+	modelhandle = _modelmgr.ModelIdReturn("Tongue_model/sita5.mv1", SCENE_RESULT);
 	//それぞれのアニメーションをアタッチ+総時間の設定
 	AnimAttachIndex = MV1AttachAnim(modelhandle,1,-1,false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimAttachIndex);
@@ -99,6 +101,8 @@ void Rope::DrawRopeRect(void)
 }
 void Rope::ModelManager(void)
 {
+	ModelMgr& _modelmgr = ModelMgr::Instance();
+
 	//当たったかどうかでアニメーションを進めるか戻す
 	AnimNowTime = tongueHitTurn ? AnimNowTime -= 0.5f : AnimNowTime += 0.5f;
 	//現在のアニメーションが最大フレームまでいったらループする
@@ -115,7 +119,7 @@ void Rope::ModelManager(void)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
 	//モデルを描画 輪郭線0.0fで透過
-	_modelmgr->Draw(modelhandle, 0.0f);
+	_modelmgr.Draw(modelhandle, 0.0f);
 }
 
 //ロープの移動処理(直線ver)

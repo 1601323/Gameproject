@@ -39,7 +39,7 @@ private:
 	HitClass *_hit;
 	MapCtl *_map;
 	Rope* _rope;
-	ModelMgr* _modelmgr;
+	//ModelMgr* _modelmgr;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
 	Position3 _pos;						//ｷｬﾗの座標
@@ -72,6 +72,7 @@ private:
 	bool crouchFlag;					//しゃがみフラグ
 	bool ropeFlag;						//ロープ状態かどうかを返すフラグ
 	bool vanFlag;						//ステルス状態かどうかのフラグ
+	bool tmpFlag;						//補正用フラグ
 	char keyData[256];
 	char oldkeyData[256];
 
