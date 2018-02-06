@@ -65,7 +65,7 @@ private:
 	void LoseSight();		//ÌßÚ²Ô°‚ğŒ©¸‚Á‚½‚Æ‚«
 	void Gravity();			//d—Í”»’è
 	void SetRange();		//‹ŠE‚ÌL‚³‚ğƒŒƒxƒ‹•Ê‚É”»’è‚µ‚Ü‚·
-
+	void TurnPlayer();		//ÌßÚ²Ô°‚ªŒã‚ë‚©‚ç‚Ô‚Â‚©‚Á‚Ä‚«‚½‚ç‚»‚Á‚¿‚ğŒü‚­
 	Position2 tmpPos;
 
 public:
