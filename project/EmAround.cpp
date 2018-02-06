@@ -53,7 +53,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_rangeLevel = RANGE_1;
 	midFlag = false;
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki1/teki.pmx", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 1);//タイヤ用のテクスチャindexを取得
@@ -151,6 +151,10 @@ void EmAround::BasicMove()
 	else if (_dir == DIR_LEFT) {	//左
 		_pos.x -= speed;
 	}
+}
+void EmAround::TurnPlayer()
+{
+
 }
 //振り返る前の動作について
 void EmAround::InterMove()
@@ -389,7 +393,6 @@ void EmAround::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
-	ModelMgr& _modelmgr = ModelMgr::Instance();
 
 	AnimNowTime += 0.1f;
 	AnimWheelTimer += 1;
