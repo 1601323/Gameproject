@@ -14,7 +14,7 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 {
 	_hit = new HitClass();
 	_map = MapCtl::GetInstance();
-	_modelmgr = ModelMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	_state = GM_NONE;
 	gravity = 0.9;
 	velocity = 0;
@@ -29,7 +29,7 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 
 	_gimType = GIM_FALL;
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/bread/breadone.pmd", SCENE_RESULT);
+	modelhandle = _modelmgr.ModelIdReturn("gimmick_model/bread/breadone.pmd", SCENE_RESULT);
 }
 
 
@@ -126,6 +126,8 @@ void GimDrop::GetItem()
 //描画
 void GimDrop::Draw(Position2 offset) 
 {
+	ModelMgr& _modelmgr = ModelMgr::Instance();
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(AngleRad(90.0f), 0.0f, 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -137,7 +139,7 @@ void GimDrop::Draw(Position2 offset)
 		//DrawCircle(_pos.x - offset.x,_pos.y -offset.y,10,GetColor(255,0,255),true);
 
 		//モデルを輪郭線0.0fで描画 
-		_modelmgr->Draw(modelhandle, 0.0f);
+		_modelmgr.Draw(modelhandle, 0.0f);
 	}
 	else if (_state == GM_END) {
 		//割れたりしてる描画
@@ -150,7 +152,7 @@ void GimDrop::Draw(Position2 offset)
 	}
 	else if (_state == GM_PAUSE) {		//移動が一時停止しているとき（壁にぶつかったなど)
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(0, 0, 255), true);
-		_modelmgr->Draw(modelhandle, 0.0f);
+		_modelmgr.Draw(modelhandle, 0.0f);
 	}
 	_gmRect.SetCenter(_pos.x , _pos.y);
 #ifdef _DEBUG

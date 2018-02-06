@@ -19,7 +19,7 @@ private:
 	EnemyServer& _server;
 	DIR _dir;			//·¬×‚ÌŒü‚«
 	MapCtl* _map;
-	ModelMgr* _modelmgr;
+	//ModelMgr* _modelmgr;
 
 	Player& _player;
 	Rope& _rope;

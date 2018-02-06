@@ -48,7 +48,7 @@ class Rope : public Object
 {
 private:
 
-	ModelMgr* _modelmgr;
+	//ModelMgr* _modelmgr;
 
 	bool RopeTurnFlag;                      //ロープ引き返し用flag
 	bool dirFlag;                           //ロープの向きを決めるflag

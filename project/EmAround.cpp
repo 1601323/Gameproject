@@ -20,8 +20,8 @@
 EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass& hit):_pl(pl),_rope(rope),_server(server),_hit(hit)
 {
 	_map = MapCtl::GetInstance();
-	_modelmgr = ModelMgr::Instance();
 
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	_emRect.w = 30;
 	_emRect.h = 60;	
 	_pos.x = pos.x;
@@ -53,7 +53,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_rangeLevel = RANGE_1;
 	midFlag = false;
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr.ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	//初期角度
 	modelDirAngle = AngleRad(-90.0f);
@@ -62,7 +62,6 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 
 EmAround::~EmAround()
 {
-	_modelmgr->ModelIdAllDelete();
 }
 
 void EmAround::Updata()
@@ -380,6 +379,7 @@ void EmAround::Gravity()
 void EmAround::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -389,7 +389,7 @@ void EmAround::Draw(Position2 offset)
 	//テクスチャを変更
 	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki-2.png", SCENE_RESULT), FALSE);
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(modelhandle,0.0f);
+	_modelmgr.Draw(modelhandle,0.0f);
 
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);

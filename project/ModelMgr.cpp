@@ -5,7 +5,7 @@
 #include "GameMain.h"
 #include "ModelMgr.h"
 
-ModelMgr* ModelMgr::ptr = nullptr;
+//ModelMgr* ModelMgr::ptr = nullptr;
 
 ModelMgr::ModelMgr()
 {
@@ -17,13 +17,10 @@ ModelMgr::~ModelMgr()
 
 }
 
-ModelMgr* ModelMgr::Instance(void)
+ModelMgr& ModelMgr::Instance(void)
 {
-	if (ptr == nullptr)
-	{
-		ptr = new ModelMgr();
-	}
-	return ptr;
+	static ModelMgr modelMgr;
+	return modelMgr;
 }
 
 int ModelMgr::ModelIdReturn(const std::string path, const SCENE_TYPE delScene)

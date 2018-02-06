@@ -49,13 +49,14 @@ Player::Player()
 	vanFlag = false;
 	ropeFlag = false;
 	inviFlag = false;
+	tmpFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
 	_fd = FEVER_DATA();
 
-	_modelmgr = ModelMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//モデル読み込み
 	modelhandle = MV1LoadModel("player_model/player.pmx");
 	//それぞれのアニメーションをアタッチ+総時間の設定
@@ -70,9 +71,7 @@ Player::Player()
 }
 Player::~Player()
 {
-	//delete _hit;
-	//delete _rope;
-	_modelmgr->ModelIdAllDelete();
+
 }
 //更新されたHitClassを受け取るための関数です
 void Player::Getclass(HitClass* h, Rope*r)
@@ -1013,7 +1012,8 @@ bool Player::stVanish(void)
 	}
 	//動いていたらｶｳﾝﾄを戻す
 	//壁登り状態で動いていたらｽﾃﾙｽにならない
-	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 ||ropeFlag == true) {
+	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 
+		||ropeFlag == true || tmpFlag != crouchFlag) {
 		vanCnt = 60 * VANISH_CNT;
 		vanFlag = false;
 		alfa = 255;
@@ -1028,6 +1028,7 @@ bool Player::stVanish(void)
 #ifdef _DEBUG
 	//DrawFormatString(0, 120, 0xffffff, "%d", vanCnt);
 #endif
+	tmpFlag = crouchFlag;
 	return false;
 }
 void Player::moveCrouch(Input* input)
@@ -1442,6 +1443,7 @@ bool Player::plPlaceCheck()
 }
 void Player::Draw(Position2& offset)
 {
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
 	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
 	//時機
@@ -1504,7 +1506,7 @@ void Player::Draw(Position2& offset)
 	AnimationSwitching();
 
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(modelhandle,0.0f);
+	_modelmgr.Draw(modelhandle,0.0f);
 
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);

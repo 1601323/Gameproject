@@ -14,6 +14,7 @@
 #include "Math.h"
 #include "ImageMgr.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 
 using namespace std;
 
@@ -177,6 +178,8 @@ void GameMain::Run()
 	ChangeScene(new TitleScene());
 	if (_scene != nullptr) {
 		ImageMgr::Instance().ImageManager(_scene->GetScene());
+		ModelMgr::Instance().ModelManager(_scene->GetScene());
+		SoundMgr::Instance().SoundManager(_scene->GetScene());
 	}
 	else
 	{
@@ -200,6 +203,8 @@ void GameMain::Run()
 	}
 	ClearDataSave();
 	ImageMgr::Instance().ImageIdAllDelete();
+	ModelMgr::Instance().ModelIdAllDelete();
+	SoundMgr::Instance().SoundIdAllDelete();
 	DxLib_End();
 }
 GameMain::~GameMain()
