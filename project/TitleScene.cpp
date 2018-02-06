@@ -12,7 +12,7 @@ using namespace std;
 TitleScene::TitleScene()
 {
 	_updater = &TitleScene::FadeinTitle;
-	SetMovieColorA8R8G8B8Flag(true);
+	//SetMovieColorA8R8G8B8Flag(true);
 
 	_menu = GAME_START;
 	_minSensingValueL = SV_HIGH;

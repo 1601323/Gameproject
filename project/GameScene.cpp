@@ -507,7 +507,7 @@ void GameScene::DrawBack(Position2 offset)
 
 }
 
-void GameScene::GameScene::RetryPauseProcess()
+void GameScene::RetryPauseProcess()
 {
 	GameMain& gm = GameMain::Instance();
 	_rtData = RESULT_DATA();
