@@ -47,6 +47,11 @@ private:
 	float AnimNowTime;    //現在のアニメーション時間
 	int AnimWheelTimer; //タイヤ回転用のタイマー
 
+	int exModelHandle;    //びっくりマーク
+	int AnimeIndexSt;     //アニメーション用インデックス
+	int AnimTotalTimeSt;  //アニメーション時間
+	float AnimNowTimeSt;  //現在のアニメーション時間
+	int starModelHandle;  //星のモデル
 
 	//３D処理について
 	int modelhandle;
