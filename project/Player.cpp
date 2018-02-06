@@ -12,9 +12,7 @@
 #include "ModelMgr.h"
 #include "ImageMgr.h"
 
-
 using namespace std;
-
 
 Player::Player()
 {
@@ -55,6 +53,7 @@ Player::Player()
 	tranceMax = 50;
 	modelDirAngle = 0.0f;
 	LineNum = 0.f;
+	airCnt = 0;
 	_fd = FEVER_DATA();
 
 	_modelmgr = ModelMgr::Instance();
@@ -105,6 +104,7 @@ void Player::Update(Input* input)
 	HitToEnemy();		//敵と当たったとき
 	//ﾌｨｰﾊﾞｰﾃﾞｰﾀ受け取り
 	GetFeverData();
+	cout << airFlag<< endl;
 }
 
 //移動系の処理
@@ -119,18 +119,15 @@ void Player::setMove(Input* input)
 	accelePL();
 	EnterDoor();
 }
-
 //ｽﾃｰﾀｽ系の処理
 void Player::setState(void)
 {
 	stFever();
-
 	if (inviFlag)
 	{
 		_state = ST_INVINCIBLE;
 	}
 	stInvincible();
-
 	if (_state != ST_FEVER) {
 		stVanish();
 	}
@@ -138,10 +135,8 @@ void Player::setState(void)
 void Player::FeverUpdata(Input* input)
 {
 	setDir(input);
-
 	FeverJump();
 	FeverWall();
-
 	moveRope();
 	moveCrouch(input);               
 	moveFever();
@@ -160,7 +155,9 @@ void Player::setDir(Input* input)
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
+			if(_state != ST_JUMP)
 			_state = ST_MOVE;
+			airFlag = false;
 			modelDirAngle = AngleRad(-90.f);
 		}
 		//左
@@ -168,7 +165,9 @@ void Player::setDir(Input* input)
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_LEFT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
+			if (_state != ST_JUMP)
 			_state = ST_MOVE;
+			airFlag = false;
 			modelDirAngle = AngleRad(90.f);
 		}
 		//上
@@ -337,6 +336,7 @@ bool Player::moveWall(void)
 {
 	if (WallFlag == true) {
 		_state = ST_WALL;
+		JumpFlag = false;
 	}
 	int count = 0;
 	//壁登り状態
@@ -647,6 +647,7 @@ void Player::FeverWall()
 	//float vy;
 	if (WallFlag == true) {
 		_state = ST_WALL;
+		JumpFlag = false;
 	}
 	int count = 0;
 	//壁登り状態
@@ -1137,7 +1138,6 @@ bool Player::stFever(void)
 #endif
 	return false;
 }
-
 //無敵状態の処理
 void Player::stInvincible(void)
 {
@@ -1154,14 +1154,10 @@ void Player::stInvincible(void)
 		}
 	}
 }
-
 //ｼﾞｬﾝﾌﾟ処理
 bool Player::moveJump(void)
 {
-	//flagがtrueならｼﾞｬﾝﾌﾟ状態
-	if (JumpFlag == true&& airFlag ==true) {
-		_state = ST_JUMP;
-	}
+
 	//ｼﾞｬﾝﾌﾟ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1178,7 +1174,6 @@ bool Player::moveJump(void)
 				airFlag = true;
 			}
 		}
-
 	}
 	else {
 		//放物線を見せるために加速度にMAX_SPEEDを設定
@@ -1203,8 +1198,11 @@ bool Player::moveJump(void)
 	//左上
 	nextPosUP[1].x = _pos.x + 2;
 	nextPosUP[1].y = _pos.y + (vy / 2);
-	Position2 nextPos[2];
-
+	Position2 nextPosDown[2];
+	nextPosDown[0].x = _pos.x + (_plRect.w -2);
+	nextPosDown[0].y = _pos.y + (vy/2) + (_plRect.h +2);
+	nextPosDown[1].x = _pos.x + 2;
+	nextPosDown[1].y = _pos.y + (vy/2) + (_plRect.h +2);
 	//登れる壁、登れない壁との判定
 	for (int j = 0; j < 2; j++) {
 		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
@@ -1214,14 +1212,41 @@ bool Player::moveJump(void)
 			break;
 		}
 	}
+
+	if (_state == ST_JUMP) {
+		for (int j = 0; j < 2; j++) {
+			if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
+				|| _map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL
+				|| _hit->GimmickHitType(nextPosDown[j]) == GIM_ATTRACT) {
+				vy = 0.0f;
+				airFlag = false;
+				_state = ST_MOVE;
+				break;
+			}
+		}
+	}
+	if(JumpFlag == true){
+		airCnt++;
+		if (airCnt >= 120) {
+			_pos.y = _pos.y + 10;
+			JumpFlag = false;
+			_state = ST_DEF;
+			airCnt = 0;
+		}
+
+	}
+	else {
+		airCnt = 0;
+	}
+	//flagがtrueならｼﾞｬﾝﾌﾟ状態
+	if (JumpFlag == true&& airFlag ==true) {
+		_state = ST_JUMP;
+	}
 	return false;
 }
 void Player::FeverJump()
 {
-	//flagがtrueならｼﾞｬﾝﾌﾟ状態
-	if (JumpFlag == true) {
-		_state = ST_JUMP;
-	}
+
 	//ｼﾞｬﾝﾌﾟ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1249,6 +1274,18 @@ void Player::FeverJump()
 			}
 		}
 	}
+	if (_state == ST_JUMP) {
+		airCnt++;
+		if (airCnt >= 60) {
+			_pos.y = _pos.y + 2;
+			JumpFlag = false;
+			airCnt = 0;
+		}
+	}
+	else {
+		airCnt = 0;
+	}
+
 	//マップとの判定
 	//2ドットほど判定を狭めている
 	//上部の当たり判定
@@ -1275,7 +1312,10 @@ void Player::FeverJump()
 			break;
 		}
 	}
-
+	//flagがtrueならｼﾞｬﾝﾌﾟ状態
+	if (JumpFlag == true && airFlag == true) {
+		_state = ST_JUMP;
+	}
 	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
 	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
 	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
@@ -1283,8 +1323,6 @@ void Player::FeverJump()
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
 	//#endif
 }
-
-
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
 {
@@ -1530,13 +1568,11 @@ Rect& Player::GetRect()
 {
 	return _plRect;
 }
-
 //ｽﾃｰﾀｽ取得
 CHAR_ST Player::GetcharState(void)
 {
 	return _state;
 }
-
 //_pos取得
 Position2& Player::GetPos(void)
 {
