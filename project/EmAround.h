@@ -42,9 +42,16 @@ private:
 
 	bool midFlag;			//中間点フラグ
 
+	int AnimeIndex;     //アニメーション用インデックス
+	int AnimTotalTime;  //アニメーション時間
+	float AnimNowTime;    //現在のアニメーション時間
+	int AnimWheelTimer; //タイヤ回転用のタイマー
+
+
 	//３D処理について
 	int modelhandle;
 	int textureIndex;
+	int textureIndexWheel;            //タイヤ用のテクスチャ
 	float modelDirAngle;
 
 	void Move();			//敵の動きについての管理を行う

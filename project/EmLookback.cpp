@@ -49,9 +49,18 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
 
+
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
 	modelDirAngle = 0.0f;
+	AnimNowTime = 0.0f;
+	AnimWheelTimer = 0.0f;
+
+	//アニメーションをアタッチ+総時間の設定
+	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
 }
 
 EmLookback::~EmLookback()
@@ -81,6 +90,21 @@ void EmLookback::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
+	ModelMgr& _modelmgr = ModelMgr::Instance();
+
+
+	AnimNowTime += 0.1f;
+	AnimWheelTimer += 1;
+	//現在のアニメーションが最大フレームまでいったらループする
+	if (AnimNowTime >= AnimTotalTime)
+	{
+		AnimNowTime = 0;
+	}
+	//アニメーションをアタッチ
+	MV1SetAttachAnimTime(modelhandle, AnimeIndex, AnimNowTime);
+
+
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -88,7 +112,16 @@ void EmLookback::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 	//テクスチャを変更
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2-1.png", SCENE_RESULT), FALSE);
+	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2/teki2-1.png", SCENE_RESULT), FALSE);
+
+	//タイヤのテクスチャを常時切り替え
+	if (AnimWheelTimer / 5 % 2 == 0)
+	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki2/teki2 tire.png", SCENE_RESULT), FALSE);
+	}
+	else {
+		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki2/teki2 tire2.png", SCENE_RESULT), FALSE);
+	}
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
