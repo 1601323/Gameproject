@@ -389,7 +389,7 @@ void EmAround::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
-	ModelMgr& _modelmgr = ModelMgr::Instance();
+	 _modelmgr = ModelMgr::Instance();
 
 	AnimNowTime += 0.1f;
 	AnimWheelTimer += 1;
