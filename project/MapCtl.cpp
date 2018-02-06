@@ -15,12 +15,12 @@ MapCtl* MapCtl::ptr = nullptr;
 MapCtl::MapCtl()
 {
 	LoadDivGraph("image/マップチップ.png",8,8,1,32,32,chipImage);
-	_modelmgr = ModelMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//chipModelHandle[1] = _modelmgr->ModelIdReturn("wall＿model/wall.pmx", SCENE_RESULT);
 	//chipModelHandle[2] = _modelmgr->ModelIdReturn("wall＿model/wall2.pmx", SCENE_RESULT);
 	//リトライしたら
-	chipModelHandle[1] = MV1LoadModel("wall＿model/wall.pmx");
-	chipModelHandle[2] = MV1LoadModel("wall＿model/wall2.pmx");
+	chipModelHandle[1] = _modelmgr.ModelIdReturn("wall＿model/wall.pmx",SCENE_RESULT);/*MV1LoadModel("wall＿model/wall.pmx");*/
+	chipModelHandle[2] = _modelmgr.ModelIdReturn("wall＿model/wall2.pmx",SCENE_RESULT);/* MV1LoadModel("wall＿model/wall2.pmx");*/
 	textureIndex = MV1GetMaterialDifMapTexture(chipModelHandle[2], 3);
 }
 
@@ -144,6 +144,7 @@ unsigned int MapCtl::GetMapNum(Position2 idPos)
 // ﾏｯﾌﾟチップ描画[座標,ﾁｯﾌﾟ番号]
 void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 {
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	auto color = GetColor(0, 50, 50);
 	//DrawGraph(x * 32 + 0 - offset.x, y * 32 + 0 - offset.y, chipImage[num],true);
 	MV1SetPosition(chipModelHandle[num], ConvWorldPosToScreenPos(VGet(x*32 - offset.x+15,y*32 - offset.y+15,0)));
@@ -153,7 +154,7 @@ void MapCtl::DrawMapChip(int x, int y, Position2 offset, unsigned int num)
 	ChangeStageTexture(num);
 
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(chipModelHandle[num],0.0f);
+	_modelmgr.Draw(chipModelHandle[num],0.0f);
 }
 
 //ギミックにデータをもらうために追加してます

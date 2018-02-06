@@ -14,7 +14,7 @@ using namespace std;
 SelectScene::SelectScene()
 {
 	_updater = &SelectScene::NormalUpdata;
-	_modelmgr = ModelMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	SelectMap = mapNumber[0];
 	nowNum = 0;
 	_minSensingValueL = SV_HIGH;
@@ -24,7 +24,7 @@ SelectScene::SelectScene()
 	stageNum[0] = "image/ステージサムネイル/stage1.png";
 	stageNum[1] = "image/ステージサムネイル/stage2.png";
 	stageNum[2] = "image/ステージサムネイル/stage3.png";
-	modelhandle = MV1LoadModel("player_model/player.pmx");
+	modelhandle = _modelmgr.ModelIdReturn("player_model/player.pmx",SCENE_GAME);/* MV1LoadModel("player_model/player.pmx");*/
 	//アニメーションをアタッチ+総時間の設定
 	AnimIndex = MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex);
@@ -113,6 +113,7 @@ void SelectScene::Select(Input* input)
 void SelectScene::Draw()
 {
 	ImageMgr& im = ImageMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 
 	int redu = 40;
 	//背景
@@ -152,7 +153,7 @@ void SelectScene::Draw()
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.5f, 3.5f, 3.5f));
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(modelhandle, 0.0f);
+	_modelmgr.Draw(modelhandle, 0.0f);
 
 
 	switch (nowNum)

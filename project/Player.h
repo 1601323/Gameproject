@@ -39,7 +39,7 @@ private:
 	HitClass *_hit;
 	MapCtl *_map;
 	Rope* _rope;
-	ModelMgr* _modelmgr;
+	//ModelMgr* _modelmgr;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//·¬×‚Ìó‘Ô
 	Position3 _pos;						//·¬×‚ÌÀ•W

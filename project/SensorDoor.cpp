@@ -15,7 +15,7 @@
 SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 {
 	//_hit = new HitClass();
-	_modelmgr = ModelMgr::Instance();
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	openFlag = false;
 	//posのオフセット
 	_pos.x = pos.x +(MAP_CHIP_SIZE_X/2);
@@ -28,7 +28,7 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	_state = GM_NONE;
 	enterFlag = false;
 	_gimType = GIM_DOOR;
-	modelhandle = _modelmgr->ModelIdReturn("gimmick_model/Gateway/door.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr.ModelIdReturn("gimmick_model/Gateway/door.pmx", SCENE_RESULT);
 	//AttachIndex = MV1AttachAnim(modelhandle, 1, -1, false);
 	//totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
 }
@@ -36,7 +36,6 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 SensorDoor::~SensorDoor()
 {
 	delete _hit;
-	_modelmgr->ModelIdAllDelete();
 }
 void SensorDoor::Updata() 
 {
@@ -109,6 +108,7 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 
 void SensorDoor::Draw(Position2 offset)
 {
+	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, AngleRad(87.f), 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -119,7 +119,7 @@ void SensorDoor::Draw(Position2 offset)
 	MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCount);
 	
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(modelhandle, 0.0f);
+	_modelmgr.Draw(modelhandle, 0.0f);
 
 	//外枠の表示
 	//DxLib::DrawBox((int)(_pos.x -offset.x-(WIDTH/2)),(int)(_pos.y - offset.y-HEIGHT),(int)(_pos.x - offset.x + (WIDTH/2)),(int)_pos.y - offset.y,0x000000,true);
