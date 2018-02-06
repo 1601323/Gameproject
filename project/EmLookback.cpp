@@ -521,6 +521,10 @@ ENEMY_STATE& EmLookback::GetState()
 {
 	return _state;
 }
+DIR EmLookback::GetDir()
+{
+	return _dir;
+}
 void EmLookback::GetClass(HitClass * hit, Player & pl)
 {
 	//_hit = hit;

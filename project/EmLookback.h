@@ -69,6 +69,7 @@ public:
 	~EmLookback();
 	Rect _emRect;
 	Rect& GetRect();
+	DIR GetDir();
 	ENEMY_TYPE _emType;
 	ENEMY_TYPE& GetType();
 	void SetInitPos();

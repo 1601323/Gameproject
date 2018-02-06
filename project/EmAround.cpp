@@ -509,6 +509,10 @@ Rect& EmAround::GetRect()
 {
 	return _emRect;
 }
+DIR EmAround::GetDir()
+{
+	return _dir;
+}
 ENEMY_STATE& EmAround::GetState()
 {
 	return _state;

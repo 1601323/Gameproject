@@ -67,6 +67,7 @@ public:
 
 	void Updata();	
 	Rect& GetRect();
+	DIR GetDir();
 	ENEMY_STATE & GetState();
 	void EnemyFalter();		//‹¯‚İó‘Ô‚É‚È‚éğŒ
 	void GetClass(HitClass* hit,Player& pl);		//ƒNƒ‰ƒXó‚¯æ‚è—p
