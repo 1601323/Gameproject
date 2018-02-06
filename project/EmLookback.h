@@ -76,6 +76,7 @@ private:
 	void Gravity();
 	void SetRange();
 	void LimitMove();					//“®‚«‚É§ŒÀ‚ğ‚Â‚¯‚é
+	void TurnPlayer();					//ÌßÚ²Ô°‚ª“–‚½‚Á‚Ä‚«‚½•ûŒü‚ğŒ©‚é
 public:
 	EmLookback(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitClass&  hit);
 	~EmLookback();

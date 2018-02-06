@@ -89,7 +89,10 @@ void EmAround::Updata()
 	_emData.lookDir = _dir;
 	_individualData.midFlag = _server.SendMidFlag();
 	Gravity();
-	Visibility();
+	TurnPlayer();
+	if (!ModelDirChangeFlag) {
+		Visibility();
+	}
 	Move();
 	//_pos.x += vx;
 }
@@ -157,15 +160,28 @@ void EmAround::BasicMove()
 	if (_dir == DIR_RIGHT) {		//右
 		modelDirAngle = AngleRad(-90.0f);
 		_pos.x += speed;
+		ModelDirChangeFlag = false;
 	}
 	else if (_dir == DIR_LEFT) {	//左
 		modelDirAngle = AngleRad(90.0f);
 		_pos.x -= speed;
+		ModelDirChangeFlag = false;
 	}
 }
+//ﾌﾟﾚｲﾔｰが当たってきたとき
 void EmAround::TurnPlayer()
 {
+	if (_hit.IsHit(GetRect(), _pl.GetRect())) {
+		if (_pl.GetPos().x < _pos.x) {
+			modelDirAngle = AngleRad(90.0f);
+			_dir = DIR_LEFT;
+		}
+		else {
+			modelDirAngle = AngleRad(-90.0f);
 
+			_dir = DIR_RIGHT;
+		}
+	}
 }
 //振り返る前の動作について
 void EmAround::InterMove()
@@ -230,10 +246,10 @@ void EmAround::CheckMove()
 	nextRightPos.y = _pos.y + (_emRect.h/2);
 	//視界で判定もおこなう
 	Position2  LeftViewPos;
-	LeftViewPos.x = _pos.x - speed - (_emEye.r / 2);
+	LeftViewPos.x = _pos.x - speed - ((_emEye.r / 4)*3);
 	LeftViewPos.y = _pos.y + (_emRect.h/2);
 	Position2 RightViewPos;
-	RightViewPos.x = _pos.x + (_emRect.w) + speed + (_emEye.r / 2);
+	RightViewPos.x = _pos.x + (_emRect.w) + speed + ((_emEye.r / 4)*3);
 	RightViewPos.y = _pos.y + (_emRect.h/2);
 	//左右地面の判定を行う
 	Position2 nextLeftDown;
@@ -447,19 +463,22 @@ void EmAround::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
+			SetDrawBright(255, 255, 0);
 			if (_dir == DIR_LEFT) {
 				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
 			else if (_dir == DIR_RIGHT) {
 				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
+			SetDrawBright(255, 255, 255);
 		}
+
 	}
 	//星
 	MV1SetPosition(starModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h)- 50, 0)));
