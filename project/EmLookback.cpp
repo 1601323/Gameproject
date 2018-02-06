@@ -82,7 +82,7 @@ void EmLookback::Updata()
 	if (!ModelDirChangeFlag) {
 		Visibility();
 	}
-	
+	TurnPlayer();
 
 	Gravity();
 }
@@ -151,10 +151,11 @@ void EmLookback::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
+			SetDrawBright(255,255,0);
 			if (_dir == DIR_RIGHT) {
 				modelDirAngle = AngleRad(-90.0f);
 				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -162,11 +163,12 @@ void EmLookback::Draw(Position2 offset)
 			else if (_dir == DIR_LEFT) {
 				modelDirAngle = AngleRad(90.0f);
 				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 			}
+			SetDrawBright(255, 255, 255);
 		}
 	}
 	returnDir(offset);
@@ -275,6 +277,19 @@ void EmLookback::setDir(void)
 			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 		}
 		LookCount = 0;
+	}
+}
+void EmLookback::TurnPlayer()
+{
+	if (_hit.IsHit(GetRect(), _player.GetRect()) == true) {
+		if (_player.GetPos().x < _pos.x) {
+			_dir = DIR_LEFT;	
+			modelDirAngle = AngleRad(90.0f);
+		}
+		else {
+			_dir = DIR_RIGHT;
+			modelDirAngle = AngleRad(-90.0f);
+		}
 	}
 }
 void EmLookback::Visibility()
