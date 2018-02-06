@@ -12,7 +12,7 @@
 Midpoint::Midpoint()
 {
 	_hit = new HitClass();
-	ModelMgr& _modelmgr = ModelMgr::Instance();
+	_modelmgr = ModelMgr::Instance();
 	GetFlag = false;
 	//マップから受け取るようにする
 	_pos.x = 350;
@@ -37,9 +37,9 @@ Midpoint::Midpoint()
 	alfa = 255;
 	tranceMax = 50;
 	//モデル読み込み
-	Safehandle = _modelmgr.ModelIdReturn("gimmick_model/safe/safe75.pmx", SCENE_RESULT);
-	keyhandle = _modelmgr.ModelIdReturn("gimmick_model/key/key.pmx", SCENE_RESULT);
-	Targethandle = _modelmgr.ModelIdReturn("gimmick_model/flask/flask.pmx", SCENE_RESULT);
+	Safehandle = _modelmgr->ModelIdReturn("gimmick_model/safe/safe75.pmx", SCENE_RESULT);
+	keyhandle = _modelmgr->ModelIdReturn("gimmick_model/key/key.pmx", SCENE_RESULT);
+	Targethandle = _modelmgr->ModelIdReturn("gimmick_model/flask/flask.pmx", SCENE_RESULT);
 }
 void Midpoint::GetClass(Player* p)
 {
@@ -47,8 +47,8 @@ void Midpoint::GetClass(Player* p)
 }
 Midpoint::~Midpoint()
 {
-
 	delete _hit;
+	_modelmgr->ModelIdAllDelete();
 }
 
 void Midpoint::Updata(Input* input)
@@ -136,8 +136,6 @@ void Midpoint::FollowDir()
 }
 void Midpoint::Draw(Position2 offset)
 {
-	ModelMgr& _modelmgr = ModelMgr::Instance();
-
 	//目的物のモデル
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(Targethandle, ConvWorldPosToScreenPos(VGet(_midPos.x - offset.x + (_hitRect.w / 2), _midPos.y - offset.y + (_hitRect.h), 0)));
@@ -150,7 +148,7 @@ void Midpoint::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(Safehandle, VGet(0.3f, 0.3f, 0.3f));
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr.Draw(Safehandle, 0.0f);
+	_modelmgr->Draw(Safehandle, 0.0f);
 
 	//鍵のモデル
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -195,7 +193,7 @@ void Midpoint::Draw(Position2 offset)
 		//DrawBox(_midPos.x - offset.x, _midPos.y - offset.y, _midPos.x + _midRect.w - offset.x, _midPos.y + _midRect.h - offset.y, 0xcccccc, true);
 		_midRect.SetCenter(_midPos.x+(_midRect.w/2),_midPos.y+(_midRect.h /2));
 		//モデルを輪郭線0.0fで描画(鍵)
-		_modelmgr.Draw(keyhandle, 0.5f);
+		_modelmgr->Draw(keyhandle, 0.5f);
 
 	}
 	else if(GetFlag == true ){
@@ -210,7 +208,7 @@ void Midpoint::Draw(Position2 offset)
 		}
 		MV1SetOpacityRate(Targethandle, alfa / 255.f);
 		//モデルを描画
-		_modelmgr.Draw(Targethandle, 0.0f);
+		_modelmgr->Draw(Targethandle, 0.0f);
 	}
 	if (uiFlag == true) {
 	//	DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"＼B!!／",0x00ff00);

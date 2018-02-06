@@ -15,7 +15,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	//_hit = new HitClass();
 	//_player = new Player();
 	_map = MapCtl::GetInstance();
-	ModelMgr& _modelmgr = ModelMgr::Instance();
+	_modelmgr = ModelMgr::Instance();
 	_emRect.w = 32;
 	_emRect.h = 64;
 	_pos.x = pos.x;
@@ -49,7 +49,9 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_individualData._level = ALERT_LEVEL_1;
 	_rangeLevel = RANGE_1;
 
-	modelhandle = _modelmgr.ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
+
+	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2.pmx", SCENE_RESULT);
+
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
 	modelDirAngle = 0.0f;
@@ -87,6 +89,7 @@ void EmLookback::Updata()
 void EmLookback::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
+
 	ModelMgr& _modelmgr = ModelMgr::Instance();
 
 
@@ -99,6 +102,7 @@ void EmLookback::Draw(Position2 offset)
 	}
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimeIndex, AnimNowTime);
+
 
 
 	//モデルの回転角度の設定(ラジアン)
@@ -119,7 +123,7 @@ void EmLookback::Draw(Position2 offset)
 		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki2/teki2 tire2.png", SCENE_RESULT), FALSE);
 	}
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr.Draw(modelhandle, 0.0f);
+	_modelmgr->Draw(modelhandle, 0.0f);
 
 	switch (_state)
 	{
@@ -549,6 +553,10 @@ ENEMY_TYPE & EmLookback::GetType()
 ENEMY_STATE& EmLookback::GetState()
 {
 	return _state;
+}
+DIR EmLookback::GetDir()
+{
+	return _dir;
 }
 void EmLookback::GetClass(HitClass * hit, Player & pl)
 {

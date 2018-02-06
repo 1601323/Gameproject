@@ -20,6 +20,7 @@ public:
 	ENEMY_STATE _state;
 	EnemyServerData _commonData;
 	virtual Rect&GetRect();
+	virtual DIR GetDir() = 0;
 	virtual ENEMY_TYPE& GetType();
 
 	int vigiImage[5];

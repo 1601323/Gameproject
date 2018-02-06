@@ -151,12 +151,24 @@ bool HitClass::GimmickEnter(Object& act)
 bool HitClass::EnemyHit(Object& act)
 {
 	for (auto& enemy : _emFac->EnemyList()) {
-		if (IsHit(enemy->GetRect(), act.GetRect())) {
 			//怯み状態であれば当たっていない判定（ﾌﾟﾚｲﾔｰに対してだけなので調整の必要あり）
-			if (enemy->GetState() == EM_ST_FEAR) {
+		if (enemy->GetState() == EM_ST_FEAR) {
+			return false;
+		}
+		if (IsHit(enemy->GetRect(), act.GetRect())) {
+			if (enemy->GetDir() == DIR_LEFT) {
+				if (enemy->GetRect().Left() > act.GetRect().Left()) {
+					return true;
+				}
 				return false;
 			}
-			return true;
+			else if (enemy->GetDir() == DIR_RIGHT) {
+				if (enemy->GetRect().Right() < act.GetRect().Right()) {
+					return true;
+				}
+				return false;
+			}
+			//return true;
 		}
 	}
 	return false;
