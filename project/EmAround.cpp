@@ -393,7 +393,6 @@ void EmAround::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
-
 	AnimNowTime += 0.1f;
 	AnimWheelTimer += 1;
 	//現在のアニメーションが最大フレームまでいったらループする
