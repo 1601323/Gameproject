@@ -5,6 +5,7 @@
 #include "TitleScene.h"
 #include "Input.h"
 #include "SelectScene.h"
+#include  "SoundMgr.h"
 #include "MovieScene.h"
 
 using namespace std;
@@ -52,6 +53,7 @@ void TitleScene::InitMovie()
 }
 void TitleScene::FadeinTitle(Input* input)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (initFlag == false) {
 		InitMovie();
 		initFlag = true;
@@ -70,6 +72,7 @@ void TitleScene::FadeinTitle(Input* input)
 		lightCnt = 0;
 
 	}
+	so.BgmStart("Bgm/title.mp3",SCENE_SELECT);
 }
 void TitleScene::NormalUpdata(Input* input)
 {
@@ -127,6 +130,7 @@ void TitleScene::NormalUpdata(Input* input)
 void TitleScene::FadeoutTitle(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
 	key = input->GetInput(1).key;
 	lastKey = input->GetLastKey();
 	inpInfo = input->GetInput(1);
@@ -138,6 +142,7 @@ void TitleScene::FadeoutTitle(Input* input)
 	if (lightCnt >= 120) {
 		gm.Instance().ChangeScene(new SelectScene());
 	}
+	so.BgmFadeOut("Bgm/title.mp3",SCENE_SELECT);
 }
 void  TitleScene::TitleMovie(Input* input)
 {
