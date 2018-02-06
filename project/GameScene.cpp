@@ -112,7 +112,7 @@ GameScene::GameScene()
 	PauseDirNumY = 0;
 	dirMoveCnt = 0;
 	selectPauseFlag = false;
-	setPoseFlag = false;
+
 	_minSensingValueL = SV_HIGH;
 	//numberImage = im.ImageIdReturn("image/UI/NewNum.png",SCENE_RESULT);
 	lightImage = im.ImageIdReturn("image/UI/Patrite2.png", SCENE_RESULT);
@@ -197,7 +197,6 @@ void GameScene::NormalUpdata(Input* input)
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
 
-	setPoseFlag = false;
 #ifdef _DEBUG
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON)
 	{
@@ -294,7 +293,7 @@ void GameScene::TransitionUpdata(Input* input)
 void GameScene::PauseUpdata(Input* input) 
 {
 	dirMoveCnt++;
-	setPoseFlag = true;
+
 	GameMain& gm = GameMain::Instance();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
@@ -313,8 +312,13 @@ void GameScene::PauseUpdata(Input* input)
 
 	PauseSelect(input);
 
-	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON ||
-		key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON)
+	{
+		dirMoveCnt = 0;
+		_updater = &GameScene::NormalUpdata;
+	}
+
+	if(	key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		switch (pauseNowNum)
 		{
 			//ゲームに戻る
@@ -325,7 +329,7 @@ void GameScene::PauseUpdata(Input* input)
 			//最初からやり直す
 		case MODE_RETRY:
 			dirMoveCnt = 0;
-			RetryProcess();
+			RetryPauseProcess();
 			_updater = &GameScene::FadeInUpdata;
 			break;
 			//ステージセレクトに戻る
@@ -403,12 +407,12 @@ void GameScene::RetryProcess()
 {
 	if (_mid->ReturnCheckFlag() || _mid->ReturnGetFlag()/*_rtData.midFlag == true*/) {
 		//ポースからの場合必ず初期関数に入る
-		setPoseFlag ? _player->SetInitPausePos(): _player->SetRetryPos(_mid->GetInitPos());
+		_player->SetRetryPos(_mid->GetInitPos());
 	}
 	else
 	{
 		//ポースからの場合必ず初期関数に入る
-		setPoseFlag ? _player->SetInitPausePos() : _player->SetInitPos();
+		 _player->SetInitPos();
 	}
 	_mid->Updata();
 	for (auto& em : _emFac->EnemyList()) {
@@ -498,6 +502,22 @@ void GameScene::DrawBack(Position2 offset)
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back1.png", SCENE_RESULT), true);
 
 }
+
+void GameScene::GameScene::RetryPauseProcess()
+{
+	GameMain& gm = GameMain::Instance();
+	_rtData.life = 3;
+	gm.SetResultData(_rtData);
+
+	_player->SetInitPausePos();
+
+	_mid->Updata();
+	for (auto& em : _emFac->EnemyList()) {
+		em->SetInitPos();
+	}
+	_server->ServerInit();
+}
+
 //シーン遷移のために用意
 SCENE_TYPE GameScene::GetScene()
 {

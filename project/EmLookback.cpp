@@ -174,12 +174,31 @@ void EmLookback::SetMove()
 void EmLookback::setDir(void)
 {
 	if (_state == EM_ST_MOVE) {
-		//3秒ごとに向きが変わる
-		if (LookCount < EM_LOOKBACK_TIME) {
+		LookCount++;
+
+		//3秒ごとに向きが変わる(+振り向き1秒)
+		if (LookCount < EM_LOOKBACK_TIME) 
+		{
 			LookCount++;
+			//ぐいん振り向きます(とりあえず3秒正面1秒で方向転換)
+			if (LookCount > 60 * EM_LOOKBACK_MODEL_TIME)
+			{
+				LookModelDirCnt++;
+
+				if (_dir == DIR_RIGHT) {
+					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -3);
+				}
+				else if (_dir == DIR_LEFT) {
+					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 3);
+				}
+			}
+
+
 			if (LookCount == EM_LOOKBACK_TIME) {
 				LookCount *= -1;
+				LookModelDirCnt = 0;
 			}
+
 		}
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
