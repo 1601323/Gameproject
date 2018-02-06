@@ -54,7 +54,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	midFlag = false;
 	//モデル読み込み
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki1/teki.pmx", SCENE_RESULT);
-	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
+	//exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
@@ -463,7 +463,7 @@ void EmAround::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
-			SetDrawBright(255, 255, 0);
+			SetDrawBright(_server.ReturnColor().red, _server.ReturnColor().green, _server.ReturnColor().blue);
 			if (_dir == DIR_LEFT) {
 				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
