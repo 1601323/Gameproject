@@ -17,6 +17,7 @@ SelectScene::SelectScene()
 	_modelmgr = ModelMgr::Instance();
 	SelectMap = mapNumber[0];
 	nowNum = 0;
+	dirMoveCnt = 0;
 	_minSensingValueL = SV_HIGH;
 	selectFlag = false;
 	w = 90;
@@ -116,7 +117,7 @@ void SelectScene::Draw()
 	ImageMgr& im = ImageMgr::Instance();
 	++colorNum;
 	colorNum %= COLOR_NUM;
-
+	dirMoveCnt++;
 	int redu = 40;
 	//”wŒi
 	DrawGraph(0, 0, im.ImageIdReturn("image/select.png",SCENE_GAME),true);
@@ -134,6 +135,10 @@ void SelectScene::Draw()
 			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 			SetDrawBright(255,255,255);
+
+			//–îˆó
+			DrawGraph(200 + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59) + 260 * f,160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME),true);
+			DrawTurnGraph(10 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59) + 260 * f, 160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME), true);
 
 		}
 		else

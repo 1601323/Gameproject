@@ -27,6 +27,7 @@ private:
 	int SelectMap;
 	int modelhandle;        //プレイヤーモデルハンドル
 	int colorNum;           //カラー変更タイマー
+	int dirMoveCnt;
 	int  AnimIndex;         //アニメーション数
 	float AnimTotalTime;    //各アニメーションのトータルタイム
 	float AnimNowTime;      //各アニメーションの現在タイム
