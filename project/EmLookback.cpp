@@ -39,6 +39,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	FearCount = 180;
 	loseSightCnt = 180;
 	midFlag = false;
+	ModelDirChangeFlag = false;
 
 	_tmpOffset.x = 0;
 	_tmpOffset.y = 0;
@@ -112,22 +113,26 @@ void EmLookback::Draw(Position2 offset)
 	}
 	_tmpOffset = offset;
 	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+
 	if (_state != EM_ST_FEAR) {
-		if (_dir == DIR_RIGHT) {
-			modelDirAngle = AngleRad(-90.0f);
-			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		if (!ModelDirChangeFlag)
+		{
+			if (_dir == DIR_RIGHT) {
+				modelDirAngle = AngleRad(-90.0f);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		}
-		else if (_dir == DIR_LEFT) {
-			modelDirAngle = AngleRad(90.0f);
-			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			}
+			else if (_dir == DIR_LEFT) {
+				modelDirAngle = AngleRad(90.0f);
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+			}
 		}
 	}
 	returnDir(offset);
@@ -181,31 +186,42 @@ void EmLookback::setDir(void)
 		{
 			LookCount++;
 			//ぐいん振り向きます(とりあえず3秒正面1秒で方向転換)
+			//左から右へ
 			if (LookCount > 60 * EM_LOOKBACK_MODEL_TIME)
 			{
+				//振り向きのカウントを増やす
 				LookModelDirCnt++;
+				ModelDirChangeFlag = true;
 				if (_dir == DIR_LEFT) {
 					modelDirAngle = AngleRad(90.f - LookModelDirCnt * 6);
 				}
 			}
+			//右から左へ
 			else if (-60 <= LookCount &&  LookCount < 0)
 			{
+
 				LookModelDirCnt++;
+				ModelDirChangeFlag = true;
 				if (_dir == DIR_RIGHT) {
 					modelDirAngle = AngleRad(-90.f + LookModelDirCnt * -6);
 				}
 			}
 		}
 
+		//左を向くためにLookCountを-EM_LOOKBACK_TIME
 		if (LookCount == EM_LOOKBACK_TIME) {
 			LookCount = -EM_LOOKBACK_TIME;
-			LookModelDirCnt = 0;
-		}
-		if (LookCount == 0)
-		{
+			ModelDirChangeFlag = false;
 			LookModelDirCnt = 0;
 		}
 
+		//右を向くためにLookCountを0
+		if (LookCount == 0)
+		{
+			ModelDirChangeFlag = false;
+			LookModelDirCnt = 0;
+		}
+		//+の値 左 -の値 右
 		if (LookCount < 0) {
 			_dir = DIR_RIGHT;
 			//_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y  + (_emRect.h / 4), _emEye.r);

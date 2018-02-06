@@ -39,6 +39,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_dir = DIR_RIGHT;
 	speed = 1;				//‰ŠúƒXƒs[ƒhÝ’è
 	moveFlag = false;
+	ModelDirChangeFlag = false;
 
 	dis = 0;
 	interCnt = 0;
@@ -148,6 +149,7 @@ void EmAround::InterMove()
 {
 	if (_state == EM_ST_MOVE) {	//ÌßÚ²Ô°‚ª”­Œ©‚³‚ê‚Ä‚¢‚È‚¢A‚©‚ÂƒNƒŠƒAðŒ‚ª–ž‚½‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«
 		interCnt++;
+		ModelDirChangeFlag = true;
 		//‚Æ‚è‚ ‚¦‚¸‚P.5•bŠÔ’âŽ~‚³‚¹‚Ä”½‘Î‘¤‚ÉˆÚ“®‚³‚¹‚é
 
 		//‚®‚¢[‚ñ‚ÆU‚èŒü‚¢‚Ä‚Ü‚·
@@ -160,6 +162,7 @@ void EmAround::InterMove()
 
 		if (interCnt > 90) {
 			moveFlag = false;
+			ModelDirChangeFlag = false;
 			interCnt = 0;
 			dis = 0;
 
@@ -396,17 +399,20 @@ void EmAround::Draw(Position2 offset)
 	}
 	_emRect.SetCenter(_pos.x  + (_emRect.w / 2), _pos.y + (_emRect.h / 2));
 	if (_state != EM_ST_FEAR) {
-		if (_dir == DIR_LEFT) {
-			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		}
-		else if (_dir == DIR_RIGHT) {
-			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
-			DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		if (!ModelDirChangeFlag)
+		{
+			if (_dir == DIR_LEFT) {
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			}
+			else if (_dir == DIR_RIGHT) {
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);
+				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			}
 		}
 	}
 	tmpPos = offset;

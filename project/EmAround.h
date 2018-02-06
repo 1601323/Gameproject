@@ -33,6 +33,7 @@ private:
 	float vy;
 	float speed;			
 	bool moveFlag;			//向きを切り替えるためのフラグ
+	bool ModelDirChangeFlag;//モデルが振り返るアニメーションflag
 	int dis;				//どれくらい動いたら反対を向くのか定義する
 	float interCnt;			//反対側を向くまでのカウント
 
