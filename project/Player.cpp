@@ -1296,7 +1296,7 @@ void Player::HitToEnemy()
 				_state = ST_DETH;
 
 				//Š®‘S”s–k
-				if (gm.GetResultData().life <= 0)
+				if (gm.GetResultData().life < 0)
 				{
 					_state = ST_OVER;
 				}

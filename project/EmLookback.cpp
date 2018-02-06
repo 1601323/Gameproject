@@ -51,16 +51,23 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
+	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
+	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
 	modelDirAngle = 0.0f;
 	AnimNowTime = 0.0f;
 	AnimWheelTimer = 0.0f;
+	AnimNowTimeSt = 0.f;
 
 	//アニメーションをアタッチ+総時間の設定
 	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
+
+	//UIのアニメーションのアタッチ
+	AnimeIndexSt = MV1AttachAnim(starModelHandle, 0, -1, false);
+	AnimTotalTimeSt = MV1GetAttachAnimTotalTime(starModelHandle, AnimeIndexSt);
 }
 
 EmLookback::~EmLookback()
@@ -101,8 +108,6 @@ void EmLookback::Draw(Position2 offset)
 	}
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimeIndex, AnimNowTime);
-
-
 
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
@@ -169,6 +174,35 @@ void EmLookback::Draw(Position2 offset)
 	}
 	returnDir(offset);
 	_emRect.SetCenter(_pos.x + (_emRect.w / 2), _pos.y  +(_emRect.h / 2));
+
+	//星
+	MV1SetPosition(starModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
+	MV1SetScale(starModelHandle, VGet(0.1f, 0.1f, 0.1f));
+
+	//！マーク
+	MV1SetPosition(exModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
+	MV1SetScale(exModelHandle, VGet(1.5f, 1.5f, 1.5f));
+
+	//混乱のときのアニメーション
+	if (_state == EM_ST_FEAR)
+	{
+		AnimNowTimeSt += 0.5f;
+		if (AnimNowTimeSt >= AnimTotalTimeSt)
+		{
+			AnimNowTimeSt = 0;
+		}
+		//アニメーションをアタッチ
+		MV1SetAttachAnimTime(starModelHandle, AnimeIndexSt, AnimNowTimeSt);
+		//モデルを輪郭線0.0fで描画 
+		_modelmgr->Draw(starModelHandle, 0.0f);
+	}
+
+	if (_state == EM_ST_DIS)
+	{
+		_modelmgr->Draw(exModelHandle, 0.0f);
+	}
+
+
 	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
