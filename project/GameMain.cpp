@@ -12,6 +12,7 @@
 #include "MapCtl.h"
 #include "Input.h"
 #include "Math.h"
+#include "Camera.h"
 #include "ImageMgr.h"
 #include "ModelMgr.h"
 
