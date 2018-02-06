@@ -13,7 +13,7 @@
 GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 {
 	_hit = new HitClass();
-	ModelMgr& _modelmgr = ModelMgr::Instance();
+	_modelmgr = ModelMgr::Instance();
 
 	_map = MapCtl::GetInstance();
 	_state = GM_NONE;
@@ -23,7 +23,7 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_initPos = _pos;
 	_gimType = GIM_ATTRACT;
 	//モデル読み込み
-	modelhandle = _modelmgr.ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
 	//テクスチャのindexを取得
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 }
@@ -31,7 +31,6 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 
 GimPull::~GimPull()
 {	
-
 	delete _hit;
 }
 
@@ -150,7 +149,6 @@ void GimPull::Move()
 
 void GimPull::Draw(Position2 offset)
 {
-	ModelMgr& _modelmgr = ModelMgr::Instance();
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f,AngleRad(90.f), 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -160,7 +158,7 @@ void GimPull::Draw(Position2 offset)
 	//ステージごとにテクスチャを変更
 	ChangeStageTexture();
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr.Draw(modelhandle, 0.0f);
+	_modelmgr->Draw(modelhandle, 0.0f);
 
 
 	if (_state != GM_END&& _state != GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま

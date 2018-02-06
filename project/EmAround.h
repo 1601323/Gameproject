@@ -25,7 +25,7 @@ private:
 	MapCtl* _map;
 	DIR _dir;
 	EnemyServerData _individualData;		//´ÈĞ°–{•”‚É‘—‚éÃŞ°À
-	//ModelMgr& _modelmgr;
+	ModelMgr* _modelmgr;
 	ENEMY_RANGE_LEVEL _rangeLevel;
 
 	//d—Í‚É‚Â‚¢‚Ä

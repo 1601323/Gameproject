@@ -25,11 +25,11 @@ ResultScene::ResultScene()
 	dirMoveCnt = 0;
 	AnnouncCnt = 0;
 	LogoDownCounter = -100;
-	ModelMgr& _modelmgr = ModelMgr::Instance();
+	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
-	playerModelHandle = _modelmgr.ModelIdReturn("player_model/player.pmx",SCENE_SELECT ); /*MV1LoadModel("player_model/player.pmx");*/
+	playerModelHandle = MV1LoadModel("player_model/player.pmx");
 	//playerModelWithFlask = _modelmgr->ModelIdReturn("player clear _model/player clear.pmx", SCENE_TITLE);
-	playerModelWithFlask = _modelmgr.ModelIdReturn("player clear _model/player clear.pmx",SCENE_SELECT);/*MV1LoadModel("player clear _model/player clear.pmx");*/
+	playerModelWithFlask = MV1LoadModel("player clear _model/player clear.pmx");
 
 	//アニメーションをアタッチ+総時間の設定
 	//クリア時
@@ -219,8 +219,6 @@ void ResultScene::Select(Input*  input)
 void ResultScene::Draw()
 {
 	ImageMgr& im = ImageMgr::Instance();
-	ModelMgr& _modelmgr = ModelMgr::Instance();
-
 	dirMoveCnt++;
 	LogoDownCounter += 3;
 
@@ -254,7 +252,7 @@ void ResultScene::Draw()
 		//顔のテクスチャを笑顔の方に変更
 		MV1SetTextureGraphHandle(playerModelWithFlask, textureIndexFlask, im.ImageIdReturn("player_model/face2.png", SCENE_TITLE), FALSE);
 		//モデルを輪郭線0.0fで描画 
-		_modelmgr.Draw(playerModelWithFlask, 0.0f);
+		_modelmgr->Draw(playerModelWithFlask, 0.0f);
 
 		//clear文字
 		DrawGameClearLogo();
@@ -277,7 +275,7 @@ void ResultScene::Draw()
 		MV1SetTextureGraphHandle(playerModelHandle, textureIndex, im.ImageIdReturn("player_model/cryFace.png", SCENE_TITLE), FALSE);
 
 		//モデルを輪郭線0.0fで描画 
-		_modelmgr.Draw(playerModelHandle, 0.0f);
+		_modelmgr->Draw(playerModelHandle, 0.0f);
 
 		DrawGraph(0, 0, im.ImageIdReturn("image/Over/Fence.png", SCENE_TITLE), true);
 		//gameover文字
