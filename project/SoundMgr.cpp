@@ -70,6 +70,7 @@ bool SoundMgr::SoundPlayCheck(int soundHandle)
 
 void SoundMgr::SoundIdAllDelete()
 {
+	InitSoundMem();
 	for (auto itr = soundID.begin(); itr != soundID.end(); itr++) {
 		DeleteSoundMem(itr->second);
 	}
@@ -120,8 +121,13 @@ void SoundMgr::BgmFadeOut(const std::string file, const SCENE_TYPE delScene)
 	if (CheckSoundMem(bgm) == 1) {
 		fadeCnt += 1;
 		if (150 - fadeCnt <= 0) {
-			StopStreamSoundMem(bgm);
+			StopSoundMem(bgm);
 		}
 		ChangeVolumeSoundMem(180-fadeCnt,bgm);
 	}
+}
+//BGM‚ðŽ~‚ß‚Ü‚·
+void SoundMgr::BgmStop(const std::string file, const SCENE_TYPE delScene)
+{
+	StopSoundMem(SoundIdReturn(file,delScene));
 }
