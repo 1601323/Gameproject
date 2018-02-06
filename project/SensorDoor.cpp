@@ -24,8 +24,8 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	_gmRect.w = WIDTH;
 	_gmRect.h = HEIGHT;
 	count = 0;
-	doorCountOpen = 0;
-	doorCountClose = 0;
+	doorCountOpen = 0.0f;
+	doorCountClose = 0.0f;
 	_state = GM_NONE;
 	enterFlag = false;
 	sensordoorMotionFlag = false;
@@ -55,33 +55,33 @@ void SensorDoor::CheckDoMove()
 	//時間があり次第、プレイヤーがドアの前で↑を押すと開いてリザルト画面に飛ばす処理を書きます。書いてくれてもいいよ
 	//あれだったら。クリア条件を見たいしていないけどゴールする？みたいな文を出してもいいかもしれない
 
-	if (_pl.GetcharState() == ST_VANISH|| _pl.GetcharState() == ST_FEVER) {	//もしﾌﾟﾚｲﾔｰがステルス、もしくはフィーバー状態だったら
-		_state = GM_MOVE2;
-	}
-	else {
-		_state = GM_MOVE;
-	}
-	if (_state == GM_NONE) {		//最初の状態であれば何もしない
+	//if (_pl.GetcharState() == ST_VANISH|| _pl.GetcharState() == ST_FEVER) {	//もしﾌﾟﾚｲﾔｰがステルス、もしくはフィーバー状態だったら
+	//	_state = GM_MOVE2;
+	//}
+	//else {
+	//	_state = GM_MOVE;
+	//}
+	//if (_state == GM_NONE) {		//最初の状態であれば何もしない
 
-	}
-	else if (_state == GM_MOVE) {	//ドアを閉める
-		doorCountOpen++;
-		if (doorCountOpen % 2 == 0) {
-			if (count > 0) {
-				count--;
-			}
-		}
-	}
-	else if (_state == GM_MOVE2) {	//ドアを開ける
-		doorCountOpen++;
-		if (doorCountOpen % 2 == 0) {
-			if (count < WIDTH / 2) {
-				count++;
-			}
-		}
-	}
-	else {							//判定に引っかからなかった時用
-	}
+	//}
+	//else if (_state == GM_MOVE) {	//ドアを閉める
+	//	doorCountOpen++;
+	//	if (doorCountOpen % 2 == 0) {
+	//		if (count > 0) {
+	//			count--;
+	//		}
+	//	}
+	//}
+	//else if (_state == GM_MOVE2) {	//ドアを開ける
+	//	doorCountOpen++;
+	//	if (doorCountOpen % 2 == 0) {
+	//		if (count < WIDTH / 2) {
+	//			count++;
+	//		}
+	//	}
+	//}
+	//else {							//判定に引っかからなかった時用
+	//}
 }
 
 void SensorDoor::CheckHit()	//あたり判定の場所について
@@ -127,7 +127,7 @@ void SensorDoor::Draw(Position2 offset)
 
 	if (sensordoorMotionFlag == false)
 	{
-		doorCountOpen++;
+		doorCountOpen += 0.5;
 		MV1SetAttachAnimBlendRate(modelhandle, AttachIndexClose, 0.0f);
 		MV1SetAttachAnimBlendRate(modelhandle, AttachIndex, 1.0f);
 		//アニメーションをアタッチ
@@ -141,7 +141,7 @@ void SensorDoor::Draw(Position2 offset)
 	}
 	else if (sensordoorMotionFlag == true)
 	{
-		doorCountClose++;
+		doorCountClose += 0.5f;
 		MV1SetAttachAnimBlendRate(modelhandle, AttachIndex,0.0f);
 		MV1SetAttachAnimBlendRate(modelhandle, AttachIndexClose, 1.0f);
 
