@@ -71,8 +71,8 @@ void EnemyServer::AlertManager()
 {
 	if (vigiCnt > 0) {
 		decreaseCnt++;
-		if (decreaseCnt > 180) {
-			vigiCnt -= 1;
+		if (decreaseCnt > 1800) {
+			vigiCnt -= 40;
 			decreaseCnt = 0;
 		}
 	}
@@ -82,7 +82,8 @@ void EnemyServer::GetInfo(EnemyServerData inData)
 {
 	//ﾌﾟﾚｲﾔｰ発見情報が上がってきたらレベルを上げる
 	if (inData.plFoundFlag == true) {
-		vigiCnt +=20;
+		vigiCnt +=40;
+		decreaseCnt = 0;
 		SetAlert();
 		inData.dataSendFlag = false;
 	}
@@ -91,13 +92,13 @@ void EnemyServer::GetInfo(EnemyServerData inData)
 //警戒度をセットする
 void EnemyServer::SetAlert()
 {
-	if (0 <= vigiCnt &&vigiCnt <= 40) {
+	if (0 <= vigiCnt &&vigiCnt < 40) {
 		_commonData._level = ALERT_LEVEL_1;
 	}
-	else if (40< vigiCnt &&vigiCnt <= 80) {
+	else if (40<= vigiCnt &&vigiCnt < 80) {
 		_commonData._level = ALERT_LEVEL_2;
 	}
-	else if (80 < vigiCnt && vigiCnt <= 100) {
+	else if (80 <= vigiCnt && vigiCnt <= 100) {
 		_commonData._level = ALERT_LEVEL_3;
 	}
 	else {
