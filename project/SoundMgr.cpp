@@ -25,9 +25,9 @@ SoundMgr& SoundMgr::Instance()
 int SoundMgr::SoundIdReturn(const std::string& path,const SCENE_TYPE delScene)
 {
 	if (soundID.count(path) == 0) {
-		soundID[path] - LoadSoundMem(path.c_str());
+		soundID[path] = LoadSoundMem(path.c_str());
 	}
-	delSound[path] - delScene;
+	delSound[path] = delScene;
 
 	return soundID[path];
 }
@@ -75,4 +75,53 @@ void SoundMgr::SoundIdAllDelete()
 	}
 	soundID.erase(soundID.begin(),soundID.end());
 	delSound.erase(delSound.begin(),delSound.end());
+}
+
+//再生関連
+//SEを再生したいとき
+void SoundMgr::SeStart(const std::string path, const SCENE_TYPE delScene)
+{
+	if (CheckSoundMem(SoundIdReturn(path, delScene)) == 1) {
+		StopSoundMem(SoundIdReturn(path, delScene));
+	}
+	else if (CheckSoundMem(SoundIdReturn(path, delScene)) == 0) {
+		PlaySoundMem(SoundIdReturn(path,delScene),DX_PLAYTYPE_BACK,true);
+	}
+	else {
+	//	ASSERT();
+	}
+}
+//BGMの再生開始用
+void SoundMgr::BgmStart(const std::string file, const SCENE_TYPE delScene)
+{
+	int bgm = SoundIdReturn(file,delScene);
+	if (CheckSoundMem(bgm) == 1) {
+		StopSoundMem(bgm);
+	}
+	else if (CheckSoundMem(bgm) == 0) {
+		PlaySoundMem(bgm,DX_PLAYTYPE_LOOP,true);
+	}
+	else {
+		//ASSERT();
+	}
+	PlaySoundMem(bgm, DX_PLAYTYPE_LOOP, true);
+
+	//音量の調節
+	//ChangeVolumeSoundMem(180, bgm);
+	fadeCnt = 0;
+}
+//BGMをフェードアウトさせます
+void SoundMgr::BgmFadeOut(const std::string file, const SCENE_TYPE delScene)
+{
+	int bgm = SoundIdReturn(file,delScene);
+	if (fadeCnt >= 180) {
+		fadeCnt = 180;
+	}
+	if (CheckSoundMem(bgm) == 1) {
+		fadeCnt += 1;
+		if (150 - fadeCnt <= 0) {
+			StopStreamSoundMem(bgm);
+		}
+		ChangeVolumeSoundMem(180-fadeCnt,bgm);
+	}
 }
