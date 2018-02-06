@@ -72,6 +72,7 @@ private:
 	bool crouchFlag;					//しゃがみフラグ
 	bool ropeFlag;						//ロープ状態かどうかを返すフラグ
 	bool vanFlag;						//ステルス状態かどうかのフラグ
+	bool tmpFlag;						//補正用フラグ
 	char keyData[256];
 	char oldkeyData[256];
 

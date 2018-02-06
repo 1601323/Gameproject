@@ -49,6 +49,7 @@ Player::Player()
 	vanFlag = false;
 	ropeFlag = false;
 	inviFlag = false;
+	tmpFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -1013,7 +1014,8 @@ bool Player::stVanish(void)
 	}
 	//ìÆÇ¢ÇƒÇ¢ÇΩÇÁ∂≥›ƒÇñﬂÇ∑
 	//ï«ìoÇËèÛë‘Ç≈ìÆÇ¢ÇƒÇ¢ÇΩÇÁΩ√ŸΩÇ…Ç»ÇÁÇ»Ç¢
-	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 ||ropeFlag == true) {
+	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 
+		||ropeFlag == true || tmpFlag != crouchFlag) {
 		vanCnt = 60 * VANISH_CNT;
 		vanFlag = false;
 		alfa = 255;
@@ -1028,6 +1030,7 @@ bool Player::stVanish(void)
 #ifdef _DEBUG
 	//DrawFormatString(0, 120, 0xffffff, "%d", vanCnt);
 #endif
+	tmpFlag = crouchFlag;
 	return false;
 }
 void Player::moveCrouch(Input* input)
