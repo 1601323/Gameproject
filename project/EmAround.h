@@ -42,6 +42,10 @@ private:
 
 	bool midFlag;			//中間点フラグ
 
+	int AnimeIndex;     //アニメーション用インデックス
+	int AnimTotalTime;  //アニメーション時間
+	float AnimNowTime;    //現在のアニメーション時間
+
 	//３D処理について
 	int modelhandle;
 	int textureIndex;

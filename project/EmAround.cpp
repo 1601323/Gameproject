@@ -53,10 +53,15 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_rangeLevel = RANGE_1;
 	midFlag = false;
 	//モデル読み込み
-	modelhandle = _modelmgr.ModelIdReturn("Enemy_model/teki.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr.ModelIdReturn("Enemy_model/teki1/teki.pmx", SCENE_RESULT);
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 	//初期角度
 	modelDirAngle = AngleRad(-90.0f);
+
+	AnimNowTime = 0.f;
+	//アニメーションをアタッチ+総時間の設定
+	AnimeIndex = MV1AttachAnim(modelhandle, 0, -1, false);
+	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimeIndex);
 }
 
 
@@ -380,6 +385,16 @@ void EmAround::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 	ModelMgr& _modelmgr = ModelMgr::Instance();
+
+	AnimNowTime += 0.5f;
+	//現在のアニメーションが最大フレームまでいったらループする
+	if (AnimNowTime >= AnimTotalTime)
+	{
+		AnimNowTime = 0;
+	}
+	//アニメーションをアタッチ
+	MV1SetAttachAnimTime(modelhandle, AnimeIndex, AnimNowTime);
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.0f, modelDirAngle, 0.0f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
