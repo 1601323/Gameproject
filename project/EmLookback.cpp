@@ -79,8 +79,10 @@ void EmLookback::Updata()
 	else {
 		SetMove();
 	}
-
-	Visibility();
+	if (!ModelDirChangeFlag) {
+		Visibility();
+	}
+	
 
 	Gravity();
 }

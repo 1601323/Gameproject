@@ -81,7 +81,9 @@ void EmAround::Updata()
 	_emData.lookDir = _dir;
 	_individualData.midFlag = _server.SendMidFlag();
 	Gravity();
-	Visibility();
+	if (!ModelDirChangeFlag) {
+		Visibility();
+	}
 	Move();
 	//_pos.x += vx;
 }
