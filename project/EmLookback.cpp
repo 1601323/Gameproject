@@ -51,7 +51,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 
 
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
-	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
+	//exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);

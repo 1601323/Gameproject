@@ -23,5 +23,7 @@ public:
 	void SeStart(const std::string path,const SCENE_TYPE delScene);
 	void BgmStart(const std::string file, const SCENE_TYPE delScene);
 	void BgmFadeOut(const std::string file, const SCENE_TYPE delScene);
+	void BgmStop(const std::string file,const SCENE_TYPE delScene);
+	void BgmStop();
 };
 
