@@ -13,6 +13,7 @@
 #include "ModelMgr.h"
 #include "GameMain.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 #include "ImageMgr.h"
 
 #include "Math.h"
@@ -312,12 +313,14 @@ void EmAround::CheckMove()
 //視界について
 void EmAround::Visibility()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
+			so.SeStart("Bgm/emChase1.mp3", SCENE_GAME); //警告音開始遅い長い
 			_individualData.plFoundFlag = true;
 		}
 		else {

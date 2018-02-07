@@ -5,7 +5,7 @@
 #include "TitleScene.h"
 #include "Input.h"
 #include "SelectScene.h"
-#include  "SoundMgr.h"
+#include "SoundMgr.h"
 #include "MovieScene.h"
 
 using namespace std;
@@ -77,6 +77,8 @@ void TitleScene::FadeinTitle(Input* input)
 void TitleScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
+
 	key = input->GetInput(1).key;
 	lastKey = input->GetLastKey();
 	inpInfo = input->GetInput(1);
@@ -93,6 +95,8 @@ void TitleScene::NormalUpdata(Input* input)
 #endif
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (selectFlag == true) {
+			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
+
 			if (_menu == GAME_START) {
 				//gm.Instance().ChangeScene(new SelectScene());
 				_updater = &TitleScene::FadeoutTitle;
@@ -196,7 +200,6 @@ void TitleScene::MenuSelect(Input* input)
 		}
 		else {
 			_menu = _menu;
-			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 	else {	//キーボードの場合
@@ -216,7 +219,6 @@ void TitleScene::MenuSelect(Input* input)
 		}
 		else {
 			_menu = _menu;
-			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 }

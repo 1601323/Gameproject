@@ -11,6 +11,9 @@ private:
 	std::map<std::string, int> soundID;				//サウンドのハンドル
 	std::map<std::string, SCENE_TYPE> delSound;		//ハンドルを消すタイミング
 	int fadeCnt;
+
+	std::string tmpName;
+	SCENE_TYPE tmpScene;
 public:
 	~SoundMgr();
 	static SoundMgr& Instance();
@@ -24,6 +27,10 @@ public:
 	void BgmStart(const std::string file, const SCENE_TYPE delScene);
 	void BgmFadeOut(const std::string file, const SCENE_TYPE delScene);
 	void BgmStop(const std::string file,const SCENE_TYPE delScene);
+	void ChangeSound();						//音量を平常に戻します
+	void ChangeSound(int volume);			//音量を決められた値にします
 	void BgmStop();
+
+	void LastInputBgm(std::string file, SCENE_TYPE delScene);			//最後に読み込んだBGMを記憶させます
 };
 

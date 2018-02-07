@@ -52,6 +52,7 @@ private:
 	int PauseDirNumY;
 	int dirMoveCnt;
 	bool selectPauseFlag;
+	bool bgmFlag;												//BGM‚ª‚È‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
 
 	RESULT_DATA _rtData;
 	FEVER_DATA _feverData;
