@@ -106,7 +106,6 @@ void Player::Update(Input* input)
 	HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
 	//Ì¨°ÊÞ°ÃÞ°ÀŽó‚¯Žæ‚è
 	GetFeverData();
-	cout << airFlag<< endl;
 }
 
 //ˆÚ“®Œn‚Ìˆ—
@@ -1648,8 +1647,8 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		if(CheckHitKey(KEY_INPUT_A)){
-		//if (GameMain::Instance().GetResultData().midFlag == true) {
+		//if(CheckHitKey(KEY_INPUT_A)){
+		if (GameMain::Instance().GetResultData().midFlag == true) {
 			return true;
 		}
 	}

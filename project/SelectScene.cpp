@@ -14,6 +14,7 @@ using namespace std;
 
 SelectScene::SelectScene()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	_updater = &SelectScene::NormalUpdata;
 	_modelmgr = ModelMgr::Instance();
 	SelectMap = mapNumber[0];
@@ -30,6 +31,8 @@ SelectScene::SelectScene()
 	//アニメーションをアタッチ+総時間の設定
 	AnimIndex = MV1AttachAnim(modelhandle, ACTION_WAIT, -1, false);
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex);
+
+	so.BgmStart("Bgm/select.mp3",SCENE_GAME);
 }
 
 
@@ -55,6 +58,7 @@ void SelectScene::NormalUpdata(Input* input)
 		so.SeStart("Se/ok.mp3", SCENE_GAME);
 		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
+		so.BgmStop("Bgm/select.mp3",SCENE_GAME);
 	}
 }
 SCENE_TYPE SelectScene::GetScene()
