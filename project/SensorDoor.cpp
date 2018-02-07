@@ -37,7 +37,7 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	AttachIndexClose = MV1AttachAnim(modelhandle,1,-1,false);
 	totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
 	totalTimeClose = MV1GetAttachAnimTotalTime(modelhandle,AttachIndexClose);
-	so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
+	so.SeStart("Se/door_open.mp3", SCENE_GAME);
 }
 
 SensorDoor::~SensorDoor()

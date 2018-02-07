@@ -52,7 +52,7 @@ void SelectScene::NormalUpdata(Input* input)
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		colorNum = 0;
-		so.SeStart("Bgm/ok.mp3", SCENE_GAME);
+		so.SeStart("Se/ok.mp3", SCENE_GAME);
 		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
@@ -105,14 +105,14 @@ void SelectScene::Select(Input* input)
 			if (nowNum >= STAGE_MAX) {
 				nowNum = 0;
 			}
-			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
+			so.SeStart("Se/cursorMove.mp3", SCENE_GAME);
 		}
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
 			nowNum -= 1;
 			if (nowNum < 0) {
 				nowNum = STAGE_MAX - 1;
 			}
-			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
+			so.SeStart("Se/cursorMove.mp3", SCENE_GAME);
 		}
 		else {
 			nowNum = nowNum;
