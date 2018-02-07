@@ -57,6 +57,7 @@ private:
 	int modelhandle;
 	int textureIndex;
 	int textureIndexWheel;            //タイヤ用のテクスチャ
+	int textureIndexEye;              //目のテクスチャ
 	float modelDirAngle;
 
 	void Move();			//敵の動きについての管理を行う
