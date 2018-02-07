@@ -1487,7 +1487,12 @@ void Player::Draw(Position2& offset)
 	if (vanFlag == true) {
 		//“§‰ß—¦‚ð‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
 		alfa = max(alfa - VANISH, tranceMax);
-		LineNum = 0.5f;
+		//—ÖŠsü‚ð‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
+		LineNum += 0.005f;
+		if (LineNum >= 0.5f)
+		{
+			LineNum = 0.5f;
+		}
 	}
 	else {
 		LineNum = 0.0f;
@@ -1606,8 +1611,8 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		//if(CheckHitKey(KEY_INPUT_A))
-		if (GameMain::Instance().GetResultData().midFlag == true) {
+		if(CheckHitKey(KEY_INPUT_A)){
+		//if (GameMain::Instance().GetResultData().midFlag == true) {
 			return true;
 		}
 	}

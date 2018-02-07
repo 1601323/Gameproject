@@ -137,8 +137,8 @@ void SelectScene::Draw()
 			SetDrawBright(255,255,255);
 
 			//–îˆó
-			DrawGraph(200 + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59) + 260 * f,160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME),true);
-			DrawTurnGraph(10 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59) + 260 * f, 160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME), true);
+			DrawTurnGraph(260 - abs(50 - (150 + (dirMoveCnt / 2 % 60)) % 30) + 260 * f,160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME),true);
+			DrawGraph(-50 + abs(50 - (150 + (dirMoveCnt / 2 % 60)) % 30) + 260 * f, 160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME), true);
 
 		}
 		else

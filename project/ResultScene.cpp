@@ -62,11 +62,11 @@ void ResultScene::NormalUpdata(Input* input)
 	}
 	else {
 		GameOver();
-		clearFlag = false;
+		clearFlag = true;
 	}
 
 	//ロゴがすべて落ちるまで処理しない
-	if (LogoDownCounter > 500)
+	if (LogoDownCounter >= 500 )
 	{
 		Select(input);
 #ifdef _DEBUG
@@ -123,6 +123,7 @@ void ResultScene::Select(Input*  input)
 				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL	&&
 				selectFlag == false) {
 				nowNum--;
+				dirMoveCnt = 0;
 				if (nowNum <= 0) {
 					nowNum = JUMP_MAX - 1;
 				}
@@ -132,6 +133,7 @@ void ResultScene::Select(Input*  input)
 				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL&&
 				selectFlag == false) {
 				nowNum++;
+				dirMoveCnt = 0;
 				if (nowNum >= JUMP_MAX) {
 					nowNum = 1;
 				}
@@ -152,12 +154,14 @@ void ResultScene::Select(Input*  input)
 			//ステージ選択
 			if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 				nowNum--;
+				dirMoveCnt = 0;
 				if (nowNum <= 0) {
 					nowNum = JUMP_MAX-1;
 				}
 			}
 			else if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
 				nowNum++;
+				dirMoveCnt = 0;
 				if (nowNum >= JUMP_MAX) {
 					nowNum = 1;
 				}
@@ -172,6 +176,7 @@ void ResultScene::Select(Input*  input)
 				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL	&&
 				selectFlag == false) {
 				nowNum--;
+				dirMoveCnt = 0;
 				if (nowNum < 0) {
 					nowNum = JUMP_MAX - 1;
 				}
@@ -181,6 +186,8 @@ void ResultScene::Select(Input*  input)
 				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL&&
 				selectFlag == false) {
 				nowNum++;
+				dirMoveCnt = 0;
+
 				if (nowNum >= JUMP_MAX) {
 					nowNum = 0;
 				}
@@ -201,12 +208,14 @@ void ResultScene::Select(Input*  input)
 			//ステージ選択
 			if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 				nowNum--;
+				dirMoveCnt = 0;
 				if (nowNum < 0) {
 					nowNum = JUMP_MAX - 1;
 				}
 			}
 			else if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
 				nowNum++;
+				dirMoveCnt = 0;
 				if (nowNum >= JUMP_MAX) {
 					nowNum = 0;
 				}
@@ -288,20 +297,20 @@ void ResultScene::Draw()
 	if (LogoDownCounter > 500)
 	{
 		//セレクト画像と矢印をnowNumの値に応じて描画
-		DrawGraph(420 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), dirNumY, im.ImageIdReturn("image/yazirushi.png", SCENE_TITLE), true);
+		DrawGraph(390 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), dirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_TITLE), true);
 		DrawGraph(500, 510, im.ImageIdReturn("image/Bar_Menu/Select.png", SCENE_TITLE), true);
 		DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
 		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
 	}
 	switch (nowNum) {
 	case 0:
-		dirNumY = clearFlag ? 430 : 350;
+		dirNumY = clearFlag ? 440 : 360;
 		break;
 	case 1:
-		dirNumY = 430;
+		dirNumY = 440;
 		break;
 	case 2:
-		dirNumY = 510;
+		dirNumY = 520;
 		break;
 	default:
 		break;
@@ -370,6 +379,6 @@ void ResultScene::DrawGoalTimer(void)
 
 	SetDrawBright(255, 255, 255);
 
-	DrawGraph(400, 400, im.ImageIdReturn("image/Clear/秒.png", SCENE_TITLE), true);
+	DrawGraph(450, 350, im.ImageIdReturn("image/Clear/秒.png", SCENE_TITLE), true);
 
 }
