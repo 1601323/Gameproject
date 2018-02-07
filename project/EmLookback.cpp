@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Rope.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 #include "ImageMgr.h"
 
 EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& server,HitClass& hit) :_player(pl), _rope(rope), _server(server),_hit(hit)
@@ -315,7 +316,7 @@ void EmLookback::setDir(void)
 }
 void EmLookback::TurnPlayer()
 {
-	if (_hit.IsHit(GetRect(), _player.GetRect()) == true) {
+	if (_hit.IsHit(GetRect(), _player.GetRect()) == true && (_player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 		if (_player.GetPos().x < _pos.x) {
 			_dir = DIR_LEFT;	
 			modelDirAngle = AngleRad(90.0f);
@@ -328,6 +329,7 @@ void EmLookback::TurnPlayer()
 }
 void EmLookback::Visibility()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
@@ -364,6 +366,7 @@ void EmLookback::Visibility()
 			_individualData.plFoundFlag = false;
 			_individualData.dataSendFlag = true;
 		}
+		so.SeStart("Bgm/buzzer.mp3", SCENE_GAME); //警告音開始遅い長い
 	}
 }
 void EmLookback::LookPl(void)

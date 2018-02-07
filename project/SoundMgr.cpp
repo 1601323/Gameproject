@@ -108,7 +108,7 @@ void SoundMgr::BgmStart(const std::string file, const SCENE_TYPE delScene)
 	PlaySoundMem(bgm, DX_PLAYTYPE_LOOP, true);
 
 	//音量の調節
-	//ChangeVolumeSoundMem(180, bgm);
+	ChangeVolumeSoundMem(150, bgm);
 	fadeCnt = 0;
 }
 //BGMをフェードアウトさせます

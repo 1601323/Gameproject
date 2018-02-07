@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Geometry.h"
 #include "Rope.h"
+#include "SoundMgr.h"
 #include "ModelMgr.h"
 #include "ImageMgr.h"
 
@@ -375,35 +376,23 @@ bool Player::moveWall(void)
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
-			//if (_inpInfo.num >= 1)
-			//{
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
-			//else {
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
+			if (_inpInfo.num >= 1)
+			{
+				if (WallFlag == false) {
+					if (_dir == DIR_UP) {
+						WallFlag = true;
+						break;
+					}
+				}
+			}
+			else {
+				if (WallFlag == false) {
+					if (_key.keybit.R_UP_BUTTON) {
+						WallFlag = true;
+						break;
+					}
+				}
+			}
 			//もし足元に床がなければそのまま壁に張り付く
 			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
@@ -686,35 +675,35 @@ void Player::FeverWall()
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
-			//if (_inpInfo.num >= 1)
-			//{
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
-			//else {
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
+			if (_inpInfo.num >= 1)
+			{
+				if (WallFlag == false) {
+					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+						WallFlag = true;
+						break;
+					}
+				}
+				else {
+					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+						WallFlag = false;
+						break;
+					}
+				}
+			}
+			else {
+				if (WallFlag == false) {
+					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+						WallFlag = true;
+						break;
+					}
+				}
+				else {
+					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+						WallFlag = false;
+						break;
+					}
+				}
+			}
 			//もし足元に床がなければそのまま壁に張り付く
 			if (_map->GetChipType(downPos) == CHIP_BLANK&&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				if (WallFlag == false) {
@@ -937,6 +926,7 @@ void Player::FeverWall()
 //ﾛｰﾌﾟ状態の処理
 bool Player::moveRope(void)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	//ﾛｰﾌﾟ状態なら動けない
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;
@@ -948,6 +938,7 @@ bool Player::moveRope(void)
 			moveFlag = false;
 		}
 		vx = 0.0f;
+		so.BgmStart("Bgm/wire.mp3", SCENE_GAME); // 用編集
 	}
 	else {
 		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
@@ -1163,7 +1154,7 @@ void Player::stInvincible(void)
 //ｼﾞｬﾝﾌﾟ処理
 bool Player::moveJump(void)
 {
-
+	SoundMgr& so = SoundMgr::Instance();
 	//ｼﾞｬﾝﾌﾟ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1172,6 +1163,7 @@ bool Player::moveJump(void)
 				JumpFlag = true;
 				airFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
@@ -1179,6 +1171,7 @@ bool Player::moveJump(void)
 				JumpFlag = true;
 				airFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -1191,6 +1184,7 @@ bool Player::moveJump(void)
 			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
 				vx = -MAX_SPEED;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 
@@ -1255,7 +1249,7 @@ bool Player::moveJump(void)
 }
 void Player::FeverJump()
 {
-
+	SoundMgr& so = SoundMgr::Instance();
 	//ｼﾞｬﾝﾌﾟ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1263,12 +1257,14 @@ void Player::FeverJump()
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -1281,6 +1277,7 @@ void Player::FeverJump()
 			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
 				vx = -MAX_SPEED;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	if (_state == ST_JUMP) {
@@ -1361,6 +1358,7 @@ void Player::FeverJump()
 //敵と当たった時の処理を行う
 void Player::HitToEnemy()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	GameMain& gm = GameMain::Instance();
 	
 	if (_hit->EnemyHit(*this)) {
@@ -1378,6 +1376,7 @@ void Player::HitToEnemy()
 			else if (deathFlag == false) {
 				//死なない
 			}
+			so.SeStart("Bgm/PlHit.mp3", SCENE_GAME);
 		}
 		else {
 		}

@@ -22,7 +22,7 @@ TitleScene::TitleScene()
 	_skyPos[1].x = 512;
 	_skyPos[1].y = 0;
 	skyImage = ImageMgr::Instance().ImageIdReturn("image/sky.png", SCENE_SELECT);
-	uiMovie = "movie/titleMovie.avi";
+	uiMovie = "movie/i.avi";
 	//SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
 	movieFlag = false;
 	titleFlag = false;
@@ -176,6 +176,7 @@ void TitleScene::scroll()
 }
 void TitleScene::MenuSelect(Input* input)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (inpInfo.num >= 1) {
 		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
@@ -185,6 +186,7 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
+			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
 		}
 		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
@@ -194,9 +196,11 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
+			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
 		}
 		else {
 			_menu = _menu;
+			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 	else {	//キーボードの場合
@@ -206,6 +210,7 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
+			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
 		}
 		else if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 			_menu = GAME_START;
@@ -213,9 +218,11 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
+			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
 		}
 		else {
 			_menu = _menu;
+			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 }
