@@ -151,7 +151,7 @@ void GameScene::GameInit()
 	bgmFlag = true;
 	switch (gm.GetNowStage()) {
 	case 0:
-		mapName = "map/easy.map";
+		mapName = "map/tutorial.map";
 		break;
 	case 1:
 		mapName = "map/normal.map";
