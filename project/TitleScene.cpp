@@ -185,6 +185,8 @@ void TitleScene::MenuSelect(Input* input)
 		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_menu = GAME_EXPLAIN;
+			dirMoveCnt = 0;
+
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
@@ -193,6 +195,8 @@ void TitleScene::MenuSelect(Input* input)
 		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_menu = GAME_START;
+			dirMoveCnt = 0;
+
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
@@ -205,6 +209,7 @@ void TitleScene::MenuSelect(Input* input)
 	else {	//キーボードの場合
 		if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
 			_menu = GAME_EXPLAIN;
+			dirMoveCnt = 0;
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
@@ -212,6 +217,7 @@ void TitleScene::MenuSelect(Input* input)
 		}
 		else if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 			_menu = GAME_START;
+			dirMoveCnt = 0;
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
@@ -250,7 +256,7 @@ void TitleScene::Draw()
 		//}
 		//DrawString(250, 550, "Game", 0xffff99);
 
-		DrawGraph(70,410,im.ImageIdReturn("image/title/TitleBoard.png",SCENE_SELECT),true);
+		DrawGraph(70,380,im.ImageIdReturn("image/title/TitleBoard.png",SCENE_SELECT),true);
 
 		DrawGraph(230, 450, im.ImageIdReturn("image/title/select_Game.png", SCENE_SELECT), true);
 
@@ -261,12 +267,12 @@ void TitleScene::Draw()
 		//DrawString(450, 550, "explain", 0xffff99);
 		DrawGraph(230, 530, im.ImageIdReturn("image/title/Pause_ope.png", SCENE_SELECT), true);
 		if (_menu == GAME_START) {
-			dirMoveCnt += 2;
-			DrawGraph(150 - abs(30 - ( 200 + (dirMoveCnt / 2 % 60)) % 59), 445, im.ImageIdReturn("image/yazirushi.png", SCENE_SELECT), true);
+			dirMoveCnt += 1;
+			DrawGraph(110 + abs(60 - ( 200 + (dirMoveCnt / 2 % 60)) % 30), 455, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
 		}
 		else if (_menu == GAME_EXPLAIN) {
-			dirMoveCnt += 2;
-			DrawGraph(150 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), 525, im.ImageIdReturn("image/yazirushi.png", SCENE_SELECT), true);
+			dirMoveCnt += 1;
+			DrawGraph(110 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), 535, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
 		}
 	}
 

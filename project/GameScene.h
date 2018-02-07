@@ -49,10 +49,18 @@ private:
 	int hunex;
 	int lightImage;
 	int pauseNowNum;                                            //現在選択しているポーズのモード
-	int PauseDirNumY;
+	int pauseRetireNowNum;                                      //ポーズでのリタイアで選択しているモード
+	int pauseDirNumX;
+	int pauseDirNumY;
 	int dirMoveCnt;
 	bool selectPauseFlag;
+
+	bool ChackFlag;                                             //ポーズの確認用
+	bool ChackDrawFlag;                                         //ポーズの確認描画用
+	bool RetryOrRetireFlag;                                     //描画をリタイアかリトライどちらかを決めるflag true:リトライ false:リザルト
+
 	bool bgmFlag;												//BGMがなっているかどうかのフラグ
+
 
 	RESULT_DATA _rtData;
 	FEVER_DATA _feverData;
@@ -67,6 +75,8 @@ private:
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
 	void PauseUpdata(Input* input);
 	void PauseSelect(Input* input);
+	void CheckReTireSelect(Input* input);                        //リタイア用
+
 
 	void RetryProcess();
 	void GameScene::RetryPauseProcess();
@@ -74,6 +84,7 @@ private:
 	void Draw(Position2& offset);
 	void DrawPauseUi(void);
 	void DrawUI();	
+	void DrawCheckUi();
 	void DrawBack(Position2 offset);
 	void JudgeTransition();
 public:

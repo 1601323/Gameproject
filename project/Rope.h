@@ -10,8 +10,8 @@
 #define ROPE_RANGE (2.f)         //circle用の半径
 #define ROPE_RECT_W (20)         //rect用の幅
 #define ROPE_RECT_H (20)         //rect用の高さ
-#define ROPE_LENGTH_MAX (58)     //ロープの最大長 
-#define WAIT_TIMER (40)          //ロープ到達後の待ち時間
+#define ROPE_LENGTH_MAX (53)     //ロープの最大長 
+#define WAIT_TIMER (50)          //ロープ到達後の待ち時間
 
 class Input;
 class Player;
@@ -68,6 +68,9 @@ private:
 	int dirNum;                             //dirのX位置
 	int ropeFiringTimer;                    //このカウントがロープ発射のアニメーションのタイミングを制御します
 
+	int dirCrouchLineNUmUp;                 //プレイヤーがしゃがんだ時に矢印の高さを調整する(上)
+	int dirCrouchLineNUmDown;               //プレイヤーがしゃがんだ時に矢印の高さを調整する(下)
+
 	float range;                            //サークル半径
 	float RopeAngle_Y;                      //表示用モデル角度Y
 	float RopeAngle_Z;                      //表示用モデル角度Z
@@ -84,6 +87,7 @@ private:
 	float SetRopeRad(void);                 //ロープの発射角度を決める関数
 	void SetRopeRadForDrawZ(void);          //モデル表示のための調整関数
 	void ModelManager(void);                //モデル関係の関数
+	void DrawDir(void);                     //矢印描画
 
 public:
 	Rope();

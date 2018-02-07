@@ -112,9 +112,15 @@ GameScene::GameScene()
 
 	count = 0;
 	pauseNowNum = 0;
-	PauseDirNumY = 0;
+	pauseRetireNowNum = 1;
+	pauseDirNumY = 0;
+	pauseDirNumX = 0;
 	dirMoveCnt = 0;
 	selectPauseFlag = false;
+	ChackFlag = false;
+	ChackDrawFlag = false;
+	RetryOrRetireFlag = false;
+
 
 	_minSensingValueL = SV_HIGH;
 	//numberImage = im.ImageIdReturn("image/UI/NewNum.png",SCENE_RESULT);
@@ -337,36 +343,68 @@ void GameScene::PauseUpdata(Input* input)
 	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON)
 	{
 		dirMoveCnt = 0;
+		ChackDrawFlag = false;
+		ChackFlag = false;
 		so.ChangeSound();
-
 		_updater = &GameScene::NormalUpdata;
 	}
 
-	if(	key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		switch (pauseNowNum)
 		{
-			//ゲームに戻る
-		case MODE_BACK:
-			dirMoveCnt = 0;
-			so.ChangeSound();
-			_updater = &GameScene::NormalUpdata;
-			break;
 			//最初からやり直す
 		case MODE_RETRY:
-			dirMoveCnt = 0;
-			RetryPauseProcess();
-			_updater = &GameScene::FadeInUpdata;
+			//ただ戻るだけでなく1回確認を入れる
+			RetryOrRetireFlag = true;
+			ChackDrawFlag = true;
 			break;
 			//ステージセレクトに戻る
 		case MODE_SELECT:
-			dirMoveCnt = 0;
-			gm.Instance().ChangeScene(new SelectScene());
-			break;
+			RetryOrRetireFlag = false;
+			ChackDrawFlag = true;
 		default:
 			break;
 		}
 		//_updater = &GameScene::NormalUpdata;
 	}
+	if (ChackDrawFlag)
+	{
+		DrawCheckUi();//ui表示
+		CheckReTireSelect(input);//入力関連
+
+		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
+		{
+			switch (pauseRetireNowNum)
+			{
+			case 0:
+				dirMoveCnt = 0;
+				ChackDrawFlag = false;
+				ChackFlag = false;
+				RetryPauseProcess();
+				//flagをみてリトライ、リタイアに分ける
+				if (RetryOrRetireFlag)
+				{
+					_updater = &GameScene::FadeInUpdata;
+				}
+				else {
+					gm.Instance().ChangeScene(new SelectScene());
+				}
+				break;
+			case 1:
+				dirMoveCnt = 0;
+				ChackDrawFlag = false;
+				ChackFlag = false;
+				//再起
+				_updater = &GameScene::PauseUpdata;
+				break;
+			default:
+				ChackDrawFlag = false;
+				ChackFlag = false;
+				break;
+			}
+		}
+	}
+	
 }
 
 //pauseの選ばれている処理
@@ -375,6 +413,8 @@ void GameScene::PauseSelect(Input* input)
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
+
+	//if (pauseNowNum <= 0)pauseNowNum = 1;
 
 	if (inpInfo.num >= 1) {
 		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
@@ -450,6 +490,70 @@ void GameScene::UpdateManager()
 {
 
 }
+
+//リタイア時確認確認用カーソル移動処理
+void  GameScene::CheckReTireSelect(Input* input)
+{
+	KEY key = input->GetInput(1).key;
+	KEY lastKey = input->GetLastKey();
+	INPUT_INFO inpInfo = input->GetInput(1);
+
+	if (inpInfo.num >= 1) {
+		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_RIGHT) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)
+		{
+			pauseRetireNowNum--;
+			if (pauseRetireNowNum <= 0) {
+				pauseRetireNowNum = 1;
+			}
+			ChackFlag = true;
+		}
+		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_LEFT) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL )
+		{
+			pauseRetireNowNum++;
+			if (pauseRetireNowNum >= 2) {
+				pauseRetireNowNum = 0;
+			}
+			ChackFlag = true;
+
+		}
+		else if (!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_RIGHT) &&
+			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) &&
+			!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_LEFT) &&
+				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)) {
+			ChackFlag = true;
+		}
+		else {
+			pauseRetireNowNum = pauseRetireNowNum;
+		}
+	}
+	else {
+
+		//ステージ選択
+		if (inpInfo.key.keybit.R_RIGHT_BUTTON && !lastKey.keybit.R_RIGHT_BUTTON) {
+			pauseRetireNowNum--;
+			if (pauseRetireNowNum < 0) {
+				pauseRetireNowNum = 1;
+			}
+			ChackFlag = true;
+
+		}
+		else if (inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
+			pauseRetireNowNum++;
+			if (pauseRetireNowNum >= MODE_MAX) {
+				pauseRetireNowNum = 0;
+			}
+			ChackFlag = true;
+
+		}
+		else {
+
+		}
+	}
+
+}
+
 void GameScene::Draw(Position2& offset)
 {
 	//今のところマップはupdataで表示させておく
@@ -496,30 +600,58 @@ void GameScene::DrawPauseUi(void)
 {
 	ImageMgr& im = ImageMgr::Instance();
 	//ボード
-	DrawExtendGraph(220, 30, 610,400,im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
-	//ポーズ文字
-	DrawGraph(310, 70, im.ImageIdReturn("image/Pause/Pause.png", SCENE_RESULT), true);
-	//モード達
-	DrawGraph(340, 170, im.ImageIdReturn("image/Pause/return.png", SCENE_RESULT), true);
-	DrawGraph(340, 230, im.ImageIdReturn("image/Pause/Retry.png", SCENE_RESULT), true);
-	DrawGraph(340, 280, im.ImageIdReturn("image/Pause/Select.png", SCENE_RESULT), true);
+	DrawExtendGraph(200, 50, 620,370,im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
 
-	DrawGraph(260 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), PauseDirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_RESULT), true);
+	DrawGraph(300, 130, im.ImageIdReturn("image/Restart/Restart.png", SCENE_RESULT), true);
+	DrawGraph(300, 220, im.ImageIdReturn("image/Pause/Retire.png", SCENE_RESULT), true);
 
 	switch (pauseNowNum) {
 	case 0:
-		PauseDirNumY = 160;
+		pauseDirNumY = 120;
 		break;
 	case 1:
-		PauseDirNumY = 220;
-		break;
-	case 2:
-		PauseDirNumY = 270;
+		pauseDirNumY = 210;
 		break;
 	default:
 		break;
 	}
 
+	DrawGraph(210 + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 20), pauseDirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_RESULT), true);
+
+
+}
+
+//リタイア確認用のUI表示
+void GameScene::DrawCheckUi()
+{
+	ImageMgr& im = ImageMgr::Instance();
+	//ボードの上にボードを置く
+	DrawExtendGraph(70, 80, 740, 470, im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
+	if (RetryOrRetireFlag)
+	{
+		//リトライするか?
+		DrawGraph(150, 130, im.ImageIdReturn("image/Restart/RestartQuestion.png", SCENE_RESULT), true);
+	}
+	else {
+		//リタイアするか?
+		DrawGraph(150, 130, im.ImageIdReturn("image/Pause/RetireQuestion.png", SCENE_RESULT), true);
+	}
+	//はいいいえ
+	DrawGraph(220, 350, im.ImageIdReturn("image/Restart/Yes.png", SCENE_RESULT), true);
+	DrawGraph(460, 350, im.ImageIdReturn("image/Restart/No.png", SCENE_RESULT), true);
+
+	switch (pauseRetireNowNum) {
+	case 0:
+		pauseDirNumX = 110;
+		break;
+	case 1:
+		pauseDirNumX = 360;
+		break;
+	default:
+		break;
+	}
+
+	DrawGraph(pauseDirNumX + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 20), 350, im.ImageIdReturn("image/yazirushi2.png", SCENE_RESULT), true);
 }
 
 //背景描画

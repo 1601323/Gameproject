@@ -71,6 +71,8 @@ void Rope::RopeInit(void)
 	ropeFiringTimer = 20;
 	RopeHitModelNumY = 0;
 	dirNum = 0;
+	dirCrouchLineNUmUp = 0;
+	dirCrouchLineNUmDown = 0;
 	timerWait = WAIT_TIMER;
 	ImageMgr& im = ImageMgr::Instance();
 
@@ -218,24 +220,7 @@ void Rope::SelectDir(Input* input)
 		//MV1DrawFrame(modelhandle,0);
 		//_modelmgr->SetMaterialDotLine(modelhandle, 0.0f);
 
-		dirdraw_Y = _player->GetStateCrouch() ? 50 : 0;
-		dirdraw_X = _player->GetStateCrouch() ? (dirFlag ? 10 : -10) : 0;
-
-
-		//矢印表示
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
-			 _player->GetPos().y - _tmpOffset.y-5 + dirdraw_Y, 1.0, dirFlag ? AngleRad(45.0f) : AngleRad(135.0f),
-			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
-
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
-			_player->GetPos().y - _tmpOffset.y - 20+  dirdraw_Y, 1.0, AngleRad(0.0f),
-			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
-
-		DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
-			_player->GetPos().y - _tmpOffset.y - 35 + dirdraw_Y, 1.0, dirFlag ? AngleRad(-45.0f) : AngleRad(-135.0f),
-			im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
-
-
+		DrawDir();
 
 		//ロープ待機解除 Readyの状態に戻す
 		if (_key.keybit.L_LEFT_BUTTON && !_lastkey.keybit.L_LEFT_BUTTON && !padFlag ||
@@ -269,6 +254,8 @@ void Rope::SelectDir(Input* input)
 //最大まで行くと待ちの処理に移る
 void Rope::Extending(Input* input)
 {
+	DrawDir();
+
 	if (_state == ST_ROPE_EXTENDING)
 	{
 		if (--ropeFiringTimer < 0)
@@ -323,6 +310,7 @@ void Rope::Extended(Input* input)
 	if (_state == ST_ROPE_EXTENDED)
 	{
 		timerWait--;
+		DrawDir();
 		//当たったかどうかでアニメーションを進めるか戻す
 		ModelManager();
 
@@ -346,6 +334,7 @@ void Rope::Extended(Input* input)
 //最後まで変えればまた待機状態に移る
 void Rope::Shrinking(Input* input)
 {
+	DrawDir();
 	if (_state == ST_ROPE_SHRINKING)
 	{
 		if (--itr != ropeinfo.begin())
@@ -450,7 +439,7 @@ float Rope::SetRopeRad(void)
 		break;
 
 	case ROPE_DIR_STRAIGHT:
-		return  dirFlag ? AngleRad(0.0f) : AngleRad(-180.0f);
+		return  dirFlag ? AngleRad(0.0f) : AngleRad(-180.9f);
 		break;
 
 	case ROPE_DIR_LOWER:
@@ -501,13 +490,13 @@ void Rope::SetRopeRadForDrawZ(void)
 		RopeAngle_Z = dirFlag ? AngleRad(ROPE_THETA) : AngleRad(-ROPE_THETA);
 		RopeHitModelNumY = _player->GetStateCrouch() ? 10 :dirFlag ? 35:25;//あたり判定用
 		mentenanceNum_Y = _player->GetStateCrouch() ? -28 + _RopeRect.h / 2 :-58 + _RopeRect.h / 2;//モデル描画
-		mentenanceNum_X = dirFlag ? -20 : 20;
+		mentenanceNum_X = _player->GetStateCrouch() ? dirFlag ? -10:10 :dirFlag ? -20 : 20;
 		break;
 	case ROPE_DIR_LOWER:
 		RopeAngle_Z =  dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(ROPE_THETA);
-		RopeHitModelNumY = _player->GetStateCrouch() ? 45:70;//あたり判定用
-		mentenanceNum_Y = _player->GetStateCrouch() ? -28 + _RopeRect.h / 2 : -58 + _RopeRect.h / 2;//モデル描画
-		mentenanceNum_X = dirFlag ? -20 : 20;
+		RopeHitModelNumY = _player->GetStateCrouch() ? 40:70;//あたり判定用
+		mentenanceNum_Y = _player->GetStateCrouch() ? -32 + _RopeRect.h / 2 : -60 + _RopeRect.h / 2;//モデル描画
+		mentenanceNum_X = _player->GetStateCrouch() ? dirFlag ? -10 : 10 :dirFlag ? -20 : 20;
 		break;
 	case ROPE_DIR_NON:
 	case ROPE_DIR_STRAIGHT:
@@ -579,4 +568,30 @@ Circle& Rope::GetCircle2(void)
 void Rope::GetClass(HitClass* h)
 {
 	_hit = h;
+}
+
+//矢印描画
+void  Rope::DrawDir(void)
+{
+	ImageMgr& im = ImageMgr::Instance();
+
+	dirdraw_Y = _player->GetStateCrouch() ? 50 : dirFlag ? 20:20;
+	dirdraw_X = _player->GetStateCrouch() ? (dirFlag ? 10 :-10) : (dirFlag ? 10:-10);
+
+	dirCrouchLineNUmUp = _player->GetStateCrouch() ? -8: 2;
+	dirCrouchLineNUmDown = _player->GetStateCrouch() ? 47: 38;
+
+
+	//矢印表示
+	DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+		_player->GetPos().y - _tmpOffset.y - dirCrouchLineNUmUp + dirdraw_Y, 1.0, dirFlag ? AngleRad(ROPE_THETA) : AngleRad(ROPE_THETA2),
+		im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
+
+	DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+		_player->GetPos().y - _tmpOffset.y - 20 + dirdraw_Y, 1.0, AngleRad(0.0f),
+		im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, !dirFlag);
+
+	DrawRotaGraph(_player->GetPos().x - _tmpOffset.x + dirNum + dirdraw_X,
+		_player->GetPos().y - _tmpOffset.y - dirCrouchLineNUmDown + dirdraw_Y, 1.0, dirFlag ? AngleRad(-ROPE_THETA) : AngleRad(-ROPE_THETA2),
+		im.ImageIdReturn("image/UI/dirSmall.png", SCENE_RESULT), true, false);
 }
