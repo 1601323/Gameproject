@@ -343,40 +343,28 @@ bool Player::moveWall(void)
 	//操作性に難あり
 	Position2 nextPos[6];
 	//右下
-	//nextPos[0].x = _pos.x + _plRect.w;
-	//nextPos[0].y = _pos.y + (_plRect.h - 1);
 	nextPos[0] = _wallRect.RightBottom();
 	//左下
-	//nextPos[1].x = _pos.x;
-	//nextPos[1].y = _pos.y + (_plRect.h - 1);
 	nextPos[1] = _wallRect.LeftBottom();
 	//右上
-	//nextPos[2].x = _pos.x + _plRect.w;
-	//nextPos[2].y = _pos.y;
 	nextPos[2] = _wallRect.RightTop();
 	//左上
-	//nextPos[3].x = _pos.x;
-	//nextPos[3].y = _pos.y;
 	nextPos[3] = _wallRect.LeftTop();
 	//右真ん中
-	//nextPos[4].x = _pos.x + _plRect.w;
-	//nextPos[4].y = _pos.y + (_plRect.h/2);
 	nextPos[4] = _wallRect.RightTop();
 	nextPos[4].y += _wallRect.h / 2;
 	//左真ん中
-	//nextPos[5].x = _pos.x;
-	//nextPos[5].y = _pos.y + (_plRect.h/2);
 	nextPos[5] = _wallRect.LeftTop();
 	nextPos[5].y += _wallRect.h / 2;
 	//ﾌﾟﾚｲﾔｰの下、マップチップ1分下
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
-	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y;
+	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y +15;
 	//downPos.x = _wallRect.Left() + (_wallRect.w/2);
 	//downPos.y = _wallRect.Bottom() + MAP_CHIP_SIZE_Y;
 	Position2 downPos2;
 	downPos2.x = _pos.x + (_plRect.w/2);
-	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2);
+	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2)+10;
 	//downPos2.x = _wallRect.Left() + (_wallRect.w / 2);
 	//downPos2.y = _wallRect.Bottom() + (MAP_CHIP_SIZE_Y / 2);
 	//壁登り状態にする条件
@@ -384,35 +372,35 @@ bool Player::moveWall(void)
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
-			if (_inpInfo.num >= 1)
-			{
-				if (WallFlag == false) {
-					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-						WallFlag = true;
-						break;
-					}
-				}
-				else {
-					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-						WallFlag = false;
-						break;
-					}
-				}
-			}
-			else {
-				if (WallFlag == false) {
-					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-						WallFlag = true;
-						break;
-					}
-				}
-				else {
-					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-						WallFlag = false;
-						break;
-					}
-				}
-			}
+			//if (_inpInfo.num >= 1)
+			//{
+			//	if (WallFlag == false) {
+			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+			//			WallFlag = true;
+			//			break;
+			//		}
+			//	}
+			//	else {
+			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+			//			WallFlag = false;
+			//			break;
+			//		}
+			//	}
+			//}
+			//else {
+			//	if (WallFlag == false) {
+			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+			//			WallFlag = true;
+			//			break;
+			//		}
+			//	}
+			//	else {
+			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+			//			WallFlag = false;
+			//			break;
+			//		}
+			//	}
+			//}
 			//もし足元に床がなければそのまま壁に張り付く
 			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
@@ -654,31 +642,19 @@ void Player::FeverWall()
 	//操作性に難あり
 	Position2 nextPos[6];
 	//右下
-	//nextPos[0].x = _pos.x + _plRect.w;
-	//nextPos[0].y = _pos.y + (_plRect.h - 1);
 	nextPos[0] = _wallRect.RightBottom();
 	//左下
-	//nextPos[1].x = _pos.x;
-	//nextPos[1].y = _pos.y + (_plRect.h - 1);
 	nextPos[1] = _wallRect.LeftBottom();
 
 	//右上
-	//nextPos[2].x = _pos.x + _plRect.w;
-	//nextPos[2].y = _pos.y;
 	nextPos[2] = _wallRect.RightTop();
 	//左上
-	//nextPos[3].x = _pos.x;
-	//nextPos[3].y = _pos.y;
 	nextPos[3] = _wallRect.LeftTop();
 	//右真ん中
-	//nextPos[4].x = _pos.x + _plRect.w;
-	//nextPos[4].y = _pos.y + (_plRect.h/2);
 	nextPos[4] = _wallRect.RightTop();
 	nextPos[4].x += 5;
 	nextPos[4].y += _wallRect.h / 2;
 	//左真ん中
-	//nextPos[5].x = _pos.x;
-	//nextPos[5].y = _pos.y + (_plRect.h/2);
 	nextPos[5] = _wallRect.LeftTop();
 	nextPos[5].x -= 5;
 	nextPos[5].y += _wallRect.h / 2;
@@ -694,36 +670,35 @@ void Player::FeverWall()
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
-			//壁が近くにあったとき、ボタンを押すと壁に張り付く
-			if (_inpInfo.num >= 1)
-			{
-				if (WallFlag == false) {
-					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-						WallFlag = true;
-						break;
-					}
-				}
-				else {
-					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-						WallFlag = false;
-						break;
-					}
-				}
-			}
-			else {
-				if (WallFlag == false) {
-					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-						WallFlag = true;
-						break;
-					}
-				}
-				else {
-					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-						WallFlag = false;
-						break;
-					}
-				}
-			}
+			//if (_inpInfo.num >= 1)
+			//{
+			//	if (WallFlag == false) {
+			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+			//			WallFlag = true;
+			//			break;
+			//		}
+			//	}
+			//	else {
+			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+			//			WallFlag = false;
+			//			break;
+			//		}
+			//	}
+			//}
+			//else {
+			//	if (WallFlag == false) {
+			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+			//			WallFlag = true;
+			//			break;
+			//		}
+			//	}
+			//	else {
+			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+			//			WallFlag = false;
+			//			break;
+			//		}
+			//	}
+			//}
 			//もし足元に床がなければそのまま壁に張り付く
 			if (_map->GetChipType(downPos) == CHIP_BLANK&&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				if (WallFlag == false) {
