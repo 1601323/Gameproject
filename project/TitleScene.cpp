@@ -143,10 +143,11 @@ void TitleScene::FadeoutTitle(Input* input)
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100 + lightCnt);
 	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	so.BgmFadeOut("Bgm/title.mp3",SCENE_SELECT);
+
 	if (lightCnt >= 120) {
 		gm.Instance().ChangeScene(new SelectScene());
 	}
-	so.BgmFadeOut("Bgm/title.mp3",SCENE_SELECT);
 }
 void  TitleScene::TitleMovie(Input* input)
 {
