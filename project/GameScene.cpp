@@ -163,7 +163,7 @@ void GameScene::FadeInUpdata(Input* input)
 	SoundMgr& so = SoundMgr::Instance();
 	GameMain& gm = GameMain::Instance();	
 	if (bgmFlag == false) {
-		so.BgmStart("Bgm/game.mp3", SCENE_GAME);
+		so.BgmStart("Bgm/game4.mp3", SCENE_GAME);
 		bgmFlag = true;
 	}
 
@@ -295,6 +295,8 @@ void GameScene::TransitionUpdata(Input* input)
 	if (count >= 120) {
 		if (_rtData.goalFlag == true) {
 			gm.Instance().ChangeScene(new ResultScene());
+			so.BgmFadeOut("Bgm/game4.mp3", SCENE_GAME);
+			bgmFlag = false;
 		}
 		else if (gm.GetResultData().life > 0) {
 			//リトライ
@@ -304,10 +306,12 @@ void GameScene::TransitionUpdata(Input* input)
 		}
 		else{
 			gm.Instance().ChangeScene(new ResultScene());
+			so.BgmFadeOut("Bgm/game4.mp3", SCENE_GAME);
+			bgmFlag = false;
 		}
 		count = 0;
 	}
-	so.BgmFadeOut("Bgm/game.mp3", SCENE_GAME);
+	so.BgmFadeOut("Bgm/game4.mp3", SCENE_GAME);
 	bgmFlag = false;
 }
 //ポーズ用updata

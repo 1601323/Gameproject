@@ -320,7 +320,7 @@ void EmAround::Visibility()
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
-			so.SeStart("Bgm/emChase1.mp3", SCENE_GAME); //警告音開始遅い長い
+			so.SeStart("Se/emChase1.mp3", SCENE_GAME); //警告音開始遅い長い
 			_individualData.plFoundFlag = true;
 		}
 		else {

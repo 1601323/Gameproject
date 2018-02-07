@@ -256,7 +256,7 @@ void Rope::SelectDir(Input* input)
 			itr = ropeinfo.begin();
 			_state = ST_ROPE_EXTENDING;
 			_states = &Rope::Extending;
-			so.SeStart("Bgm/extend4.mp3",SCENE_RESULT);
+			so.SeStart("Se/extend4.mp3",SCENE_RESULT);
 		}
 	}
 #ifdef _DEBUG

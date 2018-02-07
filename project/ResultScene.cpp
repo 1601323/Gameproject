@@ -8,6 +8,7 @@
 #include "SelectScene.h"
 #include "ResultScene.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 #include "ImageMgr.h"
 
 #define NUM_X (74)
@@ -52,6 +53,7 @@ ResultScene::~ResultScene()
 void ResultScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
 	key = input->GetInput(1).key;
 	lastKey = input->GetLastKey();
 	inpInfo = input->GetInput(1);
@@ -59,6 +61,7 @@ void ResultScene::NormalUpdata(Input* input)
 	if (gm.GetResultData().goalFlag == true && gm.GetResultData().midFlag) {
 		GameClear();
 		clearFlag = true;
+		so.SeStart("Se/Clear.mp3",SCENE_SELECT);
 	}
 	else {
 		GameOver();

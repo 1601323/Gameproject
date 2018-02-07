@@ -95,7 +95,7 @@ void TitleScene::NormalUpdata(Input* input)
 #endif
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		if (selectFlag == true) {
-			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
+			so.SeStart("Se/ok.mp3", SCENE_GAME);
 
 			if (_menu == GAME_START) {
 				//gm.Instance().ChangeScene(new SelectScene());
@@ -188,7 +188,7 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
-			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
+			so.SeStart("Se/cursorMove.mp3", SCENE_GAME);
 		}
 		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
@@ -196,7 +196,7 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
-			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
+			so.SeStart("Se/cursorMove.mp3", SCENE_GAME);
 		}
 		else {
 			_menu = _menu;
@@ -208,14 +208,14 @@ void TitleScene::MenuSelect(Input* input)
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
-			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
+			so.SeStart("Se/cursorMove.mp3", SCENE_GAME);
 		}
 		else if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 			_menu = GAME_START;
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
-			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
+			so.SeStart("Se/cursorMove.mp3", SCENE_GAME);
 		}
 		else {
 			_menu = _menu;
