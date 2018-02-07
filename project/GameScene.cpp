@@ -111,13 +111,14 @@ GameScene::GameScene()
 
 	count = 0;
 	pauseNowNum = 0;
-	pauseRetireNowNum = 0;
+	pauseRetireNowNum = 1;
 	pauseDirNumY = 0;
 	pauseDirNumX = 0;
 	dirMoveCnt = 0;
 	selectPauseFlag = false;
-	retireChackFlag = false;
-	retireChackDrawFlag = false;
+	ChackFlag = false;
+	ChackDrawFlag = false;
+	RetryOrRetireFlag = false;
 
 
 	_minSensingValueL = SV_HIGH;
@@ -329,6 +330,8 @@ void GameScene::PauseUpdata(Input* input)
 	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON)
 	{
 		dirMoveCnt = 0;
+		ChackDrawFlag = false;
+		ChackFlag = false;
 		_updater = &GameScene::NormalUpdata;
 	}
 
@@ -337,40 +340,49 @@ void GameScene::PauseUpdata(Input* input)
 		{
 			//最初からやり直す
 		case MODE_RETRY:
-			dirMoveCnt = 0;
-			RetryPauseProcess();
-			_updater = &GameScene::FadeInUpdata;
+			//ただ戻るだけでなく1回確認を入れる
+			RetryOrRetireFlag = true;
+			ChackDrawFlag = true;
 			break;
 			//ステージセレクトに戻る
 		case MODE_SELECT:
-			//ただ戻るだけでなく1回確認を入れる
-			retireChackDrawFlag = true;
+			RetryOrRetireFlag = false;
+			ChackDrawFlag = true;
+			//dirMoveCnt = 0;
+			gm.Instance().ChangeScene(new SelectScene());
+
+			//retireChackDrawFlag = true;
 		default:
 			break;
 		}
 		//_updater = &GameScene::NormalUpdata;
 	}
-	if (retireChackDrawFlag)
+	if (ChackDrawFlag)
 	{
 		DrawCheckUi();
 		CheckReTireSelect(input);
 
-		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && retireChackFlag)
+		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
 		{
 			switch (pauseRetireNowNum)
 			{
 			case 0:
 				dirMoveCnt = 0;
-				retireChackDrawFlag = false;
-				gm.Instance().ChangeScene(new SelectScene());
+				ChackDrawFlag = false;
+				ChackFlag = false;
+				RetryPauseProcess();
+				_updater = &GameScene::FadeInUpdata;
 				break;
 			case 1:
 				dirMoveCnt = 0;
-				retireChackDrawFlag = false;
+				ChackDrawFlag = false;
+				ChackFlag = false;
 				//再起
 				_updater = &GameScene::PauseUpdata;
 				break;
 			default:
+				ChackDrawFlag = false;
+				ChackFlag = false;
 				break;
 			}
 		}
@@ -477,7 +489,7 @@ void  GameScene::CheckReTireSelect(Input* input)
 			if (pauseRetireNowNum <= 0) {
 				pauseRetireNowNum = 1;
 			}
-			retireChackFlag = true;
+			ChackFlag = true;
 		}
 		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_LEFT) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL )
@@ -486,13 +498,14 @@ void  GameScene::CheckReTireSelect(Input* input)
 			if (pauseRetireNowNum >= 2) {
 				pauseRetireNowNum = 0;
 			}
-			retireChackFlag = true;
+			ChackFlag = true;
 
 		}
 		else if (!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) &&
 			!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_LEFT) &&
 				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)) {
+			ChackFlag = true;
 		}
 		else {
 			pauseRetireNowNum = pauseRetireNowNum;
@@ -506,7 +519,7 @@ void  GameScene::CheckReTireSelect(Input* input)
 			if (pauseRetireNowNum < 0) {
 				pauseRetireNowNum = 1;
 			}
-			retireChackFlag = true;
+			ChackFlag = true;
 
 		}
 		else if (inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
@@ -514,10 +527,11 @@ void  GameScene::CheckReTireSelect(Input* input)
 			if (pauseRetireNowNum >= MODE_MAX) {
 				pauseRetireNowNum = 0;
 			}
-			retireChackFlag = true;
+			ChackFlag = true;
 
 		}
 		else {
+
 		}
 	}
 
@@ -572,7 +586,7 @@ void GameScene::DrawPauseUi(void)
 	DrawExtendGraph(200, 50, 620,370,im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
 
 	DrawGraph(300, 130, im.ImageIdReturn("image/Restart/Restart.png", SCENE_RESULT), true);
-	DrawGraph(300, 220, im.ImageIdReturn("image/Pause/Select.png", SCENE_RESULT), true);
+	DrawGraph(300, 220, im.ImageIdReturn("image/Pause/Retire.png", SCENE_RESULT), true);
 
 	switch (pauseNowNum) {
 	case 0:
@@ -595,19 +609,26 @@ void GameScene::DrawCheckUi()
 {
 	ImageMgr& im = ImageMgr::Instance();
 	//ボードの上にボードを置く
-	DrawExtendGraph(100, 80, 700, 470, im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
-	//リトライするか?
-	DrawGraph(100, 130, im.ImageIdReturn("image/Restart/RestartQuestion.png", SCENE_RESULT), true);
+	DrawExtendGraph(70, 80, 740, 470, im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
+	if (RetryOrRetireFlag)
+	{
+		//リトライするか?
+		DrawGraph(150, 130, im.ImageIdReturn("image/Restart/RestartQuestion.png", SCENE_RESULT), true);
+	}
+	else {
+		//リタイアするか?
+		DrawGraph(150, 130, im.ImageIdReturn("image/Restart/RestartQuestion.png", SCENE_RESULT), true);
+	}
 	//はいいいえ
-	DrawGraph(150, 350, im.ImageIdReturn("image/Restart/Yes.png", SCENE_RESULT), true);
-	DrawGraph(350, 350, im.ImageIdReturn("image/Restart/No.png", SCENE_RESULT), true);
+	DrawGraph(220, 350, im.ImageIdReturn("image/Restart/Yes.png", SCENE_RESULT), true);
+	DrawGraph(460, 350, im.ImageIdReturn("image/Restart/No.png", SCENE_RESULT), true);
 
 	switch (pauseRetireNowNum) {
 	case 0:
-		pauseDirNumX = 120;
+		pauseDirNumX = 110;
 		break;
 	case 1:
-		pauseDirNumX = 320;
+		pauseDirNumX = 360;
 		break;
 	default:
 		break;
