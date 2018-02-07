@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Geometry.h"
 #include "Rope.h"
+#include "SoundMgr.h"
 #include "ModelMgr.h"
 #include "ImageMgr.h"
 
@@ -896,6 +897,7 @@ void Player::FeverWall()
 //Û°Ìßó‘Ô‚Ìˆ—
 bool Player::moveRope(void)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	//Û°Ìßó‘Ô‚È‚ç“®‚¯‚È‚¢
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;
@@ -907,6 +909,7 @@ bool Player::moveRope(void)
 			moveFlag = false;
 		}
 		vx = 0.0f;
+		so.BgmStart("Bgm/wire.mp3", SCENE_GAME); // —p•ÒW
 	}
 	else {
 		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
@@ -1122,7 +1125,7 @@ void Player::stInvincible(void)
 //¼Þ¬ÝÌßˆ—
 bool Player::moveJump(void)
 {
-
+	SoundMgr& so = SoundMgr::Instance();
 	//¼Þ¬ÝÌß
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1131,6 +1134,7 @@ bool Player::moveJump(void)
 				JumpFlag = true;
 				airFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
@@ -1138,6 +1142,7 @@ bool Player::moveJump(void)
 				JumpFlag = true;
 				airFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -1150,6 +1155,7 @@ bool Player::moveJump(void)
 			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
 				vx = -MAX_SPEED;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 
@@ -1211,7 +1217,7 @@ bool Player::moveJump(void)
 }
 void Player::FeverJump()
 {
-
+	SoundMgr& so = SoundMgr::Instance();
 	//¼Þ¬ÝÌß
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1219,12 +1225,14 @@ void Player::FeverJump()
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -1237,6 +1245,7 @@ void Player::FeverJump()
 			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
 				vx = -MAX_SPEED;
 			}
+			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	if (_state == ST_JUMP) {
@@ -1311,6 +1320,7 @@ void Player::FeverJump()
 //“G‚Æ“–‚½‚Á‚½Žž‚Ìˆ—‚ðs‚¤
 void Player::HitToEnemy()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	GameMain& gm = GameMain::Instance();
 	
 	if (_hit->EnemyHit(*this)) {
@@ -1328,6 +1338,7 @@ void Player::HitToEnemy()
 			else if (deathFlag == false) {
 				//Ž€‚È‚È‚¢
 			}
+			so.SeStart("Bgm/PlHit.mp3", SCENE_GAME);
 		}
 		else {
 		}
