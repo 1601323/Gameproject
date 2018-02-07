@@ -110,24 +110,52 @@ void SoundMgr::BgmStart(const std::string file, const SCENE_TYPE delScene)
 	//音量の調節
 	ChangeVolumeSoundMem(150, bgm);
 	fadeCnt = 0;
+	LastInputBgm(file,delScene);
 }
 //BGMをフェードアウトさせます
 void SoundMgr::BgmFadeOut(const std::string file, const SCENE_TYPE delScene)
 {
 	int bgm = SoundIdReturn(file,delScene);
-	if (fadeCnt >= 180) {
-		fadeCnt = 180;
+	if (fadeCnt >= 120) {
+		fadeCnt = 120;
 	}
 	if (CheckSoundMem(bgm) == 1) {
 		fadeCnt += 1;
-		if (150 - fadeCnt <= 0) {
+		if (120 - fadeCnt <= 0) {
 			StopSoundMem(bgm);
 		}
-		ChangeVolumeSoundMem(180-fadeCnt,bgm);
+		ChangeVolumeSoundMem(120-fadeCnt,bgm);
 	}
 }
 //BGMを止めます
 void SoundMgr::BgmStop(const std::string file, const SCENE_TYPE delScene)
 {
 	StopSoundMem(SoundIdReturn(file,delScene));
+}
+//音量を変更します
+void SoundMgr::ChangeSound(int volume)
+{
+	int bgm = SoundIdReturn(tmpName, tmpScene);
+	ChangeVolumeSoundMem(volume,bgm);
+}
+//音量を一定値に戻します
+void SoundMgr::ChangeSound()
+{
+	int bgm = SoundIdReturn(tmpName, tmpScene);
+	ChangeVolumeSoundMem(150, bgm);
+}
+//最後に再生したBGMを記録します
+void SoundMgr::LastInputBgm(std::string file, SCENE_TYPE delScene)
+{
+	tmpName = file;
+	tmpScene = delScene;
+}
+
+//強制的にタイトルに戻った際の対応です
+void SoundMgr::BgmStop()
+{
+	if (tmpName == "") {
+		return;
+	}
+	StopSoundMem(SoundIdReturn(tmpName,tmpScene));
 }

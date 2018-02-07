@@ -13,6 +13,7 @@
 #include "ModelMgr.h"
 #include "GameMain.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 #include "ImageMgr.h"
 
 #include "Math.h"
@@ -29,7 +30,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	_initPos = _pos;
 
 	_emEye.pos.x = _pos.x;
-	_emEye.pos.y = _pos.y + (_emRect.h / 4);
+	_emEye.pos.y = _pos.y + (_emRect.h / 4) +3;
 	_emEye.r = 40;
 	_state = EM_ST_MOVE;
 
@@ -312,12 +313,14 @@ void EmAround::CheckMove()
 //視界について
 void EmAround::Visibility()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	_emData.lookAngle = 60;
 	_emData.lookDir = _dir;
 	_emData.lookRange = _emEye;
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN) {
 		if (_hit.EnemyViewing(_emData, _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 			_state = EM_ST_DIS;
+			so.SeStart("Bgm/emChase1.mp3", SCENE_GAME); //警告音開始遅い長い
 			_individualData.plFoundFlag = true;
 		}
 		else {
@@ -477,13 +480,13 @@ void EmAround::Draw(Position2 offset)
 		{
 			SetDrawBright(_server.ReturnColor().red, _server.ReturnColor().green, _server.ReturnColor().blue);
 			if (_dir == DIR_LEFT) {
-				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4)+3, _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
 			else if (_dir == DIR_RIGHT) {
-				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4)+3, _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

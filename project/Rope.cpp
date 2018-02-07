@@ -10,6 +10,7 @@
 #include "MapCtl.h"
 #include "Geometry.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 #include "ImageMgr.h"
 
 Rope::Rope() 
@@ -206,6 +207,7 @@ void Rope::Ready(Input* input)
 //Ç±ÇÃèÛë‘ÇÃÇ∆Ç´ÇÕÅAthe worldèÛë‘
 void Rope::SelectDir(Input* input)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (_state == ST_ROPE_SELECT)
 	{
 		ImageMgr& im = ImageMgr::Instance();
@@ -254,6 +256,7 @@ void Rope::SelectDir(Input* input)
 			itr = ropeinfo.begin();
 			_state = ST_ROPE_EXTENDING;
 			_states = &Rope::Extending;
+			so.SeStart("Bgm/extend4.mp3",SCENE_RESULT);
 		}
 	}
 #ifdef _DEBUG

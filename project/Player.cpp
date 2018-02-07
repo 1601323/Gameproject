@@ -909,7 +909,7 @@ bool Player::moveRope(void)
 			moveFlag = false;
 		}
 		vx = 0.0f;
-		so.BgmStart("Bgm/wire.mp3", SCENE_GAME); // 用編集
+	//	so.BgmStart("Bgm/extend.mp3", SCENE_GAME); // 用編集
 	}
 	else {
 		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
@@ -1133,16 +1133,18 @@ bool Player::moveJump(void)
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 				airFlag = true;
+				so.SeStart("Bgm/question.mp3", SCENE_GAME);
+
 			}
-			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 				airFlag = true;
+				so.SeStart("Bgm/question.mp3", SCENE_GAME);
+
 			}
-			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -1155,7 +1157,6 @@ bool Player::moveJump(void)
 			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
 				vx = -MAX_SPEED;
 			}
-			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 
@@ -1224,15 +1225,15 @@ void Player::FeverJump()
 			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
+				so.SeStart("Bgm/question.mp3", SCENE_GAME);
 			}
-			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
+				so.SeStart("Bgm/question.mp3", SCENE_GAME);
 			}
-			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -1245,7 +1246,6 @@ void Player::FeverJump()
 			if (_inpInfo.key.keybit.R_LEFT_BUTTON) {
 				vx = -MAX_SPEED;
 			}
-			so.SeStart("Bgm/question.mp3", SCENE_GAME);
 		}
 	}
 	if (_state == ST_JUMP) {
@@ -1328,6 +1328,7 @@ void Player::HitToEnemy()
 		{
 			if (deathFlag == true) {
 				_state = ST_DETH;
+				so.SeStart("Bgm/PlHit.mp3", SCENE_GAME);
 
 				//完全敗北
 				if (gm.GetResultData().life < 0)
@@ -1338,7 +1339,6 @@ void Player::HitToEnemy()
 			else if (deathFlag == false) {
 				//死なない
 			}
-			so.SeStart("Bgm/PlHit.mp3", SCENE_GAME);
 		}
 		else {
 		}
