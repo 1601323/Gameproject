@@ -373,35 +373,23 @@ bool Player::moveWall(void)
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
-			//if (_inpInfo.num >= 1)
-			//{
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
-			//else {
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
+			if (_inpInfo.num >= 1)
+			{
+				if (WallFlag == false) {
+					if (_dir == DIR_UP) {
+						WallFlag = true;
+						break;
+					}
+				}
+			}
+			else {
+				if (WallFlag == false) {
+					if (_key.keybit.R_UP_BUTTON) {
+						WallFlag = true;
+						break;
+					}
+				}
+			}
 			//もし足元に床がなければそのまま壁に張り付く
 			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
@@ -671,35 +659,35 @@ void Player::FeverWall()
 	for (int j = 0; j < 6; j++) {
 		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
 			count = 0;
-			//if (_inpInfo.num >= 1)
-			//{
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
-			//else {
-			//	if (WallFlag == false) {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = true;
-			//			break;
-			//		}
-			//	}
-			//	else {
-			//		if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
-			//			WallFlag = false;
-			//			break;
-			//		}
-			//	}
-			//}
+			if (_inpInfo.num >= 1)
+			{
+				if (WallFlag == false) {
+					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+						WallFlag = true;
+						break;
+					}
+				}
+				else {
+					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
+						WallFlag = false;
+						break;
+					}
+				}
+			}
+			else {
+				if (WallFlag == false) {
+					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+						WallFlag = true;
+						break;
+					}
+				}
+				else {
+					if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
+						WallFlag = false;
+						break;
+					}
+				}
+			}
 			//もし足元に床がなければそのまま壁に張り付く
 			if (_map->GetChipType(downPos) == CHIP_BLANK&&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				if (WallFlag == false) {
