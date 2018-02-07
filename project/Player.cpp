@@ -1162,7 +1162,7 @@ bool Player::moveJump(void)
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 				airFlag = true;
-				so.SeStart("Bgm/question.mp3", SCENE_GAME);
+				so.SeStart("Se/question.mp3", SCENE_GAME);
 
 			}
 		}
@@ -1171,7 +1171,7 @@ bool Player::moveJump(void)
 				vy = -JUMP_POWER;
 				JumpFlag = true;
 				airFlag = true;
-				so.SeStart("Bgm/question.mp3", SCENE_GAME);
+				so.SeStart("Se/question.mp3", SCENE_GAME);
 
 			}
 		}
@@ -1257,14 +1257,14 @@ void Player::FeverJump()
 			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
-				so.SeStart("Bgm/question.mp3", SCENE_GAME);
+				so.SeStart("Se/question.mp3", SCENE_GAME);
 			}
 		}
 		else {
 			if (keyData[KEY_INPUT_SPACE] ^ oldkeyData[KEY_INPUT_SPACE] & keyData[KEY_INPUT_SPACE]) {
 				vy = -JUMP_POWER;
 				JumpFlag = true;
-				so.SeStart("Bgm/question.mp3", SCENE_GAME);
+				so.SeStart("Se/question.mp3", SCENE_GAME);
 			}
 		}
 	}
@@ -1366,7 +1366,7 @@ void Player::HitToEnemy()
 		{
 			if (deathFlag == true) {
 				_state = ST_DETH;
-				so.SeStart("Bgm/PlHit.mp3", SCENE_GAME);
+				so.SeStart("Se/PlHit.mp3", SCENE_GAME);
 
 				//Š®‘S”s–k
 				if (gm.GetResultData().life < 0)

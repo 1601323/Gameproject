@@ -51,14 +51,14 @@ void GimDrop::Updata(Input& _input)
 	}
 	if (_state == GM_HIT) {
 		MoveLeft();
-		_fd.feverCnt = 1;
+//		_fd.feverCnt = 1;
 
 		SendFeverData();
 
 	}
 	else if (_state == GM_MOVE) {
 		MoveRight();
-		_fd.feverCnt = 1;
+	//	_fd.feverCnt = 1;
 		SendFeverData();
 
 	}

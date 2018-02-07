@@ -338,7 +338,7 @@ void EmLookback::Visibility()
 
 		if (_hit.EnemyViewing(_emData, _player.GetRect()) &&( _player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
-			so.SeStart("Bgm/emChase1.mp3", SCENE_GAME); 
+			so.SeStart("Se/emChase1.mp3", SCENE_GAME); 
 			_individualData.plFoundFlag = true;
 		}
 		else {
