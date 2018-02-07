@@ -2,11 +2,11 @@ Amazing		:プレイヤー見つけたとき
 
 buzzer		:警戒度上がった時
 
-cancel		:いいえボタン
+cancel		:いいえボタン　編集可能
+　
+door_open	:自動ドア開く　編集可能
 
-door_open	:自動ドア開く
-
-doorOpen	:金庫あく
+doorOpen	:金庫あく　編集可能
 
 EnemyHit	:敵プレイヤーの攻撃受ける
 	
@@ -14,9 +14,9 @@ enemykeikai	:プレイヤーを追いかけてくるとき
 
 game		:ゲーム中BGM
 
-key-in1		:鍵開ける
+key-in1		:鍵開ける　編集可能
 
-ok		:決定ボタン
+ok		:決定ボタン 編集可能
 
 PlHit		:プレイヤー何かにぶつかる
 
