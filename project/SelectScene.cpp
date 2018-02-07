@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "SoundMgr.h"
 #include "ModelMgr.h"
 using namespace std;
 
@@ -63,6 +64,7 @@ void SelectScene::Updata(Input* input)
 }
 void SelectScene::Select(Input* input)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (_inpInfo.num >= 1) {
 		if ((input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL	&&
@@ -90,6 +92,7 @@ void SelectScene::Select(Input* input)
 		}
 		else {
 			nowNum = nowNum;
+			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -100,15 +103,18 @@ void SelectScene::Select(Input* input)
 			if (nowNum >= STAGE_MAX) {
 				nowNum = 0;
 			}
+			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
 		}
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON && !lastKey.keybit.R_LEFT_BUTTON) {
 			nowNum -= 1;
 			if (nowNum < 0) {
 				nowNum = STAGE_MAX - 1;
 			}
+			so.SeStart("Bgm/cursorMove.mp3", SCENE_GAME);
 		}
 		else {
 			nowNum = nowNum;
+			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 }

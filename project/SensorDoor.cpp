@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Gimmick.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 #define HEIGHT 100	//ドアの縦幅（とりあえず固定）
 #define WIDTH 60	//ドアの横幅（とりあ以下略）
 
@@ -114,7 +115,7 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 
 void SensorDoor::Draw(Position2 offset)
 {
-
+	SoundMgr& so = SoundMgr::Instance();
 	//外枠の表示
 	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2))+5, (int)(_pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x + (WIDTH / 2)-5), (int)_pos.y - offset.y-5, 0x000000, true);
 
@@ -137,6 +138,7 @@ void SensorDoor::Draw(Position2 offset)
 		{
 			doorCountOpen = totalTime;
 			sensordoorMotionFlag = true;
+			so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
 		}
 	}
 	else if (sensordoorMotionFlag == true)
