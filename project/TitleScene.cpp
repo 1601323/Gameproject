@@ -254,7 +254,7 @@ void TitleScene::Draw()
 		//}
 		//DrawString(250, 550, "Game", 0xffff99);
 
-		DrawGraph(70,410,im.ImageIdReturn("image/title/TitleBoard.png",SCENE_SELECT),true);
+		DrawGraph(70,380,im.ImageIdReturn("image/title/TitleBoard.png",SCENE_SELECT),true);
 
 		DrawGraph(230, 450, im.ImageIdReturn("image/title/select_Game.png", SCENE_SELECT), true);
 

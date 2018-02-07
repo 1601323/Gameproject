@@ -155,7 +155,7 @@ void SelectScene::Draw()
 		}
 	}
 
-	DrawExtendGraph(180, 450,750,620, im.ImageIdReturn("image/textbox.png",SCENE_GAME), true);
+	DrawExtendGraph(170, 450,790,620, im.ImageIdReturn("image/textbox.png",SCENE_GAME), true);
 
 	//アニメーションのフレームを進める
 	AnimNowTime += 0.5f;
@@ -179,13 +179,14 @@ void SelectScene::Draw()
 	switch (nowNum)
 	{
 	case 0:
-		DrawGraph(200, 480, im.ImageIdReturn("image/Select/Stage1.png", SCENE_GAME), true);
+		//DrawExtendGraph(200,480,730, 560, im.ImageIdReturn("image/Select/Stage1.png", SCENE_GAME), true);
+		DrawGraph(190, 480, im.ImageIdReturn("image/Select/Stage1.png", SCENE_GAME), true);
 		break;
 	case 1:
-		DrawGraph(200, 480, im.ImageIdReturn("image/Select/Stage2.png", SCENE_GAME), true);
+		DrawGraph(190, 480, im.ImageIdReturn("image/Select/Stage2.png", SCENE_GAME), true);
 		break;
 	case 2:
-		DrawGraph(200, 480, im.ImageIdReturn("image/Select/Stage3.png", SCENE_GAME), true);
+		DrawGraph(190, 480, im.ImageIdReturn("image/Select/Stage3.png", SCENE_GAME), true);
 		break;
 	default:
 		break;

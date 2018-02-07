@@ -144,7 +144,6 @@ struct SetColor {
 
 //ポーズ時のモード
 enum PAUSE_NEXT_MODE {
-	MODE_BACK,
 	MODE_RETRY,
 	MODE_SELECT,
 	MODE_MAX

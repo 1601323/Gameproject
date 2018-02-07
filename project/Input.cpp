@@ -176,7 +176,7 @@ void Input::InputSet()
 		inpInfo[0].key.keybit.Y_BUTTON = KeyData[KEY_INPUT_ADD];
 		inpInfo[0].key.keybit.X_BUTTON = KeyData[KEY_INPUT_RETURN];
 
-		inpInfo[0].key.keybit.START_BUTTON = KeyData[KEY_INPUT_E];
+		inpInfo[0].key.keybit.START_BUTTON = KeyData[KEY_INPUT_R];                        //ƒŠƒ^ƒCƒA‚¾‚æ
 		inpInfo[0].key.keybit.BACK_BUTTON = KeyData[KEY_INPUT_R];
 
 		inpInfo[0].key.keybit.L_THUMB = KeyData[KEY_INPUT_DIVIDE];
