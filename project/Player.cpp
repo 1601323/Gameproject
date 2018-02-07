@@ -48,6 +48,7 @@ Player::Player()
 	ropeFlag = false;
 	inviFlag = false;
 	tmpFlag = false;
+	WallAnimationFlag = false;
 	_minSensingValueL = SV_HIGH;
 	alfa = 255;
 	tranceMax = 50;
@@ -158,6 +159,7 @@ void Player::setDir(Input* input)
 			if(_state != ST_JUMP)
 			_state = ST_MOVE;
 			airFlag = false;
+
 			modelDirAngle = AngleRad(-90.f);
 		}
 		//左
@@ -168,6 +170,7 @@ void Player::setDir(Input* input)
 			if (_state != ST_JUMP)
 			_state = ST_MOVE;
 			airFlag = false;
+
 			modelDirAngle = AngleRad(90.f);
 		}
 		//上
@@ -507,24 +510,32 @@ bool Player::moveWall(void)
 				if (_dir == DIR_UP || _key.keybit.L_UP_BUTTON)
 				{
 					vy = -WALL_SPEED;
+					WallAnimationFlag = true;
 				}
 				else if (_dir == DIR_DOWN || _key.keybit.L_DOWN_BUTTON)
 				{
 					vy = WALL_SPEED;
+					WallAnimationFlag = true;
 				}
 				else {
 					vy = 0.0f;
+					WallAnimationFlag = false;
 				}
 			}
 			else {
 				if (_inpInfo.key.keybit.R_UP_BUTTON) {
 					vy = -WALL_SPEED;
+					WallAnimationFlag = true;
+
 				}
 				else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {
 					vy = WALL_SPEED;
+					WallAnimationFlag = true;
+
 				}
 				else {
 					vy = 0.0f;
+					WallAnimationFlag = false;
 				}
 			}
 		}
@@ -533,12 +544,17 @@ bool Player::moveWall(void)
 		}
 		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//キーボード
 			vy = WALL_SPEED;
+			WallAnimationFlag = true;
+
 		}
 		else if (_dir == DIR_DOWN) {
 			vy = WALL_SPEED;
+			WallAnimationFlag = true;
+
 		}
 		else {
 			vy = 0.0f;
+			WallAnimationFlag = false;
 		}
 		//下が地面だった時は止まる
 		Position2 nextPosDown;
@@ -793,24 +809,34 @@ void Player::FeverWall()
 				if (_dir == DIR_UP || _key.keybit.L_UP_BUTTON)
 				{
 					vy = -WALL_SPEED;
+					WallAnimationFlag = true;
+
 				}
 				else if (_dir == DIR_DOWN || _key.keybit.L_DOWN_BUTTON)
 				{
 					vy = WALL_SPEED;
+					WallAnimationFlag = true;
+
 				}
 				else {
 					vy = 0.0f;
+					WallAnimationFlag = false;
+
 				}
 			}
 			else {
 				if (_inpInfo.key.keybit.R_UP_BUTTON) {
 					vy = -WALL_SPEED;
+					WallAnimationFlag = true;
 				}
 				else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {
 					vy = WALL_SPEED;
+					WallAnimationFlag = true;
 				}
 				else {
 					vy = 0.0f;
+					WallAnimationFlag = false;
+
 				}
 			}
 		}
@@ -819,12 +845,15 @@ void Player::FeverWall()
 		}
 		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//キーボード
 			vy = WALL_SPEED;
+			WallAnimationFlag = true;
 		}
 		else if (_dir == DIR_DOWN) {
 			vy = WALL_SPEED;
+			WallAnimationFlag = true;
 		}
 		else {
 			vy = 0.0f;
+			WallAnimationFlag = false;
 		}
 		//下が地面だった時は止まる
 		Position2 nextPosDown;
@@ -1203,12 +1232,15 @@ bool Player::moveJump(void)
 		}
 	}
 	if(JumpFlag == true){
-		airCnt++;
-		if (airCnt >= 120) {
-			_pos.y = _pos.y + 10;
-			JumpFlag = false;
-			_state = ST_DEF;
-			airCnt = 0;
+		if (_rope->GetRopeState() != ST_ROPE_SELECT)
+		{
+			airCnt++;
+			if (airCnt >= 120) {
+				_pos.y = _pos.y + 10;
+				JumpFlag = false;
+				_state = ST_DEF;
+				airCnt = 0;
+			}
 		}
 
 	}
@@ -1252,11 +1284,14 @@ void Player::FeverJump()
 		}
 	}
 	if (_state == ST_JUMP) {
-		airCnt++;
-		if (airCnt >= 60) {
-			_pos.y = _pos.y + 2;
-			JumpFlag = false;
-			airCnt = 0;
+		if (_rope->GetRopeState() != ST_ROPE_SELECT)
+		{
+			airCnt++;
+			if (airCnt >= 60) {
+				_pos.y = _pos.y + 2;
+				JumpFlag = false;
+				airCnt = 0;
+			}
 		}
 	}
 	else {
@@ -1302,12 +1337,15 @@ void Player::FeverJump()
 		}
 	}
 	if (JumpFlag == true) {
-		airCnt++;
-		if (airCnt >= 120) {
-			_pos.y = _pos.y + 10;
-			JumpFlag = false;
-			_state = ST_DEF;
-			airCnt = 0;
+		if (_rope->GetRopeState() != ST_ROPE_SELECT)
+		{
+			airCnt++;
+			if (airCnt >= 120) {
+				_pos.y = _pos.y + 10;
+				JumpFlag = false;
+				_state = ST_DEF;
+				airCnt = 0;
+			}
 		}
 
 	}
@@ -1540,7 +1578,7 @@ void Player::Draw(Position2& offset)
 
 		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
-	
+
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
@@ -1680,7 +1718,7 @@ void Player::AnimationSwitching(void)
 		break;
 		//移動状態
 	case ST_MOVE:
-		AnimationManager(ACTION_WALK, ANIMATION_SPEED_HIGH,0.0f);
+		AnimationManager(ACTION_WALK, ANIMATION_SPEED_SUPER,0.0f);
 		break;
 		//ﾛｰﾌﾟ状態
 	case ST_ROPE:
@@ -1746,8 +1784,20 @@ void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float loop
 	MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[actions], 1.0f);
 	//アニメーションをアタッチ
 	MV1SetAttachAnimTime(modelhandle, AnimIndex[actions], AnimNowTime[actions]);
+
 	//指定アニメーションのフレームを進める
-	AnimNowTime[actions] += animspeed;
+	//アクションクライムに関しては別の場所でカウントを進める
+	if (actions != ACTION_CLIMB)
+	{
+		AnimNowTime[actions] += animspeed;
+	}
+	else 
+	{
+		if(WallAnimationFlag) 
+			AnimNowTime[actions] += animspeed;
+		else {
+		}
+	}
 	//現在のアニメーションが最大フレームまでいったらループする
 	if (AnimNowTime[actions] >= AnimTotalTime[actions])
 	{

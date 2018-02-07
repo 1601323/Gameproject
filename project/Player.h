@@ -14,6 +14,7 @@
 #define ANIMATION_SPEED_SLOW (0.3f)     //アニメーションの速さ(超低速)
 #define ANIMATION_SPEED_DEF (0.5f)      //アニメーションの速さ(低速)
 #define ANIMATION_SPEED_HIGH (0.8f)     //アニメーションの速さ(普通)
+#define ANIMATION_SPEED_SUPER (1.2f)    //アニメーションの速さ(高速)
 #define INVINCIBLETIMER (2)             //無敵時間
 
 
@@ -75,6 +76,7 @@ private:
 	bool vanFlag;						//ステルス状態かどうかのフラグ
 	bool tmpFlag;						//補正用フラグ
 	int airCnt;							//ジャンプ状態の時間をカウント
+	bool WallAnimationFlag;             //壁のぼりのアニメーションを再生するかどうかを決めるflag
 	char keyData[256];
 	char oldkeyData[256];
 
