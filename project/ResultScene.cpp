@@ -301,7 +301,7 @@ void ResultScene::Draw()
 	{
 		//セレクト画像と矢印をnowNumの値に応じて描画
 		DrawGraph(390 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), dirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_TITLE), true);
-		DrawGraph(500, 510, im.ImageIdReturn("image/Bar_Menu/Select.png", SCENE_TITLE), true);
+		//DrawGraph(500, 510, im.ImageIdReturn("image/Bar_Menu/Select.png", SCENE_TITLE), true);
 		DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
 		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
 	}

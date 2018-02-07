@@ -59,7 +59,8 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
-	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 1);//タイヤ用のテクスチャindexを取得
+	textureIndexEye = MV1GetMaterialDifMapTexture(modelhandle,1);   //目用のテクスチャindexを取得
+	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 2);//タイヤ用のテクスチャindexを取得
 	//初期角度(とりあえず)
 	modelDirAngle = AngleRad(-90.0f);
 
