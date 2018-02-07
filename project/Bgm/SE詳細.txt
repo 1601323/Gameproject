@@ -1,0 +1,27 @@
+Amazing		:プレイヤー見つけたとき
+
+buzzer		:警戒度上がった時
+
+cancel		:いいえボタン
+
+door_open	:自動ドア開く
+
+doorOpen	:金庫あく
+
+EnemyHit	:敵プレイヤーの攻撃受ける
+	
+enemykeikai	:プレイヤーを追いかけてくるとき
+
+game		:ゲーム中BGM
+
+key-in1		:鍵開ける
+
+ok		:決定ボタン
+
+PlHit		:プレイヤー何かにぶつかる
+
+question	:？
+
+title		:タイトルBGM
+
+wire		:ロープ出すとき
