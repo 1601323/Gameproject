@@ -18,6 +18,7 @@
 #include "Rope.h"
 
 #include "ResultScene.h"
+#include "SoundMgr.h"
 #include "SelectScene.h"
 
 #include "GimmickFactory.h"
@@ -154,6 +155,7 @@ void GameScene::GameInit()
 }
 void GameScene::FadeInUpdata(Input* input) 
 {
+	SoundMgr& so = SoundMgr::Instance();
 	GameMain& gm = GameMain::Instance();
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
@@ -172,6 +174,9 @@ void GameScene::FadeInUpdata(Input* input)
 		_updater = &GameScene::NormalUpdata;
 		count = 0;
 	}
+	so.BgmStop("Bgm/title.mp3", SCENE_SELECT);
+
+	so.BgmStart("Bgm/game.mp3", SCENE_GAME);
 }
 void GameScene::NormalUpdata(Input* input)
 {
