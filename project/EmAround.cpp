@@ -171,7 +171,7 @@ void EmAround::BasicMove()
 //ﾌﾟﾚｲﾔｰが当たってきたとき
 void EmAround::TurnPlayer()
 {
-	if (_hit.IsHit(GetRect(), _pl.GetRect())) {
+	if (_hit.IsHit(GetRect(), _pl.GetRect()) && _pl.GetStateVanish() == false && _pl.GetcharState() != ST_FEVER) {
 		if (_pl.GetPos().x < _pos.x) {
 			modelDirAngle = AngleRad(90.0f);
 			_dir = DIR_LEFT;

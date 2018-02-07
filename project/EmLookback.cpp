@@ -315,7 +315,7 @@ void EmLookback::setDir(void)
 }
 void EmLookback::TurnPlayer()
 {
-	if (_hit.IsHit(GetRect(), _player.GetRect()) == true) {
+	if (_hit.IsHit(GetRect(), _player.GetRect()) == true && (_player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 		if (_player.GetPos().x < _pos.x) {
 			_dir = DIR_LEFT;	
 			modelDirAngle = AngleRad(90.0f);

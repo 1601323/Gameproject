@@ -108,22 +108,22 @@ void SoundMgr::BgmStart(const std::string file, const SCENE_TYPE delScene)
 	PlaySoundMem(bgm, DX_PLAYTYPE_LOOP, true);
 
 	//音量の調節
-	//ChangeVolumeSoundMem(180, bgm);
+	ChangeVolumeSoundMem(120, bgm);
 	fadeCnt = 0;
 }
 //BGMをフェードアウトさせます
 void SoundMgr::BgmFadeOut(const std::string file, const SCENE_TYPE delScene)
 {
 	int bgm = SoundIdReturn(file,delScene);
-	if (fadeCnt >= 180) {
-		fadeCnt = 180;
+	if (fadeCnt >= 120) {
+		fadeCnt = 120;
 	}
 	if (CheckSoundMem(bgm) == 1) {
 		fadeCnt += 1;
-		if (150 - fadeCnt <= 0) {
+		if (120 - fadeCnt <= 0) {
 			StopSoundMem(bgm);
 		}
-		ChangeVolumeSoundMem(180-fadeCnt,bgm);
+		ChangeVolumeSoundMem(120-fadeCnt,bgm);
 	}
 }
 //BGMを止めます
