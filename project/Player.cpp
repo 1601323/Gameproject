@@ -373,7 +373,7 @@ bool Player::moveWall(void)
 	//downPos2.y = _wallRect.Bottom() + (MAP_CHIP_SIZE_Y / 2);
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
-		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
+		if ((_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT)&&  crouchFlag ==false) {
 			count = 0;
 			//壁が近くにあったとき、ボタンを押すと壁に張り付く
 			if (_inpInfo.num >= 1)
@@ -673,7 +673,7 @@ void Player::FeverWall()
 
 	//壁登り状態にする条件
 	for (int j = 0; j < 6; j++) {
-		if (_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) {
+		if ((_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) && crouchFlag == false) {
 			count = 0;
 			if (_inpInfo.num >= 1)
 			{
@@ -682,7 +682,7 @@ void Player::FeverWall()
 						WallFlag = true;
 						break;
 					}
-				}
+				} 
 				else {
 					if (_key.keybit.B_BUTTON && !_lastKey.keybit.B_BUTTON) {
 						WallFlag = false;
