@@ -17,6 +17,7 @@ SelectScene::SelectScene()
 	_modelmgr = ModelMgr::Instance();
 	SelectMap = mapNumber[0];
 	nowNum = 0;
+	dirMoveCnt = 0;
 	_minSensingValueL = SV_HIGH;
 	selectFlag = false;
 	w = 90;
@@ -47,6 +48,7 @@ void SelectScene::NormalUpdata(Input* input)
 	Draw();
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+		colorNum = 0;
 		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
@@ -113,7 +115,9 @@ void SelectScene::Select(Input* input)
 void SelectScene::Draw()
 {
 	ImageMgr& im = ImageMgr::Instance();
-
+	++colorNum;
+	colorNum %= COLOR_NUM;
+	dirMoveCnt++;
 	int redu = 40;
 	//”wŒi
 	DrawGraph(0, 0, im.ImageIdReturn("image/select.png",SCENE_GAME),true);
@@ -124,12 +128,23 @@ void SelectScene::Draw()
 	//}
 	for (int f = 0; f < STAGE_MAX; f++) {
 		if (f == nowNum) {	//‘I‚Î‚ê‚Ä‚¢‚½‚çŠg‘å•\Ž¦
-			DrawExtendGraph(25 + 260 * f, 80, 250 + 260 * f, 40 + 260, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
+			DrawExtendGraph(28 + 260 * f, 82, 245 + 260 * f, 40 + 255, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
+
+			SetDrawBright(243, 152, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255 * (static_cast<float>(abs(20 - colorNum)) / static_cast<float>((COLOR_NUM / 1.5f))));
 			DrawExtendGraph(10 + 260 * f, 60 , 10 + 260 + 260 * f, 60 + 260 , im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+			SetDrawBright(255,255,255);
+
+			//–îˆó
+			DrawGraph(200 + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59) + 260 * f,160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME),true);
+			DrawTurnGraph(10 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59) + 260 * f, 160, im.ImageIdReturn("image/yazirushi2.png", SCENE_GAME), true);
+
 		}
 		else
 		{
 			DrawExtendGraph(23 + 260 * f + redu, 72 + redu, 255 + 260 * f - redu, 45 + 260 - redu, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);
+
 			DrawExtendGraph(10+ 260*f+redu, 60+redu ,10+260+ 260*f-redu,60+260 -redu,im.ImageIdReturn("image/stage.png", SCENE_GAME), true);
 		}
 	}

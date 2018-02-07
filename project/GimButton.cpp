@@ -9,6 +9,7 @@ GimButton::GimButton(Position2 pos, Player& p) :_pl(p)
 {
 	_hit = new HitClass();
 	_state = GM_NONE;
+	sensordoorMotionFlag = false;
 	//‚ ‚½‚è”»’è‚Ì‘å‚«‚³
 	_gmRect.w = 20;
 	_gmRect.h = 10;

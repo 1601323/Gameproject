@@ -44,7 +44,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	dis = 0;
 	interCnt = 0;
 	fearCnt = 180;
-	loseSightCnt = 180;
+	loseSightCnt = 150;
 	//個体データ初期化
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
@@ -253,10 +253,10 @@ void EmAround::CheckMove()
 	RightViewPos.y = _pos.y + (_emRect.h/2);
 	//左右地面の判定を行う
 	Position2 nextLeftDown;
-	nextLeftDown.x = _pos.x - speed;
+	nextLeftDown.x = _pos.x - speed -5;
 	nextLeftDown.y = _pos.y + (_emRect.h);
 	Position2 nextRightDown;
-	nextRightDown.x = _pos.x + (_emRect.w) + speed;
+	nextRightDown.x = _pos.x + (_emRect.w) + speed+5;
 	nextRightDown.y = _pos.y + (_emRect.h);
 
 	if (_state == EM_ST_MOVE || _state == EM_ST_RETURN){	//未発見状態であれば
@@ -356,6 +356,18 @@ void EmAround::LoseSight()
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		loseSightCnt--;
 		moveFlag = true;
+		if (loseSightCnt <= 90) {
+			if (loseSightCnt % 30 == 0) {
+				if (_dir == DIR_LEFT) {
+					_dir = DIR_RIGHT;
+					modelDirAngle = AngleRad(-90.0f);
+				}
+				else if (_dir == DIR_RIGHT) {
+					_dir = DIR_LEFT;
+					modelDirAngle = AngleRad(90.0f);
+				}
+			}
+		}
 		if (loseSightCnt < 0) {
 			_state = EM_ST_MOVE;
 			loseSightCnt = 180;
@@ -463,7 +475,7 @@ void EmAround::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
-			SetDrawBright(255, 255, 0);
+			SetDrawBright(_server.ReturnColor().red, _server.ReturnColor().green, _server.ReturnColor().blue);
 			if (_dir == DIR_LEFT) {
 				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
@@ -510,7 +522,7 @@ void EmAround::Draw(Position2 offset)
 
 	tmpPos = offset;
 #ifdef _DEBUG
-	//_emRect.Draw(offset);
+	_emRect.Draw(offset);
 	//_emEye.Draw(offset);
 #endif
 

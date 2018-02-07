@@ -37,7 +37,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	emSpeed = 2;
 	LookCount = 0;
 	FearCount = 180;
-	loseSightCnt = 180;
+	loseSightCnt = 150;
 	midFlag = false;
 	ModelDirChangeFlag = false;
 
@@ -156,7 +156,7 @@ void EmLookback::Draw(Position2 offset)
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
 		{
-			SetDrawBright(255,255,0);
+			SetDrawBright(_server.ReturnColor().red,_server.ReturnColor().green,_server.ReturnColor().blue);
 			if (_dir == DIR_RIGHT) {
 				modelDirAngle = AngleRad(-90.0f);
 				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
@@ -426,6 +426,19 @@ void EmLookback::LoseSight()
 {
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS) {
 		loseSightCnt--;
+		if (loseSightCnt <= 90) {
+			if (loseSightCnt % 30 == 0) {
+				if (_dir == DIR_LEFT) {
+					_dir = DIR_RIGHT;
+					modelDirAngle = AngleRad(-90.0f);
+				}
+				else if (_dir == DIR_RIGHT) {
+					_dir = DIR_LEFT;
+					modelDirAngle = AngleRad(90.0f);
+				}
+			}
+		}
+
 		if (loseSightCnt < 0) {
 			_state = EM_ST_MOVE;
 			loseSightCnt = 180;

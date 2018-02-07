@@ -1,15 +1,14 @@
 #pragma once
 
 #include <memory>
-#include "Object.h"
 #include "Player.h"
 
 
 class Player;
 class MapCtl;
 
-class Camera :
-	public Object
+class Camera// :
+	//public Object
 {
 public:
 	Position2 tmpPos;
@@ -23,9 +22,10 @@ public:
 	Camera(const Camera&);						// シングルトン
 	const Camera& operator=(const Camera&);
 	//Camera(Player* player);
-	virtual~Camera();
+	~Camera();
 	//bool AddObject(Object* obj);				// カメラに移したいやつ追加用
 	static Camera* GetInstance(void);
+	static Camera* cam_ptr;		// カメラのポインタ
 
 	Position2& ReturnOffset();					//offsetの値を返します
 private:
@@ -35,6 +35,6 @@ private:
 	Rope* _rope;
 	Position2 CamOffset;
 	Position2 GameScrSize;
-	static Camera* cam_ptr;		// カメラのポインタ
+	Position2 pPos;
 };
 

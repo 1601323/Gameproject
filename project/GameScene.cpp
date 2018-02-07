@@ -13,7 +13,6 @@
 #include "Input.h"
 #include "Gimmick.h"
 #include "MapCtl.h"
-#include "Camera.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Rope.h"
@@ -31,6 +30,7 @@
 #include "ImageMgr.h"
 
 #include "TimeManager.h"
+#include "Camera.h"
 
 #include "GameScene.h"
 
@@ -44,7 +44,6 @@ GameScene::GameScene()
 	_server = new EnemyServer();
 	_mid = new Midpoint();
 	_timer = new TimeManager();
-	_cam = Camera::GetInstance();
 	// ﾏｯﾌﾟｲﾝｽﾀﾝｽ
 	_map = MapCtl::GetInstance();
 	// ﾏｯﾌﾟﾃﾞｰﾀの読み込み
@@ -103,7 +102,9 @@ GameScene::GameScene()
 	_player->Getclass(_hit, _rope);
 	_mid->GetClass(_player);
 	_timer->StartTimer();
-	//GameInit();
+	//GameInit();	
+	_cam = Camera::GetInstance();
+
 	_cam->SetTarget(_player);	// player基準
 	_cam->SetMapCtl(_map);		//Obj継承するならAddで
 
@@ -176,11 +177,13 @@ void GameScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
 	UpdateManager();
-	_cam->Update();
+ 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	DrawBack(offset);
 
 	_map->Draw(offset);
+
+
 	//ﾛｰﾌﾟ使用中は敵などが止まる
 	if (_player->GetStateRope() == true) {
 		UsingRopeUpdata(input, offset);
@@ -432,7 +435,14 @@ void GameScene::Draw(Position2& offset)
 	//_map->Draw();
 	_fac->Draw(offset);
 	_emFac->Draw(offset);
-	_player->Draw(offset);
+	for (auto& gim : _fac->GimmickList())
+	{
+		if (gim->sensordoorMotionFlag)
+		{
+			_player->Draw(offset);
+		}
+	}
+	//_player->Draw(offset);
 	_server->Draw(offset);
 	_mid->Draw(offset);
 }
@@ -473,7 +483,7 @@ void GameScene::DrawPauseUi(void)
 	DrawGraph(340, 230, im.ImageIdReturn("image/Pause/Retry.png", SCENE_RESULT), true);
 	DrawGraph(340, 280, im.ImageIdReturn("image/Pause/Select.png", SCENE_RESULT), true);
 
-	DrawGraph(260 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), PauseDirNumY, im.ImageIdReturn("image/yazirushi.png", SCENE_RESULT), true);
+	DrawGraph(260 - abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 59), PauseDirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_RESULT), true);
 
 	switch (pauseNowNum) {
 	case 0:
@@ -507,13 +517,13 @@ void GameScene::DrawBack(Position2 offset)
 
 }
 
-void GameScene::GameScene::RetryPauseProcess()
+void GameScene::RetryPauseProcess()
 {
 	GameMain& gm = GameMain::Instance();
 	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
-
+	gm.SetFeverData(_feverData);
 	_player->SetInitPausePos();
 
 	_mid->Updata();

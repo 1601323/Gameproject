@@ -1,5 +1,8 @@
 #pragma once
 #include "Scene.h"
+
+#define COLOR_NUM (40)
+
 class Input;
 class ModelMgr;
 
@@ -23,6 +26,8 @@ private:
 	int mapNumber[STAGE_MAX];
 	int SelectMap;
 	int modelhandle;        //プレイヤーモデルハンドル
+	int colorNum;           //カラー変更タイマー
+	int dirMoveCnt;
 	int  AnimIndex;         //アニメーション数
 	float AnimTotalTime;    //各アニメーションのトータルタイム
 	float AnimNowTime;      //各アニメーションの現在タイム

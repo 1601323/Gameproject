@@ -170,7 +170,7 @@ void Input::InputSet()
 	//Ú‘±‚³‚ê‚Ä‚¢‚È‚¢
 	else {
 		//‚Ç‚ÌƒL[‚ğ‚Ç‚±‚Éİ’è‚·‚é‚©‚Í‚Ü‚¾–¢’è
-		inpInfo[0].key.keybit.A_BUTTON = KeyData[KEY_INPUT_RETURN];
+		inpInfo[0].key.keybit.A_BUTTON = KeyData[KEY_INPUT_SPACE];
 		inpInfo[0].key.keybit.B_BUTTON = KeyData[KEY_INPUT_BACK];
 
 		inpInfo[0].key.keybit.Y_BUTTON = KeyData[KEY_INPUT_ADD];

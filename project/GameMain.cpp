@@ -12,6 +12,7 @@
 #include "MapCtl.h"
 #include "Input.h"
 #include "Math.h"
+#include "Camera.h"
 #include "ImageMgr.h"
 #include "ModelMgr.h"
 
@@ -162,6 +163,7 @@ void GameMain::TransTitle()
 void GameMain::Run()
 {
 	DxLib::SetGraphMode(SCREEN_SIZE_X,SCREEN_SIZE_Y,32);
+	SetMainWindowText("ƒ”ƒBƒWƒŒƒIƒ“");
 	ChangeWindowMode(true);
 	//KeyState key;
 

@@ -1,11 +1,13 @@
-#include "DxLib.h"
 #include <stdio.h>
+#include <iostream>
+#include <memory>
+#include "DxLib.h"
 #include "Object.h"
 #include "Player.h"
 #include "Geometry.h"
-#include "Camera.h"
 #include "Rope.h"
 #include "MapCtl.h"
+#include "Camera.h"
 
 using namespace std;
 #define CAMERA_LEFT_POS (0)
@@ -39,7 +41,7 @@ Camera::~Camera()
 //	return true;
 //}
 
-Camera * Camera::GetInstance(void)
+Camera* Camera::GetInstance(void)
 {
 	// nullÇÃèÍçánewÇ∑ÇÈ
 	if (cam_ptr == nullptr)
@@ -66,7 +68,7 @@ bool Camera::SetMapCtl(MapCtl* mapCtl) {
 void Camera::Update()
 {
 	//Ãﬂ⁄≤‘∞ÇÃç¿ïWéÊìæ
-	auto pPos = _player->GetPos();
+	 pPos = _player->GetPos();
 
 	// ç∂ë§ÇÃÇ∏ÇÁÇ≥Ç»Ç¢Ç∆Ç´
 	if (pPos.x < CAMERA_MOVE_POS_X) {

@@ -43,6 +43,7 @@ public:
 	void Updata();
 	void GetClass(Player* p);
 	void Draw(Position2 offset);
+	void RetryInit();			//ポーズからのリトライ
 	bool ReturnGetFlag();		//中間地点にたどり着いているかいないかを返す
 	bool ReturnCheckFlag();		//鍵を取得しているかどうかを返す
 	Rect& GetRect();

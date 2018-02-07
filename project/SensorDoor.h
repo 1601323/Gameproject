@@ -23,11 +23,16 @@ private:
 	bool openFlag;
 
 	int count;			//ドア開閉のためのカウント
-	int doorCount;		//ドア開閉の調整カウント
+	float doorCountOpen;		//ドア開の調整カウント
+	float doorCountClose;		//ドア開の調整カウント
+
 
 	int modelhandle;
 	int AttachIndex;
-	int totalTime;
+	float totalTime;
+
+	int AttachIndexClose;
+	float totalTimeClose;
 
 	void CheckDoMove();	//動作条件判定
 	void CheckHit();	//あたり判定をプレイヤーの場所によって変えるので書いておく
