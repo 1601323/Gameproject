@@ -25,3 +25,7 @@ question	:？
 title		:タイトルBGM
 
 wire		:ロープ出すとき
+
+extend　　　　　:舌のイメージ
+
+emChase		:敵が追いかけてくるまで

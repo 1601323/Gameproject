@@ -53,4 +53,6 @@ public:
 	~TitleScene();
 	SCENE_TYPE GetScene();
 	void Updata(Input* input);
+
+
 };

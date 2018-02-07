@@ -39,6 +39,8 @@ SelectScene::~SelectScene()
 void SelectScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
+
 	key = input->GetInput(1).key;
 	lastKey = input->GetLastKey();
 	_inpInfo = input->GetInput(1);
@@ -50,6 +52,7 @@ void SelectScene::NormalUpdata(Input* input)
 
 	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
 		colorNum = 0;
+		so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 	}
@@ -92,7 +95,6 @@ void SelectScene::Select(Input* input)
 		}
 		else {
 			nowNum = nowNum;
-			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 	else {
@@ -114,7 +116,6 @@ void SelectScene::Select(Input* input)
 		}
 		else {
 			nowNum = nowNum;
-			so.SeStart("Bgm/ok.mp3", SCENE_GAME);
 		}
 	}
 }

@@ -39,6 +39,7 @@ GameScene::GameScene()
 {
 	ImageMgr& im = ImageMgr::Instance();
 	_updater = &GameScene::FadeInUpdata;
+	bgmFlag = false;
 	GameInit();
 	_player = new Player();
 	_rope = new Rope(_player);
@@ -139,11 +140,15 @@ GameScene::~GameScene()
 void GameScene::GameInit()
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
+
 	//初期状態のデータを入れる
 	_rtData = RESULT_DATA();
 	gm.SetResultData(_rtData);
 	_feverData = FEVER_DATA();
 	gm.SetFeverData(_feverData);
+	so.BgmStart("Bgm/game4.mp3", SCENE_GAME);
+	bgmFlag = true;
 	switch (gm.GetNowStage()) {
 	case 0:
 		mapName = "map/easy.map";
@@ -162,7 +167,12 @@ void GameScene::GameInit()
 void GameScene::FadeInUpdata(Input* input) 
 {
 	SoundMgr& so = SoundMgr::Instance();
-	GameMain& gm = GameMain::Instance();
+	GameMain& gm = GameMain::Instance();	
+	if (bgmFlag == false) {
+		so.BgmStart("Bgm/game.mp3", SCENE_GAME);
+		bgmFlag = true;
+	}
+
 	KEY key = input->GetInput(1).key;
 	KEY lastKey = input->GetLastKey();
 	INPUT_INFO inpInfo = input->GetInput(1);
@@ -180,13 +190,11 @@ void GameScene::FadeInUpdata(Input* input)
 		_updater = &GameScene::NormalUpdata;
 		count = 0;
 	}
-	so.BgmStop("Bgm/title.mp3", SCENE_SELECT);
-
-	so.BgmStart("Bgm/game.mp3", SCENE_GAME);
 }
 void GameScene::NormalUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
 	UpdateManager();
  	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
@@ -222,6 +230,7 @@ void GameScene::NormalUpdata(Input* input)
 
 	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON) {
 		_updater = &GameScene::PauseUpdata;
+		so.ChangeSound(100);
 	}
 	JudgeTransition();
 }
@@ -278,6 +287,7 @@ void GameScene::UsingRopeUpdata(Input* input, Position2& offset)
 void GameScene::TransitionUpdata(Input* input)
 {
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
 	//_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	DrawBack(offset);
@@ -303,6 +313,8 @@ void GameScene::TransitionUpdata(Input* input)
 		}
 		count = 0;
 	}
+	so.BgmFadeOut("Bgm/game.mp3", SCENE_GAME);
+	bgmFlag = false;
 }
 //ポーズ用updata
 void GameScene::PauseUpdata(Input* input) 
@@ -310,6 +322,7 @@ void GameScene::PauseUpdata(Input* input)
 	dirMoveCnt++;
 
 	GameMain& gm = GameMain::Instance();
+	SoundMgr& so = SoundMgr::Instance();
 	_cam->Update();
 	Position2& offset = _cam->ReturnOffset();
 	DrawBack(offset);
@@ -332,6 +345,7 @@ void GameScene::PauseUpdata(Input* input)
 		dirMoveCnt = 0;
 		ChackDrawFlag = false;
 		ChackFlag = false;
+		so.ChangeSound();
 		_updater = &GameScene::NormalUpdata;
 	}
 
@@ -348,10 +362,6 @@ void GameScene::PauseUpdata(Input* input)
 		case MODE_SELECT:
 			RetryOrRetireFlag = false;
 			ChackDrawFlag = true;
-			//dirMoveCnt = 0;
-			gm.Instance().ChangeScene(new SelectScene());
-
-			//retireChackDrawFlag = true;
 		default:
 			break;
 		}
@@ -359,8 +369,8 @@ void GameScene::PauseUpdata(Input* input)
 	}
 	if (ChackDrawFlag)
 	{
-		DrawCheckUi();
-		CheckReTireSelect(input);
+		DrawCheckUi();//ui表示
+		CheckReTireSelect(input);//入力関連
 
 		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
 		{
@@ -371,7 +381,14 @@ void GameScene::PauseUpdata(Input* input)
 				ChackDrawFlag = false;
 				ChackFlag = false;
 				RetryPauseProcess();
-				_updater = &GameScene::FadeInUpdata;
+				//flagをみてリトライ、リタイアに分ける
+				if (RetryOrRetireFlag)
+				{
+					_updater = &GameScene::FadeInUpdata;
+				}
+				else {
+					gm.Instance().ChangeScene(new SelectScene());
+				}
 				break;
 			case 1:
 				dirMoveCnt = 0;
@@ -617,7 +634,7 @@ void GameScene::DrawCheckUi()
 	}
 	else {
 		//リタイアするか?
-		DrawGraph(150, 130, im.ImageIdReturn("image/Restart/RestartQuestion.png", SCENE_RESULT), true);
+		DrawGraph(150, 130, im.ImageIdReturn("image/Pause/RetireQuestion.png", SCENE_RESULT), true);
 	}
 	//はいいいえ
 	DrawGraph(220, 350, im.ImageIdReturn("image/Restart/Yes.png", SCENE_RESULT), true);

@@ -15,6 +15,7 @@
 
 SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 {
+	SoundMgr& so = SoundMgr::Instance();
 	//_hit = new HitClass();
 	_modelmgr = ModelMgr::Instance();
 	openFlag = false;
@@ -36,6 +37,7 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	AttachIndexClose = MV1AttachAnim(modelhandle,1,-1,false);
 	totalTime = MV1GetAttachAnimTotalTime(modelhandle, AttachIndex);
 	totalTimeClose = MV1GetAttachAnimTotalTime(modelhandle,AttachIndexClose);
+	so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
 }
 
 SensorDoor::~SensorDoor()
@@ -138,7 +140,7 @@ void SensorDoor::Draw(Position2 offset)
 		{
 			doorCountOpen = totalTime;
 			sensordoorMotionFlag = true;
-			so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
+			//so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
 		}
 	}
 	else if (sensordoorMotionFlag == true)

@@ -25,7 +25,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	_dir = DIR_RIGHT;
 
 	_emEye.pos.x = _pos.x;
-	_emEye.pos.y = _pos.y + (_emRect.h / 4);
+	_emEye.pos.y = _pos.y + (_emRect.h / 4)-3;
 	_emEye.r = 40;
 	_emType = ENEMY_TURN;
 	_state = EM_ST_MOVE;
@@ -152,7 +152,7 @@ void EmLookback::Draw(Position2 offset)
 		break;
 	}
 	_tmpOffset = offset;
-	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+	_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 
 	if (_state != EM_ST_FEAR) {
 		if (!ModelDirChangeFlag)
@@ -160,7 +160,7 @@ void EmLookback::Draw(Position2 offset)
 			SetDrawBright(_server.ReturnColor().red,_server.ReturnColor().green,_server.ReturnColor().blue);
 			if (_dir == DIR_RIGHT) {
 				modelDirAngle = AngleRad(-90.0f);
-				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 33.3, vigiImage[_rangeLevel], 16.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -168,7 +168,7 @@ void EmLookback::Draw(Position2 offset)
 			}
 			else if (_dir == DIR_LEFT) {
 				modelDirAngle = AngleRad(90.0f);
-				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 				DrawCircleGauge(_emEye.Center().x - offset.x, _emEye.Center().y - offset.y, 83.3, vigiImage[_rangeLevel], 66.6);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -305,11 +305,11 @@ void EmLookback::setDir(void)
 	else {
 		if (_dir == DIR_RIGHT) {
 			modelDirAngle = AngleRad(-90.0f);
-			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+			_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 		}
 		else if (_dir == DIR_LEFT) {
 			modelDirAngle = AngleRad(90.0f);
-			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+			_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 		}
 		LookCount = 0;
 	}
@@ -338,6 +338,7 @@ void EmLookback::Visibility()
 
 		if (_hit.EnemyViewing(_emData, _player.GetRect()) &&( _player.GetcharState() != ST_VANISH && _player.GetcharState() != ST_FEVER)) {
 			_state = EM_ST_DIS;
+			so.SeStart("Bgm/emChase1.mp3", SCENE_GAME); 
 			_individualData.plFoundFlag = true;
 		}
 		else {
@@ -366,7 +367,7 @@ void EmLookback::Visibility()
 			_individualData.plFoundFlag = false;
 			_individualData.dataSendFlag = true;
 		}
-		so.SeStart("Bgm/buzzer.mp3", SCENE_GAME); //警告音開始遅い長い
+	//	so.SeStart("Bgm/emChase.mp3", SCENE_GAME); //警告音開始遅い長い
 	}
 }
 void EmLookback::LookPl(void)
@@ -647,21 +648,21 @@ void EmLookback::returnDir(Position2 offset)
 
 			if (LookCount < 0) {
 				_dir = DIR_RIGHT;
-				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x + _emRect.w, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 			}
 			else {
 				_dir = DIR_LEFT;
-				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 			}
 		}
 	}
 	else {
 		if (_state != EM_ST_FEAR) {
 			if (_dir == DIR_RIGHT) {
-				_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x  + _emRect.w, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 			}
 			else if (_dir == DIR_LEFT) {
-				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4), _emEye.r);
+				_emEye.SetCenter(_pos.x, _pos.y + (_emRect.h / 4) - 3, _emEye.r);
 			}
 		}
 	}

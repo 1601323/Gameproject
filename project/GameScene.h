@@ -54,9 +54,13 @@ private:
 	int pauseDirNumY;
 	int dirMoveCnt;
 	bool selectPauseFlag;
+
 	bool ChackFlag;                                             //ポーズの確認用
 	bool ChackDrawFlag;                                         //ポーズの確認描画用
 	bool RetryOrRetireFlag;                                     //描画をリタイアかリトライどちらかを決めるflag true:リトライ false:リザルト
+
+	bool bgmFlag;												//BGMがなっているかどうかのフラグ
+
 
 	RESULT_DATA _rtData;
 	FEVER_DATA _feverData;

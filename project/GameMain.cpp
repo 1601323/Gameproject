@@ -14,6 +14,7 @@
 #include "Math.h"
 #include "Camera.h"
 #include "ImageMgr.h"
+#include "SoundMgr.h"
 #include "ModelMgr.h"
 
 using namespace std;
@@ -157,6 +158,7 @@ void GameMain::TransTitle()
 {
 	if (CheckHitKey(KEY_INPUT_T) && CheckHitKey(KEY_INPUT_LCONTROL)) {
 		ChangeScene(new TitleScene());
+		SoundMgr::Instance().BgmStop();
 	}
 }
 //ƒQ[ƒ€‚ÌŽÀs‚ÌƒƒCƒ“•”•ª
@@ -179,6 +181,7 @@ void GameMain::Run()
 	ChangeScene(new TitleScene());
 	if (_scene != nullptr) {
 		ImageMgr::Instance().ImageManager(_scene->GetScene());
+		SoundMgr::Instance().SoundManager(_scene->GetScene());
 	}
 	else
 	{
@@ -202,6 +205,7 @@ void GameMain::Run()
 	}
 	ClearDataSave();
 	ImageMgr::Instance().ImageIdAllDelete();
+	SoundMgr::Instance().SoundIdAllDelete();
 	DxLib_End();
 }
 GameMain::~GameMain()
