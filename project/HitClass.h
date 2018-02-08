@@ -3,6 +3,7 @@
 
 class GimmickFactory;
 class EnemyFactory;
+class Tutorial;
 class Object;
 
 class HitClass
@@ -10,13 +11,15 @@ class HitClass
 private:
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
+	Tutorial* _tuto;
 public:
-	HitClass(GimmickFactory* f,EnemyFactory* ef);
+	HitClass(GimmickFactory* f,EnemyFactory* ef, Tutorial* tuto);
 	HitClass();
 	~HitClass();
 
 	void GetClass(GimmickFactory* f);
 	void GetClass(EnemyFactory* ef);
+	void GetClass(Tutorial* tuto);
 
 	static bool IsHit(Rect& rcA, Rect& rcB);		//Rect“¯Žm‚Ì‚ ‚½‚è”»’è
 	static bool IsHit(Rect& rc,Position2& pos);		//Rect‚Æ“_‚Ì‚ ‚½‚è”»’è
@@ -29,6 +32,8 @@ public:
 	bool EnemyHit(Object& act);						//Enemy‚ÆRect‚Ì‚ ‚½‚è”»’è
 	bool EnemyHit(Circle& cir);						//Enemy‚ÆCircle‚Æ‚Ì‚ ‚½‚è”»’è
 	bool EnemyHit(Position2& pos);					//Enemy‚Æpos‚Æ‚Ì‚ ‚½‚è”»’è
+
+	bool TutorialHit(Object& act);                  //tutorial‚ÆRect‚Ì‚ ‚½‚è”»’è
 
 	bool GimmickEnter(Object& act);
 

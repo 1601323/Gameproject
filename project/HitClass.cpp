@@ -13,10 +13,13 @@
 #include "HitClass.h"
 #include "SensorDoor.h"
 #include "Math.h"
-HitClass::HitClass(GimmickFactory* f,EnemyFactory* ef)
+#include "Tutorial.h"
+
+HitClass::HitClass(GimmickFactory* f,EnemyFactory* ef, Tutorial* tuto)
 {
 	_fac = f;
 	_emFac = ef;
+	_tuto = tuto;
 }
 
 HitClass::HitClass() 
@@ -34,6 +37,11 @@ void HitClass::GetClass(EnemyFactory* ef)
 {
 	_emFac = ef;
 }
+void HitClass::GetClass(Tutorial* tuto)
+{
+	_tuto = tuto;
+}
+
 //あたり判定です。GetRectを持っている奴らなら呼び出して使えるはず
 //例
 //　HitClass* _hit = new HitClass();
@@ -194,6 +202,18 @@ bool HitClass::EnemyHit(Position2& pos)
 	}
 	return false;
 }
+//チュートリアル用
+bool HitClass::TutorialHit(Object& act)
+{
+	//通常のあたり判定
+	for (auto& tuto : _tuto->TutorialList()) {
+		if (IsHit(tuto->GetRect(), act.GetRect())) {
+			return true;
+		}
+	}
+	return false;
+}
+
 //敵の視界について
 //ENEMY_DATAで必要な引数を入れてください
 //　lookAngle	視野角を指定。

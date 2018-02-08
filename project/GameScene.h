@@ -18,6 +18,7 @@ class EnemyServer;
 class Midpoint;
 class TimeManager;
 class Input;
+class Tutorial;
 
 class ModelManager;
 
@@ -38,6 +39,7 @@ private:
 	EnemyServer* _server;
 	Midpoint* _mid;
 	TimeManager* _timer;
+	Tutorial* _tuto;
 	//仮です
 	GimmickFactory* _fac;
 	EnemyFactory* _emFac;
@@ -74,6 +76,7 @@ private:
 	void UsingRopeUpdata(Input* input,Position2& offset);		//ﾛｰﾌﾟを使用しているときのUpdataを呼び出す
 	void FadeInUpdata(Input* intput);							//フェードインを行います
 	void TransitionUpdata(Input* input);						//仮＿ここから画面遷移を行う予定
+	void TutorialUpdata(Input* input, Position2& offset);       //チュートリアル状態のときに呼ばれる
 	void PauseUpdata(Input* input);
 	void PauseSelect(Input* input);
 	void CheckReTireSelect(Input* input);                        //リタイア用
