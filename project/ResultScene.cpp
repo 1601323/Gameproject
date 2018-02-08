@@ -65,7 +65,7 @@ void ResultScene::NormalUpdata(Input* input)
 	}
 	else {
 		GameOver();
-		clearFlag = true;
+		clearFlag = false;
 	}
 
 	//ƒƒS‚ª‚·‚×‚Ä—‚¿‚é‚Ü‚Åˆ—‚µ‚È‚¢

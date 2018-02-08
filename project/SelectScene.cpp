@@ -137,6 +137,7 @@ void SelectScene::Draw()
 	//for (int x = 0; x < 3; x++) {
 	//	DrawBox(90 + 100 * x, 90  , 90 + 100 * x + w, 90  + h, 0x223344, true);
 	//}
+
 	for (int f = 0; f < STAGE_MAX; f++) {
 		if (f == nowNum) {	//‘I‚Î‚ê‚Ä‚¢‚½‚çŠg‘å•\Ž¦
 			DrawExtendGraph(28 + 260 * f, 82, 245 + 260 * f, 40 + 255, im.ImageIdReturn(stageNum[f], SCENE_GAME), true);

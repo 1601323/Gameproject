@@ -46,6 +46,7 @@ private:
 	int modelhandle;
 	int textureIndex;
 	int textureIndexWheel;            //タイヤ用のテクスチャ
+	int textureIndexEye;              //目のテクスチャ
 	float modelDirAngle;
 	int eyeRange;
 	ENEMY_STATE _state;

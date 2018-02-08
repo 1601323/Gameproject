@@ -525,6 +525,7 @@ void EmAround::Draw(Position2 offset)
 
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS)
 	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye.png", SCENE_RESULT),FALSE);
 		if (loseSightCnt <= 90)
 		{
 			//?マーク
@@ -534,6 +535,10 @@ void EmAround::Draw(Position2 offset)
 			//!マーク
 			_modelmgr->Draw(exModelHandle, 0.0f);
 		}
+	}
+	else
+	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
 	}
 
 	tmpPos = offset;

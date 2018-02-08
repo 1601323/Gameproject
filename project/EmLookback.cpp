@@ -56,7 +56,9 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	questionHandle = _modelmgr->ModelIdReturn("UI_model/question.pmx", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndexEye = MV1GetMaterialDifMapTexture(modelhandle,1);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
+
 	modelDirAngle = 0.0f;
 	AnimNowTime = 0.0f;
 	AnimWheelTimer = 0.0f;
@@ -208,6 +210,8 @@ void EmLookback::Draw(Position2 offset)
 
 	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS)
 	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki2/eye.png", SCENE_RESULT), FALSE);
+
 		if (loseSightCnt <= 90)
 		{
 			//?マーク
@@ -217,6 +221,9 @@ void EmLookback::Draw(Position2 offset)
 			//!マーク
 			_modelmgr->Draw(exModelHandle, 0.0f);
 		}
+	}
+	else {
+		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki2/eye2.png", SCENE_RESULT), FALSE);
 	}
 
 	//_emEye.Draw(offset);
