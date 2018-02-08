@@ -32,6 +32,8 @@
 
 #include "TimeManager.h"
 #include "Camera.h"
+#include "Tutorial.h"
+
 
 #include "GameScene.h"
 
@@ -55,6 +57,9 @@ GameScene::GameScene()
 	_map->Load(mapName);
 	auto chipData = _map->getChipPosData();
 	_hit = new HitClass();
+
+	_tuto = new Tutorial(*_player,*_hit);
+	_hit->GetClass(_tuto);
 
 	//_map->Load("map/1.map");
 	//_fac = new GimmickFactory(player,rope);
@@ -104,6 +109,7 @@ GameScene::GameScene()
 	//ファクトリーのリストを利用したhitを返します
 	_rope->GetClass(_hit);
 	_player->Getclass(_hit, _rope);
+	_tuto->Getclass(*_hit,*_player);
 	_mid->GetClass(_player);
 	_timer->StartTimer();
 	//GameInit();	
@@ -199,18 +205,24 @@ void GameScene::NormalUpdata(Input* input)
 	SoundMgr& so = SoundMgr::Instance();
 	UpdateManager();
  	_cam->Update();
+	
 	Position2& offset = _cam->ReturnOffset();
 	DrawBack(offset);
 
 	_map->Draw(offset);
-
+	//チュートリアルステージならupdataを呼ぶ
+	if (gm.GetNowStage() == 0) _tuto->Updata(input);
 
 	//ﾛｰﾌﾟ使用中は敵などが止まる
 	if (_player->GetStateRope() == true) {
 		UsingRopeUpdata(input, offset);
 	}
+	//チュートリアル中はすべて止まる
+	else if (_tuto->GetMessageFlag())
+	{
+		TutorialUpdata(input,offset);
+	}
 	else {
-
 		ObjectUpdata(input, offset);
 	}
 	_server->SetMidFlag(_rtData.midFlag);
@@ -420,6 +432,17 @@ void GameScene::PauseUpdata(Input* input)
 	}
 	
 }
+void GameScene::TutorialUpdata(Input* input, Position2& offset)
+{
+	for (auto& gim : _fac->GimmickList()) {		//ropeに左右されるギミックだけUpdataを呼び出す
+		if (gim->GetType() == GIM_FALL || gim->GetType() == GIM_ATTRACT) {
+			gim->Updata(*input);
+			gim->Updata();					//全体的に完成し次第こちらに移行
+		}
+	}
+	_emFac->EnemyFalter();
+	_tuto->Draw(offset);
+}
 
 //pauseの選ばれている処理
 void GameScene::PauseSelect(Input* input)
@@ -586,6 +609,8 @@ void GameScene::Draw(Position2& offset)
 	//_player->Draw(offset);
 	_server->Draw(offset);
 	_mid->Draw(offset);
+	_tuto->Draw(offset);
+
 }
 void GameScene::DrawUI()
 {
