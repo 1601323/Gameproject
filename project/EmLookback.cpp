@@ -435,10 +435,12 @@ void EmLookback::moveFear(void)
 }
 void EmLookback::EnemyFalter()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
 			((_hit.IsHit(GetRect(), _rope.GetCircle())) || (_hit.IsHit(GetRect(), _rope.GetCircle2())))) {
 			_state = EM_ST_FEAR;
+			so.SeStart("Se/attack.mp3",SCENE_RESULT);
 		}
 		else {
 		}
