@@ -36,5 +36,6 @@ public:
 	virtual void Updata(Input& input);
 	virtual void Updata();
 	virtual void Draw(Position2 offset);
+	virtual void SetInit();
 };
 

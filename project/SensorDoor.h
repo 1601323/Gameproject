@@ -18,6 +18,7 @@ private:
 	ModelMgr* _modelmgr;
 	GimmickState  _state;
 	Position2 _pos;
+	Position2 _initPos;
 	//動作確認用
 	bool keyFlag;
 	bool openFlag;
@@ -37,6 +38,7 @@ private:
 	void CheckDoMove();	//動作条件判定
 	void CheckHit();	//あたり判定をプレイヤーの場所によって変えるので書いておく
 	void Draw(Position2 offset);		//描画
+	void SetInit();
 public:
 	SensorDoor(Position2 pos,Player& p);
 	~SensorDoor();

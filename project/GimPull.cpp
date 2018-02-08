@@ -63,10 +63,11 @@ void GimPull::CheckDoMove()
 		//}
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
 			(_hit->IsHit(GetRect(), _rope.GetCircle() )|| (_hit->IsHit(GetRect(), _rope.GetCircle2())))) {
-			if (_rope.GetCircle().pos.x < _pos.x+ (_gmRect.w /2)) {		//左側
+			//if (_rope.GetCircle().pos.x < _pos.x+ (_gmRect.w /2)) {		//左側
+			if(_player.GetTmpDir() == DIR_RIGHT){
 				_state = GM_HIT;
 			}
-			else {										//右側
+			else if(_player.GetTmpDir() == DIR_LEFT){										//右側
 				_state = GM_MOVE;
 			}
 		}
@@ -135,7 +136,6 @@ void GimPull::Move()
 			}
 		}
 		else {
-
 		}
 	}
 	else {		//設定した移動量だけ移動し終わったら状態をENDに変える
@@ -161,26 +161,9 @@ void GimPull::Draw(Position2 offset)
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
-
-	if (_state != GM_END&& _state != GM_PAUSE) {			//ENDとPAUSE以外であれば色は同じまま
-	//	DrawBox((int)(_pos.x - offset.x),(int)( _pos.y-offset.y),(int) (_pos.x -offset.x+ 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
-		//DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + (32 * 3)), (int)_pos.y - offset.y + 32, GetColor(0, 216, 140), true);
-	}
-	else if (_state == GM_PAUSE) {
-		//DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(0, 0, 255), true);
-	}
-	else if (_state == GM_END) {	//ENDになったら赤に変える
-		//DrawBox((int)(_pos.x - offset.x), (int)(_pos.y - offset.y), (int)(_pos.x - offset.x + 32 * 3), (int)_pos.y - offset.y + 32, GetColor(255, 0, 0), true);
-	}
-	else {}
 	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
 	//_gmRect.Draw();	
 	_gmRect.SetCenter(_pos.x + (_gmRect.w / 2), _pos.y + (_gmRect.h / 2));
-#ifdef _DEBUG
-	//_gmRect.Draw(offset);
-	//DrawPixel(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2), 0xffffff);
-	//DrawPixel(_pos.x - offset.x, _pos.y - offset.y, 0xff00ff);
-#endif
 }
 //あたり矩形を返す
 Rect& GimPull::GetRect() 
@@ -192,7 +175,11 @@ GIMMICK_TYPE& GimPull::GetType()
 {
 	return _gimType;
 }
-
+void GimPull::SetInit()
+{
+	_pos = _initPos;
+	_state = GM_NONE;
+}
 void GimPull::ChangeStageTexture()
 {
 	ImageMgr& im = ImageMgr::Instance();

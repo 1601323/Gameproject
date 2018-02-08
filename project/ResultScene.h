@@ -7,7 +7,6 @@ class ModelMgr;
 enum NEXT_MODE {
 	JUMP_RETRY,
 	JUMP_TITLE,
-	JUMP_SELECT,
 	JUMP_MAX
 };
 
@@ -44,6 +43,8 @@ private:
 	int medicineHandle;
 	int LogoDownCounter;            //ゲームオーバーの文字が落ちてくるようのカウンター
 	bool BgmFlag;					//BGMを鳴らすフラグ
+	std::string tmpName;
+	SCENE_TYPE tmpScene;
 
 	float AnimTotalTimeH;           //アニメーション総時間 HはhappyのH
 	float AnimNowTimeH;             //今のアニメーション時間 HはhappyのH

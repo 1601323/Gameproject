@@ -227,7 +227,7 @@ void EmLookback::Draw(Position2 offset)
 	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
-	_emRect.Draw(offset);
+	//_emRect.Draw(offset);
 	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
 #endif 
 }
@@ -433,10 +433,12 @@ void EmLookback::moveFear(void)
 }
 void EmLookback::EnemyFalter()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (_state != EM_ST_FEAR) {
 		if (_rope.GetRopeState() == ST_ROPE_SHRINKING &&
 			((_hit.IsHit(GetRect(), _rope.GetCircle())) || (_hit.IsHit(GetRect(), _rope.GetCircle2())))) {
 			_state = EM_ST_FEAR;
+			so.SeStart("Se/attack.mp3",SCENE_RESULT);
 		}
 		else {
 		}

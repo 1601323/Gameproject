@@ -26,6 +26,7 @@ public:
 	void Updata(Input& input);
 	void Draw();
 	void Draw(Position2 offset);
+	void SetInit();
 	GimmickList_t& GimmickList();	//ƒŠƒXƒg‚ð•Ô‚·
 };
 

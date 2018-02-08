@@ -22,7 +22,8 @@ SensorDoor::SensorDoor(Position2 pos, Player& p):_pl(p)
 	//posのオフセット
 	_pos.x = pos.x +(MAP_CHIP_SIZE_X/2);
 	_pos.y = pos.y +MAP_CHIP_SIZE_Y;
-
+	_initPos.x = _pos.x;
+	_initPos.y = _pos.y;
 	_gmRect.w = WIDTH;
 	_gmRect.h = HEIGHT;
 	count = 0;
@@ -184,4 +185,8 @@ GIMMICK_TYPE& SensorDoor::GetType()
 RESULT_DATA& SensorDoor::GetClearData()
 {
 	return _clearData;
+}
+void SensorDoor::SetInit()
+{
+	_pos = _initPos;
 }

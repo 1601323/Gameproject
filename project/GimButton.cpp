@@ -17,6 +17,8 @@ GimButton::GimButton(Position2 pos, Player& p) :_pl(p)
 	_pos.x = pos.x +(MAP_CHIP_SIZE_X/2) - (_gmRect.w /2);
 	_pos.y = pos.y + MAP_CHIP_SIZE_Y    -  _gmRect.h;
 
+	_initPos.x = _pos.x;
+	_initPos.y = _pos.y;
 	count = 180;
 	color = 255;
 
@@ -113,4 +115,10 @@ Rect& GimButton::GetRect()
 GIMMICK_TYPE& GimButton:: GetType()
 {
 	return _gimType;
+}
+//ÉäÉgÉâÉCèàóùóp
+void GimButton::SetInit()
+{
+	_pos = _initPos;
+	_state = GM_NONE;
 }
