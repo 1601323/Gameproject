@@ -49,7 +49,7 @@ private:
 	Position2 _tmpPos;
 
 	DIR _dir;							//ｷｬﾗの向き
-	Position2 initPos;					//初期位置保存
+	Position3 initPos;					//初期位置保存
 	DIR _tmpDir;						//方向を保存する
 	float vx;							//x速度
 	float vy;							//y速度
