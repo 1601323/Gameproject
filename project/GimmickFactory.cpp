@@ -72,3 +72,10 @@ GimmickList_t&  GimmickFactory::GimmickList()
 {
 	return _gimmickList;
 }
+//リスタートのための初期化
+void GimmickFactory::SetInit()
+{
+	for (auto& gim :_gimmickList) {
+		gim->SetInit();
+	}
+}

@@ -30,6 +30,7 @@ private:
 
 	void CheckDoMove();		//“®ìğŒ”»’è
 	void Move();			//ƒMƒ~ƒbƒN‚Ì“®ì‚É‚Â‚¢‚Ä
+	void SetInit();
 public:
 	GimPull(Position2 pos,Rope& r,Player& p);
 	~GimPull();

@@ -156,6 +156,7 @@ void Player::setDir(Input* input)
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
+			_tmpDir = DIR_RIGHT;
 			if(_state != ST_JUMP)
 			_state = ST_MOVE;
 			airFlag = false;
@@ -167,6 +168,7 @@ void Player::setDir(Input* input)
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_LEFT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
+			_tmpDir = DIR_LEFT;
 			if (_state != ST_JUMP)
 			_state = ST_MOVE;
 			airFlag = false;
@@ -1598,8 +1600,8 @@ void Player::Draw(Position2& offset)
 	//	DrawFormatString(10, 400, 0xffffff, "½Ã°À½F%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d ¶:2 ‰E:3", _dir);
 #ifdef _DEBUG
-		_plRect.Draw(offset);
-		_wallRect.Draw(offset,0xffffff);
+		//_plRect.Draw(offset);
+		//_wallRect.Draw(offset,0xffffff);
 #endif
 }
 //RectŽæ“¾
@@ -1621,6 +1623,10 @@ Position2& Player::GetPos(void)
 DIR Player::GetDir(void)
 {
 	return _dir;
+}
+DIR Player::GetTmpDir()
+{
+	return _tmpDir;
 }
 //‰ŠúˆÊ’u‚É–ß‚·
 void Player::SetInitPos()
@@ -1647,8 +1653,8 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		if(CheckHitKey(KEY_INPUT_A)){
-		//if (GameMain::Instance().GetResultData().midFlag == true) {
+		//if(CheckHitKey(KEY_INPUT_A)){
+		if (GameMain::Instance().GetResultData().midFlag == true) {
 			return true;
 		}
 	}
