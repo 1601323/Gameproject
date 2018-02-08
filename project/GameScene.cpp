@@ -344,6 +344,7 @@ void GameScene::PauseUpdata(Input* input)
 
 	PauseSelect(input);
 
+	//ポーズ解除
 	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON)
 	{
 		dirMoveCnt = 0;
@@ -376,7 +377,7 @@ void GameScene::PauseUpdata(Input* input)
 		DrawCheckUi();//ui表示
 		CheckReTireSelect(input);//入力関連
 
-		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
+		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON))
 		{
 			switch (pauseRetireNowNum)
 			{

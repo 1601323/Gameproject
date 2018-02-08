@@ -1598,8 +1598,8 @@ void Player::Draw(Position2& offset)
 	//	DrawFormatString(10, 400, 0xffffff, "Ω√∞¿ΩÅF%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d ç∂:2 âE:3", _dir);
 #ifdef _DEBUG
-		_plRect.Draw(offset);
-		_wallRect.Draw(offset,0xffffff);
+		//_plRect.Draw(offset);
+		//_wallRect.Draw(offset,0xffffff);
 #endif
 }
 //RectéÊìæ

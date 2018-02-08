@@ -102,8 +102,6 @@ void EmLookback::Draw(Position2 offset)
 {
 	ImageMgr& im = ImageMgr::Instance();
 
-
-
 	AnimNowTime += 0.1f;
 	AnimWheelTimer += 1;
 	//現在のアニメーションが最大フレームまでいったらループする
@@ -222,9 +220,9 @@ void EmLookback::Draw(Position2 offset)
 			_modelmgr->Draw(exModelHandle, 0.0f);
 		}
 	}
-	else {
+	/*else {
 		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki2/eye2.png", SCENE_RESULT), FALSE);
-	}
+	}*/
 
 	//_emEye.Draw(offset);
 
@@ -650,6 +648,8 @@ void EmLookback::GetClass(HitClass * hit, Player & pl)
 }
 void EmLookback::SetInitPos()
 {
+	ImageMgr& im = ImageMgr::Instance();
+
 	_pos = _initPos;
 	_state = EM_ST_MOVE;
 	modelDirAngle = 0.0f;//初期角度
@@ -657,6 +657,7 @@ void EmLookback::SetInitPos()
 	_individualData.plFoundFlag = false;
 	_rangeLevel = RANGE_1;
 	_individualData._level = ALERT_LEVEL_1;
+	MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki2/eye2.png", SCENE_RESULT), FALSE);
 }
 //オフセットの為向いている方向を確認します
 void EmLookback::returnDir(Position2 offset)

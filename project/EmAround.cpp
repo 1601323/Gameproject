@@ -536,10 +536,6 @@ void EmAround::Draw(Position2 offset)
 			_modelmgr->Draw(exModelHandle, 0.0f);
 		}
 	}
-	else
-	{
-		//MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
-	}
 
 	tmpPos = offset;
 #ifdef _DEBUG
@@ -645,6 +641,8 @@ ENEMY_STATE& EmAround::GetState()
 }
 void EmAround::SetInitPos()
 {
+	ImageMgr& im = ImageMgr::Instance();
+
 	_pos = _initPos;
 	_state = EM_ST_MOVE;
 	loseSightCnt = 180;
@@ -655,7 +653,7 @@ void EmAround::SetInitPos()
 	else if (_dir == DIR_LEFT) {
 		modelDirAngle = AngleRad(90.0f);
 	}
-
+	MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	ModelDirChangeFlag = false;
