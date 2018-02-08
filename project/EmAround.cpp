@@ -538,7 +538,7 @@ void EmAround::Draw(Position2 offset)
 	}
 	else
 	{
-		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
+		//MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
 	}
 
 	tmpPos = offset;
