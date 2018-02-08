@@ -146,6 +146,7 @@ void TitleScene::FadeoutTitle(Input* input)
 	so.BgmFadeOut("Bgm/title.mp3",SCENE_SELECT);
 
 	if (lightCnt >= 120) {
+		dirMoveCnt = 0;
 		gm.Instance().ChangeScene(new SelectScene());
 	}
 }
@@ -186,7 +187,7 @@ void TitleScene::MenuSelect(Input* input)
 		if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_DOWN) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_menu = GAME_EXPLAIN;
-			dirMoveCnt = 0;
+			//dirMoveCnt = 0;
 
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
@@ -196,7 +197,7 @@ void TitleScene::MenuSelect(Input* input)
 		else if ((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_UP) &&
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_menu = GAME_START;
-			dirMoveCnt = 0;
+			//dirMoveCnt = 0;
 
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
@@ -210,7 +211,7 @@ void TitleScene::MenuSelect(Input* input)
 	else {	//キーボードの場合
 		if (inpInfo.key.keybit.R_DOWN_BUTTON && !lastKey.keybit.R_DOWN_BUTTON) {
 			_menu = GAME_EXPLAIN;
-			dirMoveCnt = 0;
+			//dirMoveCnt = 0;
 			//if (_menu == GAME_START) {
 			//	_menu =GAME_EXPLAIN;
 			//}
@@ -218,7 +219,7 @@ void TitleScene::MenuSelect(Input* input)
 		}
 		else if (inpInfo.key.keybit.R_UP_BUTTON && !lastKey.keybit.R_UP_BUTTON) {
 			_menu = GAME_START;
-			dirMoveCnt = 0;
+			//dirMoveCnt = 0;
 			//if (_menu == GAME_EXPLAIN) {
 			//	_menu = GAME_START;
 			//}
@@ -244,6 +245,8 @@ void TitleScene::Updata(Input* input)
 void TitleScene::Draw()
 {
 	ImageMgr& im = ImageMgr::Instance();
+	dirMoveCnt++;
+
 	for (int f = 0; f < 2; f++) {
 		DrawGraph(_skyPos[f].x, _skyPos[f].y, skyImage, true);
 	}
@@ -268,12 +271,18 @@ void TitleScene::Draw()
 		//DrawString(450, 550, "explain", 0xffff99);
 		DrawGraph(210, 530, im.ImageIdReturn("image/title/Pause_ope.png", SCENE_SELECT), true);
 		if (_menu == GAME_START) {
-			dirMoveCnt += 1;
 			DrawGraph(90 + abs(60 - ( 200 + (dirMoveCnt / 2 % 60)) % 30), 435, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
 		}
 		else if (_menu == GAME_EXPLAIN) {
-			dirMoveCnt += 1;
 			DrawGraph(90 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), 535, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
+		}
+
+		if (dirMoveCnt / 10 % 5 == 0)
+		{
+			DrawGraph(500, 460, im.ImageIdReturn("image/UI/Space2.png", SCENE_SELECT), true);
+		}
+		else {
+			DrawGraph(500, 460, im.ImageIdReturn("image/UI/Space1.png", SCENE_SELECT), true);
 		}
 	}
 
