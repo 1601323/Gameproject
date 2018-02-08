@@ -47,7 +47,7 @@ void Tutorial::CheckChainPosition()
 	{
 		if (!messageMoveCheck)
 		{
-			//ˆê’v‚µ‚Ä‚¢‚½‚ç
+			//ˆê’v‚µ‚Ä‚¢‚½‚ç(“–‚½‚ç‚È‚¢)
 
 			if(_hit.TutorialHit(_player))
 			{
@@ -74,8 +74,8 @@ void Tutorial::Draw(Position2 &offset)
 
 	for (int i = 0; i < MESSAGE_NUM; i++)
 	{
-		MessageRect.SetCenter(drawMassagePosition[i].x - offset.x, drawMassagePosition[i].y - offset.y);
-		MessageRect.Draw(offset);
+		MessageRect.SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
+		MessageRect.Draw();
 	}
 
 	if (DrawMessageBoxFlag)
