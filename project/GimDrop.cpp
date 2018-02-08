@@ -143,7 +143,8 @@ void GimDrop::Draw(Position2 offset)
 		//DrawCircle(_pos.x - offset.x,_pos.y -offset.y,10,GetColor(255,0,255),true);
 
 		//モデルを輪郭線0.0fで描画 
-		_modelmgr->Draw(modelhandle, 0.0f);
+		_modelmgr->Draw(modelhandle, 0.0f);	
+		_gmRect.SetCenter(_pos.x , _pos.y);
 	}
 	else if (_state == GM_END) {
 		//割れたりしてる描画
@@ -153,12 +154,13 @@ void GimDrop::Draw(Position2 offset)
 		}
 		//_modelmgr->Draw(modelhandle, 0.0f);
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(255, 0, 0), true);
+		_gmRect.SetCenter(0,0);
 	}
 	else if (_state == GM_PAUSE) {		//移動が一時停止しているとき（壁にぶつかったなど)
 		//DrawCircle(_pos.x - offset.x, _pos.y - offset.y, 10, GetColor(0, 0, 255), true);
 		_modelmgr->Draw(modelhandle, 0.0f);
+		_gmRect.SetCenter(_pos.x, _pos.y);
 	}
-	_gmRect.SetCenter(_pos.x , _pos.y);
 #ifdef _DEBUG
 	//_gmRect.Draw(offset);
 #endif
