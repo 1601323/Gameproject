@@ -3,19 +3,19 @@
 #include "Geometry.h"
 #include "Input.h"
 
-#define ACCEL_X (0.3f)					//‰Á‘¬“x
-#define MAX_SPEED (3.0f)				//½Ëß°ÄŞ‚ÌMAX’l
-#define MAX_GRAVITY (15.0f)				//d—Í‚ÌMAX’l
-#define WALL_SPEED (1.0f)				//•Ç“o‚è‚Ì½Ëß°ÄŞ
-#define JUMP_POWER (15.0f)				//¼Ş¬İÌß—Í
-#define VANISH_CNT (2)					//Á‚¦‚é‚Ü‚Å‚Ì¶³İÄ
-#define VANISH    (2)                   //Á‚¦‚é‚Ü‚Å‚Ì¶³İÄ
-#define FEVER_CNT (10)					//ƒtƒB[ƒo[‚ÌŠÔ
-#define ANIMATION_SPEED_SLOW (0.3f)     //ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘¬‚³(’´’á‘¬)
-#define ANIMATION_SPEED_DEF (0.5f)      //ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘¬‚³(’á‘¬)
-#define ANIMATION_SPEED_HIGH (0.8f)     //ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘¬‚³(•’Ê)
-#define ANIMATION_SPEED_SUPER (1.2f)    //ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘¬‚³(‚‘¬)
-#define INVINCIBLETIMER (2)             //–³“GŠÔ
+#define ACCEL_X (0.3f)					//åŠ é€Ÿåº¦
+#define MAX_SPEED (3.0f)				//ï½½ï¾‹ï¾Ÿï½°ï¾„ï¾ã®MAXå€¤
+#define MAX_GRAVITY (15.0f)				//é‡åŠ›ã®MAXå€¤
+#define WALL_SPEED (1.0f)				//å£ç™»ã‚Šã®ï½½ï¾‹ï¾Ÿï½°ï¾„ï¾
+#define JUMP_POWER (15.0f)				//ï½¼ï¾ï½¬ï¾ï¾Œï¾ŸåŠ›
+#define VANISH_CNT (2)					//æ¶ˆãˆã‚‹ã¾ã§ã®ï½¶ï½³ï¾ï¾„
+#define VANISH    (2)                   //æ¶ˆãˆã‚‹ã¾ã§ã®ï½¶ï½³ï¾ï¾„
+#define FEVER_CNT (10)					//ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã®æ™‚é–“
+#define ANIMATION_SPEED_SLOW (0.3f)     //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®é€Ÿã•(è¶…ä½é€Ÿ)
+#define ANIMATION_SPEED_DEF (0.5f)      //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®é€Ÿã•(ä½é€Ÿ)
+#define ANIMATION_SPEED_HIGH (0.8f)     //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®é€Ÿã•(æ™®é€š)
+#define ANIMATION_SPEED_SUPER (1.2f)    //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®é€Ÿã•(é«˜é€Ÿ)
+#define INVINCIBLETIMER (2)             //ç„¡æ•µæ™‚é–“
 
 
 class Input;
@@ -42,75 +42,79 @@ private:
 	Rope* _rope;
 	ModelMgr* _modelmgr;
 	//GameScene& gmScen;
-	CHAR_ST _state;						//·¬×‚Ìó‘Ô
-	Position2 _pos;						//·¬×‚ÌÀ•W
-	DIR _dir;							//·¬×‚ÌŒü‚«
-	Position2 initPos;					//‰ŠúˆÊ’u•Û‘¶
-	DIR _tmpDir;						//•ûŒü‚ğ•Û‘¶‚·‚é
-	float vx;							//x‘¬“x
-	float vy;							//y‘¬“x
-	int vanCnt;							//Á‚¦‚é‚Ü‚Å‚Ì¶³İÄ
-	int modelhandle;                    //ƒvƒŒƒCƒ„[ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
-	int alfa;                           //ƒXƒeƒ‹ƒX—pƒAƒ‹ƒtƒ@
-	int tranceMax;                      //Å‘å“§‰ß”
-	float LineNum;                      //—ÖŠsü‚Ì’l
-	int textureIndex;                   //Šç‚ÌƒeƒNƒXƒ`ƒƒƒCƒ“ƒfƒbƒNƒX
-	int  AnimIndex[ACTION_MAX];         //ƒAƒjƒ[ƒVƒ‡ƒ“”
-	float AnimTotalTime[ACTION_MAX];    //ŠeƒAƒjƒ[ƒVƒ‡ƒ“‚Ìƒg[ƒ^ƒ‹ƒ^ƒCƒ€
-	float AnimNowTime[ACTION_MAX];      //ŠeƒAƒjƒ[ƒVƒ‡ƒ“‚ÌŒ»İƒ^ƒCƒ€
-	float modelDirAngle;                //ƒ‚ƒfƒ‹•\¦—p‚ÌY²‚Ì‰ñ“]—¦
-	bool feverFlag;						//ƒtƒB[ƒo[ƒtƒ‰ƒO
-	int feverTime;						//ƒtƒB[ƒo[‚ÌŠÔ
-	bool inviFlag;                      //–³“GŠÔƒtƒ‰ƒO
-	int inviCnt;                        //–³“GŠÔƒJƒEƒ“ƒ^[
-	bool JumpFlag;						//¼Ş¬İÌß‚ÌÌ×¸Ş
-	bool WallFlag;						//•Ç‚É’£‚è•t‚­ƒtƒ‰ƒO
-	bool moveFlag;						//•Ç‚É’£‚è•t‚¢‚Ä‚¢‚é‚Æ‚«“®‚¯‚é‚©‚Ìƒtƒ‰ƒO
-	bool moveRopeJumpFlag;				//Û°Ìß¼Ş¬İÌßˆ—
-	bool airFlag;						//‹ó’†‚É‚¢‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-	bool fMoveRight;					//Ì¨°ÊŞ°A•Ç‚Ì‚Ú‚è‚ğ§Œä‚·‚éƒtƒ‰ƒO
-	bool fMoveLeft;						//“¯ã
-	bool deathFlag;						//‚Ü‚³‚É€–Sƒtƒ‰ƒOi_state‚Å‚ÍŠÇ—‚µ‚«‚ê‚È‚¢‚İ‚½‚¢‚È‚Ì‚Å
-	bool helpFever;						//Ì¨°ÊŞ°I—¹‚Ì•â³‚Ì‚½‚ß‚É—pˆÓ
-	bool crouchFlag;					//‚µ‚á‚ª‚İƒtƒ‰ƒO
-	bool ropeFlag;						//ƒ[ƒvó‘Ô‚©‚Ç‚¤‚©‚ğ•Ô‚·ƒtƒ‰ƒO
-	bool vanFlag;						//ƒXƒeƒ‹ƒXó‘Ô‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-	bool tmpFlag;						//•â³—pƒtƒ‰ƒO
-	int airCnt;							//ƒWƒƒƒ“ƒvó‘Ô‚ÌŠÔ‚ğƒJƒEƒ“ƒg
-	bool WallAnimationFlag;             //•Ç‚Ì‚Ú‚è‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶‚·‚é‚©‚Ç‚¤‚©‚ğŒˆ‚ß‚éflag
+	CHAR_ST _state;						//ï½·ï½¬ï¾—ã®çŠ¶æ…‹
+
+	Position3 _pos;						//ï½·ï½¬ï¾—ã®åº§æ¨™
+
+	Position2 _tmpPos;
+
+	DIR _dir;							//ï½·ï½¬ï¾—ã®å‘ã
+	Position2 initPos;					//åˆæœŸä½ç½®ä¿å­˜
+	DIR _tmpDir;						//æ–¹å‘ã‚’ä¿å­˜ã™ã‚‹
+	float vx;							//xé€Ÿåº¦
+	float vy;							//yé€Ÿåº¦
+	int vanCnt;							//æ¶ˆãˆã‚‹ã¾ã§ã®ï½¶ï½³ï¾ï¾„
+	int modelhandle;                    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+	int alfa;                           //ã‚¹ãƒ†ãƒ«ã‚¹ç”¨ã‚¢ãƒ«ãƒ•ã‚¡
+	int tranceMax;                      //æœ€å¤§é€éæ•°
+	float LineNum;                      //è¼ªéƒ­ç·šã®å€¤
+	int textureIndex;                   //é¡”ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	int  AnimIndex[ACTION_MAX];         //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ•°
+	float AnimTotalTime[ACTION_MAX];    //å„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒˆãƒ¼ã‚¿ãƒ«ã‚¿ã‚¤ãƒ 
+	float AnimNowTime[ACTION_MAX];      //å„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç¾åœ¨ã‚¿ã‚¤ãƒ 
+	float modelDirAngle;                //ãƒ¢ãƒ‡ãƒ«è¡¨ç¤ºç”¨ã®Yè»¸ã®å›è»¢ç‡
+	bool feverFlag;						//ãƒ•ã‚£ãƒ¼ãƒãƒ¼ãƒ•ãƒ©ã‚°
+	int feverTime;						//ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã®æ™‚é–“
+	bool inviFlag;                      //ç„¡æ•µæ™‚é–“ãƒ•ãƒ©ã‚°
+	int inviCnt;                        //ç„¡æ•µæ™‚é–“ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
+	bool JumpFlag;						//ï½¼ï¾ï½¬ï¾ï¾Œï¾Ÿã®ï¾Œï¾—ï½¸ï¾
+	bool WallFlag;						//å£ã«å¼µã‚Šä»˜ããƒ•ãƒ©ã‚°
+	bool moveFlag;						//å£ã«å¼µã‚Šä»˜ã„ã¦ã„ã‚‹ã¨ãå‹•ã‘ã‚‹ã‹ã®ãƒ•ãƒ©ã‚°
+	bool moveRopeJumpFlag;				//ï¾›ï½°ï¾Œï¾Ÿï½¼ï¾ï½¬ï¾ï¾Œï¾Ÿå‡¦ç†
+	bool airFlag;						//ç©ºä¸­ã«ã„ã‚‹ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+	bool fMoveRight;					//ï¾Œï½¨ï½°ï¾Šï¾ï½°æ™‚ã€å£ã®ã¼ã‚Šã‚’åˆ¶å¾¡ã™ã‚‹ãƒ•ãƒ©ã‚°
+	bool fMoveLeft;						//åŒä¸Š
+	bool deathFlag;						//ã¾ã•ã«æ­»äº¡ãƒ•ãƒ©ã‚°ï¼ˆ_stateã§ã¯ç®¡ç†ã—ãã‚Œãªã„ã¿ãŸã„ãªã®ã§
+	bool helpFever;						//ï¾Œï½¨ï½°ï¾Šï¾ï½°çµ‚äº†æ™‚ã®è£œæ­£ã®ãŸã‚ã«ç”¨æ„
+	bool crouchFlag;					//ã—ã‚ƒãŒã¿ãƒ•ãƒ©ã‚°
+	bool ropeFlag;						//ãƒ­ãƒ¼ãƒ—çŠ¶æ…‹ã‹ã©ã†ã‹ã‚’è¿”ã™ãƒ•ãƒ©ã‚°
+	bool vanFlag;						//ã‚¹ãƒ†ãƒ«ã‚¹çŠ¶æ…‹ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+	bool tmpFlag;						//è£œæ­£ç”¨ãƒ•ãƒ©ã‚°
+	int airCnt;							//ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã®æ™‚é–“ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
+	bool WallAnimationFlag;             //å£ã®ã¼ã‚Šã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿã™ã‚‹ã‹ã©ã†ã‹ã‚’æ±ºã‚ã‚‹flag
 	char keyData[256];
 	char oldkeyData[256];
 
 
-	void HitToEnemy();					//“G‚Æ“–‚½‚Á‚½
-	void setMove(Input* input);			//ˆÚ“®ŠÖ”
-	void setState(void);				//½Ã°À½§Œä
-	void setDir(Input* input);			//Œü‚«§Œä
-	void gravity(void);					//d—Í
-	bool accelePL(void);				//ˆÚ“®ˆ—
-	void InputSetMove();				//ˆÚ“®ˆ—‚Ì’†‚Ì“ü—Í‚ğó‚¯‚¿‚Ü‚·
-	bool moveJump(void);				//¼Ş¬İÌßˆ—
-	bool moveWall(void);				//•ÇˆÚ“®ˆ—
-	bool moveRope(void);				//Û°Ìßó‘Ô
+	void HitToEnemy();					//æ•µã¨å½“ãŸã£ãŸæ™‚
+	void setMove(Input* input);			//ç§»å‹•é–¢æ•°
+	void setState(void);				//ï½½ï¾ƒï½°ï¾€ï½½åˆ¶å¾¡
+	void setDir(Input* input);			//å‘ãåˆ¶å¾¡
+	void gravity(void);					//é‡åŠ›
+	bool accelePL(void);				//ç§»å‹•å‡¦ç†
+	void InputSetMove();				//ç§»å‹•å‡¦ç†ã®ä¸­ã®å…¥åŠ›ã‚’å—ã‘æŒã¡ã¾ã™
+	bool moveJump(void);				//ï½¼ï¾ï½¬ï¾ï¾Œï¾Ÿå‡¦ç†
+	bool moveWall(void);				//å£ç§»å‹•å‡¦ç†
+	bool moveRope(void);				//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹
 	void moveFever();
-	void moveCrouch(Input* input);					//‚µ‚á‚ª‚İ
-	bool stVanish(void);				//½ÃÙ½ˆ—
-	bool stFever(void);					//Ì¨°ÊŞ°ˆ—
-	bool plPlaceCheck();				//Ì¨°ÊŞ°I—¹AÌßÚ²Ô°‚ª•Ç‚Ì’†‚É‚¢‚È‚¢‚©ƒ`ƒFƒbƒN‚µ‚Ü‚·
-	void stInvincible(void);            //–³“Gó‘Ô‚ğ§Œä‚·‚éŠÖ”
+	void moveCrouch(Input* input);					//ã—ã‚ƒãŒã¿
+	bool stVanish(void);				//ï½½ï¾ƒï¾™ï½½å‡¦ç†
+	bool stFever(void);					//ï¾Œï½¨ï½°ï¾Šï¾ï½°å‡¦ç†
+	bool plPlaceCheck();				//ï¾Œï½¨ï½°ï¾Šï¾ï½°çµ‚äº†æ™‚ã€ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ãŒå£ã®ä¸­ã«ã„ãªã„ã‹ãƒã‚§ãƒƒã‚¯ã—ã¾ã™
+	void stInvincible(void);            //ç„¡æ•µçŠ¶æ…‹ã‚’åˆ¶å¾¡ã™ã‚‹é–¢æ•°
 
-	void FeverUpdata(Input* input);		//ƒtƒB[ƒo[‚ÉŒÄ‚Ño‚·‘S‘Ì‚Ìˆ—
-	void FeverJump();					//ƒtƒB[ƒo[—p‚ÌƒWƒƒƒ“ƒvˆ—
-	void FeverGravity();				//ƒtƒB[ƒo[—p‚Ìd—Íˆ—
-	void FeverWall();					//ƒtƒB[ƒo[—p‚Ì•ÇˆÚ“®ˆ—
+	void FeverUpdata(Input* input);		//ãƒ•ã‚£ãƒ¼ãƒãƒ¼æ™‚ã«å‘¼ã³å‡ºã™å…¨ä½“ã®å‡¦ç†
+	void FeverJump();					//ãƒ•ã‚£ãƒ¼ãƒãƒ¼ç”¨ã®ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
+	void FeverGravity();				//ãƒ•ã‚£ãƒ¼ãƒãƒ¼ç”¨ã®é‡åŠ›å‡¦ç†
+	void FeverWall();					//ãƒ•ã‚£ãƒ¼ãƒãƒ¼ç”¨ã®å£ç§»å‹•å‡¦ç†
 
-	void AnimationSwitching(void);      //ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦‚æ‚¤ŠÖ”
-	void AnimationManager(PLAYER_ACTIONS actions,float animspeed,float looptime);        //ƒAƒjƒ[ƒVƒ‡ƒ“ƒZƒbƒgŠÖ”
+	void AnimationSwitching(void);      //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆã‚ˆã†é–¢æ•°
+	void AnimationManager(PLAYER_ACTIONS actions,float animspeed,float looptime);        //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆé–¢æ•°
 
 	Position2 tmpOffset;
-	VECTOR WorldToScreenPos;            //ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚É•ÏŠ·‚µ‚½Œã‚Ìƒ‚ƒfƒ‹•\¦—p‚Ìpos
+	VECTOR WorldToScreenPos;            //ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã«å¤‰æ›ã—ãŸå¾Œã®ãƒ¢ãƒ‡ãƒ«è¡¨ç¤ºç”¨ã®pos
 
-	Rect _wallRect;						//•Ç—p‚ÌƒŒƒNƒg
+	Rect _wallRect;						//å£ç”¨ã®ãƒ¬ã‚¯ãƒˆ
 
 	FEVER_DATA _fd;
 	RESULT_DATA _rtData;
@@ -125,22 +129,22 @@ public:
 	void Update(Input* input);
 	void Draw(Position2& offset);
 
-	CHAR_ST GetcharState(void);			//½Ã°À½æ“¾
-	Position2& GetPos(void);			//posæ“¾
-	void SetInitPos();					//‰ŠúˆÊ’u‚É–ß‚·
-	void SetInitPos(Position2 p);		//‰ŠúˆÊ’u‚ğƒZƒbƒg‚·‚é
-	DIR GetDir(void);					//diræ“¾	
+	CHAR_ST GetcharState(void);			//ï½½ï¾ƒï½°ï¾€ï½½å–å¾—
+	Position2& GetPos(void);			//poså–å¾—
+	void SetInitPos();					//åˆæœŸä½ç½®ã«æˆ»ã™
+	void SetInitPos(Position2 p);		//åˆæœŸä½ç½®ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+	DIR GetDir(void);					//dirå–å¾—	
 	void SetRetryPos(Position2 midPos);
-	void SetInitPausePos();             //ƒ|[ƒX‰æ–Ê‚©‚çƒŠƒgƒ‰ƒC‚·‚éê‡‚±‚Á‚¿‚É“ü‚é
-	void Getclass(HitClass* h, Rope*r);	//hitƒNƒ‰ƒX‚ğó‚¯æ‚é‚½‚ß‚ÌŠÖ”
-	DIR GetTmpDir();					//NON‚É‚È‚é‘O‚ÌŒü‚«‚ğ•Ô‚µ‚Ü‚·
+	void SetInitPausePos();             //ãƒãƒ¼ã‚¹ç”»é¢ã‹ã‚‰ãƒªãƒˆãƒ©ã‚¤ã™ã‚‹å ´åˆã“ã£ã¡ã«å…¥ã‚‹
+	void Getclass(HitClass* h, Rope*r);	//hitã‚¯ãƒ©ã‚¹ã‚’å—ã‘å–ã‚‹ãŸã‚ã®é–¢æ•°
+	DIR GetTmpDir();					//NONã«ãªã‚‹å‰ã®å‘ãã‚’è¿”ã—ã¾ã™
 
-	bool EnterDoor();					//‰¼À‘•@ƒhƒA‚É“ü‚Á‚½‚çtrue‚É‚µ‚Ü‚·
-	bool GetStateCrouch();				//‚µ‚á‚ª‚ñ‚Å‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚µ‚Ü‚·
-	bool GetStateVanish();				//ƒXƒeƒ‹ƒX‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚µ‚Ü‚·
-	bool GetStateRope();				//ƒ[ƒv‚ğg‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚µ‚Ü‚·
-	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//ƒXƒeƒBƒbƒN‚ÌŒX‚«‰‚¶‚½player‚Ìspeed‚ÌãŒÀƒe[ƒuƒ‹
-	SENSING_VALUE _minSensingValueL;  // ½Ã¨¯¸‚Ì“ü—Í‚ğŠ´’m‚·‚éÅ’á‚Ì’l L
-	Position2 ReturnWoToScPos2ver();   //ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚É•ÏŠ·Œã‚Ìpos‚ğ•Ô‚·ŠÖ”
+	bool EnterDoor();					//ä»®å®Ÿè£…ã€€ãƒ‰ã‚¢ã«å…¥ã£ãŸã‚‰trueã«ã—ã¾ã™
+	bool GetStateCrouch();				//ã—ã‚ƒãŒã‚“ã§ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã—ã¾ã™
+	bool GetStateVanish();				//ã‚¹ãƒ†ãƒ«ã‚¹ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã—ã¾ã™
+	bool GetStateRope();				//ãƒ­ãƒ¼ãƒ—ã‚’ä½¿ã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã—ã¾ã™
+	float playerSpeedTable[SV_MAX] = { 0.f,1.f,MAX_SPEED,MAX_SPEED };//ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å‚¾ãå¿œã˜ãŸplayerã®speedã®ä¸Šé™ãƒ†ãƒ¼ãƒ–ãƒ«
+	SENSING_VALUE _minSensingValueL;  // ï½½ï¾ƒï½¨ï½¯ï½¸ã®å…¥åŠ›ã‚’æ„ŸçŸ¥ã™ã‚‹æœ€ä½ã®å€¤ L
+	Position2 ReturnWoToScPos2ver();   //ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã«å¤‰æ›å¾Œã®posã‚’è¿”ã™é–¢æ•°
 };
 
