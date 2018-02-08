@@ -26,7 +26,9 @@ private:
 	INPUT_INFO _inpInfo;
 	int count;				//一定量動く範囲を設定する
 	int modelhandle;
+	int handleHandle;       //取っ手の部分
 	int textureIndex;       //テクスチャのindex
+	int DownCnt;
 
 	void CheckDoMove();		//動作条件判定
 	void Move();			//ギミックの動作について

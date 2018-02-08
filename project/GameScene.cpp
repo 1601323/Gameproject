@@ -35,6 +35,8 @@
 
 #include "GameScene.h"
 
+#define COLOR_NUM_TIME (40)
+
 GameScene::GameScene()
 {
 	ImageMgr& im = ImageMgr::Instance();
@@ -208,6 +210,7 @@ void GameScene::NormalUpdata(Input* input)
 		UsingRopeUpdata(input, offset);
 	}
 	else {
+
 		ObjectUpdata(input, offset);
 	}
 	_server->SetMidFlag(_rtData.midFlag);
@@ -324,6 +327,7 @@ void GameScene::TransitionUpdata(Input* input)
 void GameScene::PauseUpdata(Input* input) 
 {
 	dirMoveCnt++;
+	dirMoveCnt %= COLOR_NUM_TIME;
 
 	GameMain& gm = GameMain::Instance();
 	SoundMgr& so = SoundMgr::Instance();
@@ -344,6 +348,7 @@ void GameScene::PauseUpdata(Input* input)
 
 	PauseSelect(input);
 
+	//ポーズ解除
 	if (key.keybit.START_BUTTON && !lastKey.keybit.START_BUTTON)
 	{
 		dirMoveCnt = 0;
@@ -366,6 +371,7 @@ void GameScene::PauseUpdata(Input* input)
 		case MODE_SELECT:
 			RetryOrRetireFlag = false;
 			ChackDrawFlag = true;
+			break;
 		default:
 			break;
 		}
@@ -376,6 +382,7 @@ void GameScene::PauseUpdata(Input* input)
 		DrawCheckUi();//ui表示
 		CheckReTireSelect(input);//入力関連
 
+		//
 		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
 		{
 			switch (pauseRetireNowNum)
@@ -384,10 +391,10 @@ void GameScene::PauseUpdata(Input* input)
 				dirMoveCnt = 0;
 				ChackDrawFlag = false;
 				ChackFlag = false;
-				RetryPauseProcess();
 				//flagをみてリトライ、リタイアに分ける
 				if (RetryOrRetireFlag)
 				{
+					RetryPauseProcess();
 					_updater = &GameScene::FadeInUpdata;
 				}
 				else {
@@ -526,7 +533,6 @@ void  GameScene::CheckReTireSelect(Input* input)
 			inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) &&
 			!((input->GetStickDir(inpInfo.L_Stick.lstick) == SD_LEFT) &&
 				inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)) {
-			ChackFlag = true;
 		}
 		else {
 			pauseRetireNowNum = pauseRetireNowNum;
@@ -564,6 +570,7 @@ void GameScene::Draw(Position2& offset)
 	//_map->Draw();
 	_fac->Draw(offset);
 	_emFac->Draw(offset);
+	//ドアが開ききってから描画
 	for (auto& gim : _fac->GimmickList())
 	{
 		if (gim->sensordoorMotionFlag)
@@ -606,8 +613,8 @@ void GameScene::DrawPauseUi(void)
 	//ボード
 	DrawExtendGraph(200, 50, 620,370,im.ImageIdReturn("image/Pause/Board.png", SCENE_RESULT), true);
 
-	DrawGraph(300, 130, im.ImageIdReturn("image/Restart/Restart.png", SCENE_RESULT), true);
-	DrawGraph(300, 220, im.ImageIdReturn("image/Pause/Retire.png", SCENE_RESULT), true);
+	DrawGraph(300, 130, im.ImageIdReturn("image/Restart/Retry.png", SCENE_RESULT), true);
+	DrawGraph(300, 220, im.ImageIdReturn("image/Pause/End.png", SCENE_RESULT), true);
 
 	switch (pauseNowNum) {
 	case 0:
@@ -634,11 +641,11 @@ void GameScene::DrawCheckUi()
 	if (RetryOrRetireFlag)
 	{
 		//リトライするか?
-		DrawGraph(150, 130, im.ImageIdReturn("image/Restart/RestartQuestion.png", SCENE_RESULT), true);
+		DrawGraph(150, 130, im.ImageIdReturn("image/Restart/RetryQuestion.png", SCENE_RESULT), true);
 	}
 	else {
 		//リタイアするか?
-		DrawGraph(150, 130, im.ImageIdReturn("image/Pause/RetireQuestion.png", SCENE_RESULT), true);
+		DrawGraph(150, 130, im.ImageIdReturn("image/Pause/EndQuestion.png", SCENE_RESULT), true);
 	}
 	//はいいいえ
 	DrawGraph(220, 350, im.ImageIdReturn("image/Restart/Yes.png", SCENE_RESULT), true);
@@ -646,16 +653,21 @@ void GameScene::DrawCheckUi()
 
 	switch (pauseRetireNowNum) {
 	case 0:
-		pauseDirNumX = 180;
+		pauseDirNumX = 185;
 		break;
 	case 1:
-		pauseDirNumX = 450;
+		pauseDirNumX = 455;
 		break;
 	default:
 		break;
 	}
 
-	DrawGraph(pauseDirNumX /*+ abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 20)*/, 340, im.ImageIdReturn("image/restart/Frame.png", SCENE_RESULT), true);
+	SetDrawBright(243, 152, 0);
+	SetDrawBlendMode(DX_BLENDMODE_ADD, 255 * (static_cast<float>(abs(20 - dirMoveCnt)) / static_cast<float>((COLOR_NUM / 1.5f))));
+	DrawGraph(pauseDirNumX, 340, im.ImageIdReturn("image/restart/Frame.png", SCENE_RESULT), true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	SetDrawBright(255, 255, 255);
+
 }
 
 //背景描画

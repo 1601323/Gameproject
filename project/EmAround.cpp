@@ -59,7 +59,7 @@ EmAround::EmAround(Position2 pos,Player& pl,Rope& rope,EnemyServer& server,HitCl
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 	questionHandle = _modelmgr->ModelIdReturn("UI_model/question.pmx", SCENE_RESULT);
 
-	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 1);
 	textureIndexEye = MV1GetMaterialDifMapTexture(modelhandle,1);   //目用のテクスチャindexを取得
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle, 2);//タイヤ用のテクスチャindexを取得
 	//初期角度(とりあえず)
@@ -454,7 +454,8 @@ void EmAround::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle,VGet(3.f,3.f,3.f));
 	//テクスチャを変更
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki1/teki-2.png", SCENE_RESULT), FALSE);
+	//MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki1/teki.png", SCENE_RESULT), FALSE);
+	//MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
 
 	//タイヤのテクスチャを常時切り替え
 	if (AnimWheelTimer / 5 % 2 == 0)
@@ -532,10 +533,6 @@ void EmAround::Draw(Position2 offset)
 			//!マーク
 			_modelmgr->Draw(exModelHandle, 0.0f);
 		}
-	}
-	else
-	{
-		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
 	}
 
 	tmpPos = offset;
@@ -642,6 +639,8 @@ ENEMY_STATE& EmAround::GetState()
 }
 void EmAround::SetInitPos()
 {
+	ImageMgr& im = ImageMgr::Instance();
+
 	_pos = _initPos;
 	_state = EM_ST_MOVE;
 	loseSightCnt = 180;
@@ -652,7 +651,7 @@ void EmAround::SetInitPos()
 	else if (_dir == DIR_LEFT) {
 		modelDirAngle = AngleRad(90.0f);
 	}
-
+	MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki1/eye2.png", SCENE_RESULT), FALSE);
 	_individualData.dataSendFlag = false;
 	_individualData.plFoundFlag = false;
 	ModelDirChangeFlag = false;

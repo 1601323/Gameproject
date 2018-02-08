@@ -259,21 +259,21 @@ void TitleScene::Draw()
 
 		DrawGraph(70,380,im.ImageIdReturn("image/title/TitleBoard.png",SCENE_SELECT),true);
 
-		DrawGraph(230, 450, im.ImageIdReturn("image/title/select_Game.png", SCENE_SELECT), true);
+		DrawGraph(210, 430, im.ImageIdReturn("image/title/select_Game.png", SCENE_SELECT), true);
 
 		//DrawBox(400, 500, 500, 600, 0xffaaff, true);
 		//if (_menu == GAME_EXPLAIN) {
 		//	DrawBox(400, 500, 500, 600, 0xffffff, true);
 		//}
 		//DrawString(450, 550, "explain", 0xffff99);
-		DrawGraph(230, 530, im.ImageIdReturn("image/title/Pause_ope.png", SCENE_SELECT), true);
+		DrawGraph(210, 530, im.ImageIdReturn("image/title/Pause_ope.png", SCENE_SELECT), true);
 		if (_menu == GAME_START) {
 			dirMoveCnt += 1;
-			DrawGraph(110 + abs(60 - ( 200 + (dirMoveCnt / 2 % 60)) % 30), 455, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
+			DrawGraph(90 + abs(60 - ( 200 + (dirMoveCnt / 2 % 60)) % 30), 435, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
 		}
 		else if (_menu == GAME_EXPLAIN) {
 			dirMoveCnt += 1;
-			DrawGraph(110 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), 535, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
+			DrawGraph(90 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), 535, im.ImageIdReturn("image/yazirushi2.png", SCENE_SELECT), true);
 		}
 	}
 

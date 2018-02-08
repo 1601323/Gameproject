@@ -26,7 +26,7 @@ Player::Player()
 	_state = ST_DEF;
 	vx = 0.0f;
 	vy = 0.0f;
-	vanCnt = 60 * VANISH_CNT;	//‚Æ‚è‚ ‚¦‚¸‚R•b
+	vanCnt = 60 * VANISH_CNT;	//ã¨ã‚Šã‚ãˆãšï¼“ç§’
 	feverFlag = false;
 	feverTime = 60 * FEVER_CNT;
 	inviCnt = INVINCIBLETIMER * 60;
@@ -61,16 +61,16 @@ Player::Player()
 	_fd = FEVER_DATA();
 
 	_modelmgr = ModelMgr::Instance();
-	//ƒ‚ƒfƒ‹“Ç‚İ‚İ
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
 	modelhandle = MV1LoadModel("player_model/player.pmx");
-	//‚»‚ê‚¼‚ê‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒAƒ^ƒbƒ`+‘ŠÔ‚Ìİ’è
+	//ãã‚Œãã‚Œã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¢ã‚¿ãƒƒãƒ+ç·æ™‚é–“ã®è¨­å®š
 	for (int i = 0; i < ACTION_MAX; i++)
 	{
 		AnimIndex[i] = MV1AttachAnim(modelhandle, i, -1, false);
 		AnimTotalTime[i] = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex[i]);
 	}
 	MV1SetRotationXYZ(modelhandle, VGet(0.f,0.f, 0.0f));
-	//Šç‚ÌƒeƒNƒXƒ`ƒƒ‚Ìindex‚ğæ“¾
+	//é¡”ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®indexã‚’å–å¾—
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 1);
 }
 Player::~Player()
@@ -79,7 +79,7 @@ Player::~Player()
 	//delete _rope;
 	_modelmgr->ModelIdAllDelete();
 }
-//XV‚³‚ê‚½HitClass‚ğó‚¯æ‚é‚½‚ß‚ÌŠÖ”‚Å‚·
+//æ›´æ–°ã•ã‚ŒãŸHitClassã‚’å—ã‘å–ã‚‹ãŸã‚ã®é–¢æ•°ã§ã™
 void Player::Getclass(HitClass* h, Rope*r)
 {
 	_hit = h;
@@ -102,19 +102,19 @@ void Player::Update(Input* input)
 		FeverUpdata(input);
 	}
 	else if (feverFlag == false) {
-		//d—Í
+		//é‡åŠ›
 	//	gravity();
-		//ˆÚ“®§Œä
+		//ç§»å‹•åˆ¶å¾¡
 		setMove(input);
 	}
-	//½Ã°À½§Œä
+	//ï½½ï¾ƒï½°ï¾€ï½½åˆ¶å¾¡
 	setState();
-	HitToEnemy();		//“G‚Æ“–‚½‚Á‚½‚Æ‚«
-	//Ì¨°ÊŞ°ÃŞ°Àó‚¯æ‚è
+	HitToEnemy();		//æ•µã¨å½“ãŸã£ãŸã¨ã
+	//ï¾Œï½¨ï½°ï¾Šï¾ï½°ï¾ƒï¾ï½°ï¾€å—ã‘å–ã‚Š
 	GetFeverData();
 }
 
-//ˆÚ“®Œn‚Ìˆ—
+//ç§»å‹•ç³»ã®å‡¦ç†
 void Player::setMove(Input* input)
 {
 	setDir(input);
@@ -126,7 +126,7 @@ void Player::setMove(Input* input)
 	accelePL();
 	EnterDoor();
 }
-//½Ã°À½Œn‚Ìˆ—
+//ï½½ï¾ƒï½°ï¾€ï½½ç³»ã®å‡¦ç†
 void Player::setState(void)
 {
 	stFever();
@@ -146,7 +146,7 @@ void Player::FeverUpdata(Input* input)
 	//FeverWall();
 	moveCrouch(input);               
 	//moveFever();
-	//•Ç”²‚¯‚ğˆê“I‚ÉŒ©‚È‚©‚Á‚½‚±‚Æ‚É‚µ‚Ü‚·
+	//å£æŠœã‘ã‚’ä¸€æ™‚çš„ã«è¦‹ãªã‹ã£ãŸã“ã¨ã«ã—ã¾ã™
 	moveJump();
 	moveWall();
 	accelePL();
@@ -155,14 +155,14 @@ void Player::FeverUpdata(Input* input)
 
 	EnterDoor();
 }
-//Œü‚«‚ğŒˆ‚ß‚é
+//å‘ãã‚’æ±ºã‚ã‚‹
 void Player::setDir(Input* input)
 {
-	//Û°Ìßó‘Ô‚È‚çŒü‚«‚Í•Ï‚¦‚ç‚ê‚È‚¢
+	//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹ãªã‚‰å‘ãã¯å¤‰ãˆã‚‰ã‚Œãªã„
 	float angle = static_cast<int>((RadAngle(_inpInfo.L_Stick.lstick) * 100.f));
 
 	if (_state != ST_ROPE  && _state != ST_CROUCH) {
-		//‰E
+		//å³
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
@@ -174,7 +174,7 @@ void Player::setDir(Input* input)
 
 			modelDirAngle = AngleRad(-90.f);
 		}
-		//¶
+		//å·¦
 		else if (_inpInfo.key.keybit.R_LEFT_BUTTON ||
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_LEFT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
@@ -186,7 +186,7 @@ void Player::setDir(Input* input)
 
 			modelDirAngle = AngleRad(90.f);
 		}
-		//ã
+		//ä¸Š
 		else if (_inpInfo.key.keybit.R_UP_BUTTON ||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_UP &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
@@ -201,7 +201,7 @@ void Player::setDir(Input* input)
 			!_inpInfo.key.keybit.R_UP_BUTTON || !_inpInfo.key.keybit.R_DOWN_BUTTON ||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_RIGHT || input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_LEFT ||
 			input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_UP || input->GetStickDir(_inpInfo.L_Stick.lstick) != SD_DOWN) {
-			//‰Ÿ‚µ‚Ä‚È‚¢
+			//æŠ¼ã—ã¦ãªã„
 			_dir = DIR_NON;
 			_state = ST_STOP;
 		}
@@ -215,25 +215,25 @@ void Player::setDir(Input* input)
 //	DrawFormatString(80, 260, 0xffffff, "%f", angle);
 #endif
 }
-//ˆÚ“®§Œä
+//ç§»å‹•åˆ¶å¾¡
 bool Player::accelePL(void)
 {
 	InputSetMove();
-	//ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è
-	//2ƒhƒbƒg‚Ù‚Ç”»’è‚ğ‹·‚ß‚Ä‚¢‚é
-	//‰E
+	//ãƒãƒƒãƒ—ã¨ã®å½“ãŸã‚Šåˆ¤å®š
+	//2ãƒ‰ãƒƒãƒˆã»ã©åˆ¤å®šã‚’ç‹­ã‚ã¦ã„ã‚‹
+	//å³
 	Position2 nextPosRight[3];
-	//‰E‰º	
+	//å³ä¸‹	
 	nextPosRight[0].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[0].y = _pos.y + (_plRect.h - 1);
-	//‰Eã
+	//å³ä¸Š
 	nextPosRight[1].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[1].y = _pos.y;
-	//‰E^‚ñ’†
+	//å³çœŸã‚“ä¸­
 	nextPosRight[2].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[2].y = _pos.y + (_plRect.h/2);
 	for (int j = 0; j < 3; j++) {
-		//“o‚ê‚é•Ç‚Æ“o‚ê‚È‚¢•ÇAƒMƒ~ƒbƒN‚Æ‚Ì”»’è
+		//ç™»ã‚Œã‚‹å£ã¨ç™»ã‚Œãªã„å£ã€ã‚®ãƒŸãƒƒã‚¯ã¨ã®åˆ¤å®š
 		if (_map->GetChipType(nextPosRight[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosRight[j]) == CHIP_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosRight[j]) && (_hit->GimmickHitType(nextPosRight[j]) != GIM_FALL) && _hit->GimmickHitType(nextPosRight[j]) != GIM_DOOR)) {
@@ -243,19 +243,19 @@ bool Player::accelePL(void)
 	}
 
 	//
-	//¶
+	//å·¦
 	Position2 nextPosLeft[3];
-	//¶‰º
+	//å·¦ä¸‹
 	nextPosLeft[0].x = _pos.x + vx + 2;
 	nextPosLeft[0].y = _pos.y + (_plRect.h - 1);
-	//¶ã
+	//å·¦ä¸Š
 	nextPosLeft[1].x = _pos.x + vx + 2;
 	nextPosLeft[1].y = _pos.y;
-	//¶^‚ñ’†
+	//å·¦çœŸã‚“ä¸­
 	nextPosLeft[2].x = _pos.x + vx + 2;
 	nextPosLeft[2].y = _pos.y + (_plRect.h/2);
 	for (int j = 0; j < 3; j++) {
-		//“o‚ê‚é•Ç‚Æ“o‚ê‚È‚¢•ÇAƒMƒ~ƒbƒN‚Æ‚Ì”»’è
+		//ç™»ã‚Œã‚‹å£ã¨ç™»ã‚Œãªã„å£ã€ã‚®ãƒŸãƒƒã‚¯ã¨ã®åˆ¤å®š
 		if (_map->GetChipType(nextPosLeft[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosLeft[j]) == CHIP_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosLeft[j]) && _hit->GimmickHitType(nextPosLeft[j]) != GIM_FALL&&_hit->GimmickHitType(nextPosLeft[j]) != GIM_DOOR)) {
@@ -263,18 +263,18 @@ bool Player::accelePL(void)
 			break;
 		}
 	}
-	//‰Á‘¬“x‚ğ‘«‚·
+	//åŠ é€Ÿåº¦ã‚’è¶³ã™
 	_pos.x += (int)vx;
 	return false;
 }
 void Player::InputSetMove()
 {
-	//ƒL[ƒ{[ƒh‚Æƒpƒbƒh‚ÅˆÚ“®ˆ—‚ğ•ª‚¯‚Ä‚¢‚Ü‚·
-	//ˆÚ“®(ƒQ[ƒ€ƒpƒbƒh)
+	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã¨ãƒ‘ãƒƒãƒ‰ã§ç§»å‹•å‡¦ç†ã‚’åˆ†ã‘ã¦ã„ã¾ã™
+	//ç§»å‹•(ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰)
 	if (_inpInfo.num >= 1)
 	{
-		//‚±‚±‚ÌL_SensingFlag‚ª‚¤‚Ü‚­XV‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚İ‚½!! (error’†)
-		//“ü—Í‚µ‚Á‚Ï‚È‚µ‚ÅƒRƒ“ƒpƒCƒ‹‚·‚é‚Æ“®‚«‚Ü‚·
+		//ã“ã“ã®L_SensingFlagãŒã†ã¾ãæ›´æ–°ã•ã‚Œã¦ã„ãªã„ã¨ã¿ãŸ!! (errorä¸­)
+		//å…¥åŠ›ã—ã£ã±ãªã—ã§ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã™ã‚‹ã¨å‹•ãã¾ã™
 		if (_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL)
 		{
 			if ((vx - ACCEL_X)< playerSpeedTable[_inpInfo.L_Stick.L_SensingFlag])
@@ -317,7 +317,7 @@ void Player::InputSetMove()
 	}
 	else
 	{
-		//ˆÚ“®(ƒL[ƒ{[ƒh)
+		//ç§»å‹•(ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰)
 		if (_inpInfo.key.keybit.R_RIGHT_BUTTON)
 		{
 			if (fMoveRight == true) {
@@ -347,7 +347,7 @@ void Player::InputSetMove()
 		}
 	}
 }
-//•ÇˆÚ“®‚Ìˆ—
+//å£ç§»å‹•ã®å‡¦ç†
 bool Player::moveWall(void)
 {
 	if (WallFlag == true) {
@@ -355,24 +355,24 @@ bool Player::moveWall(void)
 		JumpFlag = false;
 	}
 	int count = 0;
-	//•Ç“o‚èó‘Ô
-	//‘€ì«‚É“ï‚ ‚è
+	//å£ç™»ã‚ŠçŠ¶æ…‹
+	//æ“ä½œæ€§ã«é›£ã‚ã‚Š
 	Position2 nextPos[6];
-	//‰E‰º
+	//å³ä¸‹
 	nextPos[0] = _wallRect.RightBottom();
-	//¶‰º
+	//å·¦ä¸‹
 	nextPos[1] = _wallRect.LeftBottom();
-	//‰Eã
+	//å³ä¸Š
 	nextPos[2] = _wallRect.RightTop();
-	//¶ã
+	//å·¦ä¸Š
 	nextPos[3] = _wallRect.LeftTop();
-	//‰E^‚ñ’†
+	//å³çœŸã‚“ä¸­
 	nextPos[4] = _wallRect.RightTop();
 	nextPos[4].y += _wallRect.h / 2;
-	//¶^‚ñ’†
+	//å·¦çœŸã‚“ä¸­
 	nextPos[5] = _wallRect.LeftTop();
 	nextPos[5].y += _wallRect.h / 2;
-	//ÌßÚ²Ô°‚Ì‰ºAƒ}ƒbƒvƒ`ƒbƒv1•ª‰º
+	//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ã®ä¸‹ã€ãƒãƒƒãƒ—ãƒãƒƒãƒ—1åˆ†ä¸‹
 	Position2 downPos;
 	downPos.x = _pos.x + (_plRect.w / 2);
 	downPos.y = _pos.y + _plRect.h + MAP_CHIP_SIZE_Y +15;
@@ -383,11 +383,11 @@ bool Player::moveWall(void)
 	downPos2.y = _pos.y + _plRect.h + (MAP_CHIP_SIZE_Y/2)+10;
 	//downPos2.x = _wallRect.Left() + (_wallRect.w / 2);
 	//downPos2.y = _wallRect.Bottom() + (MAP_CHIP_SIZE_Y / 2);
-	//•Ç“o‚èó‘Ô‚É‚·‚éğŒ
+	//å£ç™»ã‚ŠçŠ¶æ…‹ã«ã™ã‚‹æ¡ä»¶
 	for (int j = 0; j < 6; j++) {
 		if ((_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT)&&  crouchFlag ==false) {
 			count = 0;
-			//•Ç‚ª‹ß‚­‚É‚ ‚Á‚½‚Æ‚«Aƒ{ƒ^ƒ“‚ğ‰Ÿ‚·‚Æ•Ç‚É’£‚è•t‚­
+			//å£ãŒè¿‘ãã«ã‚ã£ãŸã¨ãã€ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã¨å£ã«å¼µã‚Šä»˜ã
 			if (_inpInfo.num >= 1)
 			{
 				if (WallFlag == false) {
@@ -405,7 +405,7 @@ bool Player::moveWall(void)
 					}
 				}
 			}
-			//‚à‚µ‘«Œ³‚É°‚ª‚È‚¯‚ê‚Î‚»‚Ì‚Ü‚Ü•Ç‚É’£‚è•t‚­
+			//ã‚‚ã—è¶³å…ƒã«åºŠãŒãªã‘ã‚Œã°ãã®ã¾ã¾å£ã«å¼µã‚Šä»˜ã
 			if (_map->GetChipType(downPos) == CHIP_BLANK &&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				WallFlag = true;
 				break;
@@ -420,39 +420,39 @@ bool Player::moveWall(void)
 	}
 
 	moveFlag = false;
-	//•Ç‚ÌˆÚ“®§ŒÀ
+	//å£ã®ç§»å‹•åˆ¶é™
 	Position2 WallPosMiddl[2], WallPosTop[2], WallPosBottom[2];
-	//‰Ei^‚ñ’†j
+	//å³ï¼ˆçœŸã‚“ä¸­ï¼‰
 	WallPosMiddl[0].x = _pos.x + _plRect.w;
 	WallPosMiddl[0].y = _pos.y + (_plRect.h / 2);
 	//WallPosMiddl[0].x = _wallRect.Right();
 	//WallPosMiddl[0].y =_wallRect.Top()+ (_wallRect.h / 2);
-	//¶i^‚ñ’†j
+	//å·¦ï¼ˆçœŸã‚“ä¸­ï¼‰
 	WallPosMiddl[1].x = _pos.x;
 	WallPosMiddl[1].y = _pos.y + (_plRect.h / 2);
 	//WallPosMiddl[1].x = _wallRect.Left();
 	//WallPosMiddl[1].y = _wallRect.Top() +(_wallRect.h / 2);
-	//‰Eã
+	//å³ä¸Š
 	WallPosTop[0].x = _pos.x + _plRect.w;
 	WallPosTop[0].y = _pos.y;
 	//WallPosTop[0] = _wallRect.RightTop();
-	//¶ã
+	//å·¦ä¸Š
 	WallPosTop[1].x = _pos.x;
 	WallPosTop[1].y = _pos.y;
 	//WallPosTop[0] = _wallRect.LeftTop();
-	//•â³‚Ì‚½‚ß‚É‰º‚àŠm”F‚·‚é
-	//‰E‰º
+	//è£œæ­£ã®ãŸã‚ã«ä¸‹ã‚‚ç¢ºèªã™ã‚‹
+	//å³ä¸‹
 	WallPosBottom[0].x = _pos.x + _plRect.w;
 	WallPosBottom[0].y = _pos.y + (_plRect.h - 1);
 	//WallPosBottom[0].x = _wallRect.Right();
 	//WallPosBottom[0].y = _wallRect.Bottom() - 1;
-	//¶‰º
+	//å·¦ä¸‹
 	WallPosBottom[1].x = _pos.x;
 	WallPosBottom[1].y = _pos.y + (_plRect.h - 1);
 	//WallPosBottom[1].x = _wallRect.Left();
 	//WallPosBottom[1].y = _wallRect.Bottom() -1;
 	for (int j = 0; j < 2; j++) {
-		//·¬×‚Ì”¼•ªˆÈã,ã‚Í‚¢‚¯‚È‚¢‚æ‚¤‚É‚·‚é
+		//ï½·ï½¬ï¾—ã®åŠåˆ†ä»¥ä¸Š,ä¸Šã¯ã„ã‘ãªã„ã‚ˆã†ã«ã™ã‚‹
 		if (_rope->GetRopeState() != ST_ROPE_READY) {
 			moveFlag = false;
 			break;
@@ -482,7 +482,7 @@ bool Player::moveWall(void)
 	{
 		fMoveLeft = true;
 	}
-	//”¼•ªˆÈã‚Å•Ç‚É’£‚è•t‚¢‚Ä‚µ‚Ü‚Á‚½‚Æ‚«‚Í”¼•ª‚Ü‚Å‰º‚°‚é
+	//åŠåˆ†ä»¥ä¸Šã§å£ã«å¼µã‚Šä»˜ã„ã¦ã—ã¾ã£ãŸã¨ãã¯åŠåˆ†ã¾ã§ä¸‹ã’ã‚‹
 	Position2 offsetPos[2];
 	offsetPos[0].x = WallPosMiddl[0].x;
 	offsetPos[0].y = WallPosMiddl[0].y + 3.0f;
@@ -504,7 +504,7 @@ bool Player::moveWall(void)
 	}
 
 	if (_state == ST_WALL) {
-		//•Ç‚Ì’†‚ÅˆÚ“®‰Â”\‚È‚ç
+		//å£ã®ä¸­ã§ç§»å‹•å¯èƒ½ãªã‚‰
 		if (moveFlag) {
 			if (_inpInfo.num >= 1)
 			{
@@ -543,7 +543,7 @@ bool Player::moveWall(void)
 		else if (_rope->GetRopeState() != ST_ROPE_READY) {
 
 		}
-		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//ƒL[ƒ{[ƒh
+		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰
 			vy = WALL_SPEED;
 			WallAnimationFlag = true;
 
@@ -557,7 +557,7 @@ bool Player::moveWall(void)
 			vy = 0.0f;
 			WallAnimationFlag = false;
 		}
-		//‰º‚ª’n–Ê‚¾‚Á‚½‚Í~‚Ü‚é
+		//ä¸‹ãŒåœ°é¢ã ã£ãŸæ™‚ã¯æ­¢ã¾ã‚‹
 		Position2 nextPosDown;
 		nextPosDown.x = _pos.x + (_plRect.w / 2);
 		nextPosDown.y = _pos.y + vy + (_plRect.h - 1);
@@ -569,7 +569,7 @@ bool Player::moveWall(void)
 		 || _hit->GimmickHitType(nextPosDown) == GIM_ATTRACT) {
 			vy = 0.0f;
 		}
-		//ã‚ª•Ç‚¾‚Á‚½‚Æ‚«‚Í~‚Ü‚é
+		//ä¸ŠãŒå£ã ã£ãŸã¨ãã¯æ­¢ã¾ã‚‹
 		Position2 nextPosUp;
 		nextPosUp.x = _pos.x + (_plRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
@@ -582,13 +582,13 @@ bool Player::moveWall(void)
 			vy = 0.0f;
 		}
 
-		//ˆÊ’u•â³
+		//ä½ç½®è£œæ­£
 		Position2 tmpPos, WallPosDownL, WallPosDownR;
-		//‰E‰º
+		//å³ä¸‹
 		WallPosDownR.x = _pos.x + _plRect.w;
 		WallPosDownR.y = _pos.y + (_plRect.h - 1);
 		//WallPosDownR = _wallRect.RightBottom();
-		//¶‰º
+		//å·¦ä¸‹
 		WallPosDownL.x = _pos.x;
 		WallPosDownL.y = _pos.y + (_plRect.h - 1);
 		//WallPosDownL = _wallRect.LeftBottom();
@@ -596,15 +596,15 @@ bool Player::moveWall(void)
 		tmpPos.y = (_pos.y - _plRect.h / 2) / 32 * 32;
 		//tmpPos.y = (_pos.y - _plRect.h/2 -3);
 		//tmpPos.y =(_wallRect.Top() -_wallRect.h );
-		//moveFlag‚ªfalse‚Ì‚Æ‚«‚ÍˆÊ’u•â³‚ğs‚¤
+		//moveFlagãŒfalseã®ã¨ãã¯ä½ç½®è£œæ­£ã‚’è¡Œã†
 		if (!moveFlag) {
 			if (_rope->GetRopeState() != ST_ROPE_READY) {
 
 			}
 			else if (_inpInfo.num >= 1)
-			{		//ƒpƒbƒh‚Ìê‡
+			{		//ãƒ‘ãƒƒãƒ‰ã®å ´åˆ
 				if (_dir == DIR_RIGHT || _dir==DIR_UP) {
-					//‰E‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å³ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x += 7;
@@ -612,7 +612,7 @@ bool Player::moveWall(void)
 					}
 				}
 				if (_dir == DIR_LEFT || _dir == DIR_UP) {
-					//¶‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å·¦ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x -= 7;
@@ -620,9 +620,9 @@ bool Player::moveWall(void)
 					}
 				}
 			}
-			else {	//ƒL[ƒ{[ƒh‚Ìê‡
+			else {	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®å ´åˆ
 				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON ||_inpInfo.key.keybit.R_UP_BUTTON&& !_lastKey.keybit.R_UP_BUTTON) {
-					//‰E‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å³ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL ||_hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this)&& _hit->GimmickHitType(*this) ==GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x += 7;
@@ -630,7 +630,7 @@ bool Player::moveWall(void)
 					}
 				}
 				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
-					//¶‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å·¦ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL  ||_hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x -= 7;
@@ -655,27 +655,27 @@ void Player::FeverWall()
 		JumpFlag = false;
 	}
 	int count = 0;
-	//•Ç“o‚èó‘Ô
-	//‘€ì«‚É“ï‚ ‚è
+	//å£ç™»ã‚ŠçŠ¶æ…‹
+	//æ“ä½œæ€§ã«é›£ã‚ã‚Š
 	Position2 nextPos[6];
-	//‰E‰º
+	//å³ä¸‹
 	nextPos[0] = _wallRect.RightBottom();
-	//¶‰º
+	//å·¦ä¸‹
 	nextPos[1] = _wallRect.LeftBottom();
 
-	//‰Eã
+	//å³ä¸Š
 	nextPos[2] = _wallRect.RightTop();
-	//¶ã
+	//å·¦ä¸Š
 	nextPos[3] = _wallRect.LeftTop();
-	//‰E^‚ñ’†
+	//å³çœŸã‚“ä¸­
 	nextPos[4] = _wallRect.RightTop();
 	nextPos[4].x += 5;
 	nextPos[4].y += _wallRect.h / 2;
-	//¶^‚ñ’†
+	//å·¦çœŸã‚“ä¸­
 	nextPos[5] = _wallRect.LeftTop();
 	nextPos[5].x -= 5;
 	nextPos[5].y += _wallRect.h / 2;
-	//ÌßÚ²Ô°‚Ì‰ºAƒ}ƒbƒvƒ`ƒbƒv1•ª‰º
+	//ï¾Œï¾Ÿï¾šï½²ï¾”ï½°ã®ä¸‹ã€ãƒãƒƒãƒ—ãƒãƒƒãƒ—1åˆ†ä¸‹
 	Position2 downPos;
 	downPos.x = _pos.x + (_wallRect.w / 2);
 	downPos.y = _pos.y + _wallRect.h + MAP_CHIP_SIZE_Y;
@@ -683,7 +683,7 @@ void Player::FeverWall()
 	downPos2.x = _pos.x + (_wallRect.w / 2);
 	downPos2.y = _pos.y + _wallRect.h + (MAP_CHIP_SIZE_Y / 3);
 
-	//•Ç“o‚èó‘Ô‚É‚·‚éğŒ
+	//å£ç™»ã‚ŠçŠ¶æ…‹ã«ã™ã‚‹æ¡ä»¶
 	for (int j = 0; j < 6; j++) {
 		if ((_map->GetChipType(nextPos[j]) == CHIP_CLIMB_WALL || _hit->GimmickHitType(nextPos[j]) == GIM_ATTRACT) && crouchFlag == false) {
 			count = 0;
@@ -716,7 +716,7 @@ void Player::FeverWall()
 					}
 				}
 			}
-			//‚à‚µ‘«Œ³‚É°‚ª‚È‚¯‚ê‚Î‚»‚Ì‚Ü‚Ü•Ç‚É’£‚è•t‚­
+			//ã‚‚ã—è¶³å…ƒã«åºŠãŒãªã‘ã‚Œã°ãã®ã¾ã¾å£ã«å¼µã‚Šä»˜ã
 			if (_map->GetChipType(downPos) == CHIP_BLANK&&_map->GetChipType(downPos2) == CHIP_BLANK) {
 				if (WallFlag == false) {
 					WallFlag = true;
@@ -735,29 +735,29 @@ void Player::FeverWall()
 	}
 
 	moveFlag = false;
-	//•Ç‚ÌˆÚ“®§ŒÀ
+	//å£ã®ç§»å‹•åˆ¶é™
 	Position2 WallPosMiddl[2], WallPosTop[2], WallPosBottom[2];
-	//‰Ei^‚ñ’†j
+	//å³ï¼ˆçœŸã‚“ä¸­ï¼‰
 	WallPosMiddl[0].x = _pos.x + _plRect.w;
 	WallPosMiddl[0].y = _pos.y + (_plRect.h / 2);
-	//¶i^‚ñ’†j
+	//å·¦ï¼ˆçœŸã‚“ä¸­ï¼‰
 	WallPosMiddl[1].x = _pos.x;
 	WallPosMiddl[1].y = _pos.y + (_plRect.h / 2);
-	//‰Eã
+	//å³ä¸Š
 	WallPosTop[0].x = _pos.x + _plRect.w;
 	WallPosTop[0].y = _pos.y;
-	//¶ã
+	//å·¦ä¸Š
 	WallPosTop[1].x = _pos.x;
 	WallPosTop[1].y = _pos.y;
-	//•â³‚Ì‚½‚ß‚É‰º‚àŠm”F‚·‚é
-	//‰E‰º
+	//è£œæ­£ã®ãŸã‚ã«ä¸‹ã‚‚ç¢ºèªã™ã‚‹
+	//å³ä¸‹
 	WallPosBottom[0].x = _pos.x + _plRect.w;
 	WallPosBottom[0].y = _pos.y + (_plRect.h - 1);
-	//¶‰º
+	//å·¦ä¸‹
 	WallPosBottom[1].x = _pos.x;
 	WallPosBottom[1].y = _pos.y + (_plRect.h - 1);
 	for (int j = 0; j < 2; j++) {
-		//·¬×‚Ì”¼•ªˆÈã,ã‚Í‚¢‚¯‚È‚¢‚æ‚¤‚É‚·‚é
+		//ï½·ï½¬ï¾—ã®åŠåˆ†ä»¥ä¸Š,ä¸Šã¯ã„ã‘ãªã„ã‚ˆã†ã«ã™ã‚‹
 		if (_rope->GetRopeState() != ST_ROPE_READY) {
 			moveFlag = false;
 			break;
@@ -772,7 +772,7 @@ void Player::FeverWall()
 			moveFlag = false;
 		}
 	}
-	//”¼•ªˆÈã‚Å•Ç‚É’£‚è•t‚¢‚Ä‚µ‚Ü‚Á‚½‚Æ‚«‚Í”¼•ª‚Ü‚Å‰º‚°‚é
+	//åŠåˆ†ä»¥ä¸Šã§å£ã«å¼µã‚Šä»˜ã„ã¦ã—ã¾ã£ãŸã¨ãã¯åŠåˆ†ã¾ã§ä¸‹ã’ã‚‹
 	Position2 offsetPos[2];
 	offsetPos[0].x = WallPosMiddl[0].x;
 	offsetPos[0].y = WallPosMiddl[0].y + 3.0f;
@@ -792,18 +792,18 @@ void Player::FeverWall()
 			}
 		}
 	}
-	//ˆÊ’u•â³
+	//ä½ç½®è£œæ­£
 	Position2 tmpPos, WallPosDownL, WallPosDownR;
-	//‰E‰º
+	//å³ä¸‹
 	WallPosDownR.x = _pos.x + _wallRect.w;
 	WallPosDownR.y = _pos.y + (_wallRect.h - 1);
-	//¶‰º
+	//å·¦ä¸‹
 	WallPosDownL.x = _pos.x;
 	WallPosDownL.y = _pos.y + (_wallRect.h - 1);
 
 	tmpPos.y = (_pos.y - _wallRect.h / 2) / 32 * 32 +3;
 	if (_state == ST_WALL) {
-		//•Ç‚Ì’†‚ÅˆÚ“®‰Â”\‚È‚ç
+		//å£ã®ä¸­ã§ç§»å‹•å¯èƒ½ãªã‚‰
 		if (moveFlag) {
 			if (_inpInfo.num >= 1)
 			{
@@ -844,7 +844,7 @@ void Player::FeverWall()
 		else if (_rope->GetRopeState() != ST_ROPE_READY) {
 
 		}
-		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//ƒL[ƒ{[ƒh
+		else if (_inpInfo.key.keybit.R_DOWN_BUTTON) {		//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰
 			vy = WALL_SPEED;
 			WallAnimationFlag = true;
 		}
@@ -856,7 +856,7 @@ void Player::FeverWall()
 			vy = 0.0f;
 			WallAnimationFlag = false;
 		}
-		//‰º‚ª’n–Ê‚¾‚Á‚½‚Í~‚Ü‚é
+		//ä¸‹ãŒåœ°é¢ã ã£ãŸæ™‚ã¯æ­¢ã¾ã‚‹
 		Position2 nextPosDown;
 		nextPosDown.x = _pos.x + (_plRect.w / 2);
 		nextPosDown.y = _pos.y + vy + (_plRect.h - 1);
@@ -864,7 +864,7 @@ void Player::FeverWall()
 			|| _map->GetChipType(nextPosDown) == CHIP_N_CLIMB_WALL) {
 			vy = 0.0f;
 		}
-		//ã‚ª•Ç‚¾‚Á‚½‚Æ‚«‚Í~‚Ü‚é
+		//ä¸ŠãŒå£ã ã£ãŸã¨ãã¯æ­¢ã¾ã‚‹
 		Position2 nextPosUp;
 		nextPosUp.x = _pos.x + (_plRect.w / 2);
 		nextPosUp.y = _pos.y + vy;
@@ -874,15 +874,15 @@ void Player::FeverWall()
 			vy = 0.0f;
 		}
 
-		//moveFlag‚ªfalse‚Ì‚Æ‚«‚ÍˆÊ’u•â³‚ğs‚¤
+		//moveFlagãŒfalseã®ã¨ãã¯ä½ç½®è£œæ­£ã‚’è¡Œã†
 		if (!moveFlag && WallFlag == true) {
 			if (_rope->GetRopeState() != ST_ROPE_READY) {
 
 			}
 			else if (_inpInfo.num >= 1)
-			{		//ƒpƒbƒh‚Ìê‡
+			{		//ãƒ‘ãƒƒãƒ‰ã®å ´åˆ
 				if (_dir == DIR_RIGHT || _dir == DIR_UP) {
-					//‰E‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å³ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x += 7;
@@ -890,7 +890,7 @@ void Player::FeverWall()
 					}
 				}
 				if (_dir == DIR_LEFT || _dir == DIR_UP) {
-					//¶‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å·¦ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x -= 7;
@@ -898,9 +898,9 @@ void Player::FeverWall()
 					}
 				}
 			}
-			else {	//ƒL[ƒ{[ƒh‚Ìê‡
+			else {	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®å ´åˆ
 				if (_inpInfo.key.keybit.R_RIGHT_BUTTON && !_lastKey.keybit.R_RIGHT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
-					//‰E‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å³ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownR) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownR) == GIM_ATTRACT /*&& !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x += 7;
@@ -908,7 +908,7 @@ void Player::FeverWall()
 					}
 				}
 				if (_inpInfo.key.keybit.R_LEFT_BUTTON && !_lastKey.keybit.R_LEFT_BUTTON || _inpInfo.key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
-					//¶‰º‚ª“o‚ê‚é•Ç‚¾‚Á‚½‚ç•â³‚·‚é
+					//å·¦ä¸‹ãŒç™»ã‚Œã‚‹å£ã ã£ãŸã‚‰è£œæ­£ã™ã‚‹
 					if (_map->GetChipType(WallPosDownL) == CHIP_CLIMB_WALL || _hit->GimmickHitType(WallPosDownL) == GIM_ATTRACT/* && !(_hit->GimmickHit(*this) && _hit->GimmickHitType(*this) == GIM_ATTRACT)*/) {
 						_pos.y = tmpPos.y;
 						_pos.x -=7;
@@ -935,11 +935,11 @@ void Player::FeverWall()
 			fMoveLeft = true;
 		}
 }
-//Û°Ìßó‘Ô‚Ìˆ—
+//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹ã®å‡¦ç†
 bool Player::moveRope(void)
 {
 	SoundMgr& so = SoundMgr::Instance();
-	//Û°Ìßó‘Ô‚È‚ç“®‚¯‚È‚¢
+	//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹ãªã‚‰å‹•ã‘ãªã„
 	if (_rope->GetRopeState() != ST_ROPE_READY) {
 		_state = ST_ROPE;
 		ropeFlag = true;
@@ -950,7 +950,7 @@ bool Player::moveRope(void)
 			moveFlag = false;
 		}
 		vx = 0.0f;
-	//	so.BgmStart("Bgm/extend.mp3", SCENE_GAME); // —p•ÒW
+	//	so.BgmStart("Bgm/extend.mp3", SCENE_GAME); // ç”¨ç·¨é›†
 	}
 	else {
 		AnimNowTime[ACTION_TONGUE_SET] = 0.0f;
@@ -958,7 +958,7 @@ bool Player::moveRope(void)
 		ropeFlag = false;
 	}
 
-	//¨‚¢‚ğE‚³‚¸‚É’…’n‚·‚é
+	//å‹¢ã„ã‚’æ®ºã•ãšã«ç€åœ°ã™ã‚‹
 	if (_state == ST_JUMP) {
 		if (_dir == DIR_RIGHT) {
 			if (moveRopeJumpFlag) {
@@ -977,15 +977,15 @@ void Player::moveFever()
 {
 	InputSetMove();
 	Position2 nextPosRight[2];
-	//‰E‰º	
+	//å³ä¸‹	
 	nextPosRight[0].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[0].y = _pos.y + (_plRect.h - 1);
-	//‰Eã
+	//å³ä¸Š
 	nextPosRight[1].x = _pos.x + vx + (_plRect.w - 2);
 	nextPosRight[1].y = _pos.y;
 
 	for (int j = 0; j < 2; j++) {
-		//“o‚ê‚é•Ç‚Æ“o‚ê‚È‚¢•ÇAƒMƒ~ƒbƒN‚Æ‚Ì”»’è
+		//ç™»ã‚Œã‚‹å£ã¨ç™»ã‚Œãªã„å£ã€ã‚®ãƒŸãƒƒã‚¯ã¨ã®åˆ¤å®š
 		if (_map->GetChipType(nextPosRight[j]) == CHIP_N_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosRight[j]) && (_hit->GimmickHitType(nextPosRight[j]) != GIM_FALL) && _hit->GimmickHitType(nextPosRight[j]) != GIM_DOOR)) {
 			vx = 0.0f;
@@ -994,37 +994,37 @@ void Player::moveFever()
 	}
 
 	//
-	//¶
+	//å·¦
 	Position2 nextPosLeft[2];
-	//¶‰º
+	//å·¦ä¸‹
 	nextPosLeft[0].x = _pos.x + vx + 2;
 	nextPosLeft[0].y = _pos.y + (_plRect.h - 1);
-	//¶ã
+	//å·¦ä¸Š
 	nextPosLeft[1].x = _pos.x + vx + 2;
 	nextPosLeft[1].y = _pos.y;
 
 	for (int j = 0; j < 2; j++) {
-		//“o‚ê‚é•Ç‚Æ“o‚ê‚È‚¢•ÇAƒMƒ~ƒbƒN‚Æ‚Ì”»’è
+		//ç™»ã‚Œã‚‹å£ã¨ç™»ã‚Œãªã„å£ã€ã‚®ãƒŸãƒƒã‚¯ã¨ã®åˆ¤å®š
 		if (_map->GetChipType(nextPosLeft[j]) == CHIP_N_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosLeft[j]) && _hit->GimmickHitType(nextPosLeft[j]) != GIM_FALL&&_hit->GimmickHitType(nextPosLeft[j]) != GIM_DOOR)) {
 			vx = 0.0f;
 			break;
 		}
 	}
-	//‰Á‘¬“x‚ğ‘«‚·
+	//åŠ é€Ÿåº¦ã‚’è¶³ã™
 	_pos.x += (int)vx;
 
 }
-//½ÃÙ½ó‘Ô‚Ìˆ—
-//3•b“®‚©‚È‚©‚Á‚½‚çÁ‚¦‚é
+//ï½½ï¾ƒï¾™ï½½çŠ¶æ…‹ã®å‡¦ç†
+//3ç§’å‹•ã‹ãªã‹ã£ãŸã‚‰æ¶ˆãˆã‚‹
 bool Player::stVanish(void)
 {
-	//3•bŒãÁ‚¦‚é
+	//3ç§’å¾Œæ¶ˆãˆã‚‹
 	if (vanCnt > 0) {
 		vanCnt--;
 	}
-	//“®‚¢‚Ä‚¢‚½‚ç¶³İÄ‚ğ–ß‚·
-	//•Ç“o‚èó‘Ô‚Å“®‚¢‚Ä‚¢‚½‚ç½ÃÙ½‚É‚È‚ç‚È‚¢
+	//å‹•ã„ã¦ã„ãŸã‚‰ï½¶ï½³ï¾ï¾„ã‚’æˆ»ã™
+	//å£ç™»ã‚ŠçŠ¶æ…‹ã§å‹•ã„ã¦ã„ãŸã‚‰ï½½ï¾ƒï¾™ï½½ã«ãªã‚‰ãªã„
 	if (_state == ST_MOVE || _state == ST_JUMP || _state == ST_ROPE || vy != 0 
 		||ropeFlag == true || tmpFlag != crouchFlag) {
 		vanCnt = 60 * VANISH_CNT;
@@ -1073,7 +1073,7 @@ void Player::moveCrouch(Input* input)
 			}
 		}
 		if (_key.keybit.R_UP_BUTTON && !_lastKey.keybit.R_UP_BUTTON) {
-			//ãƒL[‚Å‚µ‚á‚ª‚İ‚ğ‰ğœ
+			//ä¸Šã‚­ãƒ¼ã§ã—ã‚ƒãŒã¿ã‚’è§£é™¤
 			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
 				if (crouchFlag == true) {
 					crouchFlag = false;
@@ -1089,7 +1089,7 @@ void Player::moveCrouch(Input* input)
 			moveFlag = false;
 		}
 		vx = 0.0f;
-		//ƒWƒƒƒ“ƒv‚µ‚½‚ç‚µ‚á‚ª‚İ‚ğ‰ğœ
+		//ã‚¸ãƒ£ãƒ³ãƒ—ã—ãŸã‚‰ã—ã‚ƒãŒã¿ã‚’è§£é™¤
 		if (JumpFlag == true) {
 			//_pos.y -= 18;
 			crouchFlag = false;
@@ -1099,10 +1099,10 @@ void Player::moveCrouch(Input* input)
 		AnimNowTime[ACTION_CROUCH] = 0.0f;
 	}
 }
-//Ì¨°ÊŞ°ˆ—
+//ï¾Œï½¨ï½°ï¾Šï¾ï½°å‡¦ç†
 bool Player::stFever(void)
 {
-	//‚Æ‚è‚ ‚¦‚¸Ì¨°ÊŞ°
+	//ã¨ã‚Šã‚ãˆãšï¾Œï½¨ï½°ï¾Šï¾ï½°
 	if (keyData[KEY_INPUT_Z]) {
 		if (_fd.feverCnt > 0) {
 
@@ -1145,7 +1145,7 @@ bool Player::stFever(void)
 #endif
 	return false;
 }
-//–³“Gó‘Ô‚Ìˆ—
+//ç„¡æ•µçŠ¶æ…‹ã®å‡¦ç†
 void Player::stInvincible(void)
 {
 	if (inviFlag)
@@ -1161,11 +1161,11 @@ void Player::stInvincible(void)
 		}
 	}
 }
-//¼Ş¬İÌßˆ—
+//ï½¼ï¾ï½¬ï¾ï¾Œï¾Ÿå‡¦ç†
 bool Player::moveJump(void)
 {
 	SoundMgr& so = SoundMgr::Instance();
-	//¼Ş¬İÌß
+	//ï½¼ï¾ï½¬ï¾ï¾Œï¾Ÿ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
 			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
@@ -1187,8 +1187,8 @@ bool Player::moveJump(void)
 		}
 	}
 	else {
-		//•ú•¨ü‚ğŒ©‚¹‚é‚½‚ß‚É‰Á‘¬“x‚ÉMAX_SPEED‚ğİ’è
-		//—Ç‚­‚È‚¢
+		//æ”¾ç‰©ç·šã‚’è¦‹ã›ã‚‹ãŸã‚ã«åŠ é€Ÿåº¦ã«MAX_SPEEDã‚’è¨­å®š
+		//è‰¯ããªã„
 		if (_state == ST_ROPE) {
 			if (_inpInfo.key.keybit.R_RIGHT_BUTTON) {
 				vx = MAX_SPEED;
@@ -1199,14 +1199,14 @@ bool Player::moveJump(void)
 		}
 	}
 
-	//ƒ}ƒbƒv‚Æ‚Ì”»’è
-	//2ƒhƒbƒg‚Ù‚Ç”»’è‚ğ‹·‚ß‚Ä‚¢‚é
-	//ã•”‚Ì“–‚½‚è”»’è
+	//ãƒãƒƒãƒ—ã¨ã®åˆ¤å®š
+	//2ãƒ‰ãƒƒãƒˆã»ã©åˆ¤å®šã‚’ç‹­ã‚ã¦ã„ã‚‹
+	//ä¸Šéƒ¨ã®å½“ãŸã‚Šåˆ¤å®š
 	Position2 nextPosUP[2];
-	//‰Eã	
+	//å³ä¸Š	
 	nextPosUP[0].x = _pos.x + (_plRect.w - 2);
 	nextPosUP[0].y = _pos.y + (vy / 2);
-	//¶ã
+	//å·¦ä¸Š
 	nextPosUP[1].x = _pos.x + 2;
 	nextPosUP[1].y = _pos.y + (vy / 2);
 	Position2 nextPosDown[2];
@@ -1214,7 +1214,7 @@ bool Player::moveJump(void)
 	nextPosDown[0].y = _pos.y + (vy/2) + (_plRect.h +2);
 	nextPosDown[1].x = _pos.x + 2;
 	nextPosDown[1].y = _pos.y + (vy/2) + (_plRect.h +2);
-	//“o‚ê‚é•ÇA“o‚ê‚È‚¢•Ç‚Æ‚Ì”»’è
+	//ç™»ã‚Œã‚‹å£ã€ç™»ã‚Œãªã„å£ã¨ã®åˆ¤å®š
 	for (int j = 0; j < 2; j++) {
 		if (_map->GetChipType(nextPosUP[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosUP[j]) == CHIP_CLIMB_WALL
@@ -1252,7 +1252,7 @@ bool Player::moveJump(void)
 	else {
 		airCnt = 0;
 	}
-	//flag‚ªtrue‚È‚ç¼Ş¬İÌßó‘Ô
+	//flagãŒtrueãªã‚‰ï½¼ï¾ï½¬ï¾ï¾Œï¾ŸçŠ¶æ…‹
 	if (JumpFlag == true&& airFlag ==true) {
 		_state = ST_JUMP;
 	}
@@ -1261,7 +1261,7 @@ bool Player::moveJump(void)
 void Player::FeverJump()
 {
 	SoundMgr& so = SoundMgr::Instance();
-	//¼Ş¬İÌß
+	//ï½¼ï¾ï½¬ï¾ï¾Œï¾Ÿ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
 			if (_key.keybit.A_BUTTON && !_lastKey.keybit.A_BUTTON) {
@@ -1279,8 +1279,8 @@ void Player::FeverJump()
 		}
 	}
 	else {
-		//•ú•¨ü‚ğŒ©‚¹‚é‚½‚ß‚É‰Á‘¬“x‚ÉMAX_SPEED‚ğİ’è
-		//—Ç‚­‚È‚¢
+		//æ”¾ç‰©ç·šã‚’è¦‹ã›ã‚‹ãŸã‚ã«åŠ é€Ÿåº¦ã«MAX_SPEEDã‚’è¨­å®š
+		//è‰¯ããªã„
 		if (_state == ST_ROPE) {
 			if (_inpInfo.key.keybit.R_RIGHT_BUTTON) {
 				vx = MAX_SPEED;
@@ -1305,22 +1305,22 @@ void Player::FeverJump()
 		airCnt = 0;
 	}
 
-	//ƒ}ƒbƒv‚Æ‚Ì”»’è
-	//2ƒhƒbƒg‚Ù‚Ç”»’è‚ğ‹·‚ß‚Ä‚¢‚é
-	//ã•”‚Ì“–‚½‚è”»’è
+	//ãƒãƒƒãƒ—ã¨ã®åˆ¤å®š
+	//2ãƒ‰ãƒƒãƒˆã»ã©åˆ¤å®šã‚’ç‹­ã‚ã¦ã„ã‚‹
+	//ä¸Šéƒ¨ã®å½“ãŸã‚Šåˆ¤å®š
 	Position2 nextPosUP[2];
-	//‰Eã	
+	//å³ä¸Š	
 	nextPosUP[0].x = _pos.x + (_plRect.w - 2);
 	nextPosUP[0].y = _pos.y + (vy / 2);
-	//¶ã
+	//å·¦ä¸Š
 	nextPosUP[1].x = _pos.x + 2;
 	nextPosUP[1].y = _pos.y + (vy / 2);
-	//‘«Œ³”»’è
+	//è¶³å…ƒåˆ¤å®š
 	Position2 nextPosDown[2];
-	//‰E‰º
+	//å³ä¸‹
 	nextPosDown[0].x = _pos.x + (_plRect.w - 2);
 	nextPosDown[0].y = _pos.y + (_plRect.h - 2) + (vy / 2);
-	//¶‰º
+	//å·¦ä¸‹
 	nextPosDown[1].x = _pos.x + 2;
 	nextPosDown[1].y = _pos.y + (_plRect.h - 2) + (vy / 2);
 	for (int j = 0; j < 2; j++) {
@@ -1360,12 +1360,12 @@ void Player::FeverJump()
 		airCnt = 0;
 	}
 
-	//flag‚ªtrue‚È‚ç¼Ş¬İÌßó‘Ô
+	//flagãŒtrueãªã‚‰ï½¼ï¾ï½¬ï¾ï¾Œï¾ŸçŠ¶æ…‹
 	if (JumpFlag == true && airFlag == true) {
 		_state = ST_JUMP;
 	}
 }
-//“G‚Æ“–‚½‚Á‚½‚Ìˆ—‚ğs‚¤
+//æ•µã¨å½“ãŸã£ãŸæ™‚ã®å‡¦ç†ã‚’è¡Œã†
 void Player::HitToEnemy()
 {
 	SoundMgr& so = SoundMgr::Instance();
@@ -1378,14 +1378,14 @@ void Player::HitToEnemy()
 				_state = ST_DETH;
 				so.SeStart("Se/PlHit.mp3", SCENE_GAME);
 
-				//Š®‘S”s–k
+				//å®Œå…¨æ•—åŒ—
 				if (gm.GetResultData().life < 0)
 				{
 					_state = ST_OVER;
 				}
 			}
 			else if (deathFlag == false) {
-				//€‚È‚È‚¢
+				//æ­»ãªãªã„
 			}
 		}
 		else {
@@ -1396,26 +1396,26 @@ void Player::HitToEnemy()
 	}
 	
 }
-//d—Í
+//é‡åŠ›
 void Player::gravity(void)
 {
-	//•Ç“o‚èó‘Ô‚È‚çd—Í‚Í–³‹
+	//å£ç™»ã‚ŠçŠ¶æ…‹ãªã‚‰é‡åŠ›ã¯ç„¡è¦–
 	if (_state == ST_WALL) {
 		return;
 	}
-	//ƒ}ƒbƒv‚Æ‚Ì”»’è
-	//2ƒhƒbƒg‚Ù‚Ç”»’è‚ğ‹·‚ß‚Ä‚¢‚é
+	//ãƒãƒƒãƒ—ã¨ã®åˆ¤å®š
+	//2ãƒ‰ãƒƒãƒˆã»ã©åˆ¤å®šã‚’ç‹­ã‚ã¦ã„ã‚‹
 	Position2 nextPosDown[3];
-	//‰E‰º	
+	//å³ä¸‹	
 	nextPosDown[0].x = _pos.x + (_plRect.w - 2);
 	nextPosDown[0].y = _pos.y + (vy / 2) + (_plRect.h);
-	//¶‰º
+	//å·¦ä¸‹
 	nextPosDown[1].x = _pos.x + 2;
 	nextPosDown[1].y = _pos.y + (vy / 2) + (_plRect.h);
-	//^‚ñ’†
+	//çœŸã‚“ä¸­
 	nextPosDown[2].x = _pos.x + (_plRect.w / 2);
 	nextPosDown[2].y = _pos.y + (vy / 2) + (_plRect.h);
-	//“o‚ê‚é•ÇA“o‚ê‚È‚¢•Ç‚Æ‚Ì”»’è
+	//ç™»ã‚Œã‚‹å£ã€ç™»ã‚Œãªã„å£ã¨ã®åˆ¤å®š
 	for (int j = 0; j < 3; j++) {
 		if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
 			|| _map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL
@@ -1426,54 +1426,54 @@ void Player::gravity(void)
 			break;
 		}
 		else {
-			//‰º•”‚É‰½‚à‚È‚©‚Á‚½‚çd—Í‚ğ‘«‚·
-			//‘¬“x’²®‚Ì‚½‚ß3‚ÅŠ„‚Á‚Ä‚¢‚é
+			//ä¸‹éƒ¨ã«ä½•ã‚‚ãªã‹ã£ãŸã‚‰é‡åŠ›ã‚’è¶³ã™
+			//é€Ÿåº¦èª¿æ•´ã®ãŸã‚3ã§å‰²ã£ã¦ã„ã‚‹
 			vy += GRAVITY / 3.0f;
-			//ˆê‰Max’l‚ğİ’è‚µ‚Ä‚¨‚­
+			//ä¸€å¿œMaxå€¤ã‚’è¨­å®šã—ã¦ãŠã
 			if (vy > MAX_GRAVITY) {
 				vy = MAX_GRAVITY;
 			}
-			//‹ó’†‚¾‚Á‚½‚ç‚Æ‚è‚ ‚¦‚¸¼Ş¬İÌßó‘Ô
+			//ç©ºä¸­ã ã£ãŸã‚‰ã¨ã‚Šã‚ãˆãšï½¼ï¾ï½¬ï¾ï¾Œï¾ŸçŠ¶æ…‹
 			//JumpFlag = true;
 			airFlag = true;
 		}
 	}
-	//Û°Ìßó‘Ô‚È‚ç‚¤‚²‚¯‚È‚¢
+	//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹ãªã‚‰ã†ã”ã‘ãªã„
 	if (_state == ST_ROPE ) {
 		vy = 0.0f;
 	}
-	//‰Á‘¬“x‚ğ‘«‚·
-	//‘¬“x’²®‚Ì‚½‚ß‚Q‚ÅŠ„‚Á‚Ä‚¢‚é
+	//åŠ é€Ÿåº¦ã‚’è¶³ã™
+	//é€Ÿåº¦èª¿æ•´ã®ãŸã‚ï¼’ã§å‰²ã£ã¦ã„ã‚‹
 	_pos.y += (int)vy / 2.0f;
 }
-//ƒtƒB[ƒo[‚Ìd—Í‚Å‚·
+//ãƒ•ã‚£ãƒ¼ãƒãƒ¼æ™‚ã®é‡åŠ›ã§ã™
 void Player::FeverGravity()
 {
 
-	//ƒ}ƒbƒv‚Æ‚Ì”»’è
-	//2ƒhƒbƒg‚Ù‚Ç”»’è‚ğ‹·‚ß‚Ä‚¢‚é
+	//ãƒãƒƒãƒ—ã¨ã®åˆ¤å®š
+	//2ãƒ‰ãƒƒãƒˆã»ã©åˆ¤å®šã‚’ç‹­ã‚ã¦ã„ã‚‹
 	Position2 nextPosDown[3];
-	//‰E‰º	
+	//å³ä¸‹	
 	nextPosDown[0].x = _pos.x + (_plRect.w - 2);
 	nextPosDown[0].y = _pos.y + (vy / 2) + (_plRect.h);
-	//¶‰º
+	//å·¦ä¸‹
 	nextPosDown[1].x = _pos.x + 2;
 	nextPosDown[1].y = _pos.y + (vy / 2) + (_plRect.h);
-	//^‚ñ’†
+	//çœŸã‚“ä¸­
 	nextPosDown[2].x = _pos.x + (_plRect.w / 2);
 	nextPosDown[2].y = _pos.y + (vy / 2) + (_plRect.h);
-	//‹ê“÷‚Ìô
+	//è‹¦è‚‰ã®ç­–
 	Position2 nextPosDown2[3];
-	//‰E‰º
+	//å³ä¸‹
 	nextPosDown2[0].x = nextPosDown[0].x;
 	nextPosDown2[0].y = nextPosDown[0].y - 8;
-	//¶‰º
+	//å·¦ä¸‹
 	nextPosDown2[1].x = nextPosDown[1].x;
 	nextPosDown2[1].y = nextPosDown[1].y - 8;
-	//^‚ñ’†
+	//çœŸã‚“ä¸­
 	nextPosDown2[2].x = nextPosDown[2].x;
 	nextPosDown2[2].y = nextPosDown[2].y - 8;
-	//•Ç“o‚èó‘Ô‚È‚çd—Í‚Í–³‹
+	//å£ç™»ã‚ŠçŠ¶æ…‹ãªã‚‰é‡åŠ›ã¯ç„¡è¦–
 	if (_state == ST_WALL) {
 		return;
 	}
@@ -1489,9 +1489,9 @@ void Player::FeverGravity()
 	if (JumpFlag == true && vy < 0) {
 
 	}
-	//“o‚ê‚È‚¢•Ç‚Æ‚Ì”»’è
+	//ç™»ã‚Œãªã„å£ã¨ã®åˆ¤å®š
 	for (int j = 0; j < 3; j++) {
-		//‰º‚É’n–Ê‚ª‚ ‚ê‚Îd—Í‰ÁZ‚ğ‚â‚ß‚é
+		//ä¸‹ã«åœ°é¢ãŒã‚ã‚Œã°é‡åŠ›åŠ ç®—ã‚’ã‚„ã‚ã‚‹
 		if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
@@ -1500,25 +1500,25 @@ void Player::FeverGravity()
 			break;
 		}
 		else {
-			//‰º•”‚É‰½‚à‚È‚©‚Á‚½‚çd—Í‚ğ‘«‚·
-			//‘¬“x’²®‚Ì‚½‚ß3‚ÅŠ„‚Á‚Ä‚¢‚é
+			//ä¸‹éƒ¨ã«ä½•ã‚‚ãªã‹ã£ãŸã‚‰é‡åŠ›ã‚’è¶³ã™
+			//é€Ÿåº¦èª¿æ•´ã®ãŸã‚3ã§å‰²ã£ã¦ã„ã‚‹
 			vy += GRAVITY / 3.0f;
-			//ˆê‰Max’l‚ğİ’è‚µ‚Ä‚¨‚­
+			//ä¸€å¿œMaxå€¤ã‚’è¨­å®šã—ã¦ãŠã
 			if (vy > MAX_GRAVITY) {
 				vy = MAX_GRAVITY;
 			}
-			//‹ó’†‚¾‚Á‚½‚ç‚Æ‚è‚ ‚¦‚¸¼Ş¬İÌßó‘Ô
-			JumpFlag = true;			//‚Â‚¯‚Ä‚È‚¢‚Æã°‚·‚è”²‚¯”»’è‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢‚Á‚Û‚¢‚Å‚·
+			//ç©ºä¸­ã ã£ãŸã‚‰ã¨ã‚Šã‚ãˆãšï½¼ï¾ï½¬ï¾ï¾Œï¾ŸçŠ¶æ…‹
+			JumpFlag = true;			//ã¤ã‘ã¦ãªã„ã¨ä¸ŠåºŠã™ã‚ŠæŠœã‘åˆ¤å®šãŒã†ã¾ãã„ã‹ãªã„ã£ã½ã„ã§ã™
 			airFlag = true;
 		}
 	}
 
-	//Û°Ìßó‘Ô‚È‚ç‚¤‚²‚¯‚È‚¢
+	//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹ãªã‚‰ã†ã”ã‘ãªã„
 	if (_state == ST_ROPE ) {
 		vy = 0.0f;
 	}
-	//‰Á‘¬“x‚ğ‘«‚·
-	//‘¬“x’²®‚Ì‚½‚ß‚Q‚ÅŠ„‚Á‚Ä‚¢‚é
+	//åŠ é€Ÿåº¦ã‚’è¶³ã™
+	//é€Ÿåº¦èª¿æ•´ã®ãŸã‚ï¼’ã§å‰²ã£ã¦ã„ã‚‹
 	_pos.y += (int)vy / 2.0f;
 }
 bool Player::plPlaceCheck()
@@ -1533,13 +1533,13 @@ bool Player::plPlaceCheck()
 }
 void Player::Draw(Position2& offset)
 {
-	//ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚É•ÏŠ·‚µ‚½Œã‚Ìƒ‚ƒfƒ‹•\¦—p‚Ìpos‚ğƒZƒbƒg
-	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
-	//‹@
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã«å¤‰æ›ã—ãŸå¾Œã®ãƒ¢ãƒ‡ãƒ«è¡¨ç¤ºç”¨ã®posã‚’ã‚»ãƒƒãƒˆ
+	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h),0.0f));
+	//æ™‚æ©Ÿ
 	if (vanFlag == true) {
-		//“§‰ß—¦‚ğ‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
+		//é€éç‡ã‚’ã ã‚“ã ã‚“ä¸Šã’ã¦ã„ã
 		alfa = max(alfa - VANISH, tranceMax);
-		//—ÖŠsü‚ğ‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
+		//è¼ªéƒ­ç·šã‚’ã ã‚“ã ã‚“ä¸Šã’ã¦ã„ã
 		LineNum += 0.005f;
 		if (LineNum >= 0.5f)
 		{
@@ -1550,23 +1550,23 @@ void Player::Draw(Position2& offset)
 		LineNum = 0.0f;
 		switch (_state)
 		{
-			//½ÃÙ½ó‘Ô
+			//ï½½ï¾ƒï¾™ï½½çŠ¶æ…‹
 		//case ST_VANISH:
-		//	//“§‰ß—¦‚ğ‚¾‚ñ‚¾‚ñã‚°‚Ä‚¢‚­
+		//	//é€éç‡ã‚’ã ã‚“ã ã‚“ä¸Šã’ã¦ã„ã
 		//	alfa = max(alfa - VANISH, tranceMax);
 		//	//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0xff0000, true);
 		//	break;
-			//Û°Ìßó‘Ô
+			//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹
 		case ST_ROPE:
 			LineNum = 0.0f;
 			alfa = 255;
 			break;
-			//•Ç“o‚èó‘Ô
+			//å£ç™»ã‚ŠçŠ¶æ…‹
 		case ST_WALL:
 			LineNum = 0.0f;
 			alfa = 255;
 			break;
-			//Ì¨°ÊŞ°ó‘Ô
+			//ï¾Œï½¨ï½°ï¾Šï¾ï½°çŠ¶æ…‹
 		case ST_FEVER:
 			LineNum = 0.5f;
 			alfa = 50;
@@ -1577,7 +1577,7 @@ void Player::Draw(Position2& offset)
 				alfa = 255;
 			}
 			else {
-				//Š®‘S‚ÉÁ‚·
+				//å®Œå…¨ã«æ¶ˆã™
 				alfa = 0;
 			}
 			break;
@@ -1592,19 +1592,19 @@ void Player::Draw(Position2& offset)
 		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
 
-	//ƒ‚ƒfƒ‹‚Ì‰ñ“]Šp“x‚Ìİ’è(ƒ‰ƒWƒAƒ“)
+	//ãƒ¢ãƒ‡ãƒ«ã®å›è»¢è§’åº¦ã®è¨­å®š(ãƒ©ã‚¸ã‚¢ãƒ³)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, modelDirAngle, 0.f));
-	//ƒ‚ƒfƒ‹‚Ìpos‚ğİ’è+ƒ[ƒ‹ƒhÀ•W‚©‚çƒXƒNƒŠ[ƒ“‚Ö•ÏŠ·
+	//ãƒ¢ãƒ‡ãƒ«ã®posã‚’è¨­å®š+ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã¸å¤‰æ›
 	MV1SetPosition(modelhandle, WorldToScreenPos);
-	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚Ìİ’è
+	//ãƒ¢ãƒ‡ãƒ«ã®æ‹¡å¤§ç¸®å°å€¤ã®è¨­å®š
 	MV1SetScale(modelhandle, VGet(1.4f, 1.4f, 1.4f));
-	//ƒ‚ƒfƒ‹‚Ì“§‰ß—¦‚Ìİ’è
+	//ãƒ¢ãƒ‡ãƒ«ã®é€éç‡ã®è¨­å®š
 	MV1SetOpacityRate(modelhandle, alfa / 255.f);
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 	AnimationSwitching();
 
-	//ƒ‚ƒfƒ‹‚ğ—ÖŠsü0.0f‚Å•`‰æ 
+	//ãƒ¢ãƒ‡ãƒ«ã‚’è¼ªéƒ­ç·š0.0fã§æç”» 
 	_modelmgr->Draw(modelhandle, LineNum);
 
 #ifdef _DEBUG
@@ -1612,12 +1612,12 @@ void Player::Draw(Position2& offset)
 		//_wallRect.Draw(offset,0xffffff);
 #endif
 }
-//Rectæ“¾
+//Rectå–å¾—
 Rect& Player::GetRect()
 {
 	return _plRect;
 }
-//½Ã°À½æ“¾
+//ï½½ï¾ƒï½°ï¾€ï½½å–å¾—
 CHAR_ST Player::GetcharState(void)
 {
 	if (feverFlag == true) {
@@ -1625,13 +1625,13 @@ CHAR_ST Player::GetcharState(void)
 	}
 	return _state;
 }
-//_posæ“¾
+//_poså–å¾—
 Position2& Player::GetPos(void)
 {
 	//return Position2(_pos.x,_pos.y);
 	return _tmpPos;
 }
-//Œü‚«æ“¾
+//å‘ãå–å¾—
 DIR Player::GetDir(void)
 {
 	return _dir;
@@ -1640,15 +1640,15 @@ DIR Player::GetTmpDir()
 {
 	return _tmpDir;
 }
-//‰ŠúˆÊ’u‚É–ß‚·
+//åˆæœŸä½ç½®ã«æˆ»ã™
 void Player::SetInitPos()
 {
 	_pos = initPos;
-	//‰Á‘¬“x‚àŒ³‚É–ß‚·
+	//åŠ é€Ÿåº¦ã‚‚å…ƒã«æˆ»ã™
 	vx = 0.0f;
 	vy = 0.0f;
 	alfa = 255;
-	_state = ST_INVINCIBLE;//–³“G‚É‚·‚é
+	_state = ST_INVINCIBLE;//ç„¡æ•µã«ã™ã‚‹
 	AnimNowTime[ACTION_KNOCKBACK] = 0.0f;
 	AnimNowTime[ST_OVER] = 0.0f;
 	feverFlag = false;
@@ -1656,10 +1656,10 @@ void Player::SetInitPos()
 	inviFlag = true;
 	inviCnt = INVINCIBLETIMER * 60;
 }
-//‰ŠúˆÊ’u‚ğƒZƒbƒg‚·‚é
+//åˆæœŸä½ç½®ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position3(p.x,p.y-(_plRect.h/2)+6,0.f);	//y‚É‘«‚µ‚Ä‚¢‚é‚Ì‚ÍÅ‰‚ÌÀ•W‚Å–„‚Ü‚ç‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß
+	_pos = Position2(p.x,p.y-(_plRect.h/2)+6);	//yã«è¶³ã—ã¦ã„ã‚‹ã®ã¯æœ€åˆã®åº§æ¨™ã§åŸ‹ã¾ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹ãŸã‚
 	initPos = _pos;
 	_tmpPos.x = _pos.x;
 	_tmpPos.y = _pos.y;
@@ -1679,7 +1679,8 @@ void Player::SetRetryPos(Position2 midPos)
 	_pos = Position3(midPos.x,midPos.y - (_plRect.h / 2),0.f);
 	_tmpPos.x = _pos.x;
 	_tmpPos.y = _pos.y;
-	//‰Á‘¬“x‚àŒ³‚É–ß‚·
+
+	//åŠ é€Ÿåº¦ã‚‚å…ƒã«æˆ»ã™
 	vx = 0.0f;
 	vy = 0.0f;
 	_state = ST_INVINCIBLE;
@@ -1690,13 +1691,13 @@ void Player::SetRetryPos(Position2 midPos)
 	inviCnt = INVINCIBLETIMER * 60;
 }
 
-//ƒ|[ƒX‚©‚ç—p
+//ãƒãƒ¼ã‚¹ã‹ã‚‰ç”¨
 void Player::SetInitPausePos()
 {
 	_pos = initPos;
 	_tmpPos.x = _pos.x;
 	_tmpPos.y = _pos.y;
-	//‰Á‘¬“x‚àŒ³‚É–ß‚·
+	//åŠ é€Ÿåº¦ã‚‚å…ƒã«æˆ»ã™
 	vx = 0.0f;
 	vy = 0.0f;
 	alfa = 255;
@@ -1711,6 +1712,7 @@ Position2 Player::ReturnWoToScPos2ver()
 {
 	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
 }
+
 bool Player::GetStateCrouch()
 {
 	return crouchFlag;
@@ -1724,57 +1726,57 @@ bool Player::GetStateRope()
 	return ropeFlag;
 }
 
-//ƒvƒŒƒCƒ„[‚Ìó‘Ô‚É‚æ‚Á‚ÄƒAƒjƒ[ƒVƒ‡ƒ“‚ğØ‚è‘Ö‚¦‚Ä‚¢‚éŠÖ”‚Å‚·
-//ƒeƒNƒXƒ`ƒƒ‚à•Ï‚¦‚Ä‚¢‚Ü‚·
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®çŠ¶æ…‹ã«ã‚ˆã£ã¦ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆã¦ã„ã‚‹é–¢æ•°ã§ã™
+//ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚‚å¤‰ãˆã¦ã„ã¾ã™
 void Player::AnimationSwitching(void)
 {
 	ImageMgr& im = ImageMgr::Instance();
 	switch (_state)
 	{
-		//’Êíó‘Ô
+		//é€šå¸¸çŠ¶æ…‹
 	case ST_DEF:
 	case ST_STOP:
 	case ST_INVINCIBLE:
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/face.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_WAIT, ANIMATION_SPEED_DEF,0.0f);
 		break;
-		//ˆÚ“®ó‘Ô
+		//ç§»å‹•çŠ¶æ…‹
 	case ST_MOVE:
 		AnimationManager(ACTION_WALK, ANIMATION_SPEED_SUPER,0.0f);
 		break;
-		//Û°Ìßó‘Ô
+		//ï¾›ï½°ï¾Œï¾ŸçŠ¶æ…‹
 	case ST_ROPE:
-		//”­Ë€”õ’†‚Í‚Ì‚¯‚¼‚éƒAƒjƒ[ƒVƒ‡ƒ“
+		//ç™ºå°„æº–å‚™ä¸­ã¯ã®ã‘ãã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 		if (_rope->GetRopeState() != ST_ROPE_READY && _rope->GetRopeState() == ST_ROPE_SELECT)
 		{
 			AnimationManager(ACTION_TONGUE_SET, ANIMATION_SPEED_HIGH, AnimTotalTime[ACTION_TONGUE_SET]);
 		}
-		//ã”­Ë!!!!!!
+		//èˆŒç™ºå°„!!!!!!
 		else if (_rope->GetRopeState() != ST_ROPE_READY && _rope->GetRopeState() != ST_ROPE_SELECT)
 		{
 			AnimationManager(ACTION_TONGUE_GO, ANIMATION_SPEED_HIGH, AnimTotalTime[ACTION_TONGUE_GO]);
 		}
 		break;
-		//•Ç“o‚èó‘Ô
+		//å£ç™»ã‚ŠçŠ¶æ…‹
 	case ST_WALL:
 		AnimationManager(ACTION_CLIMB, ANIMATION_SPEED_HIGH,0.0f);
 		break;
-		//ƒWƒƒƒ“ƒvó‘Ô
+		//ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹
 	case ST_JUMP:
 		AnimationManager(ACTION_JUMP, ANIMATION_SPEED_DEF, 0.0f);
 		break;
-		//ƒŠƒXƒ|[ƒ“ƒ_ƒEƒ“ó‘Ô
+		//ãƒªã‚¹ãƒãƒ¼ãƒ³ãƒ€ã‚¦ãƒ³çŠ¶æ…‹
 	case ST_DETH:
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/cryFace.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_KNOCKBACK, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_KNOCKBACK]);
 		break;
-		//ƒQ[ƒ€ƒI[ƒo[ó‘Ô
+		//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼çŠ¶æ…‹
 	case ST_OVER:
 		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("player_model/surprisFace.png", SCENE_TITLE), FALSE);
 		AnimationManager(ACTION_DAMAGE, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_DAMAGE]);
 		break;
 	case ST_CROUCH:
-		//‚µ‚á‚ª‚İó‘Ô
+		//ã—ã‚ƒãŒã¿çŠ¶æ…‹
 		AnimationManager(ACTION_CROUCH, ANIMATION_SPEED_DEF, AnimTotalTime[ACTION_CROUCH]);
 		break;
 
@@ -1787,10 +1789,10 @@ void Player::GetFeverData()
 	_fd = GameMain::Instance().ReturnFeverData();
 }
 
-//‘æˆêˆø” ƒAƒ^ƒbƒ`‚·‚éƒAƒjƒ[ƒVƒ‡ƒ“–¼
-//‘æ“ñˆø” ƒAƒjƒ[ƒVƒ‡ƒ“‚ği‚ß‚éƒXƒs[ƒh
-//‘æOˆø” ƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒ‹[ƒv‚³‚¹‚é‚©‚Ç‚¤‚©(¡‚Ì‚Æ‚±‚ë0.0fw’è‚Åƒ‹[ƒv,AnimTotalTime[ƒAƒNƒVƒ‡ƒ“]‚Å1‰ñÄ¶)
-//AnimTotalTime[ƒAƒNƒVƒ‡ƒ“]‚Åw’è‚µ‚½ê‡•K‚¸‚Ç‚±‚©‚µ‚ç‚Ìˆ—‚ÅAnimNowTime[]‚ğ0‚É‚·‚é
+//ç¬¬ä¸€å¼•æ•° ã‚¢ã‚¿ãƒƒãƒã™ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å
+//ç¬¬äºŒå¼•æ•° ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é€²ã‚ã‚‹ã‚¹ãƒ”ãƒ¼ãƒ‰
+//ç¬¬ä¸‰å¼•æ•° ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹ã‹ã©ã†ã‹(ä»Šã®ã¨ã“ã‚0.0fæŒ‡å®šã§ãƒ«ãƒ¼ãƒ—,AnimTotalTime[ã‚¢ã‚¯ã‚·ãƒ§ãƒ³]ã§1å›å†ç”Ÿ)
+//AnimTotalTime[ã‚¢ã‚¯ã‚·ãƒ§ãƒ³]ã§æŒ‡å®šã—ãŸå ´åˆå¿…ãšã©ã“ã‹ã—ã‚‰ã®å‡¦ç†ã§AnimNowTime[]ã‚’0ã«ã™ã‚‹
 void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float looptime)
 {
 	for (int i = 0; i <= ACTION_MAX; i++)
@@ -1799,16 +1801,16 @@ void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float loop
 		{
 			continue;
 		}
-		//•s—v‚ÈƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒuƒŒƒ“ƒh—¦‚ğ0‚É‚·‚é
+		//ä¸è¦ãªã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ–ãƒ¬ãƒ³ãƒ‰ç‡ã‚’0ã«ã™ã‚‹
 		MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[i], 0.0f);
 	}
-	//“K—p‚·‚éƒAƒjƒ[ƒVƒ‡ƒ“‚Ìİ’è ƒuƒŒƒ“ƒh—¦‚ğ1.0f‚É
+	//é©ç”¨ã™ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š ãƒ–ãƒ¬ãƒ³ãƒ‰ç‡ã‚’1.0fã«
 	MV1SetAttachAnimBlendRate(modelhandle, AnimIndex[actions], 1.0f);
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒAƒ^ƒbƒ`
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¢ã‚¿ãƒƒãƒ
 	MV1SetAttachAnimTime(modelhandle, AnimIndex[actions], AnimNowTime[actions]);
 
-	//w’èƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒtƒŒ[ƒ€‚ği‚ß‚é
-	//ƒAƒNƒVƒ‡ƒ“ƒNƒ‰ƒCƒ€‚ÉŠÖ‚µ‚Ä‚Í•Ê‚ÌêŠ‚ÅƒJƒEƒ“ƒg‚ği‚ß‚é
+	//æŒ‡å®šã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’é€²ã‚ã‚‹
+	//ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚¯ãƒ©ã‚¤ãƒ ã«é–¢ã—ã¦ã¯åˆ¥ã®å ´æ‰€ã§ã‚«ã‚¦ãƒ³ãƒˆã‚’é€²ã‚ã‚‹
 	if (actions != ACTION_CLIMB)
 	{
 		AnimNowTime[actions] += animspeed;
@@ -1820,7 +1822,7 @@ void Player::AnimationManager(PLAYER_ACTIONS actions, float animspeed,float loop
 		else {
 		}
 	}
-	//Œ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ªÅ‘åƒtƒŒ[ƒ€‚Ü‚Å‚¢‚Á‚½‚çƒ‹[ƒv‚·‚é
+	//ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒæœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ã§ã„ã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã™ã‚‹
 	if (AnimNowTime[actions] >= AnimTotalTime[actions])
 	{
 		AnimNowTime[actions] = looptime;
