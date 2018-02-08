@@ -44,6 +44,9 @@ private:
 	//GameScene& gmScen;
 	CHAR_ST _state;						//·¬×‚Ìó‘Ô
 	Position3 _pos;						//·¬×‚ÌÀ•W
+
+	Position2 _tmpPos;
+
 	DIR _dir;							//·¬×‚ÌŒü‚«
 	Position3 initPos;					//‰ŠúˆÊ’u•Û‘¶
 	DIR _tmpDir;						//•ûŒü‚ğ•Û‘¶‚·‚é

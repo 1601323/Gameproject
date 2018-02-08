@@ -21,6 +21,8 @@ Player::Player()
 	_pos.y = 300.0f;
 	initPos.x = _pos.x;
 	initPos.y = _pos.y;
+	_tmpPos.x = _pos.x;
+	_tmpPos.y = _pos.y;
 	_state = ST_DEF;
 	vx = 0.0f;
 	vy = 0.0f;
@@ -90,8 +92,10 @@ void Player::Update(Input* input)
 	_inpInfo = input->GetInput(1);
 	memcpy(oldkeyData, keyData, sizeof(keyData));
 	GetHitKeyStateAll(keyData);
-		gravity();
+	gravity();
 
+	_tmpPos.x = _pos.x;
+	_tmpPos.y = _pos.y;
 	if (feverFlag == true) {
 	//	FeverGravity();
 
@@ -131,7 +135,7 @@ void Player::setState(void)
 		_state = ST_INVINCIBLE;
 	}
 	stInvincible();
-	if (/*_state != ST_FEVER*/feverFlag == true) {
+	if (/*_state != ST_FEVER*/feverFlag == false) {
 		stVanish();
 	}
 }
@@ -1624,7 +1628,8 @@ CHAR_ST Player::GetcharState(void)
 //_poséÊìæ
 Position2& Player::GetPos(void)
 {
-	return Position2(_pos.x,_pos.y);
+	//return Position2(_pos.x,_pos.y);
+	return _tmpPos;
 }
 //å¸Ç´éÊìæ
 DIR Player::GetDir(void)
@@ -1656,6 +1661,8 @@ void Player::SetInitPos(Position2 p)
 {
 	_pos = Position3(p.x,p.y-(_plRect.h/2)+6,0.f);	//yÇ…ë´ÇµÇƒÇ¢ÇÈÇÃÇÕç≈èâÇÃç¿ïWÇ≈ñÑÇ‹ÇÁÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈÇΩÇﬂ
 	initPos = _pos;
+	_tmpPos.x = _pos.x;
+	_tmpPos.y = _pos.y;
 }
 bool Player::EnterDoor()
 {
@@ -1670,6 +1677,8 @@ bool Player::EnterDoor()
 void Player::SetRetryPos(Position2 midPos)
 {
 	_pos = Position3(midPos.x,midPos.y - (_plRect.h / 2),0.f);
+	_tmpPos.x = _pos.x;
+	_tmpPos.y = _pos.y;
 	//â¡ë¨ìxÇ‡å≥Ç…ñﬂÇ∑
 	vx = 0.0f;
 	vy = 0.0f;
@@ -1685,6 +1694,8 @@ void Player::SetRetryPos(Position2 midPos)
 void Player::SetInitPausePos()
 {
 	_pos = initPos;
+	_tmpPos.x = _pos.x;
+	_tmpPos.y = _pos.y;
 	//â¡ë¨ìxÇ‡å≥Ç…ñﬂÇ∑
 	vx = 0.0f;
 	vy = 0.0f;
