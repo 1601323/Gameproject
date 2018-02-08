@@ -43,9 +43,9 @@ private:
 	ModelMgr* _modelmgr;
 	//GameScene& gmScen;
 	CHAR_ST _state;						//ｷｬﾗの状態
-	Position3 _pos;						//ｷｬﾗの座標
+	Position2 _pos;						//ｷｬﾗの座標
 	DIR _dir;							//ｷｬﾗの向き
-	Position3 initPos;					//初期位置保存
+	Position2 initPos;					//初期位置保存
 	DIR _tmpDir;						//方向を保存する
 	float vx;							//x速度
 	float vy;							//y速度

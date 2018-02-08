@@ -112,7 +112,7 @@ void GimPull::Move()
 	//count -=abs(_rope.GetRopeVec().x);
 	count -= 1;
 	if (count > 0) {
-		cout << _pos.x << endl;
+	//	cout << _pos.x << endl;
 		if (_state == GM_HIT) {			//´ÝÀ°‚à‚µ‚­‚ÍÛ°Ìß‚Ì“–‚½‚Á‚½êŠ‚ª’†S‚æ‚è¶‘¤
 			if (_map->GetChipType(nextPos2[1]) != CHIP_BLANK &&_map->GetChipType(nextPos2[1]) != CHIP_ROPE_ATTRACT /*||(_map->GetChipType(downPos[0]) == CHIP_BLANK&& _map->GetChipType(downPos[1]) == CHIP_BLANK)*/) {
 				_state = GM_END;

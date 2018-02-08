@@ -210,6 +210,7 @@ void GameScene::NormalUpdata(Input* input)
 		UsingRopeUpdata(input, offset);
 	}
 	else {
+
 		ObjectUpdata(input, offset);
 	}
 	_server->SetMidFlag(_rtData.midFlag);
@@ -381,6 +382,7 @@ void GameScene::PauseUpdata(Input* input)
 		DrawCheckUi();//ui表示
 		CheckReTireSelect(input);//入力関連
 
+		//
 		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
 		{
 			switch (pauseRetireNowNum)
@@ -568,6 +570,7 @@ void GameScene::Draw(Position2& offset)
 	//_map->Draw();
 	_fac->Draw(offset);
 	_emFac->Draw(offset);
+	//ドアが開ききってから描画
 	for (auto& gim : _fac->GimmickList())
 	{
 		if (gim->sensordoorMotionFlag)
