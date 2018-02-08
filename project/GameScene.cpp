@@ -646,16 +646,16 @@ void GameScene::DrawCheckUi()
 
 	switch (pauseRetireNowNum) {
 	case 0:
-		pauseDirNumX = 110;
+		pauseDirNumX = 180;
 		break;
 	case 1:
-		pauseDirNumX = 360;
+		pauseDirNumX = 450;
 		break;
 	default:
 		break;
 	}
 
-	DrawGraph(pauseDirNumX + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 20), 350, im.ImageIdReturn("image/yazirushi2.png", SCENE_RESULT), true);
+	DrawGraph(pauseDirNumX /*+ abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 20)*/, 340, im.ImageIdReturn("image/restart/Frame.png", SCENE_RESULT), true);
 }
 
 //背景描画
@@ -686,6 +686,9 @@ void GameScene::RetryPauseProcess()
 	_mid->Updata();
 	for (auto& em : _emFac->EnemyList()) {
 		em->SetInitPos();
+	}
+	for (auto& gim : _fac->GimmickList()) {
+		gim->SetInit();
 	}
 	_server->ServerInit();
 }

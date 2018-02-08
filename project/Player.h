@@ -46,6 +46,7 @@ private:
 	Position3 _pos;						//ｷｬﾗの座標
 	DIR _dir;							//ｷｬﾗの向き
 	Position3 initPos;					//初期位置保存
+	DIR _tmpDir;						//方向を保存する
 	float vx;							//x速度
 	float vy;							//y速度
 	int vanCnt;							//消えるまでのｶｳﾝﾄ
@@ -132,6 +133,7 @@ public:
 	void SetRetryPos(Position2 midPos);
 	void SetInitPausePos();             //ポース画面からリトライする場合こっちに入る
 	void Getclass(HitClass* h, Rope*r);	//hitクラスを受け取るための関数
+	DIR GetTmpDir();					//NONになる前の向きを返します
 
 	bool EnterDoor();					//仮実装　ドアに入ったらtrueにします
 	bool GetStateCrouch();				//しゃがんでいるかどうかを返します

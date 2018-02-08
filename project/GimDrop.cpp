@@ -23,6 +23,8 @@ GimDrop::GimDrop(Position2 pos,Rope& r,Player& p):_rope(r),_player(p)
 	_gmRect.w = 30;
 	_pos.x = pos.x + (MAP_CHIP_SIZE_X/2);
 	_pos.y = pos.y+MAP_CHIP_SIZE_Y - (_gmRect.h / 2);
+	_initPos.x = _pos.x;
+	_initPos.y = _pos.y;
 	dropFlag = false;
 	count = 60;
 	_fd.feverCnt = 0;
@@ -172,4 +174,9 @@ GIMMICK_TYPE& GimDrop::GetType()
 void GimDrop::SendFeverData()
 {
 	GameMain::Instance().SetFeverData(_fd);
+}
+void GimDrop::SetInit()
+{
+	_pos = _initPos;
+	_state = GM_NONE;
 }
