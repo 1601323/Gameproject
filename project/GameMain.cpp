@@ -167,6 +167,7 @@ void GameMain::Run()
 	DxLib::SetGraphMode(SCREEN_SIZE_X,SCREEN_SIZE_Y,32);
 	SetMainWindowText("ƒ”ƒBƒWƒŒƒIƒ“");
 	ChangeWindowMode(true);
+	SetTransColor(0,0,255);
 	//KeyState key;
 
 	if (DxLib_Init() == -1) {
