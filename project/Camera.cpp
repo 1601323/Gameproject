@@ -69,6 +69,8 @@ void Camera::Update()
 {
 	//ÌßÚ²Ô°‚ÌÀ•Wæ“¾
 	 pPos = _player->GetPos();
+	// pPos = _player->ReturnWoToScPos2ver();
+
 
 	// ¶‘¤‚Ì‚¸‚ç‚³‚È‚¢‚Æ‚«
 	if (pPos.x < CAMERA_MOVE_POS_X) {

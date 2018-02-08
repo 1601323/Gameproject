@@ -1530,7 +1530,7 @@ bool Player::plPlaceCheck()
 void Player::Draw(Position2& offset)
 {
 	//ワールド座標からスクリーン座標に変換した後のモデル表示用のposをセット
-	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h), _pos.z));
+	WorldToScreenPos = ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_plRect.w / 2), _pos.y - offset.y + (_plRect.h),0.0f));
 	//時機
 	if (vanFlag == true) {
 		//透過率をだんだん上げていく
@@ -1654,7 +1654,7 @@ void Player::SetInitPos()
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position3(p.x,p.y-(_plRect.h/2)+6,0.f);	//yに足しているのは最初の座標で埋まらないようにするため
+	_pos = Position2(p.x,p.y-(_plRect.h/2)+6);	//yに足しているのは最初の座標で埋まらないようにするため
 	initPos = _pos;
 }
 bool Player::EnterDoor()
@@ -1669,7 +1669,7 @@ bool Player::EnterDoor()
 }
 void Player::SetRetryPos(Position2 midPos)
 {
-	_pos = Position3(midPos.x,midPos.y - (_plRect.h / 2),0.f);
+	_pos = Position2(midPos.x,midPos.y - (_plRect.h / 2));
 	//加速度も元に戻す
 	vx = 0.0f;
 	vy = 0.0f;
@@ -1700,6 +1700,7 @@ Position2 Player::ReturnWoToScPos2ver()
 {
 	return Position2(WorldToScreenPos.x, WorldToScreenPos.y);
 }
+
 bool Player::GetStateCrouch()
 {
 	return crouchFlag;
