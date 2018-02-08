@@ -1598,8 +1598,8 @@ void Player::Draw(Position2& offset)
 	//	DrawFormatString(10, 400, 0xffffff, "½Ã°À½F%d", GetcharState());
 	//	DrawFormatString(10, 415, 0xffffff, "dir:%d ¶:2 ‰E:3", _dir);
 #ifdef _DEBUG
-		_plRect.Draw(offset);
-		_wallRect.Draw(offset,0xffffff);
+		//_plRect.Draw(offset);
+		//_wallRect.Draw(offset,0xffffff);
 #endif
 }
 //RectŽæ“¾
@@ -1647,8 +1647,8 @@ void Player::SetInitPos(Position2 p)
 bool Player::EnterDoor()
 {
 	if (_hit->GimmickEnter(*this)) {
-		if(CheckHitKey(KEY_INPUT_A)){
-		//if (GameMain::Instance().GetResultData().midFlag == true) {
+		//if(CheckHitKey(KEY_INPUT_A)){
+		if (GameMain::Instance().GetResultData().midFlag == true) {
 			return true;
 		}
 	}

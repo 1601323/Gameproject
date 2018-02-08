@@ -19,7 +19,7 @@ ResultScene::ResultScene()
 {
 	_updater = &ResultScene::NormalUpdata;
 	_minSensingValueL = SV_HIGH;
-	_mode = JUMP_SELECT;
+	_mode = JUMP_TITLE;
 	clearFlag = false;
 	selectFlag = false;
 	nowNum = 0;
@@ -62,12 +62,25 @@ void ResultScene::NormalUpdata(Input* input)
 	if (gm.GetResultData().goalFlag == true && gm.GetResultData().midFlag) {
 		GameClear();
 		clearFlag = true;
-		so.BgmStart("Bgm/gameclear.mp3",SCENE_SELECT);
-		so.SeStart("Se/Clear.mp3",SCENE_SELECT);
 	}
 	else {
 		GameOver();
 		clearFlag = false;
+	}
+	if (BgmFlag == false) {
+		if (clearFlag == true) {
+			so.BgmStart("Bgm/gameclear.mp3", SCENE_TITLE);
+			so.SeStart("Se/Clear.mp3", SCENE_TITLE);
+			tmpName = "Bgm/gameclear.mp3";
+			tmpScene = SCENE_TITLE;
+			BgmFlag = true;
+		}
+		else {
+			so.BgmStart("Bgm/gameover.mp3",SCENE_SELECT);
+			tmpName = "Bgm/gameover.mp3";
+			tmpScene = SCENE_SELECT;
+			BgmFlag = true;
+		}
 	}
 	//ÉçÉSÇ™Ç∑Ç◊ÇƒóéÇøÇÈÇ‹Ç≈èàóùÇµÇ»Ç¢
 	if (LogoDownCounter >= 500 )
@@ -77,19 +90,23 @@ void ResultScene::NormalUpdata(Input* input)
 		//DrawString(10, 10, "ÉäÉUÉãÉgÇ…ëJà⁄ÇµÇƒÇÈÇÊÅI", 0xffffff);
 #endif
 		if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
-			if (nowNum == JUMP_SELECT) {
+
+			 if (nowNum == JUMP_TITLE) {
 				dirMoveCnt = 0;
 				LogoDownCounter = -100;
-				gm.Instance().ChangeScene(new SelectScene());
-			}
-			else if (nowNum == JUMP_TITLE) {
-				dirMoveCnt = 0;
-				LogoDownCounter = -100;
+				if (BgmFlag == true) {
+					so.BgmStop(tmpName, tmpScene);
+					BgmFlag = false;
+				}
 				gm.Instance().ChangeScene(new TitleScene());
 			}
 			else if (nowNum == JUMP_RETRY) {
 				dirMoveCnt = 0;
 				LogoDownCounter = -100;
+				if (BgmFlag == true) {
+					so.BgmStop(tmpName, tmpScene);
+					BgmFlag = false;
+				}
 				gm.Instance().ChangeScene(new GameScene());
 			}
 			else {
@@ -313,7 +330,7 @@ void ResultScene::Draw()
 		else
 		{
 			DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
-			DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
+			//DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
 		}
 	}
 	switch (nowNum) {

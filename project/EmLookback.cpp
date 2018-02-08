@@ -229,7 +229,7 @@ void EmLookback::Draw(Position2 offset)
 	//_emEye.Draw(offset);
 
 #ifdef _DEBUG
-	_emRect.Draw(offset);
+	//_emRect.Draw(offset);
 	//DrawFormatString(10, 380, 0xffffff, "振り返り:%d", LookCount);
 #endif 
 }

@@ -543,7 +543,7 @@ void EmAround::Draw(Position2 offset)
 
 	tmpPos = offset;
 #ifdef _DEBUG
-	_emRect.Draw(offset);
+	//_emRect.Draw(offset);
 	//_emEye.Draw(offset);
 #endif
 
