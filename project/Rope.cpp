@@ -96,8 +96,8 @@ void Rope::DrawRopeRect(void)
 
 	ModelManager();
 
-	_RopeCircle.Draw(_tmpOffset);
-	_RopeCircle2.Draw(_tmpOffset);
+	//_RopeCircle.Draw(_tmpOffset);
+	//_RopeCircle2.Draw(_tmpOffset);
 
 }
 void Rope::ModelManager(void)

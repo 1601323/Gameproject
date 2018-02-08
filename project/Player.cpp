@@ -90,14 +90,16 @@ void Player::Update(Input* input)
 	_inpInfo = input->GetInput(1);
 	memcpy(oldkeyData, keyData, sizeof(keyData));
 	GetHitKeyStateAll(keyData);
+		gravity();
 
 	if (feverFlag == true) {
+	//	FeverGravity();
+
 		FeverUpdata(input);
-		FeverGravity();
 	}
 	else if (feverFlag == false) {
 		//重力
-		gravity();
+	//	gravity();
 		//移動制御
 		setMove(input);
 	}
@@ -129,18 +131,23 @@ void Player::setState(void)
 		_state = ST_INVINCIBLE;
 	}
 	stInvincible();
-	if (_state != ST_FEVER) {
+	if (/*_state != ST_FEVER*/feverFlag == true) {
 		stVanish();
 	}
 }
 void Player::FeverUpdata(Input* input)
 {
 	setDir(input);
-	FeverJump();
-	FeverWall();
-	moveRope();
+	//FeverJump();
+	//FeverWall();
 	moveCrouch(input);               
-	moveFever();
+	//moveFever();
+	//壁抜けを一時的に見なかったことにします
+	moveJump();
+	moveWall();
+	accelePL();
+
+	moveRope();
 
 	EnterDoor();
 }
@@ -1054,7 +1061,6 @@ void Player::moveCrouch(Input* input)
 			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
 				if (crouchFlag == true) {
 					crouchFlag = false;
-					//_pos.y -= 30;
 				}
 				else if (crouchFlag == false) {
 					crouchFlag = true;
@@ -1067,7 +1073,6 @@ void Player::moveCrouch(Input* input)
 			if (WallFlag == false && JumpFlag == false && ropeFlag == false) {
 				if (crouchFlag == true) {
 					crouchFlag = false;
-					//_pos.y -= 30;
 				}
 			}
 
@@ -1095,21 +1100,21 @@ bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
 	if (keyData[KEY_INPUT_Z]) {
-		if (_fd.feverCnt > 0) {
+		//if (_fd.feverCnt > 0) {
 
 			if (feverFlag == false) {
 				feverFlag = true;
 				_fd.feverCnt--;
 				GameMain::Instance().SetFeverData(_fd);
 			}
-		}
+	//	}
 	}
 	if (feverFlag == true) {
 		if (_state == ST_ROPE) {
 			feverTime = feverTime;
 		}
 		else {
-			_state = ST_FEVER;
+			//_state = ST_FEVER;
 			deathFlag = false;
 			feverTime--;
 		}
@@ -1363,7 +1368,7 @@ void Player::HitToEnemy()
 	GameMain& gm = GameMain::Instance();
 	
 	if (_hit->EnemyHit(*this)) {
-		if (_state != ST_INVINCIBLE)
+		if (_state != ST_INVINCIBLE && feverFlag ==false)
 		{
 			if (deathFlag == true) {
 				_state = ST_DETH;
@@ -1468,8 +1473,21 @@ void Player::FeverGravity()
 	if (_state == ST_WALL) {
 		return;
 	}
+	if (JumpFlag == true && vy > 0) {
+		for (int j = 0; j < 3; j++) {
+			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
+				vy = 0.0f;
+				JumpFlag = false;
+				break;
+			}
+		}
+	}
+	if (JumpFlag == true && vy < 0) {
+
+	}
 	//登れない壁との判定
 	for (int j = 0; j < 3; j++) {
+		//下に地面があれば重力加算をやめる
 		if (_map->GetChipType(nextPosDown[j]) == CHIP_N_CLIMB_WALL
 			|| (_hit->GimmickHit(nextPosDown[j]) && _hit->GimmickHitType(nextPosDown[j]) != GIM_FALL && _hit->GimmickHitType(nextPosDown[j]) != GIM_DOOR)) {
 			vy = 0.0f;
@@ -1488,14 +1506,6 @@ void Player::FeverGravity()
 			//空中だったらとりあえずｼﾞｬﾝﾌﾟ状態
 			JumpFlag = true;			//つけてないと上床すり抜け判定がうまくいかないっぽいです
 			airFlag = true;
-		}
-	}if (JumpFlag == true && vy > 0) {
-		for (int j = 0; j < 3; j++) {
-			if (_map->GetChipType(nextPosDown[j]) == CHIP_CLIMB_WALL && (_map->GetMapNum(nextPosDown[j]) != _map->GetMapNum(nextPosDown2[j]))) {
-				vy = 0.0f;
-				JumpFlag = false;
-				break;
-			}
 		}
 	}
 
@@ -1545,20 +1555,16 @@ void Player::Draw(Position2& offset)
 			//ﾛｰﾌﾟ状態
 		case ST_ROPE:
 			LineNum = 0.0f;
-			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x  + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x00ffff, true);
 			alfa = 255;
 			break;
 			//壁登り状態
 		case ST_WALL:
 			LineNum = 0.0f;
-			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y  + 32 -offset.y, 0xff00ff, true);
 			alfa = 255;
 			break;
 			//ﾌｨｰﾊﾞｰ状態
 		case ST_FEVER:
 			LineNum = 0.5f;
-			//DrawBox((int)_pos.x -offset.x, (int)_pos.y -offset.y, (int)_pos.x + 32 -offset.x, (int)_pos.y + 32 -offset.y, 0x0000ff, true);
-			//DrawString((int)_pos.x - 20 - offset.x, (int)_pos.y - 20 - offset.y, "＼FEVER／", 0x0000ff);
 			alfa = 50;
 			break;
 		case ST_INVINCIBLE:
@@ -1574,8 +1580,11 @@ void Player::Draw(Position2& offset)
 		default:
 			break;
 		}
+		if (feverFlag == true) {
+			LineNum = 0.5f;
+			alfa = 50;
+		}
 	}
-
 		_plRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + (_plRect.h / 2));
 		_wallRect.SetCenter(_pos.x + (_plRect.w / 2), _pos.y + ((_plRect.h / 4) * 3) - 1);
 
@@ -1594,11 +1603,6 @@ void Player::Draw(Position2& offset)
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, LineNum);
 
-	//	DrawString(400, 200, "赤：ステルス状態", 0xffffff);
-	//	DrawString(400, 220, "水：ﾛｰﾌﾟ使用状態", 0xffffff);
-	//	DrawString(400, 180, "Lｺﾝﾄﾛｰﾙでﾛｰﾌﾟ使用（仮）", 0xffffff);
-	//	DrawFormatString(10, 400, 0xffffff, "ｽﾃｰﾀｽ：%d", GetcharState());
-	//	DrawFormatString(10, 415, 0xffffff, "dir:%d 左:2 右:3", _dir);
 #ifdef _DEBUG
 		//_plRect.Draw(offset);
 		//_wallRect.Draw(offset,0xffffff);
@@ -1612,6 +1616,9 @@ Rect& Player::GetRect()
 //ｽﾃｰﾀｽ取得
 CHAR_ST Player::GetcharState(void)
 {
+	if (feverFlag == true) {
+		return ST_FEVER;
+	}
 	return _state;
 }
 //_pos取得
