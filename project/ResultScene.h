@@ -43,6 +43,7 @@ private:
 	int AnnouncCnt;                 //タイム表示用のアナウンスカウント
 	int medicineHandle;
 	int LogoDownCounter;            //ゲームオーバーの文字が落ちてくるようのカウンター
+	bool BgmFlag;					//BGMを鳴らすフラグ
 
 	float AnimTotalTimeH;           //アニメーション総時間 HはhappyのH
 	float AnimNowTimeH;             //今のアニメーション時間 HはhappyのH
