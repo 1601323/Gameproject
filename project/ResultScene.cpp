@@ -28,6 +28,7 @@ ResultScene::ResultScene()
 	AnimNowTimeH = 0.f;
 	AnimNowTimeS = 0.f;
 	LogoDownCounter = -100;
+	BgmFlag = false;
 	_modelmgr = ModelMgr::Instance();
 	//ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
 	playerModelHandle = MV1LoadModel("player_model/player.pmx");
@@ -61,13 +62,13 @@ void ResultScene::NormalUpdata(Input* input)
 	if (gm.GetResultData().goalFlag == true && gm.GetResultData().midFlag) {
 		GameClear();
 		clearFlag = true;
+		so.BgmStart("Bgm/gameclear.mp3",SCENE_SELECT);
 		so.SeStart("Se/Clear.mp3",SCENE_SELECT);
 	}
 	else {
 		GameOver();
 		clearFlag = false;
 	}
-
 	//ƒƒS‚ª‚·‚×‚Ä—Ž‚¿‚é‚Ü‚Åˆ—‚µ‚È‚¢
 	if (LogoDownCounter >= 500 )
 	{
