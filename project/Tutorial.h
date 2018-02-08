@@ -8,7 +8,7 @@
 
 //メッセージが出現するposition
 const Position2 drawMassagePosition[MESSAGE_NUM] = {
-	{200,580},                 //1 移動ジャンプ
+	{200,720},                 //1 移動ジャンプ
 	{750,580},                 //2 張り付く
 	{0,0},                 //3 ロープ
 	{0,0},                 //4 ステルス
@@ -39,13 +39,14 @@ public:
 	Tutorial(Player& player,HitClass& h);
 	~Tutorial();
 	Rect MessageRect;
-
+	Rect MessageRect2[MESSAGE_NUM];
 	void Updata(Input* input);
 	void Draw(Position2 &offset);
 	void CheckChainPosition();         //プレイヤーの座標と指定座標を一致してるかを確認する
 	void Getclass(HitClass& h,Player& pl);	       //hitクラスを受け取るための関数
 	void RetryInit();                  //リトライ時などで呼び出される
 	Rect &GetRect();
+	Rect& GetRect2(int num);
 	TutoList_t& TutorialList();
 
 	bool GetMessageFlag();

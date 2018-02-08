@@ -55,6 +55,7 @@ private:
 	int pauseDirNumX;
 	int pauseDirNumY;
 	int dirMoveCnt;
+	int BgImage;
 	bool selectPauseFlag;
 
 	bool ChackFlag;                                             //ポーズの確認用

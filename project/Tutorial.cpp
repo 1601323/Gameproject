@@ -17,6 +17,11 @@ Tutorial::Tutorial(Player& player, HitClass& h):_player(player),_hit(h)
 	messageMoveCheck = false;
 	MessageRect.w = 20;
 	MessageRect.h = 20;
+	for (int f = 0; f < MESSAGE_NUM; f++) {
+		MessageRect2[f].w = 20;
+		MessageRect2[f].h = 20;
+	}
+
 }
 
 Tutorial::~Tutorial()
@@ -49,7 +54,8 @@ void Tutorial::CheckChainPosition()
 		{
 			//一致していたら(当たらない)
 
-			if(_hit.TutorialHit(_player))
+			//if(_hit.TutorialHit(_player))
+			if(_hit.IsHit(GetRect2(i),_player.GetRect()))
 			{
 				MessageNumFlag[i] = true;
 				DrawMessageBoxFlag = true;
@@ -58,6 +64,7 @@ void Tutorial::CheckChainPosition()
 			else {
 				MessageNumFlag[i] = false;
 				DrawMessageBoxFlag = false;
+
 			}
 		}
 		//テキストを閉じる
@@ -74,8 +81,10 @@ void Tutorial::Draw(Position2 &offset)
 
 	for (int i = 0; i < MESSAGE_NUM; i++)
 	{
-		MessageRect.SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
-		MessageRect.Draw();
+		//MessageRect.SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
+		//MessageRect.Draw(offset);
+		MessageRect2[i].SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
+		MessageRect2[i].Draw(offset);
 	}
 
 	if (DrawMessageBoxFlag)
@@ -136,7 +145,10 @@ Rect& Tutorial::GetRect()
 {
 	return MessageRect;
 }
-
+Rect& Tutorial::GetRect2(int num)
+{
+	return MessageRect2[num];
+}
 void Tutorial::RetryInit()
 {
 	for (int i = 0; i < MESSAGE_NUM; i++)

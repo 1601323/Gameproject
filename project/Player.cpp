@@ -1104,13 +1104,27 @@ void Player::moveCrouch(Input* input)
 bool Player::stFever(void)
 {
 	//とりあえずﾌｨｰﾊﾞｰ
-	if (keyData[KEY_INPUT_Z]) {
-		if (_fd.feverCnt > 0) {
+	if (_inpInfo.num >= 1) {
+		if (_key.keybit.Y_BUTTON &&! _lastKey.keybit.Y_BUTTON) {
+			if (_fd.feverCnt > 0) {
 
-			if (feverFlag == false) {
-				feverFlag = true;
-				_fd.feverCnt--;
-				GameMain::Instance().SetFeverData(_fd);
+				if (feverFlag == false) {
+					feverFlag = true;
+					_fd.feverCnt--;
+					GameMain::Instance().SetFeverData(_fd);
+				}
+			}
+		}
+	}
+	else {
+		if (keyData[KEY_INPUT_Z]) {
+			if (_fd.feverCnt > 0) {
+
+				if (feverFlag == false) {
+					feverFlag = true;
+					_fd.feverCnt--;
+					GameMain::Instance().SetFeverData(_fd);
+				}
 			}
 		}
 	}
@@ -1444,7 +1458,7 @@ void Player::gravity(void)
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE ) {
+	if (_state == ST_ROPE  || _state == ST_CROUCH) {
 		vy = 0.0f;
 	}
 	//加速度を足す
@@ -1519,7 +1533,7 @@ void Player::FeverGravity()
 	}
 
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE ) {
+	if (_state == ST_ROPE ||_state == ST_CROUCH) {
 		vy = 0.0f;
 	}
 	//加速度を足す

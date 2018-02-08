@@ -707,8 +707,9 @@ void GameScene::DrawBack(Position2 offset)
 	ImageMgr& im = ImageMgr::Instance();
 	//DrawGraph(0-offset.x,0-offset.y,im.ImageIdReturn("image/Game/title5.png",SCENE_RESULT),true);
 	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/title5.png", SCENE_RESULT), true);
-	DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/j.bmp", SCENE_RESULT), true);
-
+	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/j.bmp", SCENE_RESULT), true);
+	DrawGraph(min(0 - offset.x*0.2,0),min( 0 - offset.y,0), im.ImageIdReturn("image/Game/haikkk.png",SCENE_RESULT),true);
+	DrawGraph(min(0, -offset.x*0.5), min(0, -offset.y), im.ImageIdReturn("image/Game/hai.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back3.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back2.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back1.png", SCENE_RESULT), true);
