@@ -52,7 +52,7 @@ void Tutorial::CheckChainPosition()
 	{
 		if (!messageMoveCheck)
 		{
-			//àÍívÇµÇƒÇ¢ÇΩÇÁ(ìñÇΩÇÁÇ»Ç¢)
+			//àÍívÇµÇƒÇ¢ÇΩÇÁ
 
 			//if(_hit.TutorialHit(_player))
 			if(_hit.IsHit(GetRect2(i),_player.GetRect()))
@@ -84,7 +84,7 @@ void Tutorial::Draw(Position2 &offset)
 		//MessageRect.SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
 		//MessageRect.Draw(offset);
 		MessageRect2[i].SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
-		MessageRect2[i].Draw(offset);
+		//MessageRect2[i].Draw(offset);
 	}
 
 	if (DrawMessageBoxFlag)
@@ -123,10 +123,10 @@ void Tutorial::Draw(Position2 &offset)
 		///7 ÉSÅ[Éã
 		else if (MessageNumFlag[6])
 		{
-			DrawGraph(200, 200, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial7.png", SCENE_RESULT), true);
+			DrawGraph(560, 450, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial7.png", SCENE_RESULT), true);
 		}
 
-		DrawGraph(0, 0, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
+		DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
 	}
 }
 
