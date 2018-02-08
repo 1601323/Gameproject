@@ -183,7 +183,6 @@ void SelectScene::Draw()
 	//ƒ‚ƒfƒ‹‚ð—ÖŠsü0.0f‚Å•`‰æ 
 	_modelmgr->Draw(modelhandle, 0.0f);
 
-
 	switch (nowNum)
 	{
 	case 0:

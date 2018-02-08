@@ -21,10 +21,13 @@ GimPull::GimPull(Position2 pos,Rope& r,Player& p):_rope(r),_pos(pos),_player(p)
 	_gmRect.w = 32*3;
 	_gmRect.h = 32;
 	count = 60;
+	DownCnt = 0;
 	_initPos = _pos;
 	_gimType = GIM_ATTRACT;
 	//モデル読み込み
-	modelhandle = _modelmgr->ModelIdReturn("floor_model/floor.pmx", SCENE_RESULT);
+	modelhandle = _modelmgr->ModelIdReturn("floor_model/pull floor_model/pull floor.pmx", SCENE_RESULT);
+	//取っ手の部分
+	handleHandle = _modelmgr->ModelIdReturn("floor_model/pull floor_model/handle.pmx", SCENE_RESULT);
 	//テクスチャのindexを取得
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
 }
@@ -151,15 +154,31 @@ void GimPull::Move()
 void GimPull::Draw(Position2 offset)
 {
 	//モデルの回転角度の設定(ラジアン)
-	MV1SetRotationXYZ(modelhandle, VGet(0.0f,AngleRad(90.f), 0.0f));
+	MV1SetRotationXYZ(modelhandle, VGet(0.0f,0.0f, 0.0f));
+	MV1SetRotationXYZ(handleHandle, VGet(0.0f, 0.0f, 0.0f));
+
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(modelhandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_gmRect.w / 2),_pos.y - offset.y + (_gmRect.h ), 0)));
+	if (_state != GM_END)
+	{
+		MV1SetPosition(handleHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h), 0)));
+	}
+	else {
+		DownCnt+=5;
+		//endになったら落ちるよ
+		MV1SetPosition(handleHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_gmRect.w / 2), min(_pos.y - offset.y + (_gmRect.h) + DownCnt ,SCREEN_SIZE_Y+50), 0)));
+	}
+
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(5.5f, 7.0f, 5.5f));
+	MV1SetScale(handleHandle, VGet(5.5f, 7.0f, 5.5f));
+
 	//ステージごとにテクスチャを変更
 	ChangeStageTexture();
+
 	//モデルを輪郭線0.0fで描画 
 	_modelmgr->Draw(modelhandle, 0.0f);
+	_modelmgr->Draw(handleHandle, 0.0f);
 
 	//_gmRect.SetCenter(_pos.x - offset.x + (_gmRect.w / 2), _pos.y - offset.y + (_gmRect.h / 2));
 	//_gmRect.Draw();	
@@ -202,5 +221,10 @@ void GimPull::ChangeStageTexture()
 	default:
 		ASSERT();
 		break;
+	}
+
+	if (_state == GM_END)
+	{
+		MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("floor_model/floorMax.png", SCENE_TITLE), FALSE);
 	}
 }
