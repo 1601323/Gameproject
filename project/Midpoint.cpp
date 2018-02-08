@@ -127,6 +127,7 @@ void Midpoint::FollowDir()
 }
 void Midpoint::Draw(Position2 offset)
 {
+	GameMain& gm = GameMain::Instance();
 	//目的物のモデル
 	//モデルのposを設定+ワールド座標からスクリーンへ変換
 	MV1SetPosition(Targethandle, ConvWorldPosToScreenPos(VGet(_midPos.x - offset.x + (_hitRect.w / 2), _midPos.y - offset.y + (_hitRect.h), 0)));
@@ -199,7 +200,10 @@ void Midpoint::Draw(Position2 offset)
 		}
 		MV1SetOpacityRate(Targethandle, alfa / 255.f);
 		//モデルを描画
-		_modelmgr->Draw(Targethandle, 0.0f);
+		if (!gm.GetResultData().goalFlag)
+		{
+			_modelmgr->Draw(Targethandle, 0.08f);
+		}
 	}
 	if (uiFlag == true) {
 	//	DrawString(_midPos.x-offset.x,_midPos.y-offset.y-20,"＼B!!／",0x00ff00);
