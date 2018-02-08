@@ -53,9 +53,12 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	modelhandle = _modelmgr->ModelIdReturn("Enemy_model/teki2/teki2.pmx", SCENE_RESULT);
 	exModelHandle = _modelmgr->ModelIdReturn("UI_model/ex.pmx", SCENE_RESULT);
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
+	questionHandle = _modelmgr->ModelIdReturn("UI_model/question.pmx", SCENE_RESULT);
 
 	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndexEye = MV1GetMaterialDifMapTexture(modelhandle,1);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
+
 	modelDirAngle = 0.0f;
 	AnimNowTime = 0.0f;
 	AnimWheelTimer = 0.0f;
@@ -187,6 +190,10 @@ void EmLookback::Draw(Position2 offset)
 	MV1SetPosition(exModelHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
 	MV1SetScale(exModelHandle, VGet(1.5f, 1.5f, 1.5f));
 
+	//?マーク
+	MV1SetPosition(questionHandle, ConvWorldPosToScreenPos(VGet(_pos.x - offset.x + (_emRect.w / 2), _pos.y - offset.y + (_emRect.h) - 70, 0)));
+	MV1SetScale(questionHandle, VGet(1.5f, 1.5f, 1.5f));
+
 	//混乱のときのアニメーション
 	if (_state == EM_ST_FEAR)
 	{
@@ -201,11 +208,23 @@ void EmLookback::Draw(Position2 offset)
 		_modelmgr->Draw(starModelHandle, 0.0f);
 	}
 
-	if (_state == EM_ST_DIS)
+	if (_state == EM_ST_DIS || _state == EM_ST_RE_DIS)
 	{
-		_modelmgr->Draw(exModelHandle, 0.0f);
-	}
+		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki2/eye.png", SCENE_RESULT), FALSE);
 
+		if (loseSightCnt <= 90)
+		{
+			//?マーク
+			_modelmgr->Draw(questionHandle, 0.0f);
+		}
+		else {
+			//!マーク
+			_modelmgr->Draw(exModelHandle, 0.0f);
+		}
+	}
+	else {
+		MV1SetTextureGraphHandle(modelhandle, textureIndexEye, im.ImageIdReturn("Enemy_model/teki2/eye2.png", SCENE_RESULT), FALSE);
+	}
 
 	//_emEye.Draw(offset);
 

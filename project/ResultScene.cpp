@@ -28,6 +28,7 @@ ResultScene::ResultScene()
 	AnimNowTimeH = 0.f;
 	AnimNowTimeS = 0.f;
 	LogoDownCounter = -100;
+	BgmFlag = false;
 	_modelmgr = ModelMgr::Instance();
 	//モデル読み込み
 	playerModelHandle = MV1LoadModel("player_model/player.pmx");
@@ -61,13 +62,13 @@ void ResultScene::NormalUpdata(Input* input)
 	if (gm.GetResultData().goalFlag == true && gm.GetResultData().midFlag) {
 		GameClear();
 		clearFlag = true;
+		so.BgmStart("Bgm/gameclear.mp3",SCENE_SELECT);
 		so.SeStart("Se/Clear.mp3",SCENE_SELECT);
 	}
 	else {
 		GameOver();
-		clearFlag = true;
+		clearFlag = false;
 	}
-
 	//ロゴがすべて落ちるまで処理しない
 	if (LogoDownCounter >= 500 )
 	{
@@ -301,9 +302,19 @@ void ResultScene::Draw()
 	{
 		//セレクト画像と矢印をnowNumの値に応じて描画
 		DrawGraph(390 + abs(60 - (200 + (dirMoveCnt / 2 % 60)) % 30), dirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_TITLE), true);
-		//DrawGraph(500, 510, im.ImageIdReturn("image/Bar_Menu/Select.png", SCENE_TITLE), true);
-		DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
-		if (!clearFlag)	DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
+
+		if (!clearFlag)
+		{
+			//DrawGraph(500, 510, im.ImageIdReturn("image/Bar_Menu/Select.png", SCENE_TITLE), true);
+
+			DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
+			DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
+		}
+		else
+		{
+			DrawGraph(500, 430, im.ImageIdReturn("image/Bar_Menu/Title.png", SCENE_TITLE), true);
+			DrawGraph(510, 350, im.ImageIdReturn("image/Bar_Menu/Retry.png", SCENE_TITLE), true);
+		}
 	}
 	switch (nowNum) {
 	case 0:

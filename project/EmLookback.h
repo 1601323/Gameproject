@@ -41,10 +41,12 @@ private:
 	int AnimTotalTimeSt;  //アニメーション時間
 	float AnimNowTimeSt;  //現在のアニメーション時間
 	int starModelHandle;  //星のモデル
+	int questionHandle;   //?マーク
 
 	int modelhandle;
 	int textureIndex;
 	int textureIndexWheel;            //タイヤ用のテクスチャ
+	int textureIndexEye;              //目のテクスチャ
 	float modelDirAngle;
 	int eyeRange;
 	ENEMY_STATE _state;

@@ -119,7 +119,7 @@ void SensorDoor::Draw(Position2 offset)
 {
 	SoundMgr& so = SoundMgr::Instance();
 	//外枠の表示
-	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2))+5, (int)(_pos.y - offset.y - HEIGHT), (int)(_pos.x - offset.x + (WIDTH / 2)-5), (int)_pos.y - offset.y-5, 0x000000, true);
+	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2))+5, (int)(_pos.y - offset.y - HEIGHT)+3, (int)(_pos.x - offset.x + (WIDTH / 2)-5), (int)_pos.y - offset.y-5, 0x000000, true);
 
 	//モデルの回転角度の設定(ラジアン)
 	MV1SetRotationXYZ(modelhandle, VGet(0.f, 0.f, 0.0f));
