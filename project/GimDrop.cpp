@@ -7,6 +7,7 @@
 #include "Rope.h"
 #include "Player.h"
 #include "MapCtl.h"
+#include "SoundMgr.h"
 #include "ModelMgr.h"
 
 
@@ -118,10 +119,12 @@ void GimDrop::MoveRight()
 }
 void GimDrop::GetItem()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	if (_hit->IsHit(_gmRect, _player.GetRect())) {
 		if (_state != GM_END) {
 			_state = GM_END;
 			_fd.feverCnt++;
+			so.SeStart("Se/suck.mp3",SCENE_RESULT);
 			GameMain::Instance().SetFeverData(_fd);
 		}
 	}

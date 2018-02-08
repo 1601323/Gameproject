@@ -48,3 +48,7 @@ void Gimmick::Draw(Position2 offset)
 {
 
 }
+void Gimmick::SetInit()
+{
+
+}
