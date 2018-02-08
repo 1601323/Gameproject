@@ -19,6 +19,7 @@ private:
 	ModelMgr* _modelmgr;
 	GimmickState _state;
 	Position2 _pos;
+	Position2 _initPos;
 	FEVER_DATA _fd;
 
 	bool dropFlag;	//落下フラグ
@@ -37,6 +38,7 @@ private:
 	void MoveRight();
 	//ﾌｨｰﾊﾞｰｱｲﾃﾑとしてゲットする
 	void GetItem();
+	void SetInit();
 public:
 	GimDrop(Position2 pos,Rope& r,Player& p);
 	~GimDrop();

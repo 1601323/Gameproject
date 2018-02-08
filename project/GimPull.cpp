@@ -175,7 +175,11 @@ GIMMICK_TYPE& GimPull::GetType()
 {
 	return _gimType;
 }
-
+void GimPull::SetInit()
+{
+	_pos = _initPos;
+	_state = GM_NONE;
+}
 void GimPull::ChangeStageTexture()
 {
 	ImageMgr& im = ImageMgr::Instance();

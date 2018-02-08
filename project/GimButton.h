@@ -11,6 +11,7 @@ private:
 	Player& _pl;
 	GimmickState _state;
 	Position2 _pos;
+	Position2 _initPos;
 
 	//遊び心
 	//許されたい
@@ -21,7 +22,7 @@ private:
 	void CheckDoMove();		//作動のための条件
 	void Move();			//ギミックの内容について
 	void Draw(Position2 offset);			//描画
-
+	void SetInit();			//やりなおしのリセットを行う
 public:
 	GimButton(Position2 pos,Player& p);
 	~GimButton();
