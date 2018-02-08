@@ -418,6 +418,7 @@ bool Player::moveWall(void)
 	}
 	if (count >= 4) {
 		WallFlag = false;
+		moveFlag = false;
 	}
 
 	moveFlag = false;
@@ -504,7 +505,7 @@ bool Player::moveWall(void)
 		}
 	}
 
-	if (_state == ST_WALL) {
+	if (/*_state == ST_WALL*/WallFlag== true) {
 		//壁の中で移動可能なら
 		if (moveFlag) {
 			if (_inpInfo.num >= 1)
@@ -1419,7 +1420,7 @@ void Player::HitToEnemy()
 void Player::gravity(void)
 {
 	//壁登り状態なら重力は無視
-	if (_state == ST_WALL) {
+	if (_state == ST_WALL && WallFlag == true) {
 		return;
 	}
 	//マップとの判定
