@@ -33,6 +33,7 @@ SelectScene::SelectScene()
 	AnimTotalTime = MV1GetAttachAnimTotalTime(modelhandle, AnimIndex);
 
 	so.BgmStart("Bgm/select.mp3",SCENE_GAME);
+	so.ChangeSound(90);
 }
 
 
@@ -59,6 +60,7 @@ void SelectScene::NormalUpdata(Input* input)
 		gm.SetNowStage(nowNum);
 		gm.Instance().ChangeScene(new GameScene());
 		so.BgmStop("Bgm/select.mp3",SCENE_GAME);
+		so.ChangeSound();
 	}
 }
 SCENE_TYPE SelectScene::GetScene()

@@ -7,6 +7,7 @@
 #include "GameMain.h"
 #include "Midpoint.h"
 #include "ModelMgr.h"
+#include "SoundMgr.h"
 
 
 Midpoint::Midpoint()
@@ -68,8 +69,13 @@ void Midpoint::Updata()
 }
 void Midpoint::GetPoint()
 {
+	SoundMgr& so = SoundMgr::Instance();
 	//Ãﬂ⁄≤‘∞Ç™ÇΩÇ«ÇËíÖÇ¢ÇΩÇ∆Ç´ÅiÇ†ÇΩÇËîªíË?Åj
 	if (_hit->IsHit(GetRect(), _pl->GetRect())) {
+		if (checkpointFlag == false) {
+			so.SeStart("Se/keyGet.mp3", SCENE_RESULT);
+			checkpointFlag = true;
+		}
 		checkpointFlag = true;
 	}
 	//ñ⁄ìIï®éÊìæèåè
@@ -77,9 +83,13 @@ void Midpoint::GetPoint()
 		//if (GetFlag == false && checkpointFlag == true) {
 		//	uiFlag = true;
 		//}
+		if (GetFlag == false) {
+			so.SeStart("Se/key-in1.mp3", SCENE_RESULT);
+			GetFlag = true;
+			uiFlag = false;
+			initPos = _midPos;
+		}
 		GetFlag = true;
-		uiFlag = false;
-		initPos = _midPos;
 	}
 }
 void Midpoint::FollowDir()
@@ -147,7 +157,7 @@ void Midpoint::Draw(Position2 offset)
 		//MV1DrawModel(keyhandle);
 
 #ifdef _DEBUG
-		//_hitRect.Draw(offset);
+		_hitRect.Draw(offset);
 #endif
 	}
 	else if (checkpointFlag == true && GetFlag == false) {
@@ -167,7 +177,7 @@ void Midpoint::Draw(Position2 offset)
 		MV1SetOpacityRate(keyhandle, alfa / 255.f);
 
 #ifdef _DEBUG
-		//_hitRect.Draw(offset);
+		_hitRect.Draw(offset);
 #endif
 	}
 	if (GetFlag == false) {
