@@ -134,6 +134,8 @@ void SelectScene::Draw()
 	int redu = 40;
 	//背景
 	DrawGraph(0, 0, im.ImageIdReturn("image/select.png",SCENE_GAME),true);
+	//ステージセレクトの文字
+	DrawGraph(200, 0, im.ImageIdReturn("image/Select/StageSelect.png", SCENE_GAME), true);
 
 	//ステージ選択用の四角
 	//for (int x = 0; x < 3; x++) {

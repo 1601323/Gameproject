@@ -250,10 +250,14 @@ void GameScene::JudgeTransition()
 		_rtData.midFlag = false;
 	}
 	if (_player->EnterDoor()) {
+		
 		_timer->StopTimer();
 		_rtData.goalFlag = true;
 		_rtData.goalTime = _timer->ShowTimer();
 		gm.SetResultData(_rtData);
+		for (auto& gim : _fac->GimmickList()) {
+			gim->sensordoorMotionFlag = false;
+		}
 		_updater = &GameScene::TransitionUpdata;
 	}
 	if (_player->GetcharState() == ST_DETH || _player->GetcharState() == ST_OVER) {
@@ -303,12 +307,6 @@ void GameScene::TransitionUpdata(Input* input)
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	if (count >= 120) {
 		if (_rtData.goalFlag == true) {
-
-			for (auto& gim : _fac->GimmickList())
-			{
-				gim->sensordoorMotionFlag = false;
-			}
-
 			gm.Instance().ChangeScene(new ResultScene());
 			so.BgmFadeOut("Bgm/game4.mp3", SCENE_GAME);
 			bgmFlag = false;
@@ -388,7 +386,6 @@ void GameScene::PauseUpdata(Input* input)
 		DrawCheckUi();//ui表示
 		CheckReTireSelect(input);//入力関連
 
-		//
 		if ((key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) && ChackFlag)
 		{
 			switch (pauseRetireNowNum)
@@ -572,6 +569,8 @@ void  GameScene::CheckReTireSelect(Input* input)
 
 void GameScene::Draw(Position2& offset)
 {
+	GameMain& gm = GameMain::Instance();
+
 	//今のところマップはupdataで表示させておく
 	//_map->Draw();
 	_fac->Draw(offset);
@@ -579,7 +578,7 @@ void GameScene::Draw(Position2& offset)
 	//ドアが開ききってから描画
 	for (auto& gim : _fac->GimmickList())
 	{
-		if (gim->sensordoorMotionFlag)
+		if (gim->sensordoorMotionFlag && !gm.GetResultData().goalFlag)
 		{
 			_player->Draw(offset);
 		}
@@ -634,7 +633,6 @@ void GameScene::DrawPauseUi(void)
 	}
 
 	DrawGraph(210 + abs(30 - (200 + (dirMoveCnt / 2 % 60)) % 20), pauseDirNumY, im.ImageIdReturn("image/yazirushi2.png", SCENE_RESULT), true);
-
 
 }
 

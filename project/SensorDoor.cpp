@@ -119,7 +119,7 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 void SensorDoor::Draw(Position2 offset)
 {
 	SoundMgr& so = SoundMgr::Instance();
-	RESULT_DATA _rtData = RESULT_DATA();
+	GameMain& gm = GameMain::Instance();
 	//外枠の表示
 	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2))+5, (int)(_pos.y - offset.y - HEIGHT)+3, (int)(_pos.x - offset.x + (WIDTH / 2)-5), (int)_pos.y - offset.y-5, 0x000000, true);
 
@@ -132,25 +132,35 @@ void SensorDoor::Draw(Position2 offset)
 
 	if (sensordoorMotionFlag == false)
 	{
-		doorCountOpen += 0.5;
-		MV1SetAttachAnimBlendRate(modelhandle, AttachIndexClose, 0.0f);
-		MV1SetAttachAnimBlendRate(modelhandle, AttachIndex, 1.0f);
-		//アニメーションをアタッチ
-		MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCountOpen);
-
-		if (doorCountOpen >= totalTime)
+		if (gm.GetResultData().goalFlag ==false)
 		{
-			doorCountOpen = totalTime;
-			sensordoorMotionFlag = true;
+			doorCountOpen += 0.5f;
+			MV1SetAttachAnimBlendRate(modelhandle, AttachIndexClose, 0.0f);
+			MV1SetAttachAnimBlendRate(modelhandle, AttachIndex, 1.0f);
+			//アニメーションをアタッチ
+			MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCountOpen);
 
-			//クリアのときには扉があくだけ
-			if (_rtData.goalFlag == true)
+			if (doorCountOpen >= totalTime)
+			{
+				doorCountOpen = totalTime;
+				sensordoorMotionFlag = true;
+				//so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
+			}
+		}
+		//クリアのときには扉があくだけ
+		else if (gm.GetResultData().goalFlag ==true)
+		{
+			doorCountOpen += 0.3f;
+			MV1SetAttachAnimBlendRate(modelhandle, AttachIndexClose, 0.0f);
+			MV1SetAttachAnimBlendRate(modelhandle, AttachIndex, 1.0f);
+			//アニメーションをアタッチ
+			MV1SetAttachAnimTime(modelhandle, AttachIndex, doorCountOpen);
+
+			if (doorCountOpen >= totalTime)
 			{
 				doorCountOpen = totalTime;
 				sensordoorMotionFlag = false;
 			}
-
-			//so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
 		}
 	}
 	else if (sensordoorMotionFlag == true)
