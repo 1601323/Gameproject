@@ -303,6 +303,12 @@ void GameScene::TransitionUpdata(Input* input)
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	if (count >= 120) {
 		if (_rtData.goalFlag == true) {
+
+			for (auto& gim : _fac->GimmickList())
+			{
+				gim->sensordoorMotionFlag = false;
+			}
+
 			gm.Instance().ChangeScene(new ResultScene());
 			so.BgmFadeOut("Bgm/game4.mp3", SCENE_GAME);
 			bgmFlag = false;

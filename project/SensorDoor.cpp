@@ -119,6 +119,7 @@ void SensorDoor::CheckHit()	//あたり判定の場所について
 void SensorDoor::Draw(Position2 offset)
 {
 	SoundMgr& so = SoundMgr::Instance();
+	RESULT_DATA _rtData = RESULT_DATA();
 	//外枠の表示
 	DxLib::DrawBox((int)(_pos.x - offset.x - (WIDTH / 2))+5, (int)(_pos.y - offset.y - HEIGHT)+3, (int)(_pos.x - offset.x + (WIDTH / 2)-5), (int)_pos.y - offset.y-5, 0x000000, true);
 
@@ -141,6 +142,14 @@ void SensorDoor::Draw(Position2 offset)
 		{
 			doorCountOpen = totalTime;
 			sensordoorMotionFlag = true;
+
+			//クリアのときには扉があくだけ
+			if (_rtData.goalFlag == true)
+			{
+				doorCountOpen = totalTime;
+				sensordoorMotionFlag = false;
+			}
+
 			//so.SeStart("Bgm/door_open.mp3", SCENE_GAME);
 		}
 	}
@@ -155,6 +164,7 @@ void SensorDoor::Draw(Position2 offset)
 		if (doorCountClose >= totalTimeClose)
 		{
 			doorCountClose = totalTimeClose;
+			doorCountOpen = 0;
 			//sensordoorMotionFlag = true;
 		}
 	}
