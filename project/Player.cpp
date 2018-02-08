@@ -21,6 +21,7 @@ Player::Player()
 	_pos.y = 300.0f;
 	initPos.x = _pos.x;
 	initPos.y = _pos.y;
+	initPos.z = _pos.z;
 	_tmpPos.x = _pos.x;
 	_tmpPos.y = _pos.y;
 	_state = ST_DEF;
@@ -1165,6 +1166,10 @@ void Player::stInvincible(void)
 bool Player::moveJump(void)
 {
 	SoundMgr& so = SoundMgr::Instance();
+	if (_state == ST_ROPE && crouchFlag == true) {
+		JumpFlag = false;
+		return;
+	}
 	//ｼﾞｬﾝﾌﾟ
 	if (JumpFlag == false) {
 		if (_inpInfo.num >= 1) {
@@ -1659,7 +1664,7 @@ void Player::SetInitPos()
 //初期位置をセットする
 void Player::SetInitPos(Position2 p)
 {
-	_pos = Position2(p.x,p.y-(_plRect.h/2)+6);	//yに足しているのは最初の座標で埋まらないようにするため
+	_pos = Position3(p.x,p.y-(_plRect.h/2)+6,0.f);	//yに足しているのは最初の座標で埋まらないようにするため
 	initPos = _pos;
 	_tmpPos.x = _pos.x;
 	_tmpPos.y = _pos.y;
