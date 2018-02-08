@@ -23,7 +23,7 @@ TitleScene::TitleScene()
 	_skyPos[1].y = 0;
 	skyImage = ImageMgr::Instance().ImageIdReturn("image/sky.png", SCENE_SELECT);
 	uiMovie = "movie/i.avi";
-	//SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
+	SeekMovieToGraph(ImageMgr::Instance().ImageIdReturn(uiMovie, SCENE_SELECT), 0);
 	movieFlag = false;
 	titleFlag = false;
 	selectFlag = false;
@@ -277,8 +277,8 @@ void TitleScene::Draw()
 		}
 	}
 
-	DrawGraph(400, -105, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
-	DrawExtendGraph(10, 10,750,450, im.ImageIdReturn("image/title.png", SCENE_SELECT), true);
+	DrawGraph(400, -150, im.ImageIdReturn(uiMovie, SCENE_SELECT), true);
+	DrawExtendGraph(10, -10,750,500, im.ImageIdReturn("image/title.png", SCENE_SELECT), true);
 	//if (padFlag == false) {
 	//	DrawGraph(0, max(0, menuCnt), im.ImageIdReturn("image/Operation/Operation_key.png", SCENE_SELECT), true);
 	//}

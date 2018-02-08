@@ -1100,14 +1100,14 @@ bool Player::stFever(void)
 {
 	//‚Æ‚è‚ ‚¦‚¸Ì¨°ÊÞ°
 	if (keyData[KEY_INPUT_Z]) {
-		//if (_fd.feverCnt > 0) {
+		if (_fd.feverCnt > 0) {
 
 			if (feverFlag == false) {
 				feverFlag = true;
 				_fd.feverCnt--;
 				GameMain::Instance().SetFeverData(_fd);
 			}
-	//	}
+		}
 	}
 	if (feverFlag == true) {
 		if (_state == ST_ROPE) {
