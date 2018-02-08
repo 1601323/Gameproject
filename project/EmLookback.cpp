@@ -55,7 +55,7 @@ EmLookback::EmLookback(Position2 pos, Player& pl, Rope& rope, EnemyServer& serve
 	starModelHandle = _modelmgr->ModelIdReturn("UI_model/star.mv1", SCENE_RESULT);
 	questionHandle = _modelmgr->ModelIdReturn("UI_model/question.pmx", SCENE_RESULT);
 
-	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 0);
+	textureIndex = MV1GetMaterialDifMapTexture(modelhandle, 1);
 	textureIndexEye = MV1GetMaterialDifMapTexture(modelhandle,1);
 	textureIndexWheel = MV1GetMaterialDifMapTexture(modelhandle,2);//タイヤ用のテクスチャindexを取得
 
@@ -119,7 +119,7 @@ void EmLookback::Draw(Position2 offset)
 	//モデルの拡大縮小値の設定
 	MV1SetScale(modelhandle, VGet(3.f, 3.f, 3.f));
 	//テクスチャを変更
-	MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2/teki2-1.png", SCENE_RESULT), FALSE);
+	//MV1SetTextureGraphHandle(modelhandle, textureIndex, im.ImageIdReturn("Enemy_model/teki2/teki2-1.png", SCENE_RESULT), FALSE);
 
 	//タイヤのテクスチャを常時切り替え
 	if (AnimWheelTimer / 5 % 2 == 0)
