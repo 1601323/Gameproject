@@ -156,6 +156,7 @@ void Player::setDir(Input* input)
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_RIGHT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_RIGHT;
+			_tmpDir = DIR_RIGHT;
 			if(_state != ST_JUMP)
 			_state = ST_MOVE;
 			airFlag = false;
@@ -167,6 +168,7 @@ void Player::setDir(Input* input)
 			(input->GetStickDir(_inpInfo.L_Stick.lstick) == SD_LEFT) &&
 			_inpInfo.L_Stick.L_SensingFlag >= _minSensingValueL) {
 			_dir = DIR_LEFT;
+			_tmpDir = DIR_LEFT;
 			if (_state != ST_JUMP)
 			_state = ST_MOVE;
 			airFlag = false;
@@ -1621,6 +1623,10 @@ Position2& Player::GetPos(void)
 DIR Player::GetDir(void)
 {
 	return _dir;
+}
+DIR Player::GetTmpDir()
+{
+	return _tmpDir;
 }
 //èâä˙à íuÇ…ñﬂÇ∑
 void Player::SetInitPos()
