@@ -1168,7 +1168,7 @@ bool Player::moveJump(void)
 	SoundMgr& so = SoundMgr::Instance();
 	if (_state == ST_ROPE && crouchFlag == true) {
 		JumpFlag = false;
-		return;
+		//return;
 	}
 	//ｼﾞｬﾝﾌﾟ
 	if (JumpFlag == false) {
