@@ -52,6 +52,7 @@ private:
 	int AnimTotalTimeSt;  //アニメーション時間
 	float AnimNowTimeSt;  //現在のアニメーション時間
 	int starModelHandle;  //星のモデル
+	int questionHandle;   //?マーク
 
 	//３D処理について
 	int modelhandle;
