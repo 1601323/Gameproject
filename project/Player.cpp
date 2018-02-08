@@ -1444,7 +1444,7 @@ void Player::gravity(void)
 		}
 	}
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE ) {
+	if (_state == ST_ROPE  || _state == ST_CROUCH) {
 		vy = 0.0f;
 	}
 	//加速度を足す
@@ -1519,7 +1519,7 @@ void Player::FeverGravity()
 	}
 
 	//ﾛｰﾌﾟ状態ならうごけない
-	if (_state == ST_ROPE ) {
+	if (_state == ST_ROPE ||_state == ST_CROUCH) {
 		vy = 0.0f;
 	}
 	//加速度を足す
