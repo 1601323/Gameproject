@@ -83,8 +83,9 @@ void Tutorial::Draw(Position2 &offset)
 	{
 		//MessageRect.SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
 		//MessageRect.Draw(offset);
-		MessageRect2[i].SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
-		//MessageRect2[i].Draw(offset);
+
+		MessageRect2[4].SetCenter(drawMassagePosition[4].x, drawMassagePosition[2].y);
+		MessageRect2[4].Draw(offset);
 	}
 
 	if (DrawMessageBoxFlag)
@@ -94,16 +95,18 @@ void Tutorial::Draw(Position2 &offset)
 		if (MessageNumFlag[0])
 		{
 			DrawGraph(200, 150, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial1.5.png" : "image/Tutorial/Keyboard/Tutorial1.png", SCENE_RESULT), true);
+			DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);//230 230ずれます
+
 		}
 		//2 張り付く
 		else if (MessageNumFlag[1])
 		{
-			DrawGraph(200, 10, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial2.5.png" : "image/Tutorial/Keyboard/Tutorial2.png", SCENE_RESULT), true);
+			DrawGraph(200, 150, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial2.5.png" : "image/Tutorial/Keyboard/Tutorial2.png", SCENE_RESULT), true);
 		}
 		//3 ロープ
 		else if (MessageNumFlag[2])
 		{
-			DrawGraph(200, 200, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial3.5.png" : "image/Tutorial/Keyboard/Tutorial3.png", SCENE_RESULT), true);
+			DrawGraph(100, 100, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial3.5.png" : "image/Tutorial/Keyboard/Tutorial3.png", SCENE_RESULT), true);
 		}
 		//4 ステルス
 		else if (MessageNumFlag[3])
@@ -113,14 +116,14 @@ void Tutorial::Draw(Position2 &offset)
 		//5 鍵とか金庫
 		else if (MessageNumFlag[4])
 		{
-			DrawGraph(200, 200, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial5.png", SCENE_RESULT), true);
+			DrawGraph(300, 200, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial5.png", SCENE_RESULT), true);
 		}
 		//6 トランスアイテム(食パン)
 		else if (MessageNumFlag[5])
 		{
 			DrawGraph(200, 200 ,im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial6.png", SCENE_RESULT), true);
 		}
-		///7 ゴール
+		//7 ゴール
 		else if (MessageNumFlag[6])
 		{
 			DrawGraph(560, 450, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial7.png", SCENE_RESULT), true);
