@@ -112,37 +112,30 @@ void Tutorial::Draw(Position2 &offset)
 		//1 移動ジャンプ
 		if (MessageNumFlag[0] == true) {
 			DrawGraph(200, 150, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial1.5.png" : "image/Tutorial/Keyboard/Tutorial1.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);//230 230ずれます
 		}
 		//2 張り付く
 		if (MessageNumFlag[1] == true) {
 			DrawGraph(200, 150, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial2.5.png" : "image/Tutorial/Keyboard/Tutorial2.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
 		}
 		//3 ロープ
 		if (MessageNumFlag[2] == true) {
 			DrawGraph(100, 100, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial3.5.png" : "image/Tutorial/Keyboard/Tutorial3.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
 		}
 		//4 ステルス
 		if (MessageNumFlag[3] == true) {
-			DrawGraph(100, 300, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial4.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
+			DrawGraph(100, 300, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial4.5.png":"image/Tutorial/Keyboard/Tutorial4.png", SCENE_RESULT), true);
 		}
 		//5 鍵とか金庫
 		if (MessageNumFlag[4] == true) {
-			DrawGraph(200, 300, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial5.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
+			DrawGraph(200, 300, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial5.5.png":"image/Tutorial/Keyboard/Tutorial5.png", SCENE_RESULT), true);
 		}
 		//6 トランスアイテム(食パン)
 		if (MessageNumFlag[5] == true) {
-			DrawGraph(200, 300, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial6.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
+			DrawGraph(200, 300, im.ImageIdReturn(padFlag ?  "image/Tutorial/GamePad/Tutorial6.5.png" : "image/Tutorial/Keyboard/Tutorial6.png", SCENE_RESULT), true);
 		}
 		//7 ゴール
 		if (MessageNumFlag[6] == true) {
-			DrawGraph(200, 300, im.ImageIdReturn("image/Tutorial/Keyboard/Tutorial7.png", SCENE_RESULT), true);
-			//DrawGraph(530, 380, im.ImageIdReturn(padFlag ? "image/UI/backBotton1.png" : "image/UI/keyBackSpace.png", SCENE_RESULT), true);
+			DrawGraph(200, 300, im.ImageIdReturn(padFlag ? "image/Tutorial/GamePad/Tutorial7.5.png" : "image/Tutorial/Keyboard/Tutorial7.png", SCENE_RESULT), true);
 		}
 	}
 	//if (DrawMessageBoxFlag)
