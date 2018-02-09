@@ -105,7 +105,7 @@ void Tutorial::Draw(Position2 &offset)
 		//MessageRect.SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
 		//MessageRect.Draw(offset);
 		MessageRect2[i].SetCenter(drawMassagePosition[i].x, drawMassagePosition[i].y);
-		MessageRect2[i].Draw(offset);
+		//MessageRect2[i].Draw(offset);
 	}
 	if (DrawMessageBoxFlag)
 	{
