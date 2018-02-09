@@ -611,6 +611,8 @@ void GameScene::Draw(Position2& offset)
 	//_player->Draw(offset);
 	_server->Draw(offset);
 	_mid->Draw(offset);
+	_tuto->Draw(offset);
+
 }
 void GameScene::DrawUI()
 {
