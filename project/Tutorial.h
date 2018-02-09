@@ -8,7 +8,7 @@
 
 //メッセージが出現するposition
 const Position2 drawMassagePosition[MESSAGE_NUM] = {
-	{100,720},                 //1 移動ジャンプ
+	{200,720},                 //1 移動ジャンプ
 	{740,680},                 //2 張り付く
 	{0,0},                 //3 ロープ
 	{0,0},                 //4 ステルス
@@ -35,6 +35,17 @@ private:
 
 	bool padFlag;                       //パッドが刺さっているか見るflag
 	bool messageMoveCheck;              //メッセージの入力受理を見るflag
+	//くそ処理
+	void check1();
+	void check2();
+	void check3();
+	void check4();
+	void check5();
+	void check6();
+	void check7();
+	
+	bool HitFlag[MESSAGE_NUM];
+	bool checkFlag[MESSAGE_NUM];
 public:
 	Tutorial(Player& player,HitClass& h);
 	~Tutorial();
