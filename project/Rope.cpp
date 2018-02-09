@@ -117,6 +117,15 @@ void Rope::ModelManager(void)
 	MV1SetPosition(modelhandle, VGet(_player->ReturnWoToScPos2ver().x - mentenanceNum_X, _player->ReturnWoToScPos2ver().y - mentenanceNum_Y, 0));
 	//ƒ‚ƒfƒ‹‚ÌŠg‘åk¬’l‚ÌÝ’è
 	MV1SetScale(modelhandle, VGet(0.3f, 0.3f, 0.3f));
+
+	if (_player->GetcharState() == ST_FEVER)
+	{
+		MV1SetOpacityRate(modelhandle, 50.f / 255.f);
+	}
+	else {
+		MV1SetOpacityRate(modelhandle, 1.0f);
+
+	}
 	//ƒ‚ƒfƒ‹‚ð•`‰æ —ÖŠsü0.0f‚Å“§‰ß
 	_modelmgr->Draw(modelhandle, 0.0f);
 }
