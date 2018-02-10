@@ -211,7 +211,7 @@ void GameScene::NormalUpdata(Input* input)
 
 	_map->Draw(offset);
 	//チュートリアルステージならupdataを呼ぶ
-	if (gm.GetNowStage() == 0) _tuto->Updata(input);
+	if (gm.GetNowStage() == 0) _tuto->Updata(input);//本来0
 
 	//ﾛｰﾌﾟ使用中は敵などが止まる
 	if (_player->GetStateRope() == true) {
@@ -374,7 +374,8 @@ void GameScene::PauseUpdata(Input* input)
 		_updater = &GameScene::NormalUpdata;
 	}
 
-	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) {
+	if (key.keybit.A_BUTTON && !lastKey.keybit.A_BUTTON) 
+	{
 		switch (pauseNowNum)
 		{
 			//最初からやり直す
@@ -393,6 +394,7 @@ void GameScene::PauseUpdata(Input* input)
 		}
 		//_updater = &GameScene::NormalUpdata;
 	}
+
 	if (ChackDrawFlag)
 	{
 		DrawCheckUi();//ui表示
@@ -709,7 +711,7 @@ void GameScene::DrawBack(Position2 offset)
 	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/title5.png", SCENE_RESULT), true);
 	//DrawExtendGraph(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, im.ImageIdReturn("image/Game/j.bmp", SCENE_RESULT), true);
 	DrawGraph(min(0 - offset.x*0.2,0),min( 0 - offset.y,0), im.ImageIdReturn("image/Game/haikkk.png",SCENE_RESULT),true);
-	DrawGraph(min(0, -offset.x*0.5), min(0, -offset.y), im.ImageIdReturn("image/Game/hai.png", SCENE_RESULT), true);
+	//DrawGraph(min(0, -offset.x*0.5), min(0, -offset.y), im.ImageIdReturn("image/Game/hai.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back3.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back2.png", SCENE_RESULT), true);
 	//DrawGraph(0 - offset.x, 0 - offset.y, im.ImageIdReturn("image/Game/back1.png", SCENE_RESULT), true);
