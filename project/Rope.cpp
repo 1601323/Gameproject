@@ -127,7 +127,7 @@ void Rope::ModelManager(void)
 
 	}
 	//ƒ‚ƒfƒ‹‚ğ•`‰æ —ÖŠsü0.0f‚Å“§‰ß
-	_modelmgr->Draw(modelhandle, 0.0f);
+	_modelmgr->Draw(modelhandle, 0.5f);
 }
 
 //ƒ[ƒv‚ÌˆÚ“®ˆ—(’¼üver)
