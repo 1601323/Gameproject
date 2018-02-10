@@ -466,7 +466,7 @@ void EmAround::Draw(Position2 offset)
 		MV1SetTextureGraphHandle(modelhandle, textureIndexWheel, im.ImageIdReturn("Enemy_model/teki1/tire.png", SCENE_RESULT), FALSE);
 	}
 	//モデルを輪郭線0.0fで描画 
-	_modelmgr->Draw(modelhandle,0.0f);
+	_modelmgr->Draw(modelhandle,0.3f);
 
 	if (_state != EM_ST_FEAR) {
 		//DrawBox(_pos.x - offset.x, _pos.y - offset.y, _pos.x - offset.x + _emRect.w, _pos.y - offset.y + _emRect.h, 0x2112ff, true);
